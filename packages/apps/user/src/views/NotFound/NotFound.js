@@ -1,11 +1,11 @@
-import { Button, ButtonGroup, Stack } from '@chakra-ui/react';
+import { Button, Stack } from '@chakra-ui/react';
 import React from 'react';
+import './NotFound.css';
 
 function NotFound() {
   return (
     <div className="notfound">
       <h1>404 Not Found</h1>
-      <h2>페이지를 찾을 수 없습니다.</h2>
       <Stack direction="row" spacing={4} align="center">
         <Button colorScheme="blue" onClick={() => window.history.back()}>
           이전 페이지로
