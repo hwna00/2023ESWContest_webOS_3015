@@ -1,28 +1,41 @@
 import { render, screen } from '@testing-library/react';
 import NotFound from '../NotFound';
 import '@testing-library/jest-dom/extend-expect';
+import { BrowserRouter } from 'react-router-dom';
 
 describe('NotFound', () => {
-  test('renders "Not Found"', () => {
-    render(<NotFound />);
+  test('Not Found', () => {
+    render(
+      <BrowserRouter>
+        <NotFound />
+      </BrowserRouter>,
+    );
 
-    const message = screen.getByText(/404 not found/i);
-    expect(message).toBeInTheDocument();
+    const msg = screen.getByText(/404 not found/i);
+    expect(msg).toBeInTheDocument();
   });
   test('이전 버튼', () => {
-    render(<NotFound />);
+    render(
+      <BrowserRouter>
+        <NotFound />
+      </BrowserRouter>,
+    );
 
-    const previousButton = screen.getByRole('button', {
+    const previousBtn = screen.getByRole('button', {
       name: /이전 페이지로/i,
     });
-    expect(previousButton).toBeInTheDocument();
+    expect(previousBtn).toBeInTheDocument();
   });
   test('메인 버튼', () => {
-    render(<NotFound />);
+    render(
+      <BrowserRouter>
+        <NotFound />
+      </BrowserRouter>,
+    );
 
-    const mainButton = screen.getByRole('button', {
+    const mainBtn = screen.getByRole('button', {
       name: /메인 페이지로/i,
     });
-    expect(mainButton).toBeInTheDocument();
+    expect(mainBtn).toBeInTheDocument();
   });
 });
