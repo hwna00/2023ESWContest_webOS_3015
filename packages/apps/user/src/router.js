@@ -1,16 +1,11 @@
-import { Outlet, createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 import NotFound from './views/NotFound';
-import SideBar from './components/SideBar';
+import Root from './components/Root/Root';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: (
-      <>
-        <SideBar />
-        <Outlet />
-      </>
-    ),
+    element: <Root />,
     errorElement: <NotFound />,
   },
 ]);
