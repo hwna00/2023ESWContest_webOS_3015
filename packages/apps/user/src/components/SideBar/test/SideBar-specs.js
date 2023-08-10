@@ -1,8 +1,8 @@
+import { BrowserRouter, RouterProvider } from 'react-router-dom';
 import { describe, expect, it } from '@jest/globals';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SideBar from '../SideBar';
-import { RouterProvider } from 'react-router-dom';
 import router from '../../../router';
 
 const menuNames = [
@@ -13,24 +13,26 @@ const menuNames = [
   '복약 관리',
 ];
 
-//TODO: 로그인 하지 않은 경우 기본 프로필을 보여준다.
-//TODO: 로그인 했지만 이미지가 없는 경우, 기본 프로필을 보여준다.
-//TODO: 로그인했고 이미지가 있다면, 기본 아이콘 대신 이미지를 보여준다.
+const user = {
+  name: '하철환',
+  img: 'https://www.marthastewart.com/thmb/g-FunKfdiZombJQ7pB4wb8BF4C8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/cat-kitten-138468381-4cd82b91d7be45cb9f9aa8366e10bce4.jpg',
+};
+
 describe('Test SideBar Component', () => {
-  beforeEach(() => {
-    render(
-      <RouterProvider router={router}>
-        <SideBar />
-      </RouterProvider>,
-    );
+  it('로그인 중인 경우 이름을 생성', () => {
+    render(<SideBar user={user} />, { wrapper: BrowserRouter });
+    const profileName = screen.getByText(/.*님/i);
+    expect(profileName).toBeInTheDocument();
   });
-  it('프로필 생성', () => {
-    const profileButton = screen.getByText(/.*님/i);
-    expect(profileButton).toBeInTheDocument();
-    expect(profileButton).tohave;
+
+  it('로그인 하지 않은 경우 프로필 대신 로그인 버튼 생성', () => {
+    render(<SideBar />, { wrapper: BrowserRouter });
+    const loginButton = screen.getByText(/로그인하기/i);
+    expect(loginButton).toBeInTheDocument();
   });
 
   it('메뉴 항목 생성', () => {
+    render(<SideBar />, { wrapper: BrowserRouter });
     menuNames.forEach(menuName => {
       const menuItem = screen.getByText(menuName);
       expect(menuItem).toBeInTheDocument();
@@ -38,6 +40,7 @@ describe('Test SideBar Component', () => {
   });
 
   it('세팅 버튼 생성', () => {
+    render(<SideBar />, { wrapper: BrowserRouter });
     const settingButton = screen.getByRole('button', { name: /환경 설정/i });
     expect(settingButton).toBeInTheDocument();
   });
