@@ -1,10 +1,43 @@
 import { createBrowserRouter } from 'react-router-dom';
 import NotFound from './views/NotFound';
+import Root from './components/Root/Root';
+import MyPage from './views/MyPage/MyPage';
+
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <div>root</div>,
+    element: <Root />,
     errorElement: <NotFound />,
+    children: [
+      {
+        path: '',
+        element: '',
+      },
+      {
+        path: 'mypage',
+        element: <MyPage />,
+      },
+      {
+        path: 'doctor-appointment',
+        element: '',
+      },
+      {
+        path: 'appointment-history',
+        element: '',
+      },
+      {
+        path: 'health',
+        element: '',
+      },
+      {
+        path: 'medicines',
+        element: '',
+      },
+      {
+        path: 'settings',
+        element: '',
+      },
+    ],
   },
 ]);
 
