@@ -1,6 +1,6 @@
-import { Flex, Heading, Stack, Button } from '@chakra-ui/react';
 import { Link as ReactRouterLink } from 'react-router-dom';
-
+import { Link as ChakraLink } from '@chakra-ui/react';
+import { Flex, Heading, Stack, Button } from '@chakra-ui/react';
 function NotFound() {
   return (
     <Flex
@@ -18,12 +18,12 @@ function NotFound() {
       </Heading>
 
       <Stack direction="row" spacing={4} align="center">
-        <ReactRouterLink to="">
+        <ChakraLink as={ReactRouterLink} onClick={() => window.history.back()}>
           <Button colorScheme="blue">이전 페이지로</Button>
-        </ReactRouterLink>
-        <ReactRouterLink to="/">
+        </ChakraLink>
+        <ChakraLink as={ReactRouterLink} to="/">
           <Button colorScheme="blue">메인 페이지로</Button>
-        </ReactRouterLink>
+        </ChakraLink>
       </Stack>
     </Flex>
   );
