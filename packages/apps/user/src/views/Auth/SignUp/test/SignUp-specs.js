@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom';
 import { BrowserRouter } from 'react-router-dom';
 import SignUp from '../SignUp';
 
@@ -16,17 +17,17 @@ describe('Test SignUp Page', () => {
   test('다음 버튼을 눌렀을 때 "이전으로" 버튼이 생성되는가', async () => {
     const nextBtn = screen.getByRole('button', { name: /다음으로/i });
     expect(nextBtn).toBeInTheDocument();
-    await userEvent(nextBtn);
+    await userEvent.click(nextBtn);
     const prevBtn = screen.getByRole('button', { name: /이전으로/i });
     expect(prevBtn).toBeInTheDocument();
   });
 
-  test('회원가입 마지막 단계에서 "가입 완료" 버튼이 생성되는가', async () => {
+  test('회원가입 마지막 단계에서 "가입하기" 버튼이 생성되는가', async () => {
     const nextBtn = screen.getByRole('button', { name: /다음으로/i });
-    await userEvent(nextBtn);
-    await userEvent(nextBtn);
-    await userEvent(nextBtn);
-    const submitBtn = screen.getByRole('button', { name: /가입 완료/i });
+    await userEvent.click(nextBtn);
+    await userEvent.click(nextBtn);
+    await userEvent.click(nextBtn);
+    const submitBtn = screen.getByRole('button', { name: /가입하기/i });
     expect(submitBtn).toBeInTheDocument();
   });
 });
