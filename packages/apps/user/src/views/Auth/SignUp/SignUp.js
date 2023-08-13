@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link as ReactRouterLink } from 'react-router-dom';
+import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import {
   HStack,
   Heading,
@@ -28,11 +28,14 @@ import {
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
+import { auth, createUserWithEmailAndPassword } from '../../../../firebase';
+import { updateProfile } from 'firebase/auth';
 
 //Todo: 어케 바꾸지..?
 const steps = [{}, {}, {}, {}];
 
 const SignUp = function () {
+  const navigate = useNavigate();
   const { activeStep, goToNext, goToPrevious, isActiveStep, isCompleteStep } =
     useSteps({
       index: 0,
@@ -42,13 +45,13 @@ const SignUp = function () {
     register,
     handleSubmit,
     getValues,
-    watch,
     formState: { errors },
-  } = useForm({ mode: 'all' });
+  } = useForm({ mode: 'onSubmit' });
 
   const [formPosition, setFormPosition] = useState(0);
 
-  const handleNext = function () {
+  const handleNext = async function () {
+    //Todo: useForm의 trigger를 이용한 validation trigger 구현하기
     goToNext();
     setFormPosition(formPosition - 800); //Todo: 800 어케좀 하기
   };
@@ -58,9 +61,23 @@ const SignUp = function () {
     setFormPosition(formPosition + 800);
   };
   const onSubmit = function (data) {
-    console.log('submit', data);
+    const { email, password, username } = data;
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(userCredential => {
+        const user = userCredential.user;
+        if (user !== null) {
+          updateProfile(user, {
+            displayName: username,
+          }).then(() => {
+            navigate('/');
+          });
+        }
+      })
+      .catch(error => {
+        //Todo: 예외 상황 처리하기
+        console.log(error);
+      });
   };
-  console.log(watch());
 
   return (
     <VStack height={'100vh'} p={'6'}>
@@ -95,12 +112,7 @@ const SignUp = function () {
           </Stepper>
         </Box>
 
-        <VStack
-          as="form"
-          onSubmit={handleSubmit(onSubmit)}
-          gap={'4'}
-          alignItems={'flex-end'}
-        >
+        <VStack as="form" gap={'4'} alignItems={'flex-end'}>
           <Box height={'full'} width={800} overflowX={'hidden'} p={'2'}>
             <HStack
               gap={0}
@@ -122,7 +134,6 @@ const SignUp = function () {
                           /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
                         message: '이메일 형식이 아닙니다.',
                       },
-                      validate: value => console.log(value),
                     })}
                   />
                   <FormErrorMessage>
@@ -157,10 +168,10 @@ const SignUp = function () {
                   <Input
                     required
                     type="password"
-                    placeholder="4자리 이상의 비밀번호를 입력해주세요."
+                    placeholder="6자리 이상의 비밀번호를 입력해주세요."
                     {...register('password', {
                       required: '이 항목은 필수입니다.',
-                      min: { value: 4, message: '4자리 이상 입력해주세요.' },
+                      min: { value: 6, message: '6자리 이상 입력해주세요.' },
                     })}
                   />
                   <FormErrorMessage>
@@ -381,11 +392,7 @@ const SignUp = function () {
               </Button>
             )}
             {isActiveStep(3) ? (
-              <Button
-                type="submit"
-                // onClick={handleSubmit(onSubmit)}
-                colorScheme="primary"
-              >
+              <Button colorScheme="primary" onClick={handleSubmit(onSubmit)}>
                 가입하기
               </Button>
             ) : (
