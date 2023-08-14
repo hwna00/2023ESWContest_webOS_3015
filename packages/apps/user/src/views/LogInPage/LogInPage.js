@@ -64,8 +64,8 @@ function LogInPage() {
         >
           <form>
             <Stack
-              spacing={4}
-              p="1rem"
+              spacing={6}
+              p="3rem"
               backgroundColor="whiteAlpha.900"
               boxShadow="md"
             >
