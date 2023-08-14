@@ -1,7 +1,8 @@
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { Link as ChakraLink } from '@chakra-ui/react';
 import { Flex, Heading, Stack, Button } from '@chakra-ui/react';
-function NotFound() {
+
+function ErrorPage() {
   return (
     <Flex
       direction="column"
@@ -11,10 +12,10 @@ function NotFound() {
       bgColor="#f0f0f0"
     >
       <Heading as="h1" fontSize="3rem" mb="2rem" color="#333">
-        404 Not Found
+        500 Server Error
       </Heading>
       <Heading as="h2" fontSize="1.5rem" mb="1rem" color="#333">
-        페이지를 찾을 수 없습니다.
+        서버에 에러가 발생하였습니다. 잠시 후 다시 시도해주세요.
       </Heading>
 
       <Stack direction="row" spacing={4} align="center">
@@ -29,4 +30,4 @@ function NotFound() {
   );
 }
 
-export default NotFound;
+export default ErrorPage;

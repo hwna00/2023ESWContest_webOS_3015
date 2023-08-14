@@ -1,17 +1,25 @@
 import { BrowserRouter } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import NotFound from '../NotFound';
+import ErrorPage from '../ErrorPage';
 
-describe('NotFound', () => {
-  test('Not Found', () => {
-    render(<NotFound />, { wrapper: BrowserRouter });
+describe('Error Page', () => {
+  test('Error Page', () => {
+    render(
+      <BrowserRouter>
+        <ErrorPage />
+      </BrowserRouter>,
+    );
 
-    const msg = screen.getByText(/404 not found/i);
+    const msg = screen.getByText(/500 Server Error/i);
     expect(msg).toBeInTheDocument();
   });
   test('이전 버튼', () => {
-    render(<NotFound />, { wrapper: BrowserRouter });
+    render(
+      <BrowserRouter>
+        <ErrorPage />
+      </BrowserRouter>,
+    );
 
     const previousBtn = screen.getByRole('button', {
       name: /이전 페이지로/i,
@@ -19,7 +27,11 @@ describe('NotFound', () => {
     expect(previousBtn).toBeInTheDocument();
   });
   test('메인 버튼', () => {
-    render(<NotFound />, { wrapper: BrowserRouter });
+    render(
+      <BrowserRouter>
+        <ErrorPage />
+      </BrowserRouter>,
+    );
 
     const mainBtn = screen.getByRole('button', {
       name: /메인 페이지로/i,
