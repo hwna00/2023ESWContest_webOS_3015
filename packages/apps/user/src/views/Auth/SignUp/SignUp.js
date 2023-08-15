@@ -40,6 +40,7 @@ const SignUp = function () {
           <SignUpStepper activeStep={activeStep} steps={steps} />
 
           <SignUpForm
+            activeStep={activeStep}
             goToNext={goToNext}
             goToPrevious={goToPrevious}
             isActiveStep={isActiveStep}

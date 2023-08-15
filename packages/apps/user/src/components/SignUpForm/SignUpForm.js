@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import {
@@ -18,11 +18,12 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-import { auth, createUserWithEmailAndPassword } from '../../../firebase';
+import { signIn } from '../../../firebase';
 import { updateProfile } from 'firebase/auth';
 import PropTypes from 'prop-types';
 
 const SignUpForm = function ({
+  activeStep,
   goToNext,
   goToPrevious,
   isActiveStep,
@@ -32,64 +33,76 @@ const SignUpForm = function ({
     register,
     handleSubmit,
     getValues,
+    trigger,
     formState: { errors },
-  } = useForm({ mode: 'onSubmit' });
+  } = useForm({ mode: 'all' });
+
   const navigate = useNavigate();
   const [formPosition, setFormPosition] = useState(0);
+  const ref = useRef();
 
-  const handleNext = useCallback(() => {
-    //Todo: useForm의 trigger를 이용한 validation trigger 구현하기
-    goToNext();
-    setFormPosition(formPosition - 800); //Todo: 800 어케좀 하기
-  }, [goToNext, setFormPosition, formPosition]);
+  const handleNext = useCallback(async () => {
+    const isFullfilled = await trigger(`step${activeStep}`);
+    if (isFullfilled) {
+      const currentFormWidth = ref.current?.offsetWidth;
+      setFormPosition(formPosition - currentFormWidth);
+      goToNext();
+    }
+  }, [trigger, activeStep, goToNext, setFormPosition, formPosition]);
 
   const handlePrev = useCallback(() => {
+    const currentFormWidth = ref.current?.offsetWidth;
+    setFormPosition(formPosition + currentFormWidth);
     goToPrevious();
-    setFormPosition(formPosition + 800);
   }, [goToPrevious, setFormPosition, formPosition]);
 
   const onSubmit = function (data) {
     const { email, password, username } = data;
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(userCredential => {
-        const user = userCredential.user;
-        if (user !== null) {
-          updateProfile(user, {
-            displayName: username,
-          }).then(() => {
+    signIn(email, password).then(user => {
+      if (user !== null) {
+        updateProfile(user, {
+          displayName: username,
+        })
+          .then(() => {
             navigate('/');
+          })
+          .catch(() => {
+            navigate('/error');
           });
-        }
-      })
-      .catch(error => {
-        //Todo: 예외 상황 처리하기
-        console.log(error);
-      });
+      }
+    });
   };
+
+  const FORM_WIDTH = 700;
+
   return (
     <VStack
       as={'form'}
       onSubmit={handleSubmit(onSubmit)}
       alignItems={'flex-end'}
       gap={'4'}
-      width={800}
-      overflowX={'hidden'}
+      maxWidth={'full'}
+      overflowY={'scroll'}
     >
-      <Box height={'full'} width={800} p={'2'}>
+      <Box ref={ref} width={FORM_WIDTH} overflowX={'hidden'} p={'2'}>
         <HStack
           gap={0}
           as={motion.div}
           animate={{ x: formPosition }}
           transition={'0.1s linear'}
         >
-          <VStack minWidth={800} gap={'4'} pr={'10'}>
-            <FormControl width={'full'} isRequired isInvalid={errors.email}>
+          <VStack minWidth={FORM_WIDTH} gap={'4'} pr={'4'}>
+            <FormControl
+              width={'full'}
+              isRequired
+              isInvalid={errors.step0?.email}
+            >
               <FormLabel>이메일</FormLabel>
               <Input
                 required
                 type="email"
                 placeholder="이메일을 입력해주세요."
-                {...register('email', {
+                {...register('step0.email', {
                   required: '이 항목은 필수입니다.',
                   pattern: {
                     value:
@@ -99,55 +112,63 @@ const SignUpForm = function ({
                 })}
               />
               <FormErrorMessage>
-                {errors.email && errors.email.message}
-              </FormErrorMessage>
-            </FormControl>
-
-            <FormControl width={'full'} isRequired isInvalid={errors.username}>
-              <FormLabel>이름</FormLabel>
-              <Input
-                required
-                placeholder="성함을 입력해주세요."
-                {...register('username', {
-                  required: '이 항목은 필수입니다.',
-                })}
-              />
-              <FormErrorMessage>
-                {errors.username && errors.username.message}
-              </FormErrorMessage>
-            </FormControl>
-
-            <FormControl width={'full'} isRequired isInvalid={errors.password}>
-              <FormLabel>비밀번호</FormLabel>
-              <Input
-                required
-                type="password"
-                placeholder="6자리 이상의 비밀번호를 입력해주세요."
-                {...register('password', {
-                  required: '이 항목은 필수입니다.',
-                  min: { value: 6, message: '6자리 이상 입력해주세요.' },
-                })}
-              />
-              <FormErrorMessage>
-                {errors.password && errors.password.message}
+                {errors.step0?.email?.message}
               </FormErrorMessage>
             </FormControl>
 
             <FormControl
               width={'full'}
               isRequired
-              isInvalid={errors.checkPassword}
+              isInvalid={errors.step0?.username}
+            >
+              <FormLabel>이름</FormLabel>
+              <Input
+                required
+                placeholder="성함을 입력해주세요."
+                {...register('step0.username', {
+                  required: '이 항목은 필수입니다.',
+                })}
+              />
+              <FormErrorMessage>
+                {errors.step0?.username?.message}
+              </FormErrorMessage>
+            </FormControl>
+
+            <FormControl
+              width={'full'}
+              isRequired
+              isInvalid={errors.step0?.password}
+            >
+              <FormLabel>비밀번호</FormLabel>
+              <Input
+                required
+                type="password"
+                placeholder="6자리 이상의 비밀번호를 입력해주세요."
+                {...register('step0.password', {
+                  required: '이 항목은 필수입니다.',
+                  minLength: { value: 6, message: '6자리 이상 입력해주세요.' },
+                })}
+              />
+              <FormErrorMessage>
+                {errors.step0?.password?.message}
+              </FormErrorMessage>
+            </FormControl>
+
+            <FormControl
+              width={'full'}
+              isRequired
+              isInvalid={errors.step0?.checkPassword}
             >
               <FormLabel>비밀번호 확인</FormLabel>
               <Input
                 required
                 type="password"
                 placeholder="필수 요소입니다."
-                {...register('checkPassword', {
+                {...register('step0.checkPassword', {
                   required: '이 항목은 필수입니다.',
                   validate: {
                     check: checkPassword => {
-                      if (getValues('password') !== checkPassword) {
+                      if (getValues('step0.password') !== checkPassword) {
                         return '비밀번호가 일치하지 않습니다.';
                       }
                     },
@@ -155,45 +176,53 @@ const SignUpForm = function ({
                 })}
               />
               <FormErrorMessage>
-                {errors.checkPassword && errors.checkPassword.message}
+                {errors.step0?.checkPassword?.message}
               </FormErrorMessage>
             </FormControl>
           </VStack>
 
-          <VStack minWidth={800} gap={'4'} pr={'10'}>
-            <FormControl width={'full'} isRequired isInvalid={errors.birthDate}>
+          <VStack minWidth={FORM_WIDTH} gap={'4'} pr={'4'}>
+            <FormControl
+              width={'full'}
+              isRequired
+              isInvalid={errors.step1?.birthDate}
+            >
               <FormLabel>생년월일</FormLabel>
               <Input
                 required
                 type="date"
                 placeholder="생년월일을 선택해주세요."
-                {...register('birthDate', {
+                {...register('step1.birthDate', {
                   required: '이 항목은 필수입니다.',
                 })}
               />
               <FormErrorMessage>
-                {errors.birthDate && errors.birthDate.message}
-              </FormErrorMessage>
-            </FormControl>
-
-            <FormControl width={'full'} isRequired isInvalid={errors.address}>
-              <FormLabel>주소</FormLabel>
-              <Input
-                required
-                placeholder="옵션 요소입니다."
-                {...register('address', {
-                  required: '이 항목은 필수입니다.',
-                })}
-              />
-              <FormErrorMessage>
-                {errors.address && errors.address.message}
+                {errors.step1?.birthDate?.message}
               </FormErrorMessage>
             </FormControl>
 
             <FormControl
               width={'full'}
               isRequired
-              isInvalid={errors.phoneNumber}
+              isInvalid={errors.step1?.address}
+            >
+              <FormLabel>주소</FormLabel>
+              <Input
+                required
+                placeholder="옵션 요소입니다."
+                {...register('step1.address', {
+                  required: '이 항목은 필수입니다.',
+                })}
+              />
+              <FormErrorMessage>
+                {errors.step1?.address?.message}
+              </FormErrorMessage>
+            </FormControl>
+
+            <FormControl
+              width={'full'}
+              isRequired
+              isInvalid={errors.step1?.phoneNumber}
             >
               <FormLabel>전화번호</FormLabel>
               <InputGroup colorScheme="primary">
@@ -203,7 +232,7 @@ const SignUpForm = function ({
                   type="tel"
                   maxLength={'8'}
                   placeholder="필수 요소입니다."
-                  {...register('phoneNumber', {
+                  {...register('step1.phoneNumber', {
                     required: '이 항목은 필수입니다.',
                     pattern: {
                       value: /^[0-9]{8}$/i,
@@ -213,11 +242,14 @@ const SignUpForm = function ({
                 />
               </InputGroup>
               <FormErrorMessage>
-                {errors.phoneNumber && errors.phoneNumber.message}
+                {errors.step1?.phoneNumber?.message}
               </FormErrorMessage>
             </FormControl>
 
-            <FormControl width={'full'} isInvalid={errors.secondPhoneNumber}>
+            <FormControl
+              width={'full'}
+              isInvalid={errors.step1?.secondPhoneNumber}
+            >
               <FormLabel>비상 시 연락처</FormLabel>
               <InputGroup>
                 <InputLeftAddon>010</InputLeftAddon>
@@ -225,7 +257,7 @@ const SignUpForm = function ({
                   type="tel"
                   maxLength={'8'}
                   placeholder="옵션 요소입니다."
-                  {...register('secondPhoneNumber', {
+                  {...register('step1.secondPhoneNumber', {
                     pattern: {
                       value: /^[0-9]{8}$/i,
                       message: '전화번호는 8자리의 숫자로만 이루어져야 합니다.',
@@ -234,33 +266,33 @@ const SignUpForm = function ({
                 />
               </InputGroup>
               <FormErrorMessage>
-                {errors.secondPhoneNumber && errors.secondPhoneNumber.message}
+                {errors.step1?.secondPhoneNumber?.message}
               </FormErrorMessage>
             </FormControl>
           </VStack>
 
-          <VStack minWidth={800} gap={'4'} pr={'10'}>
+          <VStack minWidth={FORM_WIDTH} gap={'4'} pr={'4'}>
             <HStack width={'full'} gap={'4'}>
-              <FormControl width={'full'} isInvalid={errors.bloodType}>
+              <FormControl width={'full'} isInvalid={errors.step2?.bloodType}>
                 <FormLabel>혈액형</FormLabel>
-                <Select placeholder="혈액형" {...register('bloodType')}>
+                <Select placeholder="혈액형" {...register('step2.bloodType')}>
                   <option value="blood_A">A형</option>
                   <option value="blood_B">B형</option>
                   <option value="blood_O">O형</option>
                   <option value="blood_AB">AB형</option>
                 </Select>
                 <FormErrorMessage>
-                  {errors.bloodType && errors.bloodType.message}
+                  {errors.step2?.bloodType?.message}
                 </FormErrorMessage>
               </FormControl>
 
-              <FormControl width={'full'} isInvalid={errors.height}>
+              <FormControl width={'full'} isInvalid={errors.step?.height}>
                 <FormLabel>키</FormLabel>
                 <InputGroup>
                   <Input
                     type="number"
                     placeholder="키"
-                    {...register('height', {
+                    {...register('step2.height', {
                       pattern: {
                         value: /^[0-9]/i,
                         message: '키는 숫자로만 이루어져야 합니다.',
@@ -269,52 +301,60 @@ const SignUpForm = function ({
                   />
                   <InputRightAddon>cm</InputRightAddon>
                 </InputGroup>
-                <FormErrorMessage>{errors.height?.message}</FormErrorMessage>
+                <FormErrorMessage>
+                  {errors.step2?.height?.message}
+                </FormErrorMessage>
               </FormControl>
 
-              <FormControl width={'full'}>
+              <FormControl width={'full'} isInvalid={errors.step2?.weight}>
                 <FormLabel>몸무게</FormLabel>
                 <InputGroup>
                   <Input
                     type="number"
                     placeholder="몸무게"
-                    {...register('weight')}
+                    {...register('step2.weight')}
                   />
                   <InputRightAddon>kg</InputRightAddon>
                 </InputGroup>
                 <FormErrorMessage>
-                  {errors.weight && errors.weight.message}
+                  {errors.step2?.weight?.message}
                 </FormErrorMessage>
               </FormControl>
             </HStack>
 
-            <FormControl width={'full'} isInvalid={errors.chronicDisease}>
+            <FormControl
+              width={'full'}
+              isInvalid={errors.step2?.chronicDisease}
+            >
               <FormLabel>질환 정보</FormLabel>
               <Textarea
                 resize={'none'}
                 placeholder="평소 앓고 있었던 질병이 있다면 입력해주세요."
-                {...register('chronicDisease')}
+                {...register('step2.chronicDisease')}
               />
               <FormErrorMessage>
-                {errors.chronicDisease && errors.chronicDisease.message}
+                {errors.step2?.chronicDisease?.message}
               </FormErrorMessage>
             </FormControl>
 
-            <FormControl width={'full'} isInvalid={errors.regularMedicines}>
+            <FormControl
+              width={'full'}
+              isInvalid={errors.step2?.regularMedicines}
+            >
               <FormLabel>복약 정보</FormLabel>
               <Textarea
                 resize={'none'}
                 placeholder="평소 지속적으로 복용하고 있는 약이 있다면 입력해주세요."
-                {...register('regularMedicines')}
+                {...register('step2.regularMedicines')}
               />
+              <FormErrorMessage>
+                {errors.step2?.regularMedicines?.message}
+              </FormErrorMessage>
             </FormControl>
-            <FormErrorMessage>
-              {errors.regularMedicines && errors.regularMedicines.message}
-            </FormErrorMessage>
           </VStack>
 
-          <VStack minWidth={800} gap={'4'} pr={'10'}>
-            필요 프로필 사진 추가 //Todo: 사진 찍기
+          <VStack minWidth={FORM_WIDTH} gap={'4'} pr={'4'}>
+            프로필 사진 추가 필요 //Todo: 프로필 사진 찍기 기능 추가하기
           </VStack>
         </HStack>
       </Box>
