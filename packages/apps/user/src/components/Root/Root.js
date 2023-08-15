@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router-dom';
+import { Box } from '@chakra-ui/react';
 import SideBar from '../SideBar/SideBar';
 
 //TODO: 로그인 기능 구현 후 실제 user를 props 로 받아와야 한다.
@@ -11,7 +12,9 @@ const Root = function () {
   return (
     <>
       <SideBar user={user} />
-      <Outlet />
+      <Box ml="40" p="6" height={'100vh'}>
+        <Outlet />
+      </Box>
     </>
   );
 };
