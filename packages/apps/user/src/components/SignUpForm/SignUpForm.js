@@ -57,20 +57,20 @@ const SignUpForm = function ({
   }, [goToPrevious, setFormPosition, formPosition]);
 
   const onSubmit = function (data) {
-    const { email, password, username } = data;
-    signIn(email, password).then(user => {
-      if (user !== null) {
-        updateProfile(user, {
+    const {
+      step0: { email, password, username },
+    } = data;
+
+    signIn(email, password)
+      .then(userCredential => {
+        updateProfile(userCredential.user, {
           displayName: username,
-        })
-          .then(() => {
-            navigate('/');
-          })
-          .catch(() => {
-            navigate('/error');
-          });
-      }
-    });
+        }).then(() => navigate('/'));
+      })
+      .catch(error => {
+        console.log(error);
+        navigate('/error');
+      });
   };
 
   const FORM_WIDTH = 700;
