@@ -233,9 +233,23 @@ const MainPage = function () {
             })}
           </UnorderedList>
         </Box>
-        <ButtonGroup>
-          <Button>긴급 전화</Button>
-          <Button>챗봇</Button>
+        <ButtonGroup
+          width={'full'}
+          justifyContent={'space-between'}
+          alignItems={'center'}
+        >
+          <Button colorScheme="red" py={'8'} width={'full'} fontSize={'lg'}>
+            긴급 전화
+          </Button>
+          <Button
+            variant={'outline'}
+            colorScheme="primary"
+            py={'8'}
+            width={'full'}
+            fontSize={'lg'}
+          >
+            챗봇 호출
+          </Button>
         </ButtonGroup>
       </VStack>
     </HStack>
