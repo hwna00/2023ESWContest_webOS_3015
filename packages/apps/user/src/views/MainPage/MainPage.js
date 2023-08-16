@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import dayjs from 'dayjs';
@@ -6,12 +6,16 @@ import {
   Box,
   Button,
   ButtonGroup,
+  Checkbox,
+  Divider,
   Drawer,
   DrawerBody,
   DrawerContent,
   DrawerHeader,
   HStack,
+  Heading,
   ListItem,
+  Text,
   UnorderedList,
   VStack,
   useDisclosure,
@@ -39,6 +43,31 @@ const todos = [
         title: '비타민 먹기',
         description: '08:30',
       },
+      {
+        id: 2,
+        title: '비타민 먹기',
+        description: '12:30',
+      },
+      {
+        id: 3,
+        title: '비타민 먹기',
+        description: '18:30',
+      },
+      {
+        id: 4,
+        title: '비타민 먹기',
+        description: '08:30',
+      },
+      {
+        id: 5,
+        title: '비타민 먹기',
+        description: '12:30',
+      },
+      {
+        id: 6,
+        title: '비타민 먹기',
+        description: '18:30',
+      },
     ],
   },
   {
@@ -46,7 +75,7 @@ const todos = [
     items: [
       {
         id: 1,
-        title: '비타민 먹기',
+        title: '감기약 먹기',
         description: '08:30',
       },
     ],
@@ -56,7 +85,7 @@ const todos = [
     items: [
       {
         id: 1,
-        title: '비타민 먹기',
+        title: '맛있는 거 먹기',
         description: '08:30',
       },
     ],
@@ -66,7 +95,7 @@ const todos = [
     items: [
       {
         id: 1,
-        title: '비타민 먹기',
+        title: '안 먹기',
         description: '08:30',
       },
     ],
@@ -76,12 +105,19 @@ const todos = [
 const MainPage = function () {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [date, setDate] = useState(new Date());
+  const [today, setToday] = useState([]);
   const pushRef = useRef();
-  console.log(date);
+
+  useEffect(() => {
+    const todoOfTheDay = todos.find(
+      todo => todo.date === dayjs(date).format('YYYY-MM-DD'),
+    );
+    setToday(todoOfTheDay);
+  }, [todos, date]);
 
   return (
     <HStack height={'full'}>
-      <Box width={'60%'} height={'full'}>
+      <Box flex={3} height={'full'}>
         <Calendar
           calendarType="gregory"
           formatDay={(locale, date) => dayjs(date).format('DD')}
@@ -111,7 +147,7 @@ const MainPage = function () {
           }}
         />
       </Box>
-      <VStack>
+      <VStack flex={2} height={'full'} justifyContent={'space-evenly'}>
         <Button ref={pushRef} colorScheme="primary" onClick={onOpen}>
           푸시 알림
         </Button>
@@ -154,7 +190,49 @@ const MainPage = function () {
             </DrawerBody>
           </DrawerContent>
         </Drawer>
-        <Box>오늘 할 일</Box>
+        <Box
+          bgColor={'primary.100'}
+          padding={'4'}
+          borderRadius={'md'}
+          width={'full'}
+          height={'70%'}
+          overflow={'hidden'}
+        >
+          <Text fontSize={'xl'} fontWeight={'bold'} mb={'2'}>
+            {dayjs(date).format('YYYY-MM-DD') ===
+            dayjs(new Date()).format('YYYY-MM-DD')
+              ? '오늘 할 일'
+              : dayjs(date).format('YYYY-MM-DD')}
+          </Text>
+
+          <Divider bgColor={'primary.900'} opacity={'50%'} height={'0.5'} />
+
+          <UnorderedList
+            styleType={'none'}
+            spacing={'6'}
+            height={'80%'}
+            py={'4'}
+            overflowY={'scroll'}
+            scrollBehavior={'smooth'}
+          >
+            {today?.items?.map(item => {
+              return (
+                <Checkbox
+                  width={'full'}
+                  spacing={'4'}
+                  colorScheme="primary"
+                  iconSize="3rem"
+                  borderColor={'primary.900'}
+                >
+                  <ListItem key={item.id}>
+                    <Text fontSize={'lg'}>{item.title}</Text>
+                    <Text>{item.description}</Text>
+                  </ListItem>
+                </Checkbox>
+              );
+            })}
+          </UnorderedList>
+        </Box>
         <ButtonGroup>
           <Button>긴급 전화</Button>
           <Button>챗봇</Button>
