@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import Calendar from 'react-calendar';
+import Calendar from '../../components/Calendar/Calendar';
 import 'react-calendar/dist/Calendar.css';
 import dayjs from 'dayjs';
 import {
@@ -13,14 +13,12 @@ import {
   DrawerContent,
   DrawerHeader,
   HStack,
-  Heading,
   ListItem,
   Text,
   UnorderedList,
   VStack,
   useDisclosure,
 } from '@chakra-ui/react';
-import './MainPage.css';
 
 const notifications = [
   {
@@ -104,49 +102,20 @@ const todos = [
 
 const MainPage = function () {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [date, setDate] = useState(new Date());
+  const [day, setDay] = useState(new Date());
   const [today, setToday] = useState([]);
   const pushRef = useRef();
 
   useEffect(() => {
     const todoOfTheDay = todos.find(
-      todo => todo.date === dayjs(date).format('YYYY-MM-DD'),
+      todo => todo.date === dayjs(day).format('YYYY-MM-DD'),
     );
     setToday(todoOfTheDay);
-  }, [todos, date]);
+  }, [day]);
 
   return (
     <HStack height={'full'}>
-      <Box flex={3} height={'full'}>
-        <Calendar
-          calendarType="gregory"
-          formatDay={(locale, date) => dayjs(date).format('DD')}
-          prev2Label={null}
-          next2Label={null}
-          maxDetail="month"
-          value={date}
-          onChange={setDate}
-          defaultValue={new Date()}
-          tileContent={({ _, date, view }) => {
-            if (
-              todos.find(todo => todo.date === dayjs(date).format('YYYY-MM-DD'))
-            ) {
-              return (
-                <Box
-                  className="dot"
-                  bgColor={'yellow.500'}
-                  width={'2'}
-                  height={'2'}
-                  borderRadius={'full'}
-                  position={'absolute'}
-                  bottom={'2'}
-                  left={'calc(50% - 4px)'}
-                ></Box>
-              );
-            }
-          }}
-        />
-      </Box>
+      <Calendar day={day} setDay={setDay} todos={todos} />
       <VStack flex={2} height={'full'} justifyContent={'space-evenly'}>
         <Button ref={pushRef} colorScheme="primary" onClick={onOpen}>
           푸시 알림
@@ -199,10 +168,10 @@ const MainPage = function () {
           overflow={'hidden'}
         >
           <Text fontSize={'xl'} fontWeight={'bold'} mb={'2'}>
-            {dayjs(date).format('YYYY-MM-DD') ===
+            {dayjs(day).format('YYYY-MM-DD') ===
             dayjs(new Date()).format('YYYY-MM-DD')
               ? '오늘 할 일'
-              : dayjs(date).format('YYYY-MM-DD')}
+              : dayjs(day).format('YYYY-MM-DD')}
           </Text>
 
           <Divider bgColor={'primary.900'} opacity={'50%'} height={'0.5'} />
