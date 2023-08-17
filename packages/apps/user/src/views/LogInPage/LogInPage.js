@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 import { Link as ReactRouterLink } from 'react-router-dom';
-import { logIn } from '../../../firebase';
 import {
   Box,
   Flex,
@@ -16,8 +16,10 @@ import {
   InputRightElement,
   HStack,
   Link as ChakraLink,
+  FormErrorMessage,
 } from '@chakra-ui/react';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
+import { logIn } from '../../../firebase';
 import {
   AiFillGithub,
   AiFillGoogleCircle,
@@ -34,25 +36,15 @@ const Twitter = chakra(AiFillTwitterCircle);
 function LogInPage() {
   const [showPassword, setShowPassword] = useState(false); //비번 보여주기
   const handleShowClick = () => setShowPassword(!showPassword);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
   const navigate = useNavigate();
-  // 로그인시 이벤트
-  const onChange = event => {
-    const {
-      target: { name, value },
-    } = event;
-    if (name === 'email') {
-      setEmail(value);
-    } else if (name === 'password') {
-      setPassword(value);
-    }
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const onSubmit = function (event) {
-    event.preventDefault();
-
+  const onSubmit = function (data) {
+    const { email, password } = data;
     logIn(email, password)
       .then(userCredential => {
         navigate('/');
@@ -62,18 +54,6 @@ function LogInPage() {
         navigate('/error');
       });
   };
-
-  // const onGoggleClick = async event => {
-  //   const {
-  //     target: { name },
-  //   } = event;
-  //   let provider;
-  //   if (name === 'google') {
-  //     provider = new firebaseInstance.auth.GoogleAuthProvider();
-  //   }
-  //   const data = await auth.signInWithPopup(provider);
-  //   console.log(data);
-  // };
 
   return (
     <Flex
@@ -106,7 +86,7 @@ function LogInPage() {
           justifyContent="center"
           alignItems="center"
         >
-          <Box as={'form'} onSubmit={onSubmit}>
+          <Box as={'form'} onSubmit={handleSubmit(onSubmit)}>
             <Stack
               spacing={6}
               p="3rem"
@@ -129,23 +109,30 @@ function LogInPage() {
                   <Twitter boxSize="30px" />
                 </Button>
               </HStack>
-              <FormControl>
+              <FormControl isInvalid={errors.email}>
                 <InputGroup>
                   <InputLeftElement
                     pointerEvents="none"
                     children={<CFaUserAlt color="gray.300" />}
                   />
                   <Input
+                    required
                     name="email"
                     type="email"
                     placeholder="email"
-                    required
-                    value={email}
-                    onChange={onChange}
+                    {...register('email', {
+                      required: '이 항목은 필수입니다.',
+                      pattern: {
+                        value:
+                          /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
+                        message: '이메일 형식이 아닙니다.',
+                      },
+                    })}
                   />
                 </InputGroup>
+                <FormErrorMessage>{errors?.email?.message}</FormErrorMessage>
               </FormControl>
-              <FormControl>
+              <FormControl isInvalid={errors.password}>
                 <InputGroup>
                   <InputLeftElement
                     pointerEvents="none"
@@ -157,8 +144,13 @@ function LogInPage() {
                     type={showPassword ? 'text' : 'password'}
                     placeholder="Password"
                     required
-                    value={password}
-                    onChange={onChange}
+                    {...register('password', {
+                      required: '이 항목은 필수입니다.',
+                      minLength: {
+                        value: 6,
+                        message: '6자리 이상 입력해주세요.',
+                      },
+                    })}
                   />
                   <InputRightElement width="4.5rem">
                     <Button h="1.75rem" size="sm" onClick={handleShowClick}>
@@ -166,6 +158,7 @@ function LogInPage() {
                     </Button>
                   </InputRightElement>
                 </InputGroup>
+                <FormErrorMessage>{errors?.password?.message}</FormErrorMessage>
               </FormControl>
               <Button
                 borderRadius={8}
