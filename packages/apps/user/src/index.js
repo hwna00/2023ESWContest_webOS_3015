@@ -1,24 +1,20 @@
-/* global ENACT_PACK_ISOMORPHIC */
-import { createRoot, hydrateRoot } from 'react-dom/client';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { RouterProvider } from 'react-router-dom';
+import router from './router';
+import { ChakraProvider } from '@chakra-ui/react';
+import theme from '../theme';
 
-const appElement = <App />;
+const root = ReactDOM.createRoot(document.getElementById('root'));
 
 // In a browser environment, render instead of exporting
 if (typeof window !== 'undefined') {
-  if (ENACT_PACK_ISOMORPHIC) {
-    hydrateRoot(document.getElementById('root'), appElement);
-  } else {
-    createRoot(document.getElementById('root')).render(appElement);
-  }
+  root.render(
+    <React.StrictMode>
+      <ChakraProvider theme={theme}>
+        <RouterProvider router={router} />
+      </ChakraProvider>
+    </React.StrictMode>,
+  );
 }
-
-export default appElement;
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint.
-// Learn more: https://github.com/enactjs/cli/blob/master/docs/measuring-performance.md
-reportWebVitals();
