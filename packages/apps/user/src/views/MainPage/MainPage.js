@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Calendar from '../../components/Calendar/Calendar';
 import 'react-calendar/dist/Calendar.css';
 import dayjs from 'dayjs';
@@ -8,29 +8,13 @@ import {
   ButtonGroup,
   Checkbox,
   Divider,
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerHeader,
   HStack,
   ListItem,
   Text,
   UnorderedList,
   VStack,
-  useDisclosure,
 } from '@chakra-ui/react';
-
-const notifications = [
-  {
-    title: '감기약 복용 - 8시 30분',
-  },
-  {
-    title: '감기약 복용 - 13시 30분',
-  },
-  {
-    title: '감기약 복용 - 20시 30분',
-  },
-];
+import PushAlarm from '../../components/PushAlarm/PushAlarm';
 
 const todos = [
   {
@@ -101,10 +85,8 @@ const todos = [
 ];
 
 const MainPage = function () {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [day, setDay] = useState(new Date());
   const [today, setToday] = useState([]);
-  const pushRef = useRef();
 
   useEffect(() => {
     const todoOfTheDay = todos.find(
@@ -117,48 +99,7 @@ const MainPage = function () {
     <HStack height={'full'}>
       <Calendar day={day} setDay={setDay} todos={todos} />
       <VStack flex={2} height={'full'} justifyContent={'space-evenly'}>
-        <Button ref={pushRef} colorScheme="primary" onClick={onOpen}>
-          푸시 알림
-        </Button>
-        <Drawer
-          isOpen={isOpen}
-          placement="right"
-          onClose={onClose}
-          finalFocusRef={pushRef}
-          isFullHeight
-        >
-          <DrawerContent
-            bgColor={'transparent'}
-            boxShadow={'none'}
-            transition={'0.2s ease-out'}
-          >
-            <DrawerHeader>푸시 알림</DrawerHeader>
-
-            <DrawerBody>
-              <UnorderedList
-                styleType={'none'}
-                spacing={'6'}
-                maxHeight={'80%'}
-                overflow={'scroll'}
-                scrollBehavior={'smooth'}
-              >
-                {notifications.map(notification => {
-                  return (
-                    <ListItem
-                      key={notification.title}
-                      p={'4'}
-                      bgColor={'primary.200'}
-                      borderRadius={'lg'}
-                      boxShadow={'lg'}
-                    >
-                      {notification.title}
-                    </ListItem>
-                  );
-                })}
-              </UnorderedList>
-            </DrawerBody>
-          </DrawerContent>
-        </Drawer>
+        <PushAlarm />
         <Box
           bgColor={'primary.100'}
           padding={'4'}
