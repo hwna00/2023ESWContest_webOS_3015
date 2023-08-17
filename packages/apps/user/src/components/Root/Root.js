@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router-dom';
+import { Box } from '@chakra-ui/react';
 import SideBar from '../SideBar/SideBar';
 import { auth } from '../../../firebase';
 
@@ -11,7 +12,9 @@ const Root = function () {
   return (
     <>
       {auth.currentUser ? <SideBar user={user} /> : <SideBar />}
-      <Outlet />
+      <Box ml="40" p="6" height={'100vh'}>
+        <Outlet />
+      </Box>
     </>
   );
 };
