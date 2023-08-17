@@ -9,9 +9,9 @@ describe('Log-In', () => {
     const msg = screen.getByText(/Housepital/i);
     expect(msg).toBeInTheDocument();
   });
-  test('id 입력 폼', () => {
+  test('email 입력 폼', () => {
     render(<LogInPage />, { wrapper: BrowserRouter });
-    const id = screen.getByPlaceholderText('id');
+    const id = screen.getByPlaceholderText('email');
     expect(id).toBeInTheDocument();
   });
   test('pw 입력 폼', () => {
