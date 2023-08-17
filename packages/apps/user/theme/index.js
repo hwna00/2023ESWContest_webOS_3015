@@ -1,5 +1,9 @@
-import { extendTheme, withDefaultColorScheme } from '@chakra-ui/react';
+import { extendTheme } from '@chakra-ui/react';
 import styles from './styles';
+import Stepper from './components/stepper';
+import { inputTheme } from './components/input';
+import { selectTheme } from './components/select';
+import { textareaTheme } from './components/textarea';
 
 const theme = extendTheme({
   styles,
@@ -17,6 +21,12 @@ const theme = extendTheme({
     },
     black: '#050813',
     white: '#ebedf8',
+  },
+  components: {
+    Input: inputTheme,
+    Select: selectTheme,
+    Textarea: textareaTheme,
+    Stepper,
   },
 });
 
