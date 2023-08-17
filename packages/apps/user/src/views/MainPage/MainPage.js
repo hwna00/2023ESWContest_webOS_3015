@@ -2,19 +2,9 @@ import { useEffect, useState } from 'react';
 import Calendar from '../../components/Calendar/Calendar';
 import 'react-calendar/dist/Calendar.css';
 import dayjs from 'dayjs';
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Checkbox,
-  Divider,
-  HStack,
-  ListItem,
-  Text,
-  UnorderedList,
-  VStack,
-} from '@chakra-ui/react';
+import { Button, ButtonGroup, HStack, VStack } from '@chakra-ui/react';
 import PushAlarm from '../../components/PushAlarm/PushAlarm';
+import TodoList from '../../components/TodoList/TodoList';
 
 const todos = [
   {
@@ -100,49 +90,7 @@ const MainPage = function () {
       <Calendar day={day} setDay={setDay} todos={todos} />
       <VStack flex={2} height={'full'} justifyContent={'space-evenly'}>
         <PushAlarm />
-        <Box
-          bgColor={'primary.100'}
-          padding={'4'}
-          borderRadius={'md'}
-          width={'full'}
-          height={'70%'}
-          overflow={'hidden'}
-        >
-          <Text fontSize={'xl'} fontWeight={'bold'} mb={'2'}>
-            {dayjs(day).format('YYYY-MM-DD') ===
-            dayjs(new Date()).format('YYYY-MM-DD')
-              ? '오늘 할 일'
-              : dayjs(day).format('YYYY-MM-DD')}
-          </Text>
-
-          <Divider bgColor={'primary.900'} opacity={'50%'} height={'0.5'} />
-
-          <UnorderedList
-            styleType={'none'}
-            spacing={'6'}
-            height={'80%'}
-            py={'4'}
-            overflowY={'scroll'}
-            scrollBehavior={'smooth'}
-          >
-            {today?.items?.map(item => {
-              return (
-                <Checkbox
-                  width={'full'}
-                  spacing={'4'}
-                  colorScheme="primary"
-                  iconSize="3rem"
-                  borderColor={'primary.900'}
-                >
-                  <ListItem key={item.id}>
-                    <Text fontSize={'lg'}>{item.title}</Text>
-                    <Text>{item.description}</Text>
-                  </ListItem>
-                </Checkbox>
-              );
-            })}
-          </UnorderedList>
-        </Box>
+        <TodoList day={day} today={today} />
         <ButtonGroup
           width={'full'}
           justifyContent={'space-between'}
