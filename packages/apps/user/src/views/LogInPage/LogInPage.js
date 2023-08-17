@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Link as ReactRouterLink } from 'react-router-dom';
+import { logIn } from '../../../firebase';
 import {
+  Box,
   Flex,
   Heading,
   Input,
@@ -31,6 +34,47 @@ const Twitter = chakra(AiFillTwitterCircle);
 function LogInPage() {
   const [showPassword, setShowPassword] = useState(false); //비번 보여주기
   const handleShowClick = () => setShowPassword(!showPassword);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const navigate = useNavigate();
+  // 로그인시 이벤트
+  const onChange = event => {
+    const {
+      target: { name, value },
+    } = event;
+    if (name === 'email') {
+      setEmail(value);
+    } else if (name === 'password') {
+      setPassword(value);
+    }
+  };
+
+  const onSubmit = function (event) {
+    event.preventDefault();
+
+    logIn(email, password)
+      .then(userCredential => {
+        navigate('/');
+      })
+      .catch(error => {
+        console.log(error);
+        navigate('/error');
+      });
+  };
+
+  // const onGoggleClick = async event => {
+  //   const {
+  //     target: { name },
+  //   } = event;
+  //   let provider;
+  //   if (name === 'google') {
+  //     provider = new firebaseInstance.auth.GoogleAuthProvider();
+  //   }
+  //   const data = await auth.signInWithPopup(provider);
+  //   console.log(data);
+  // };
+
   return (
     <Flex
       flexDirection="column"
@@ -40,18 +84,18 @@ function LogInPage() {
       justifyContent="center"
       alignItems="center"
     >
-      <Flex direction="row" wrap="wrap" alignItems="center">
+      <HStack wrap="wrap" alignItems="center">
         <Flex flexDirection="column" alignItems="flex-start" marginRight="8rem">
+          <Heading as="h1" fontSize="3rem" mb="2rem" color="#333">
+            Housepital
+          </Heading>
           <Heading
-            as="h1"
-            fontSize="3rem"
-            mb="2rem"
+            as="h3"
+            fontSize="1rem"
+            mb="1rem"
             color="#333"
             fontWeight="500"
           >
-            Housepital
-          </Heading>
-          <Heading as="h3" fontSize="1rem" mb="1rem" color="#333">
             건강 데이터 기록부터 의사와의 원격 상담까지, <br />
             간편하고 안전한 건강 관리 서비스에 가입해보세요.
           </Heading>
@@ -62,7 +106,7 @@ function LogInPage() {
           justifyContent="center"
           alignItems="center"
         >
-          <form>
+          <Box as={'form'} onSubmit={onSubmit}>
             <Stack
               spacing={6}
               p="3rem"
@@ -74,9 +118,16 @@ function LogInPage() {
                 alignItems="center"
                 padding="15px"
               >
-                <GitHub boxSize="30px" />
-                <Google boxSize="30px" />
-                <Twitter boxSize="30px" />
+                <Button bgColor="white">
+                  <GitHub boxSize="30px" />
+                </Button>
+
+                <Button bgColor="white">
+                  <Google size="30px" />
+                </Button>
+                <Button bgColor="white">
+                  <Twitter boxSize="30px" />
+                </Button>
               </HStack>
               <FormControl>
                 <InputGroup>
@@ -84,7 +135,14 @@ function LogInPage() {
                     pointerEvents="none"
                     children={<CFaUserAlt color="gray.300" />}
                   />
-                  <Input type="text" placeholder="id" />
+                  <Input
+                    name="email"
+                    type="email"
+                    placeholder="email"
+                    required
+                    value={email}
+                    onChange={onChange}
+                  />
                 </InputGroup>
               </FormControl>
               <FormControl>
@@ -95,8 +153,12 @@ function LogInPage() {
                     children={<CFaLock color="gray.300" />}
                   />
                   <Input
+                    name="password"
                     type={showPassword ? 'text' : 'password'}
                     placeholder="Password"
+                    required
+                    value={password}
+                    onChange={onChange}
                   />
                   <InputRightElement width="4.5rem">
                     <Button h="1.75rem" size="sm" onClick={handleShowClick}>
@@ -138,9 +200,9 @@ function LogInPage() {
                 비밀번호를 잊어버리셨나요?
               </ChakraLink>
             </Stack>
-          </form>
+          </Box>
         </Stack>
-      </Flex>
+      </HStack>
     </Flex>
   );
 }
