@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { Link as ReactRouterLink } from 'react-router-dom';
@@ -11,7 +11,6 @@ import {
   InputGroup,
   Stack,
   InputLeftElement,
-  chakra,
   FormControl,
   InputRightElement,
   HStack,
@@ -20,7 +19,7 @@ import {
   Icon,
 } from '@chakra-ui/react';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
-import { logIn, googleLogin, auth, provider } from '../../../firebase';
+import { logIn, googleLogin, auth, provider } from '../../../../firebase';
 import {
   AiFillGithub,
   AiFillGoogleCircle,
@@ -29,7 +28,9 @@ import {
 
 function LogIn() {
   const [showPassword, setShowPassword] = useState(false);
-  const handleShowClick = () => setShowPassword(!showPassword);
+  const handleShowClick = useCallback(() => {
+    setShowPassword(!showPassword);
+  }, [showPassword]);
   const navigate = useNavigate();
   const {
     register,
@@ -40,7 +41,7 @@ function LogIn() {
   const onSubmit = function (data) {
     const { email, password } = data;
     logIn(email, password)
-      .then(userCredential => {
+      .then(() => {
         navigate('/');
       })
       .catch(error => {
@@ -48,7 +49,8 @@ function LogIn() {
         navigate('/error');
       });
   };
-  const googleClick = function () {
+
+  const googleClick = useCallback(() => {
     googleLogin(auth, provider)
       .then(result => {
         console.log(result);
@@ -58,7 +60,8 @@ function LogIn() {
         console.log(error);
         navigate('/error');
       });
-  };
+  }, [navigate]);
+
   return (
     <Flex
       flexDirection="column"
@@ -70,14 +73,14 @@ function LogIn() {
     >
       <HStack wrap="wrap" alignItems="center">
         <Flex flexDirection="column" alignItems="flex-start" marginRight="8rem">
-          <Heading as="h1" fontSize="3rem" mb="2rem" color="#333">
+          <Heading as="h1" fontSize="3rem" mb="2rem" color="black">
             Housepital
           </Heading>
           <Heading
             as="h3"
             fontSize="1rem"
             mb="1rem"
-            color="#333"
+            color="black"
             fontWeight="500"
           >
             건강 데이터 기록부터 의사와의 원격 상담까지, <br />
@@ -91,12 +94,7 @@ function LogIn() {
           alignItems="center"
         >
           <Box as={'form'} onSubmit={handleSubmit(onSubmit)}>
-            <Stack
-              spacing={6}
-              p="3rem"
-              backgroundColor="whiteAlpha.900"
-              boxShadow="md"
-            >
+            <Stack spacing={6} p="3rem" backgroundColor="white" boxShadow="md">
               <HStack
                 justifyContent="center"
                 alignItems="center"
@@ -115,12 +113,9 @@ function LogIn() {
               </HStack>
               <FormControl isInvalid={errors.email}>
                 <InputGroup>
-                  <InputLeftElement
-                    pointerEvents="none"
-                    children={
-                      <Icon as={FaUserAlt} boxSize="20px" color="gray.300" />
-                    }
-                  />
+                  <InputLeftElement pointerEvents="none">
+                    <Icon as={FaUserAlt} boxSize="20px" color="gray.300" />
+                  </InputLeftElement>
                   <Input
                     required
                     name="email"
@@ -140,13 +135,9 @@ function LogIn() {
               </FormControl>
               <FormControl isInvalid={errors.password}>
                 <InputGroup>
-                  <InputLeftElement
-                    pointerEvents="none"
-                    color="gray.300"
-                    children={
-                      <Icon as={FaLock} boxSize="20px" color="gray.300" />
-                    }
-                  />
+                  <InputLeftElement pointerEvents="none" color="gray.300">
+                    <Icon as={FaLock} boxSize="20px" color="gray.300" />
+                  </InputLeftElement>
                   <Input
                     name="password"
                     type={showPassword ? 'text' : 'password'}
@@ -172,17 +163,17 @@ function LogIn() {
                 borderRadius={8}
                 type="submit"
                 variant="solid"
-                colorScheme="blue"
+                colorScheme="primary"
                 width="full"
               >
                 Login
               </Button>
-              <ChakraLink as={ReactRouterLink} to="/sign-up">
+              <ChakraLink as={ReactRouterLink} to="/auth/sign-up">
                 <Button
                   borderRadius={8}
                   type="button"
                   variant="outline"
-                  colorScheme="blue"
+                  colorScheme="primary"
                   width="full"
                 >
                   Sign Up
@@ -190,7 +181,7 @@ function LogIn() {
               </ChakraLink>
               <ChakraLink
                 as={ReactRouterLink}
-                color="blue.500"
+                color="primary.500"
                 href="#"
                 textDecoration="underline"
                 textAlign="center"

@@ -1,7 +1,12 @@
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { Link as ChakraLink } from '@chakra-ui/react';
 import { Flex, Heading, Stack, Button } from '@chakra-ui/react';
+import { useCallback } from 'react';
 function NotFound() {
+  const goPrev = useCallback(() => {
+    window.history.back();
+  }, []);
+
   return (
     <Flex
       direction="column"
@@ -10,19 +15,19 @@ function NotFound() {
       minH="100vh"
       bgColor="#f0f0f0"
     >
-      <Heading as="h1" fontSize="3rem" mb="2rem" color="#333">
+      <Heading as="h1" fontSize="3rem" mb="2rem" color="black">
         404 Not Found
       </Heading>
-      <Heading as="h2" fontSize="1.5rem" mb="1rem" color="#333">
+      <Heading as="h2" fontSize="1.5rem" mb="1rem" color="black">
         페이지를 찾을 수 없습니다.
       </Heading>
 
       <Stack direction="row" spacing={4} align="center">
-        <ChakraLink as={ReactRouterLink} onClick={() => window.history.back()}>
-          <Button colorScheme="blue">이전 페이지로</Button>
+        <ChakraLink as={ReactRouterLink} onClick={goPrev}>
+          <Button colorScheme="primary">이전 페이지로</Button>
         </ChakraLink>
         <ChakraLink as={ReactRouterLink} to="/">
-          <Button colorScheme="blue">메인 페이지로</Button>
+          <Button colorScheme="primary">메인 페이지로</Button>
         </ChakraLink>
       </Stack>
     </Flex>

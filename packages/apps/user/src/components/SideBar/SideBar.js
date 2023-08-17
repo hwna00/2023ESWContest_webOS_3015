@@ -37,18 +37,22 @@ const SideBar = function ({ user }) {
       left="0"
       zIndex={2}
     >
-      <ChakraLink as={ReactRouterLink} to={'/mypage'} width={'full'}>
-        <VStack width={'full'} py={'2'}>
+      <VStack width={'full'} py={'2'}>
+        <ChakraLink as={ReactRouterLink} to={'/mypage'}>
           {user ? (
             <Avatar src={user?.img} size={'xl'} />
           ) : (
             <Avatar icon={<FaUser />} size={'xl'} />
           )}
+        </ChakraLink>
+
+        <ChakraLink as={ReactRouterLink} to={'/auth/log-in'}>
           <Text fontSize={'xl'} fontWeight={'bold'}>
             {user ? `${user?.name}님` : '로그인하기'}
           </Text>
-        </VStack>
-      </ChakraLink>
+        </ChakraLink>
+      </VStack>
+
       <VStack width={'full'} gap={0}>
         {menuNames.map(menu => {
           return (
