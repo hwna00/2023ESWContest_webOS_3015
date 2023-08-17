@@ -7,8 +7,9 @@ import {
   UnorderedList,
 } from '@chakra-ui/react';
 import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
 
-const TodoList = function ({ day, today }) {
+const TodoList = function ({ selectedDay, todoOfSelectedDay }) {
   return (
     <Box
       bgColor={'primary.100'}
@@ -19,10 +20,10 @@ const TodoList = function ({ day, today }) {
       overflow={'hidden'}
     >
       <Text fontSize={'xl'} fontWeight={'bold'} mb={'2'}>
-        {dayjs(day).format('YYYY-MM-DD') ===
+        {dayjs(selectedDay).format('YYYY-MM-DD') ===
         dayjs(new Date()).format('YYYY-MM-DD')
           ? '오늘 할 일'
-          : dayjs(day).format('YYYY-MM-DD')}
+          : dayjs(selectedDay).format('YYYY-MM-DD')}
       </Text>
 
       <Divider bgColor={'primary.900'} opacity={'50%'} height={'0.5'} />
@@ -35,7 +36,7 @@ const TodoList = function ({ day, today }) {
         overflowY={'scroll'}
         scrollBehavior={'smooth'}
       >
-        {today?.items?.map(item => {
+        {todoOfSelectedDay?.items?.map(item => {
           return (
             <Checkbox
               key={item.id}
@@ -55,6 +56,16 @@ const TodoList = function ({ day, today }) {
       </UnorderedList>
     </Box>
   );
+};
+
+TodoList.defaultProps = {
+  selectedDay: new Date(),
+  todoOfSelectedDay: {},
+};
+
+TodoList.propTypes = {
+  selectedDay: PropTypes.instanceOf(Date),
+  todoOfSelectedDay: PropTypes.object,
 };
 
 export default TodoList;

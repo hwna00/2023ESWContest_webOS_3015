@@ -75,22 +75,29 @@ const todos = [
 ];
 
 const MainPage = function () {
-  const [day, setDay] = useState(new Date());
-  const [today, setToday] = useState([]);
+  const [selectedDay, setSelectedDay] = useState(new Date());
+  const [todoOfSelectedDay, setTodoOfSelectedDay] = useState({});
 
   useEffect(() => {
     const todoOfTheDay = todos.find(
-      todo => todo.date === dayjs(day).format('YYYY-MM-DD'),
+      todo => todo.date === dayjs(selectedDay).format('YYYY-MM-DD'),
     );
-    setToday(todoOfTheDay);
-  }, [day]);
+    setTodoOfSelectedDay(todoOfTheDay);
+  }, [selectedDay]);
 
   return (
     <HStack height={'full'}>
-      <Calendar day={day} setDay={setDay} todos={todos} />
+      <Calendar
+        selectedDay={selectedDay}
+        setSelectedDay={setSelectedDay}
+        todos={todos}
+      />
       <VStack flex={2} height={'full'} justifyContent={'space-evenly'}>
         <PushAlarm />
-        <TodoList day={day} today={today} />
+        <TodoList
+          selectedDay={selectedDay}
+          todoOfSelectedDay={todoOfSelectedDay}
+        />
         <ButtonGroup
           width={'full'}
           justifyContent={'space-between'}

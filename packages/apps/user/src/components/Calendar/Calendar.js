@@ -3,9 +3,10 @@ import { Box } from '@chakra-ui/react';
 import ReactCalendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
 import './Calendar.css';
 
-const Calendar = function ({ day, setDay, todos }) {
+const Calendar = function ({ selectedDay, setSelectedDay, todos }) {
   return (
     <Box flex={3} height={'full'}>
       <ReactCalendar
@@ -15,8 +16,8 @@ const Calendar = function ({ day, setDay, todos }) {
         prev2Label={null}
         next2Label={null}
         maxDetail="month"
-        value={day}
-        onChange={setDay}
+        value={selectedDay}
+        onChange={setSelectedDay}
         defaultValue={new Date()}
         // eslint-disable-next-line
         tileContent={({ date }) => {
@@ -40,6 +41,17 @@ const Calendar = function ({ day, setDay, todos }) {
       />
     </Box>
   );
+};
+
+Calendar.defaultProps = {
+  selectedDay: new Date(),
+  todo: [],
+};
+
+Calendar.propTyps = {
+  selectedDay: PropTypes.instanceOf(Date).isRequired,
+  setSelectedDay: PropTypes.func.isRequired,
+  todos: PropTypes.array,
 };
 
 export default Calendar;
