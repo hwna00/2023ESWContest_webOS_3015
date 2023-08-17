@@ -17,6 +17,7 @@ import {
   HStack,
   Link as ChakraLink,
   FormErrorMessage,
+  Icon,
 } from '@chakra-ui/react';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
 import { logIn, googleLogin, auth, provider } from '../../../firebase';
@@ -25,12 +26,6 @@ import {
   AiFillGoogleCircle,
   AiFillTwitterCircle,
 } from 'react-icons/ai';
-
-const CFaUserAlt = chakra(FaUserAlt);
-const CFaLock = chakra(FaLock);
-const GitHub = chakra(AiFillGithub);
-const Google = chakra(AiFillGoogleCircle);
-const Twitter = chakra(AiFillTwitterCircle);
 
 function LogIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -108,21 +103,23 @@ function LogIn() {
                 padding="15px"
               >
                 <Button bgColor="white">
-                  <GitHub boxSize="30px" />
+                  <Icon as={AiFillGithub} boxSize="30px" />
                 </Button>
 
                 <Button bgColor="white" onClick={googleClick}>
-                  <Google size="30px" />
+                  <Icon as={AiFillGoogleCircle} boxSize="30px" />
                 </Button>
                 <Button bgColor="white">
-                  <Twitter boxSize="30px" />
+                  <Icon as={AiFillTwitterCircle} boxSize="30px" />
                 </Button>
               </HStack>
               <FormControl isInvalid={errors.email}>
                 <InputGroup>
                   <InputLeftElement
                     pointerEvents="none"
-                    children={<CFaUserAlt color="gray.300" />}
+                    children={
+                      <Icon as={FaUserAlt} boxSize="20px" color="gray.300" />
+                    }
                   />
                   <Input
                     required
@@ -146,7 +143,9 @@ function LogIn() {
                   <InputLeftElement
                     pointerEvents="none"
                     color="gray.300"
-                    children={<CFaLock color="gray.300" />}
+                    children={
+                      <Icon as={FaLock} boxSize="20px" color="gray.300" />
+                    }
                   />
                   <Input
                     name="password"
