@@ -18,9 +18,13 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-import { signIn } from '../../../firebase';
-import { updateProfile } from 'firebase/auth';
+import {
+  browserLocalPersistence,
+  setPersistence,
+  updateProfile,
+} from 'firebase/auth';
 import PropTypes from 'prop-types';
+import { auth, signIn } from '../../../firebase';
 
 const SignUpForm = function ({
   activeStep,
@@ -61,16 +65,20 @@ const SignUpForm = function ({
       step0: { email, password, username },
     } = data;
 
-    signIn(email, password)
-      .then(userCredential => {
-        updateProfile(userCredential.user, {
-          displayName: username,
-        }).then(() => navigate('/'));
+    setPersistence(auth, browserLocalPersistence)
+      .then(() => {
+        signIn(email, password)
+          .then(userCredential => {
+            updateProfile(userCredential.user, {
+              displayName: username,
+            }).then(() => navigate('/'));
+          })
+          .catch(error => {
+            console.log(error);
+            navigate('/error');
+          });
       })
-      .catch(error => {
-        console.log(error);
-        navigate('/error');
-      });
+      .catch(() => navigate('/error'));
   };
 
   const FORM_WIDTH = 700;
