@@ -1,18 +1,30 @@
-import { Outlet } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { Box } from '@chakra-ui/react';
+import { onAuthStateChanged, getAuth } from 'firebase/auth';
 import SideBar from '../SideBar/SideBar';
 import StatusBar from '../StatusBar/StatusBar';
-import { auth } from '../../../firebase';
 
 const Root = function () {
-  const user = {
-    name: auth.currentUser?.displayName,
-    profileImg: auth.currentUser?.photoURL,
-  };
+  const [currentUser, setCurrentUser] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const auth = getAuth();
+
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        setCurrentUser(user);
+      } else {
+        setCurrentUser(null);
+        navigate('/auth/log-in');
+      }
+    });
+  }, [navigate]);
 
   return (
     <>
-      {auth.currentUser ? <SideBar user={user} /> : <SideBar />}
+      <SideBar user={currentUser} />
       <StatusBar />
       <Box ml="40" p="6" pt={'14'} height={'100vh'}>
         <Outlet />
