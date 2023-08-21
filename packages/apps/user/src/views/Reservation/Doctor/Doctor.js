@@ -152,7 +152,7 @@ function Doctor() {
     return selectedSpecialties.length === 0 || isSelectedSpecialty;
   });
 
-  if (sortBy === 'newest') {
+  if (sortBy === 'name') {
     doctorsToDisplay.sort((a, b) => (a.name > b.name ? 1 : -1));
   } else {
     doctorsToDisplay.sort((a, b) => (a.rate < b.rate ? 1 : -1));
@@ -187,11 +187,11 @@ function Doctor() {
               <Box>
                 <Heading as="h3">정렬 기준</Heading>
                 <Checkbox
-                  id="newest"
-                  checked={sortBy === 'newest'}
-                  onChange={() => handleSortByChange('newest')}
+                  id="name"
+                  checked={sortBy === 'name'}
+                  onChange={() => handleSortByChange('name')}
                 >
-                  이름순(예비)
+                  이름순
                 </Checkbox>
                 <Checkbox
                   id="rating"
