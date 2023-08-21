@@ -25,10 +25,14 @@ const StatusBar = function () {
       justifyContent={'flex-end'}
       alignItems={'center'}
       bg={'primary.200'}
-      w={'full'}
+      width={'full'}
       height={'8'}
       px={'4'}
       fontWeight={'bold'}
+      position={'absolute'}
+      top={'0'}
+      left={'0'}
+      zIndex={'1'}
     >
       <Text>{currentTime}</Text>
     </HStack>

@@ -14,7 +14,7 @@ const Root = function () {
     <>
       {auth.currentUser ? <SideBar user={user} /> : <SideBar />}
       <StatusBar />
-      <Box ml="40" p="6" height={'100vh'}>
+      <Box ml="40" p="6" pt={'14'} height={'100vh'}>
         <Outlet />
       </Box>
     </>
