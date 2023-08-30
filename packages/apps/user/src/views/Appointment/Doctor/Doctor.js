@@ -17,9 +17,8 @@ import {
   Checkbox,
   CheckboxGroup,
 } from '@chakra-ui/react';
-import { ArrowBackIcon } from '@chakra-ui/icons';
 import AppointmentCard from './AppointmentCard';
-
+import BackButton from '../BackButton';
 function Doctor() {
   const goPrev = useCallback(() => {
     window.history.back();
@@ -116,19 +115,7 @@ function Doctor() {
   return (
     <Flex direction="column" alignItems="flex-start">
       <Box>
-        <HStack>
-          <ArrowBackIcon boxSize="10" onClick={goPrev} />
-          <Heading
-            as="h2"
-            fontSize="3xl"
-            mb="4"
-            color="black"
-            fontWeight="500"
-            textAlign="center"
-          >
-            의사별 보기
-          </Heading>
-        </HStack>
+        <BackButton goPrev={goPrev} title={'의사별 보기'} />
         <Button onClick={onOpen} position="fixed" right="8" top="4">
           필터적용
         </Button>
