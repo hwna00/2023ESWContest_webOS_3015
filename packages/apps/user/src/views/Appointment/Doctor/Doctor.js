@@ -167,7 +167,7 @@ function Doctor() {
         </Modal>
       </Box>
 
-      <Box width={'full'} maxHeight="80vh" overflowY="auto">
+      <Box width={'full'} maxHeight="80vh" overflowY="scroll">
         <AppointmentCard doctors={doctorsToDisplay} />
       </Box>
     </Flex>
