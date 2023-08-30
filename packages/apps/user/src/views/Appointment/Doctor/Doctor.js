@@ -5,8 +5,6 @@ import {
   Heading,
   Button,
   Stack,
-  HStack,
-  Icon,
   Modal,
   ModalOverlay,
   ModalContent,
