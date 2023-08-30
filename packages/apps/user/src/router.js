@@ -5,7 +5,7 @@ import MyPage from './views/MyPage/MyPage';
 import MainPage from './views/MainPage/MainPage';
 import SignUp from './views/Auth/SignUp/SignUp';
 import LogIn from './views/Auth/LogIn/LogIn';
-import Doctor from './views/Reservation/Doctor/Doctor';
+import Doctor from './views/Appointment/Doctor/Doctor';
 
 const router = createBrowserRouter(
   [
@@ -23,8 +23,18 @@ const router = createBrowserRouter(
           element: <MyPage />,
         },
         {
-          path: 'doctor-appointment',
-          element: <Doctor />,
+          path: 'appointment',
+          element: <Outlet />,
+          children: [
+            {
+              path: 'doctors',
+              element: <Doctor />,
+            },
+            // {
+            //   path: 'hospitals',
+            //   element: <Hospital />,
+            // },
+          ],
         },
         {
           path: 'appointment-history',
