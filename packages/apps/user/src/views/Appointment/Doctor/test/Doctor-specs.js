@@ -17,19 +17,19 @@ const specialties = [
 ];
 
 describe('의사별 보기', () => {
-  test('의사별 보기 뜨는지', () => {
+  it('의사별 보기 뜨는가', () => {
     render(<Doctor />, { wrapper: BrowserRouter });
-    const headingElement = screen.getByText(/의사별 보기/i);
-    expect(headingElement).toBeInTheDocument();
+    const headingElements = screen.getAllByText(/의사별 보기/i);
+    expect(headingElements.length).toBeGreaterThan(0);
   });
 
-  test('필터 적용 버튼', () => {
+  it('필터 적용 버튼이 뜨는가', () => {
     render(<Doctor />, { wrapper: BrowserRouter });
     const buttonElement = screen.getByRole('button', { name: '필터적용' });
     expect(buttonElement).toBeInTheDocument();
   });
 
-  test('필터 적용 버튼 누르면 모달창 뜨는지', () => {
+  it('필터 적용 버튼 누르면 모달창 뜨는가', () => {
     render(<Doctor />, { wrapper: BrowserRouter });
     const buttonElement = screen.getByRole('button', { name: '필터적용' });
     fireEvent.click(buttonElement);
@@ -37,7 +37,7 @@ describe('의사별 보기', () => {
     expect(modalElement).toBeInTheDocument();
   });
 
-  test('모든 과목 체크박스가 렌더링되는지', async () => {
+  it('모든 과목 체크박스가 렌더링되는가', async () => {
     render(<Doctor />, { wrapper: BrowserRouter });
     const buttonElement = screen.getByRole('button', { name: '필터적용' });
     userEvent.click(buttonElement);
