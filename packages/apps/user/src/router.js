@@ -1,6 +1,7 @@
 import { Outlet, createBrowserRouter } from 'react-router-dom';
 import NotFound from './views/NotFound';
 import Root from './components/Root/Root';
+import AppointmentHistory from './views/AppointmentHistory/AppointmentHistory';
 import MyPage from './views/MyPage/MyPage';
 import MainPage from './views/MainPage/MainPage';
 import SignUp from './views/Auth/SignUp/SignUp';
@@ -27,7 +28,7 @@ const router = createBrowserRouter(
         },
         {
           path: 'appointment-history',
-          element: '',
+          element: <AppointmentHistory />,
         },
         {
           path: 'health',
