@@ -25,6 +25,7 @@ import {
 } from 'firebase/auth';
 import PropTypes from 'prop-types';
 import { auth, signIn } from '../../../firebase';
+import UserFase from '../UserFace/UserFase';
 
 const SignUpForm = function ({
   activeStep,
@@ -99,6 +100,10 @@ const SignUpForm = function ({
           animate={{ x: formPosition }}
           transition={'0.1s linear'}
         >
+          <VStack minWidth={FORM_WIDTH} gap={'4'} pr={'4'}>
+            <UserFase />
+          </VStack>
+
           <VStack minWidth={FORM_WIDTH} gap={'4'} pr={'4'}>
             <FormControl
               width={'full'}
@@ -359,10 +364,6 @@ const SignUpForm = function ({
                 {errors.step2?.regularMedicines?.message}
               </FormErrorMessage>
             </FormControl>
-          </VStack>
-
-          <VStack minWidth={FORM_WIDTH} gap={'4'} pr={'4'}>
-            프로필 사진 추가 필요 //Todo: 프로필 사진 찍기 기능 추가하기
           </VStack>
         </HStack>
       </Box>
