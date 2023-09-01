@@ -42,14 +42,22 @@ const AppointmentHistory = function () {
   ]);
 
   return (
-    <VStack m="0 15px" spacing={'5'} align={'stretch'}>
-      <HStack mt={'7'} mb={'-5'} justifyContent={'center'} spacing={'100'}>
-        <Box>처방 일시</Box>
-        <Box>진료 병원</Box>
-        <Box>제조 약국</Box>
-        <Box>즐겨찾기</Box>
+    <VStack ml={'5'} mr={'5'} align={'stretch'}>
+      <HStack mt={'7'} mb={'-2'} justifyContent={'center'}>
+        <Box w={'40'} textAlign={'center'}>
+          처방 일시
+        </Box>
+        <Box w={'40'} textAlign={'center'}>
+          진료 병원
+        </Box>
+        <Box w={'40'} textAlign={'center'}>
+          제조 약국
+        </Box>
+        <Box w={'40'} textAlign={'center'}>
+          즐겨찾기
+        </Box>
       </HStack>
-      <Divider marginBottom={'-2'} h={'0.5'} bgColor="black" />
+      <Divider h={'0.5'} mb={'1'} bgColor="black" />
       {histories
         .sort(function (a, b) {
           if (a.prescriptionDate > b.prescriptionDate) return 1;
@@ -58,19 +66,27 @@ const AppointmentHistory = function () {
         })
         .map((item, index) => (
           <HStack
-            h={'55'}
             bg={'primary.100'}
+            py={'3'}
+            mb={'1'}
             borderRadius={'10'}
             justifyContent={'center'}
-            spacing={'100'}
             key={index}
           >
-            <Box>{item.prescriptionDate}</Box>
-            <Box>{item.hospitalName}</Box>
-            <Box>{item.pharmacyName}</Box>
-            <Button colorScheme={'blue'} size={'sm'}>
-              {item.favorites}
-            </Button>
+            <Box w={'40'} textAlign={'center'}>
+              {item.prescriptionDate}
+            </Box>
+            <Box w={'40'} textAlign={'center'}>
+              {item.hospitalName}
+            </Box>
+            <Box w={'40'} textAlign={'center'}>
+              {item.pharmacyName}
+            </Box>
+            <Box w={'40'} textAlign={'center'}>
+              <Button colorScheme={'blue'} size={'sm'}>
+                {item.favorites}
+              </Button>
+            </Box>
           </HStack>
         ))}
     </VStack>
