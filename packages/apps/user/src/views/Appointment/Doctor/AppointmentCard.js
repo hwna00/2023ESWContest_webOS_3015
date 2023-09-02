@@ -41,7 +41,6 @@ function AppointmentCard({ doctors }) {
                 {doctor.field.join(', ')}
               </Text>
             </Box>
-            // rating part is here.
             <Flex alignItems={'center'}>
               <Icon as={StarIcon} boxSize={'4'} mr={'2'} />
               <Text fontSize={'sm'}>{doctor.rate}</Text>
