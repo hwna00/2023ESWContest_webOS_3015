@@ -20,7 +20,7 @@ import {
 import AppointmentCard from '../../../../theme/components/AppointmentCard';
 import BackButton from '../../../../theme/components/BackButton';
 import initialDoctorList from './DoctorList';
-import specialties from './Specialties';
+import specialties from '/home/user/projects/housepital/packages/apps/user/src/views/Appointment/Specialties.js';
 
 function AppointDoctor() {
   const goPrev = useCallback(() => {
