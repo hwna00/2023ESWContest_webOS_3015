@@ -3,9 +3,9 @@ import { Link as ReactRouterLink } from 'react-router-dom';
 import { TiChevronRight } from 'react-icons/ti';
 import { BsBookmark } from 'react-icons/bs';
 
-const AppointmentHistoryList = function ({ history, index }) {
+const AppointmentHistoryList = function ({ history }) {
   return (
-    <ChakraLink key={index} as={ReactRouterLink} to="/appointment-history/1">
+    <ChakraLink as={ReactRouterLink} to="/appointment-history/1">
       <HStack
         bg={'primary.100'}
         py={'3'}

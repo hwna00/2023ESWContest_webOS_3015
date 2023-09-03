@@ -66,7 +66,7 @@ const AppointmentHistory = function () {
           if (a.prescriptionDate < b.prescriptionDate) return -1;
         })
         .map((history, index) => (
-          <AppointmentHistoryList history={history} index={index} />
+          <AppointmentHistoryList key={index} history={history} />
         ))}
     </VStack>
   );
