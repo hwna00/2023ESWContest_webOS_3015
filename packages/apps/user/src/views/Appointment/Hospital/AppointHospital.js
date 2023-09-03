@@ -17,8 +17,8 @@ import {
   SimpleGrid,
 } from '@chakra-ui/react';
 
-import AppointmentCard from '../../../../theme/components/AppointmentCard';
-import BackButton from '../../../../theme/components/BackButton';
+import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
+import BackButton from '../../../components/BackButton/BackButton';
 import HospitalList from './HospitalList';
 import specialties from '/home/user/projects/housepital/packages/apps/user/src/views/Appointment/Specialties.js';
 
@@ -44,13 +44,10 @@ function AppointHospital() {
   const handleSpecialtyChange = selectedOptions => {
     setSelectedSpecialties(selectedOptions);
   };
-
   const hospitalToDisplay = hospitalList.filter(hospital => {
-    const isSelectedSpecialty =
-      hospital.specialty && // 추가: hospital.specialty가 존재하는지 확인
-      hospital.specialty.some(specialty =>
-        selectedSpecialties.includes(specialty),
-      );
+    const isSelectedSpecialty = hospital.field.some(specialty =>
+      selectedSpecialties.includes(specialty),
+    );
     return selectedSpecialties.length === 0 || isSelectedSpecialty;
   });
 
