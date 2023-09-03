@@ -1,5 +1,15 @@
-import { Box, Button, Divider, HStack, VStack } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Divider,
+  HStack,
+  Link as ChakraLink,
+  VStack,
+} from '@chakra-ui/react';
 import { useState } from 'react';
+import { Link as ReactRouterLink } from 'react-router-dom';
+import { TiChevronRight } from 'react-icons/ti';
+import { BsBookmark } from 'react-icons/bs';
 
 const AppointmentHistory = function () {
   const [histories, setHistories] = useState([
@@ -65,29 +75,38 @@ const AppointmentHistory = function () {
           if (a.prescriptionDate < b.prescriptionDate) return -1;
         })
         .map((item, index) => (
-          <HStack
-            bg={'primary.100'}
-            py={'3'}
-            mb={'1'}
-            borderRadius={'10'}
-            justifyContent={'center'}
+          <ChakraLink
             key={index}
+            as={ReactRouterLink}
+            to="/appointment-history/:id"
           >
-            <Box w={'40'} textAlign={'center'}>
-              {item.prescriptionDate}
-            </Box>
-            <Box w={'40'} textAlign={'center'}>
-              {item.hospitalName}
-            </Box>
-            <Box w={'40'} textAlign={'center'}>
-              {item.pharmacyName}
-            </Box>
-            <Box w={'40'} textAlign={'center'}>
-              <Button colorScheme={'blue'} size={'sm'}>
-                {item.favorites}
-              </Button>
-            </Box>
-          </HStack>
+            <HStack
+              bg={'primary.100'}
+              py={'3'}
+              mb={'1'}
+              borderRadius={'10'}
+              justifyContent={'center'}
+            >
+              <Box w={'40'} textAlign={'center'}>
+                {item.prescriptionDate}
+              </Box>
+              <Box w={'40'} textAlign={'center'}>
+                {item.hospitalName}
+              </Box>
+              <Box w={'40'} textAlign={'center'}>
+                {item.pharmacyName}
+              </Box>
+              <Box
+                w={'40'}
+                mr={'-4'}
+                display={'flex'}
+                justifyContent={'center'}
+              >
+                <BsBookmark />
+              </Box>
+              <TiChevronRight />
+            </HStack>
+          </ChakraLink>
         ))}
     </VStack>
   );
