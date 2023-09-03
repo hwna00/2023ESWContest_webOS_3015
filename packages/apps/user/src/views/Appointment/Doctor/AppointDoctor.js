@@ -17,8 +17,8 @@ import {
   SimpleGrid,
 } from '@chakra-ui/react';
 
-import AppointmentCard from './AppointmentCard';
-import BackButton from '../BackButton';
+import AppointmentCard from '../../../../theme/components/AppointmentCard';
+import BackButton from '../../../../theme/components/BackButton';
 import initialDoctorList from './DoctorList';
 import specialties from './Specialties';
 
