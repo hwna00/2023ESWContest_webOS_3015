@@ -35,10 +35,6 @@ const router = createBrowserRouter(
               path: 'doctors',
               element: <Doctor />,
             },
-            // {
-            //   path: 'hospitals',
-            //   element: <Hospital />,
-            // },
           ],
         },
         {
