@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import {
   Box,
   Flex,
@@ -23,10 +23,6 @@ import initialDoctorList from './DoctorList';
 import specialties from '/home/user/projects/housepital/packages/apps/user/src/views/Appointment/Specialties.js';
 
 function AppointDoctor() {
-  const goPrev = useCallback(() => {
-    window.history.back();
-  }, []);
-
   const [sortBy, setSortBy] = useState();
   const [selectedSpecialties, setSelectedSpecialties] = useState([]);
   const [doctorList, setDoctorList] = useState(initialDoctorList);
@@ -61,7 +57,7 @@ function AppointDoctor() {
   return (
     <Flex direction="column" alignItems="flex-start">
       <Box>
-        <BackButton goPrev={goPrev} title={'의사별 보기'} />
+        <BackButton title={'의사별 보기'} />
         <Button onClick={onOpen} position="fixed" right="8" top="4">
           필터적용
         </Button>
