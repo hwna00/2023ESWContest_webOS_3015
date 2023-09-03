@@ -1,10 +1,11 @@
-import { Outlet, createBrowserRouter } from 'react-router-dom';
+import { Link, Outlet, createBrowserRouter } from 'react-router-dom';
 import NotFound from './views/NotFound';
 import Root from './components/Root/Root';
 import MyPage from './views/MyPage/MyPage';
 import MainPage from './views/MainPage/MainPage';
 import SignUp from './views/Auth/SignUp/SignUp';
 import LogIn from './views/Auth/LogIn/LogIn';
+import Doctor from './views/Appointment/Doctor/AppointDoctor';
 
 const router = createBrowserRouter(
   [
@@ -22,8 +23,19 @@ const router = createBrowserRouter(
           element: <MyPage />,
         },
         {
-          path: 'doctor-appointment',
-          element: '',
+          path: 'appointment',
+          element: (
+            <>
+              <Link to={'/appointment/doctors'}>doctor</Link>
+              <Outlet />
+            </>
+          ),
+          children: [
+            {
+              path: 'doctors',
+              element: <Doctor />,
+            },
+          ],
         },
         {
           path: 'appointment-history',
