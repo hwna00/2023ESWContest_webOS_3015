@@ -15,7 +15,13 @@ const AppointmentHistory = function () {
       <Heading as={'h3'} size={'lg'} pl={'4'} mb={'5'}>
         상세 진료 기록
       </Heading>
-      <VStack h={'450'} mx={'5'} align={'stretch'} gap={'4'} overflowY={'auto'}>
+      <VStack
+        h={'450'}
+        mx={'5'}
+        align={'stretch'}
+        gap={'4'}
+        overflowY={'scrollY'}
+      >
         <Box pl={'4'} bg={'primary.100'} py={'3'} borderRadius={'10'}>
           처방 일시:
         </Box>
