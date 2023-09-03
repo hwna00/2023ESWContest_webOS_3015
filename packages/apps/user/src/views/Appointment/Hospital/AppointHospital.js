@@ -15,6 +15,7 @@ import {
   Checkbox,
   CheckboxGroup,
   SimpleGrid,
+  HStack,
 } from '@chakra-ui/react';
 
 import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
@@ -60,11 +61,12 @@ function AppointHospital() {
   return (
     <Flex direction="column" alignItems="flex-start">
       <Box>
-        <BackButton title={'병원별 보기'} />
-        <Button onClick={onOpen} position="fixed" right="8" top="4">
-          필터적용
-        </Button>
-
+        <HStack>
+          <BackButton title={'병원별 보기'} />
+          <Button onClick={onOpen} position="fixed" right="8" top="4">
+            필터적용
+          </Button>
+        </HStack>
         <Modal isOpen={isOpen} onClose={onClose} size="4xl">
           <ModalOverlay />
           <ModalContent>
