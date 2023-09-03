@@ -2,8 +2,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import Doctor from '../Doctor';
-
+import AppointDoctor from '../AppointDoctor';
 const specialties = [
   '이비인후과',
   '안과',
@@ -18,19 +17,19 @@ const specialties = [
 
 describe('의사별 보기', () => {
   it('의사별 보기 뜨는가', () => {
-    render(<Doctor />, { wrapper: BrowserRouter });
+    render(<AppointDoctor />, { wrapper: BrowserRouter });
     const headingElements = screen.getAllByText(/의사별 보기/i);
     expect(headingElements.length).toBeGreaterThan(0);
   });
 
   it('필터 적용 버튼이 뜨는가', () => {
-    render(<Doctor />, { wrapper: BrowserRouter });
+    render(<AppointDoctor />, { wrapper: BrowserRouter });
     const buttonElement = screen.getByRole('button', { name: '필터적용' });
     expect(buttonElement).toBeInTheDocument();
   });
 
   it('필터 적용 버튼 누르면 모달창 뜨는가', () => {
-    render(<Doctor />, { wrapper: BrowserRouter });
+    render(<AppointDoctor />, { wrapper: BrowserRouter });
     const buttonElement = screen.getByRole('button', { name: '필터적용' });
     fireEvent.click(buttonElement);
     const modalElement = screen.getByRole('dialog');
@@ -38,7 +37,7 @@ describe('의사별 보기', () => {
   });
 
   it('모든 과목 체크박스가 렌더링되는가', async () => {
-    render(<Doctor />, { wrapper: BrowserRouter });
+    render(<AppointDoctor />, { wrapper: BrowserRouter });
     const buttonElement = screen.getByRole('button', { name: '필터적용' });
     userEvent.click(buttonElement);
     await waitFor(() => {
