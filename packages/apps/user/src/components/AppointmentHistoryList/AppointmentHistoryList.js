@@ -8,8 +8,7 @@ const AppointmentHistoryList = function ({ history }) {
     <ChakraLink as={ReactRouterLink} to="/appointment-history/1">
       <HStack
         bg={'primary.100'}
-        py={'3'}
-        mb={'1'}
+        py={'4'}
         borderRadius={'10'}
         justifyContent={'center'}
       >
