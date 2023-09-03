@@ -14,7 +14,7 @@ function AppointmentCard({ info }) {
       <Flex alignItems="center">
         <Image
           src={info.img}
-          alt={`${info.name}`}
+          alt={info.name}
           width="24"
           height="24"
           objectFit="cover"
