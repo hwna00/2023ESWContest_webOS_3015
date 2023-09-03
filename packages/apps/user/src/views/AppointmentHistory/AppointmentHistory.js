@@ -1,15 +1,6 @@
-import {
-  Box,
-  Button,
-  Divider,
-  HStack,
-  Link as ChakraLink,
-  VStack,
-} from '@chakra-ui/react';
+import { Box, Divider, HStack, VStack } from '@chakra-ui/react';
+import AppointmentHistoryList from '../../components/AppointmentHistoryList/AppointmentHistoryList';
 import { useState } from 'react';
-import { Link as ReactRouterLink } from 'react-router-dom';
-import { TiChevronRight } from 'react-icons/ti';
-import { BsBookmark } from 'react-icons/bs';
 
 const AppointmentHistory = function () {
   const [histories, setHistories] = useState([
@@ -74,39 +65,8 @@ const AppointmentHistory = function () {
           if (a.prescriptionDate === b.prescriptionDate) return 0;
           if (a.prescriptionDate < b.prescriptionDate) return -1;
         })
-        .map((item, index) => (
-          <ChakraLink
-            key={index}
-            as={ReactRouterLink}
-            to="/appointment-history/:id"
-          >
-            <HStack
-              bg={'primary.100'}
-              py={'3'}
-              mb={'1'}
-              borderRadius={'10'}
-              justifyContent={'center'}
-            >
-              <Box w={'40'} textAlign={'center'}>
-                {item.prescriptionDate}
-              </Box>
-              <Box w={'40'} textAlign={'center'}>
-                {item.hospitalName}
-              </Box>
-              <Box w={'40'} textAlign={'center'}>
-                {item.pharmacyName}
-              </Box>
-              <Box
-                w={'40'}
-                mr={'-4'}
-                display={'flex'}
-                justifyContent={'center'}
-              >
-                <BsBookmark />
-              </Box>
-              <TiChevronRight />
-            </HStack>
-          </ChakraLink>
+        .map((history, index) => (
+          <AppointmentHistoryList history={history} index={index} />
         ))}
     </VStack>
   );
