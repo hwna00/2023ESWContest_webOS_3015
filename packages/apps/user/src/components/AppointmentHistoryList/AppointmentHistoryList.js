@@ -1,9 +1,14 @@
+import { useState } from 'react';
 import { Box, HStack, Link as ChakraLink } from '@chakra-ui/react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { TiChevronRight } from 'react-icons/ti';
-import { BsBookmark } from 'react-icons/bs';
+import { BsBookmark, BsFillBookmarkCheckFill } from 'react-icons/bs';
 
 const AppointmentHistoryList = function ({ history }) {
+  const [isChecked, setIsChecked] = useState(false);
+  const changeBookmark = function () {
+    setIsChecked(previous => !previous);
+  };
   return (
     <ChakraLink as={ReactRouterLink} to="/appointment-history/1">
       <HStack
@@ -22,7 +27,11 @@ const AppointmentHistoryList = function ({ history }) {
           {history.pharmacyName}
         </Box>
         <Box w={'40'} mr={'-4'} display={'flex'} justifyContent={'center'}>
-          <BsBookmark />
+          {!isChecked ? (
+            <BsBookmark onClick={changeBookmark} />
+          ) : (
+            <BsFillBookmarkCheckFill onClick={changeBookmark} />
+          )}
         </Box>
         <TiChevronRight />
       </HStack>
