@@ -40,11 +40,11 @@ function AppointmentCard({ doctors }) {
               <Text fontSize={'sm'} mb={'2'}>
                 {doctor.field.join(', ')}
               </Text>
+              <Flex alignItems={'center'}>
+                <Icon as={StarIcon} boxSize={'4'} mr={'2'} />
+                <Text fontSize={'sm'}>{doctor.rate}</Text>
+              </Flex>
             </Box>
-            <Flex alignItems={'center'}>
-              <Icon as={StarIcon} boxSize={'4'} mr={'2'} />
-              <Text fontSize={'sm'}>{doctor.rate}</Text>
-            </Flex>
           </Flex>
         </Box>
       ))}
