@@ -5,7 +5,7 @@ import { BsBookmark } from 'react-icons/bs';
 
 const AppointmentHistoryList = function ({ history, index }) {
   return (
-    <ChakraLink key={index} as={ReactRouterLink} to="/appointment-history/:id">
+    <ChakraLink key={index} as={ReactRouterLink} to="/appointment-history/1">
       <HStack
         bg={'primary.100'}
         py={'3'}
