@@ -23,7 +23,7 @@ const AppointmentHistory = function () {
         overflowY={'scroll'}
       >
         <Box pl={'4'} bg={'primary.100'} py={'3'} borderRadius={'10'}>
-          처방 일시:
+          진료 일시:
         </Box>
         <Box pl={'4'} bg={'primary.100'} py={'3'} borderRadius={'10'}>
           진료 병원:

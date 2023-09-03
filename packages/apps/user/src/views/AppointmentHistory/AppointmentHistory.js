@@ -76,7 +76,7 @@ const AppointmentHistory = function () {
     <VStack ml={'5'} mr={'5'} align={'stretch'}>
       <HStack mt={'7'} mb={'-2'} justifyContent={'center'}>
         <Box w={'40'} textAlign={'center'}>
-          처방 일시
+          진료 일시
         </Box>
         <Box w={'40'} textAlign={'center'}>
           진료 병원
