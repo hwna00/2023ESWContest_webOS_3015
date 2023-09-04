@@ -73,20 +73,18 @@ const AppointmentHistory = function () {
   ]);
 
   return (
-    <VStack ml={'5'} mr={'5'} align={'stretch'}>
-      <HStack mt={'7'} mb={'-2'} justifyContent={'center'}>
-        <Box w={'40'} textAlign={'center'}>
+    <VStack mx={'5'} align={'stretch'}>
+      <HStack mt={'7'} mb={'-2'} justifyContent={'space-evenly'}>
+        <Box width={'48'} textAlign={'center'} fontWeight={'bold'}>
           진료 일시
         </Box>
-        <Box w={'40'} textAlign={'center'}>
+        <Box width={'48'} textAlign={'center'} fontWeight={'bold'}>
           진료 병원
         </Box>
-        <Box w={'40'} textAlign={'center'}>
+        <Box width={'48'} textAlign={'center'} fontWeight={'bold'}>
           제조 약국
         </Box>
-        <Box w={'40'} textAlign={'center'}>
-          즐겨찾기
-        </Box>
+        <Box width={'20'} />
       </HStack>
       <Divider h={'0.5'} mb={'1'} bgColor="black" />
       <Box
