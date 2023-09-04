@@ -1,5 +1,5 @@
 import { Box, Divider, HStack, VStack } from '@chakra-ui/react';
-import AppointmentHistoryList from '../../components/AppointmentHistoryList/AppointmentHistoryList';
+import AppointmentHistoryItem from '../../components/AppointmentHistoryItem/AppointmentHistoryItem';
 import { useState } from 'react';
 
 const AppointmentHistory = function () {
@@ -101,7 +101,7 @@ const AppointmentHistory = function () {
             if (a.prescriptionDate < b.prescriptionDate) return -1;
           })
           .map((history, index) => (
-            <AppointmentHistoryList key={index} history={history} />
+            <AppointmentHistoryItem key={index} history={history} />
           ))}
       </Box>
     </VStack>

@@ -2,7 +2,7 @@ import { Box, HStack, Link as ChakraLink } from '@chakra-ui/react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { TiChevronRight } from 'react-icons/ti';
 
-const AppointmentHistoryList = function ({ history }) {
+const AppointmentHistoryItem = function ({ history }) {
   return (
     <ChakraLink as={ReactRouterLink} to="/appointment-history/1">
       <HStack
@@ -28,4 +28,4 @@ const AppointmentHistoryList = function ({ history }) {
   );
 };
 
-export default AppointmentHistoryList;
+export default AppointmentHistoryItem;
