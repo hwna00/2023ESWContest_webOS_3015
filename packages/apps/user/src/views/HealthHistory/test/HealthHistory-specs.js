@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import HealthHistory from '../HealthHistory/HealthHistory';
+import HealthHistory from '../HealthHistory';
 
 describe('건강 데이터가 뜬다', () => {
   beforeEach(() => {
