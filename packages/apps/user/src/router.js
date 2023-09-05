@@ -7,6 +7,7 @@ import MyPage from './views/MyPage/MyPage';
 import MainPage from './views/MainPage/MainPage';
 import SignUp from './views/Auth/SignUp/SignUp';
 import LogIn from './views/Auth/LogIn/LogIn';
+import Appointment from './views/Appointment/Appointment';
 import AppointDoctor from './views/Appointment/Doctor/AppointDoctor';
 import AppointHospital from './views/Appointment/Hospital/AppointHospital';
 
@@ -27,14 +28,7 @@ const router = createBrowserRouter(
         },
         {
           path: 'appointment',
-          element: (
-            <>
-              <Link to={'/appointment/doctors'}>doctor</Link>
-              <br />
-              <Link to={'/appointment/hospitals'}>hospital</Link>
-              <Outlet />
-            </>
-          ),
+          element: <Appointment />,
           children: [
             {
               path: 'doctors',
