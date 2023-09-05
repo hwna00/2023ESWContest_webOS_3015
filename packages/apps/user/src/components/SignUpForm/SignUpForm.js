@@ -24,6 +24,7 @@ import {
   updateProfile,
 } from 'firebase/auth';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import { auth, signIn } from '../../../firebase';
 import UserFace from './UserFace';
 
@@ -60,6 +61,9 @@ const SignUpForm = function ({
     setFormPosition(formPosition + currentFormWidth);
     goToPrevious();
   }, [goToPrevious, setFormPosition, formPosition]);
+
+  const profileImgSrc = useSelector(state => state.url);
+  console.log(profileImgSrc);
 
   const onSubmit = function (data) {
     const {
@@ -100,10 +104,6 @@ const SignUpForm = function ({
           animate={{ x: formPosition }}
           transition={'0.1s linear'}
         >
-          <VStack minWidth={FORM_WIDTH} gap={'4'} pr={'4'}>
-            <UserFace />
-          </VStack>
-
           <VStack minWidth={FORM_WIDTH} gap={'4'} pr={'4'}>
             <FormControl
               width={'full'}
@@ -193,7 +193,6 @@ const SignUpForm = function ({
               </FormErrorMessage>
             </FormControl>
           </VStack>
-
           <VStack minWidth={FORM_WIDTH} gap={'4'} pr={'4'}>
             <FormControl
               width={'full'}
@@ -283,7 +282,6 @@ const SignUpForm = function ({
               </FormErrorMessage>
             </FormControl>
           </VStack>
-
           <VStack minWidth={FORM_WIDTH} gap={'4'} pr={'4'}>
             <HStack width={'full'} gap={'4'}>
               <FormControl width={'full'} isInvalid={errors.step2?.bloodType}>
@@ -364,6 +362,9 @@ const SignUpForm = function ({
                 {errors.step2?.regularMedicines?.message}
               </FormErrorMessage>
             </FormControl>
+          </VStack>
+          <VStack minWidth={FORM_WIDTH} gap={'4'} pr={'4'}>
+            <UserFace />
           </VStack>
         </HStack>
       </Box>

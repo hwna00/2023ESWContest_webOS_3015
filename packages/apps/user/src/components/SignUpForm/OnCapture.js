@@ -1,8 +1,12 @@
 import { AspectRatio, Button, HStack } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setImg } from '../../store';
 
 const OnCapture = function () {
+  const dispatch = useDispatch();
+
   const [error, setError] = useState();
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -54,8 +58,9 @@ const OnCapture = function () {
     return data;
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
     const profileImg = captureCam();
+    dispatch(setImg(profileImg));
     navigate('/auth/sign-up/after-capture', { state: { profileImg } });
   };
 
@@ -67,7 +72,7 @@ const OnCapture = function () {
     if (error) {
       navigate('/error');
     }
-  }, [error]);
+  }, [error, navigate]);
 
   return (
     <HStack width={'full'} justifyContent={'space-evenly'}>
@@ -80,10 +85,11 @@ const OnCapture = function () {
         <video autoPlay ref={videoRef} />
       </AspectRatio>
 
+      {/* eslint-disable */}
       <Button colorScheme={'primary'} onClick={handleClick}>
         사진 찍기
       </Button>
-      <canvas ref={canvasRef} height={0} />
+      <canvas ref={canvasRef} height={0} width={0} />
     </HStack>
   );
 };

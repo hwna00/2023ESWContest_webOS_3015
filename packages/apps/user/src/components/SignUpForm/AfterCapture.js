@@ -1,11 +1,10 @@
-import { AspectRatio, HStack, Image } from '@chakra-ui/react';
-import { useRef } from 'react';
+import { AspectRatio, HStack } from '@chakra-ui/react';
 import { useLocation } from 'react-router-dom';
 
 const AfterCapture = function () {
   const location = useLocation();
-  console.log(location);
   const profileImg = location.state.profileImg;
+
   return (
     <HStack width={'full'} justifyContent={'space-evenly'}>
       <AspectRatio
@@ -22,14 +21,6 @@ const AfterCapture = function () {
           disabled
         />
       </AspectRatio>
-
-      {/* <Button
-        variant={'outline'}
-        colorScheme={'primary'}
-        onClick={clearProfileImg}
-      >
-        다시 찍기
-      </Button> */}
     </HStack>
   );
 };
