@@ -1,4 +1,5 @@
-import { Text, Grid, Flex, VStack, HStack } from '@chakra-ui/react';
+import { Grid, Flex } from '@chakra-ui/react';
+import HealthHistoryItem from '../../components/HealthHistoryItem/HealthHistoryItem.js';
 
 const HealthHistory = function () {
   const recentData = [
@@ -19,27 +20,7 @@ const HealthHistory = function () {
         placeItems={'center'}
       >
         {recentData.map((data, index) => (
-          <VStack
-            key={index}
-            h={'full'}
-            w={'full'}
-            bg={'primary.200'}
-            borderRadius={10}
-            padding={'4'}
-            justifyContent={'space-between'}
-          >
-            <HStack w={'full'} justifyContent={'space-between'}>
-              <Text fontSize="2xl" fontWeight={'bold'}>
-                {data.name}
-              </Text>
-              <Text fontSize="sm" float={'right'} opacity={'0.5'}>
-                {data.measuementTime}&gt;
-              </Text>
-            </HStack>
-            <Text w={'90%'} fontSize="5xl" align={'right'}>
-              {data.value}
-            </Text>
-          </VStack>
+          <HealthHistoryItem measureData={data} key={index} />
         ))}
       </Grid>
     </Flex>
