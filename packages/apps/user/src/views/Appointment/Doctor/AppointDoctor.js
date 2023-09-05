@@ -20,7 +20,7 @@ import {
 import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
 import BackButton from '../../../components/BackButton/BackButton';
 import initialDoctorList from './DoctorList';
-import specialties from '/home/user/projects/housepital/packages/apps/user/src/views/Appointment/Specialties.js';
+import specialties from '../Specialties.js';
 
 function AppointDoctor() {
   const [sortBy, setSortBy] = useState();
