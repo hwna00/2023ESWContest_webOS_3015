@@ -27,8 +27,8 @@ describe('건강 데이터가 뜬다', () => {
     const txtBloodPressure = screen.getByText('혈압');
     expect(txtBloodPressure).toBeInTheDocument();
   });
-  it('체중이 뜬다', () => {
-    const txtWeight = screen.getByText('체중');
+  it('몸무게가 뜬다', () => {
+    const txtWeight = screen.getByText('몸무게');
     expect(txtWeight).toBeInTheDocument();
   });
 });
