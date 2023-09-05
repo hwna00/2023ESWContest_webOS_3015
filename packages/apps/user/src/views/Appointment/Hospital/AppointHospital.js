@@ -15,17 +15,18 @@ import {
   Checkbox,
   CheckboxGroup,
   SimpleGrid,
+  HStack,
 } from '@chakra-ui/react';
 
 import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
 import BackButton from '../../../components/BackButton/BackButton';
-import initialDoctorList from './DoctorList';
+import HospitalList from './HospitalList';
 import specialties from '/home/user/projects/housepital/packages/apps/user/src/views/Appointment/Specialties.js';
 
-function AppointDoctor() {
+function AppointHospital() {
   const [sortBy, setSortBy] = useState();
   const [selectedSpecialties, setSelectedSpecialties] = useState([]);
-  const [doctorList, setDoctorList] = useState(initialDoctorList);
+  const [hospitalList, setHospitalList] = useState(HospitalList);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleSortByChange = event => {
@@ -33,35 +34,39 @@ function AppointDoctor() {
     if (newSortBy !== sortBy) {
       setSortBy(newSortBy);
     } else {
-      setDoctorList([...doctorList]);
+      setHospitalList([...hospitalList]);
     }
   };
 
   const handleSpecialtyChange = selectedOptions => {
     setSelectedSpecialties(selectedOptions);
   };
-
-  const doctorsToDisplay = doctorList.filter(doctor => {
-    const isSelectedSpecialty = doctor.field.some(specialty =>
+  const hospitalToDisplay = hospitalList.filter(hospital => {
+    const isSelectedSpecialty = hospital.field.some(specialty =>
       selectedSpecialties.includes(specialty),
     );
     return selectedSpecialties.length === 0 || isSelectedSpecialty;
   });
 
   if (sortBy === 'name') {
-    doctorsToDisplay.sort((a, b) => (a.name > b.name ? 1 : -1));
+    hospitalToDisplay.sort((a, b) => (a.hospital > b.hospital ? 1 : -1));
+  } else if (sortBy === 'distance') {
+    hospitalToDisplay.sort(
+      (a, b) => parseFloat(a.distance) - parseFloat(b.distance),
+    );
   } else {
-    doctorsToDisplay.sort((a, b) => (a.rate < b.rate ? 1 : -1));
+    hospitalToDisplay.sort((a, b) => (a.rate < b.rate ? 1 : -1));
   }
 
   return (
     <Flex direction="column" alignItems="flex-start">
       <Box>
-        <BackButton title={'의사별 보기'} />
-        <Button onClick={onOpen} position="fixed" right="8" top="4">
-          필터적용
-        </Button>
-
+        <HStack>
+          <BackButton title={'병원별 보기'} />
+          <Button onClick={onOpen} position="fixed" right="8" top="4">
+            필터적용
+          </Button>
+        </HStack>
         <Modal isOpen={isOpen} onClose={onClose} size="4xl">
           <ModalOverlay />
           <ModalContent>
@@ -83,6 +88,13 @@ function AppointDoctor() {
                   onChange={() => handleSortByChange('rating')}
                 >
                   별점순
+                </Checkbox>
+                <Checkbox
+                  id="distance"
+                  checked={sortBy === 'distance'}
+                  onChange={() => handleSortByChange('distance')}
+                >
+                  거리순
                 </Checkbox>
               </Box>
               <Box>
@@ -111,7 +123,7 @@ function AppointDoctor() {
 
       <Box width={'full'} maxHeight="80vh" overflowY="scroll">
         <SimpleGrid columns={2} gap="8" mt="4" width={'full'} padding="8">
-          {doctorsToDisplay.map(info => (
+          {hospitalToDisplay.map(info => (
             <AppointmentCard info={info} />
           ))}
         </SimpleGrid>
@@ -120,4 +132,4 @@ function AppointDoctor() {
   );
 }
 
-export default AppointDoctor;
+export default AppointHospital;

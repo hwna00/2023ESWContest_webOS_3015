@@ -14,7 +14,7 @@ function AppointmentCard({ info }) {
       <Flex alignItems="center">
         <Image
           src={info.img}
-          alt={`${info.name} 의사`}
+          alt={info.name}
           width="24"
           height="24"
           objectFit="cover"
@@ -22,13 +22,16 @@ function AppointmentCard({ info }) {
         />
         <Box ml={{ base: '2', md: '4' }}>
           <Heading as="h3" size="md" mb="1">
-            {info.name} 의사
+            {info.name}
           </Heading>
           <Text fontSize="sm" mb={1}>
-            {info.specialty}
+            {info.specialty && <span>{info.specialty}</span>}
           </Text>
           <Text fontSize={'sm'} mb={'2'}>
             {info.field.join(', ')}
+          </Text>
+          <Text fontSize="sm" mb="1">
+            {info.distance && <span>{info.distance}</span>}
           </Text>
           <Flex alignItems={'center'}>
             <Icon as={StarIcon} boxSize={'4'} mr={'2'} />

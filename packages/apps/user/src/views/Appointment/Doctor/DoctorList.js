@@ -1,4 +1,4 @@
-const initialDoctorList = [
+const DoctorList = [
   {
     name: '이현철',
     specialty: '내과 전문의',
@@ -72,4 +72,4 @@ const initialDoctorList = [
     isFavorite: false,
   },
 ];
-export default initialDoctorList;
+export default DoctorList;

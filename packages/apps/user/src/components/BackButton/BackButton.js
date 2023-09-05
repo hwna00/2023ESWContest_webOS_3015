@@ -1,7 +1,12 @@
+import { useCallback } from 'react';
 import { HStack, Heading } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 
-function BackButton({ goPrev, title }) {
+function BackButton({ title }) {
+  const goPrev = useCallback(() => {
+    window.history.back();
+  }, []);
+
   return (
     <HStack>
       <ArrowBackIcon boxSize="10" onClick={goPrev} />
