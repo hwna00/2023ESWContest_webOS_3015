@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box,
   Flex,
@@ -15,25 +15,24 @@ import {
   Checkbox,
   CheckboxGroup,
   SimpleGrid,
+  HStack,
 } from '@chakra-ui/react';
 
 import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
 import BackButton from '../../../components/BackButton/BackButton';
-import initialDoctorList from './DoctorList';
+import DoctorList from './DoctorList';
 import specialties from '/home/user/projects/housepital/packages/apps/user/src/views/Appointment/Specialties.js';
 
 function AppointDoctor() {
   const [sortBy, setSortBy] = useState();
   const [selectedSpecialties, setSelectedSpecialties] = useState([]);
-  const [doctorList, setDoctorList] = useState(initialDoctorList);
+  const [doctorList, setDoctorList] = useState(DoctorList);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleSortByChange = event => {
     const newSortBy = event;
     if (newSortBy !== sortBy) {
       setSortBy(newSortBy);
-    } else {
-      setDoctorList([...doctorList]);
     }
   };
 
@@ -41,26 +40,37 @@ function AppointDoctor() {
     setSelectedSpecialties(selectedOptions);
   };
 
-  const doctorsToDisplay = doctorList.filter(doctor => {
-    const isSelectedSpecialty = doctor.field.some(specialty =>
-      selectedSpecialties.includes(specialty),
-    );
-    return selectedSpecialties.length === 0 || isSelectedSpecialty;
-  });
+  const [filteredDoctors, setFilteredDoctors] = useState([]);
+  useEffect(() => {
+    let doctorToFilter = [...doctorList];
 
-  if (sortBy === 'name') {
-    doctorsToDisplay.sort((a, b) => (a.name > b.name ? 1 : -1));
-  } else {
-    doctorsToDisplay.sort((a, b) => (a.rate < b.rate ? 1 : -1));
-  }
+    if (selectedSpecialties.length > 0) {
+      doctorToFilter = doctorToFilter.filter(doctor =>
+        doctor.fields.some(specialty =>
+          selectedSpecialties.includes(specialty),
+        ),
+      );
+    }
+    if (sortBy === 'name') {
+      doctorToFilter.sort((a, b) => (a.doctor > b.doctor ? 1 : -1));
+    } else if (sortBy === 'distance') {
+      doctorToFilter.sort(
+        (a, b) => parseFloat(a.distance) - parseFloat(b.distance),
+      );
+    } else if (sortBy === 'rating') {
+      doctorToFilter.sort((a, b) => (a.rate < b.rate ? 1 : -1));
+    }
+
+    setFilteredDoctors(doctorToFilter);
+  }, [sortBy, selectedSpecialties, doctorList]);
 
   return (
     <Flex direction="column" alignItems="flex-start">
       <Box>
-        <BackButton title={'의사별 보기'} />
-        <Button onClick={onOpen} position="fixed" right="8" top="4">
-          필터적용
-        </Button>
+        <HStack gap="31.5rem" height="10">
+          <BackButton title={'의사별 보기'} />
+          <Button onClick={onOpen}>필터적용</Button>
+        </HStack>
 
         <Modal isOpen={isOpen} onClose={onClose} size="4xl">
           <ModalOverlay />
@@ -111,8 +121,8 @@ function AppointDoctor() {
 
       <Box width={'full'} maxHeight="80vh" overflowY="scroll">
         <SimpleGrid columns={2} gap="8" mt="4" width={'full'} padding="8">
-          {doctorsToDisplay.map(info => (
-            <AppointmentCard info={info} />
+          {filteredDoctors.map(doctor => (
+            <AppointmentCard data={doctor} key={doctor.name} />
           ))}
         </SimpleGrid>
       </Box>

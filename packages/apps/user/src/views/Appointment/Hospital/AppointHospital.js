@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box,
   Flex,
@@ -33,39 +33,42 @@ function AppointHospital() {
     const newSortBy = event;
     if (newSortBy !== sortBy) {
       setSortBy(newSortBy);
-    } else {
-      setHospitalList([...hospitalList]);
     }
   };
 
   const handleSpecialtyChange = selectedOptions => {
     setSelectedSpecialties(selectedOptions);
   };
-  const hospitalToDisplay = hospitalList.filter(hospital => {
-    const isSelectedSpecialty = hospital.field.some(specialty =>
-      selectedSpecialties.includes(specialty),
-    );
-    return selectedSpecialties.length === 0 || isSelectedSpecialty;
-  });
 
-  if (sortBy === 'name') {
-    hospitalToDisplay.sort((a, b) => (a.hospital > b.hospital ? 1 : -1));
-  } else if (sortBy === 'distance') {
-    hospitalToDisplay.sort(
-      (a, b) => parseFloat(a.distance) - parseFloat(b.distance),
-    );
-  } else {
-    hospitalToDisplay.sort((a, b) => (a.rate < b.rate ? 1 : -1));
-  }
+  const [filteredHospitals, setFilteredHospitals] = useState([]);
+  useEffect(() => {
+    let hospitalToFilter = [...hospitalList];
 
+    if (selectedSpecialties.length > 0) {
+      hospitalToFilter = hospitalToFilter.filter(hospital =>
+        hospital.fields.some(specialty =>
+          selectedSpecialties.includes(specialty),
+        ),
+      );
+    }
+    if (sortBy === 'name') {
+      hospitalToFilter.sort((a, b) => (a.hospital > b.hospital ? 1 : -1));
+    } else if (sortBy === 'distance') {
+      hospitalToFilter.sort(
+        (a, b) => parseFloat(a.distance) - parseFloat(b.distance),
+      );
+    } else if (sortBy === 'rating') {
+      hospitalToFilter.sort((a, b) => (a.rate < b.rate ? 1 : -1));
+    }
+
+    setFilteredHospitals(hospitalToFilter);
+  }, [sortBy, selectedSpecialties, hospitalList]);
   return (
     <Flex direction="column" alignItems="flex-start">
       <Box>
-        <HStack>
+        <HStack gap="31.5rem">
           <BackButton title={'병원별 보기'} />
-          <Button onClick={onOpen} position="fixed" right="8" top="4">
-            필터적용
-          </Button>
+          <Button onClick={onOpen}>필터적용</Button>
         </HStack>
         <Modal isOpen={isOpen} onClose={onClose} size="4xl">
           <ModalOverlay />
@@ -123,8 +126,8 @@ function AppointHospital() {
 
       <Box width={'full'} maxHeight="80vh" overflowY="scroll">
         <SimpleGrid columns={2} gap="8" mt="4" width={'full'} padding="8">
-          {hospitalToDisplay.map(info => (
-            <AppointmentCard info={info} />
+          {filteredHospitals.map(hospital => (
+            <AppointmentCard data={hospital} key={hospital.name} />
           ))}
         </SimpleGrid>
       </Box>
