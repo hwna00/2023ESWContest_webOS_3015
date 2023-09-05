@@ -25,7 +25,7 @@ import {
 } from 'firebase/auth';
 import PropTypes from 'prop-types';
 import { auth, signIn } from '../../../firebase';
-import UserFase from '../UserFace/UserFase';
+import UserFace from './UserFace';
 
 const SignUpForm = function ({
   activeStep,
@@ -101,7 +101,7 @@ const SignUpForm = function ({
           transition={'0.1s linear'}
         >
           <VStack minWidth={FORM_WIDTH} gap={'4'} pr={'4'}>
-            <UserFase />
+            <UserFace />
           </VStack>
 
           <VStack minWidth={FORM_WIDTH} gap={'4'} pr={'4'}>

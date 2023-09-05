@@ -5,6 +5,9 @@ import MyPage from './views/MyPage/MyPage';
 import MainPage from './views/MainPage/MainPage';
 import SignUp from './views/Auth/SignUp/SignUp';
 import LogIn from './views/Auth/LogIn/LogIn';
+import BeforeCapture from './components/SignUpForm/BeforeCapture';
+import OnCapture from './components/SignUpForm/OnCapture';
+import AfterCapture from './components/SignUpForm/AfterCapture';
 
 const router = createBrowserRouter(
   [
@@ -51,6 +54,20 @@ const router = createBrowserRouter(
         {
           path: 'sign-up',
           element: <SignUp />,
+          children: [
+            {
+              path: '',
+              element: <BeforeCapture />,
+            },
+            {
+              path: 'on-capture',
+              element: <OnCapture />,
+            },
+            {
+              path: 'after-capture',
+              element: <AfterCapture />,
+            },
+          ],
         },
         {
           path: 'log-in',
