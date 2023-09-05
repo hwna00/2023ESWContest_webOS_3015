@@ -1,5 +1,6 @@
 import { AspectRatio, Avatar, Button, HStack, Image } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const BeforeCapture = function ({ openCam }) {
   return (
@@ -63,29 +64,43 @@ const AfterCapture = function ({ imgRef, profileImg }) {
 };
 
 const UserFase = function () {
+  const navigate = useNavigate();
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const imgRef = useRef(null);
 
   const [isCamOpen, setIsCamOpen] = useState(false);
   const [profileImg, setProfileImg] = useState(null);
-  const [streamLoading, setStreamLoading] = useState();
+  const [error, setError] = useState();
+
+  useEffect(() => {
+    if (error) {
+      navigate('/error');
+    }
+  }, [error]);
 
   const fetchStream = async () => {
-    setStreamLoading(true);
-    const myStream = await window.navigator.mediaDevices.getUserMedia({
-      audio: true,
-      video: {
-        deviceId: {
-          exact:
-            '61c8194295392492c4593e5a4f512c94edaa5e26036227180aca9c2fff72ed5e',
-        },
-      },
-    });
-    setStreamLoading(false);
+    const devices = await window.navigator.mediaDevices.enumerateDevices();
+    const cameras = devices.filter(device => device.kind === 'videoinput');
 
-    if (videoRef?.current) {
-      videoRef.current.srcObject = myStream;
+    try {
+      const devicdId = cameras[1].deviceId;
+
+      const cameraContraints = {
+        audio: true,
+        video: {
+          deviceId: { exact: devicdId },
+        },
+      };
+
+      const myStream = await window.navigator.mediaDevices.getUserMedia(
+        cameraContraints,
+      );
+      if (videoRef?.current) {
+        videoRef.current.srcObject = myStream;
+      }
+    } catch (err) {
+      setError(err);
     }
   };
 
