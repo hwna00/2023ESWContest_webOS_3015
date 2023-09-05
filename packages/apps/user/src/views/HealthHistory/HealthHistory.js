@@ -20,6 +20,7 @@ const HealthHistory = function () {
       >
         {recentData.map((data, index) => (
           <VStack
+            key={index}
             h={'full'}
             w={'full'}
             bg={'primary.200'}
