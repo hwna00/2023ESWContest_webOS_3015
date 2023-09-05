@@ -1,10 +1,10 @@
 import { Box, Flex, Heading, Text, Image, Icon } from '@chakra-ui/react';
 import { StarIcon } from '@chakra-ui/icons';
 
-function AppointmentCard({ info }) {
+function AppointmentCard({ data }) {
   return (
     <Box
-      key={info.name}
+      key={data.name}
       backgroundColor="primary.300"
       padding="2"
       borderRadius="md"
@@ -13,8 +13,8 @@ function AppointmentCard({ info }) {
     >
       <Flex alignItems="center">
         <Image
-          src={info.img}
-          alt={info.name}
+          src={data.profileImg}
+          alt={data.name}
           width="24"
           height="24"
           objectFit="cover"
@@ -22,20 +22,20 @@ function AppointmentCard({ info }) {
         />
         <Box ml={{ base: '2', md: '4' }}>
           <Heading as="h3" size="md" mb="1">
-            {info.name}
+            {data.name}
           </Heading>
           <Text fontSize="sm" mb={1}>
-            {info.specialty && <span>{info.specialty}</span>}
+            {data.specialty && <span>{data.specialty}</span>}
           </Text>
           <Text fontSize={'sm'} mb={'2'}>
-            {info.field.join(', ')}
+            {data.fields.join(', ')}
           </Text>
           <Text fontSize="sm" mb="1">
-            {info.distance && <span>{info.distance}</span>}
+            {data.distance && <span>{data.distance}</span>}
           </Text>
           <Flex alignItems={'center'}>
             <Icon as={StarIcon} boxSize={'4'} mr={'2'} />
-            <Text fontSize={'sm'}>{info.rate}</Text>
+            <Text fontSize={'sm'}>{data.rate}</Text>
           </Flex>
         </Box>
       </Flex>
