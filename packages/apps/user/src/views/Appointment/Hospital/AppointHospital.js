@@ -27,6 +27,7 @@ function AppointHospital() {
   const [sortBy, setSortBy] = useState();
   const [selectedSpecialties, setSelectedSpecialties] = useState([]);
   const [hospitalList, setHospitalList] = useState(HospitalList);
+  const [filteredHospitals, setFilteredHospitals] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleSortByChange = event => {
@@ -40,7 +41,6 @@ function AppointHospital() {
     setSelectedSpecialties(selectedOptions);
   };
 
-  const [filteredHospitals, setFilteredHospitals] = useState([]);
   useEffect(() => {
     let hospitalToFilter = [...hospitalList];
 
