@@ -12,29 +12,43 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Checkbox,
   CheckboxGroup,
-  SimpleGrid,
+  Checkbox,
   HStack,
+  SimpleGrid,
 } from '@chakra-ui/react';
-
 import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
 import BackButton from '../../../components/BackButton/BackButton';
-import HospitalList from './HospitalList';
-import specialties from '/home/user/projects/housepital/packages/apps/user/src/views/Appointment/Specialties.js';
+import specialties from '../Specialties';
+import HospitalList from '../Hospital/HospitalList';
+import DoctorList from '../Doctor/DoctorList';
+import { useLocation } from 'react-router-dom';
 
-function AppointHospital() {
-  const [sortBy, setSortBy] = useState();
-  const [selectedSpecialties, setSelectedSpecialties] = useState([]);
-  const [hospitalList, setHospitalList] = useState(HospitalList);
-  const [filteredHospitals, setFilteredHospitals] = useState([]);
+function AppointmentList() {
+  const { pathname } = useLocation();
+  const path = pathname.split('/')[2];
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const handleSortByChange = event => {
-    const newSortBy = event;
-    if (newSortBy !== sortBy) {
-      setSortBy(newSortBy);
+  const [sortBy, setSortBy] = useState();
+  const [selectedSpecialties, setSelectedSpecialties] = useState([]);
+  const [list, setList] = useState([]);
+  const [filteredList, setFilteredList] = useState([]);
+  const [title, setTitle] = useState();
+
+  useEffect(() => {
+    if (path === 'doctors') {
+      setList(DoctorList);
+      setTitle('의사별 보기');
+      console.log(list, title);
+    } else if (path === 'hospitals') {
+      setList(HospitalList);
+      setTitle('병원별 보기');
     }
+  }, [path, list, title]);
+
+  const handleSortByChange = event => {
+    setSortBy(event);
   };
 
   const handleSpecialtyChange = selectedOptions => {
@@ -42,32 +56,32 @@ function AppointHospital() {
   };
 
   useEffect(() => {
-    let hospitalToFilter = [...hospitalList];
+    let itemsToFilter = [...list];
 
     if (selectedSpecialties.length > 0) {
-      hospitalToFilter = hospitalToFilter.filter(hospital =>
-        hospital.fields.some(specialty =>
-          selectedSpecialties.includes(specialty),
-        ),
+      itemsToFilter = itemsToFilter.filter(item =>
+        item.fields.some(specialty => selectedSpecialties.includes(specialty)),
       );
     }
+
     if (sortBy === 'name') {
-      hospitalToFilter.sort((a, b) => (a.hospital > b.hospital ? 1 : -1));
+      itemsToFilter.sort((a, b) => (a.name > b.name ? 1 : -1));
     } else if (sortBy === 'distance') {
-      hospitalToFilter.sort(
+      itemsToFilter.sort(
         (a, b) => parseFloat(a.distance) - parseFloat(b.distance),
       );
     } else if (sortBy === 'rating') {
-      hospitalToFilter.sort((a, b) => (a.rate < b.rate ? 1 : -1));
+      itemsToFilter.sort((a, b) => (a.rate < b.rate ? 1 : -1));
     }
 
-    setFilteredHospitals(hospitalToFilter);
-  }, [sortBy, selectedSpecialties, hospitalList]);
+    setFilteredList(itemsToFilter);
+  }, [sortBy, selectedSpecialties, list]);
+
   return (
     <Flex direction="column" alignItems="flex-start">
       <Box>
         <HStack gap="31.5rem">
-          <BackButton title={'병원별 보기'} />
+          <BackButton title={title} />
           <Button onClick={onOpen}>필터적용</Button>
         </HStack>
         <Modal isOpen={isOpen} onClose={onClose} size="4xl">
@@ -126,8 +140,8 @@ function AppointHospital() {
 
       <Box width={'full'} maxHeight="80vh" overflowY="scroll">
         <SimpleGrid columns={2} gap="8" mt="4" width={'full'} padding="8">
-          {filteredHospitals.map(hospital => (
-            <AppointmentCard data={hospital} key={hospital.name} />
+          {filteredList.map(item => (
+            <AppointmentCard data={item} key={item.name} />
           ))}
         </SimpleGrid>
       </Box>
@@ -135,4 +149,4 @@ function AppointHospital() {
   );
 }
 
-export default AppointHospital;
+export default AppointmentList;

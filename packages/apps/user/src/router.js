@@ -5,8 +5,7 @@ import MyPage from './views/MyPage/MyPage';
 import MainPage from './views/MainPage/MainPage';
 import SignUp from './views/Auth/SignUp/SignUp';
 import LogIn from './views/Auth/LogIn/LogIn';
-import AppointDoctor from './views/Appointment/Doctor/AppointDoctor';
-import AppointHospital from './views/Appointment/Hospital/AppointHospital';
+import AppointmentList from './views/Appointment/Data/AppointmentList';
 
 const router = createBrowserRouter(
   [
@@ -36,11 +35,11 @@ const router = createBrowserRouter(
           children: [
             {
               path: 'doctors',
-              element: <AppointDoctor />,
+              element: <AppointmentList />,
             },
             {
               path: 'hospitals',
-              element: <AppointHospital />,
+              element: <AppointmentList />,
             },
           ],
         },
