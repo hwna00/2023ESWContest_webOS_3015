@@ -1,4 +1,5 @@
 const express = require('express');
+const mysql = require('mysql2');
 const cors = require('cors');
 const axios = require('axios');
 require('dotenv').config();
@@ -78,6 +79,27 @@ app.get('/api/users/me', (req, res) => {
   console.log('me');
   //TODO: DB로부터 사용자 정보 검색
   res.json({});
+});
+
+const dbConfig = {
+  host: process.env.HOST,
+  user: process.env.USERNAME,
+  password: process.env.PASSWORD,
+  port: process.env.PORT,
+};
+
+const pool = mysql.createPool(dbConfig);
+
+pool.getConnection(err => {
+  if (err) {
+    console.error('MySQL 연결 실패:', err);
+  } else {
+    console.log('MySQL 연결 성공');
+  }
+});
+
+app.get('/', (req, res) => {
+  console.log('get /');
 });
 
 app.listen(port, () => {
