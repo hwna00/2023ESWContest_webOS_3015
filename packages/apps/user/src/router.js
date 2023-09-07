@@ -29,16 +29,14 @@ const router = createBrowserRouter(
         {
           path: 'appointment',
           element: <Appointment />,
-          children: [
-            {
-              path: 'doctors',
-              element: <AppointDoctor />,
-            },
-            {
-              path: 'hospitals',
-              element: <AppointHospital />,
-            },
-          ],
+        },
+        {
+          path: 'appointment/doctors',
+          element: <AppointDoctor />,
+        },
+        {
+          path: 'appointment/hospitals',
+          element: <AppointHospital />,
         },
         {
           path: 'appointment-history',
