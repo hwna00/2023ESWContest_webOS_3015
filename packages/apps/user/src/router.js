@@ -9,7 +9,7 @@ import SignUp from './views/Auth/SignUp/SignUp';
 import LogIn from './views/Auth/LogIn/LogIn';
 import AppointDoctor from './views/Appointment/Doctor/AppointDoctor';
 import AppointHospital from './views/Appointment/Hospital/AppointHospital';
-
+import WaitingRoom from './views/Appointment/WaitingRoom/WaitingRoom';
 const router = createBrowserRouter(
   [
     {
@@ -32,6 +32,9 @@ const router = createBrowserRouter(
               <Link to={'/appointment/doctors'}>doctor</Link>
               <br />
               <Link to={'/appointment/hospitals'}>hospital</Link>
+              <br />
+              <Link to={'/appointment/waiting'}>waiting</Link>
+
               <Outlet />
             </>
           ),
@@ -43,6 +46,10 @@ const router = createBrowserRouter(
             {
               path: 'hospitals',
               element: <AppointHospital />,
+            },
+            {
+              path: 'waiting',
+              element: <WaitingRoom />,
             },
           ],
         },
