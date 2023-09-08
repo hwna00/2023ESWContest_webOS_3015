@@ -1,4 +1,4 @@
-import { Link, Outlet, createBrowserRouter } from 'react-router-dom';
+import { Outlet, createBrowserRouter } from 'react-router-dom';
 import NotFound from './views/NotFound';
 import Root from './components/Root/Root';
 import AppointmentHistory from './views/AppointmentHistory/AppointmentHistory';
@@ -9,8 +9,6 @@ import MainPage from './views/MainPage/MainPage';
 import SignUp from './views/Auth/SignUp/SignUp';
 import LogIn from './views/Auth/LogIn/LogIn';
 import Appointment from './views/Appointment/Appointment';
-import AppointDoctor from './views/Appointment/Doctor/AppointDoctor';
-import AppointHospital from './views/Appointment/Hospital/AppointHospital';
 import WaitingRoom from './views/Appointment/WaitingRoom/WaitingRoom';
 import BeforeCapture from './components/SignUpForm/BeforeCapture';
 import OnCapture from './components/SignUpForm/OnCapture';
@@ -38,11 +36,11 @@ const router = createBrowserRouter(
         },
         {
           path: 'appointment/doctors',
-          element: <AppointDoctor />,
+          element: <AppointmentList />,
         },
         {
           path: 'appointment/hospitals',
-          element: <AppointHospital />,
+          element: <AppointmentList />,
         },
         {
           path: 'appointment-history',
@@ -63,6 +61,14 @@ const router = createBrowserRouter(
         {
           path: 'settings',
           element: '',
+        },
+        {
+          path: 'appointment/waiting',
+          element: <WaitingRoom />,
+        },
+        {
+          path: 'appointment/favorites',
+          element: <AppointmentList />,
         },
       ],
     },
