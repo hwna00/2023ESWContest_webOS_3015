@@ -19,10 +19,8 @@ import {
 } from '@chakra-ui/react';
 import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
 import BackButton from '../../../components/BackButton/BackButton';
-import HospitalList from './HospitalList';
 import specialties from '../Specialties.js';
-
-import { DoctorList, HospitalList } from '../dataList';
+import { DoctorList, HospitalList, FavoriteList } from '../dataList';
 import { useLocation } from 'react-router-dom';
 
 function AppointmentList() {
@@ -45,6 +43,9 @@ function AppointmentList() {
     } else if (path === 'hospitals') {
       setList(HospitalList);
       setTitle('병원별 보기');
+    } else if (path === 'favorites') {
+      setList(FavoriteList);
+      setTitle('즐겨찾기 관리');
     }
   }, [path, list, title]);
 
@@ -80,8 +81,8 @@ function AppointmentList() {
 
   return (
     <Flex direction="column" alignItems="flex-start">
-      <Box>
-        <HStack gap="31.5rem">
+      <Box width="100%">
+        <HStack width="100%" justifyContent="space-between">
           <BackButton title={title} />
           <Button onClick={onOpen}>필터적용</Button>
         </HStack>

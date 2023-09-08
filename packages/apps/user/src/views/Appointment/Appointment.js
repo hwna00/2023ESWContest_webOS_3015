@@ -137,7 +137,7 @@ const Appointment = function () {
               <Text fontSize={'2xl'} fontWeight={'bold'}>
                 즐겨찾기
               </Text>
-              <ChakraLink as={ReactRouterLink} to="/appointment">
+              <ChakraLink as={ReactRouterLink} to="/appointment/favorites">
                 + 더보기
               </ChakraLink>
             </HStack>
