@@ -1,12 +1,13 @@
 import { createBrowserRouter } from 'react-router-dom';
-import Root from '../components/Root/Root';
+
 import NotFound from '../views/NotFound';
 import MyPage from '../views/MyPage/MyPage';
 import MainPage from '../views/MainPage/MainPage';
+import Root from '../components/Root/Root';
 
-import appointmentRoutes from './appointmentRoutes';
 import healthHistoryRoutes from './healthHistoryRoutes';
 import authRoutes from './authRoutes';
+import appointmentRoutes from './appointmentRoutes';
 
 const router = createBrowserRouter(
   [

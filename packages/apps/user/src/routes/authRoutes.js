@@ -1,10 +1,11 @@
 import { Outlet } from 'react-router-dom';
+
 import NotFound from '../views/NotFound/NotFound';
 import SignUp from '../views/Auth/SignUp/SignUp';
-import BeforeCapture from '../components/SignUpForm/BeforeCapture';
-import OnCapture from '../components/SignUpForm/OnCapture';
-import AfterCapture from '../components/SignUpForm/AfterCapture';
 import LogIn from '../views/Auth/LogIn/LogIn';
+import OnCapture from '../components/SignUpForm/OnCapture';
+import BeforeCapture from '../components/SignUpForm/BeforeCapture';
+import AfterCapture from '../components/SignUpForm/AfterCapture';
 
 const authRoutes = {
   path: 'auth',

@@ -1,17 +1,17 @@
-import { AspectRatio, HStack } from '@chakra-ui/react';
 import { useLocation } from 'react-router-dom';
+import { AspectRatio, HStack } from '@chakra-ui/react';
 
 const AfterCapture = function () {
   const location = useLocation();
-  const profileImg = location.state.profileImg;
+  const {profileImg} = location.state;
 
   return (
-    <HStack width={'full'} justifyContent={'space-evenly'}>
+    <HStack width="full" justifyContent="space-evenly">
       <AspectRatio
-        width={'xs'}
+        width="xs"
         ratio={1}
-        borderRadius={'full'}
-        overflow={'hidden'}
+        borderRadius="full"
+        overflow="hidden"
       >
         <input
           src={profileImg}

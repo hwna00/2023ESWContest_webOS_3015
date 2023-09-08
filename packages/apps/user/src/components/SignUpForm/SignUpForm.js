@@ -1,6 +1,15 @@
 import { useCallback, useRef, useState } from 'react';
+
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
+import PropTypes from 'prop-types';
+import { motion } from 'framer-motion';
+import {
+  browserLocalPersistence,
+  setPersistence,
+  updateProfile,
+} from 'firebase/auth';
 import {
   Box,
   Button,
@@ -17,15 +26,9 @@ import {
   Textarea,
   VStack,
 } from '@chakra-ui/react';
-import { motion } from 'framer-motion';
-import {
-  browserLocalPersistence,
-  setPersistence,
-  updateProfile,
-} from 'firebase/auth';
-import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+
 import { auth, signIn } from '../../../firebase';
+
 import UserFace from './UserFace';
 
 const SignUpForm = function ({
@@ -90,23 +93,23 @@ const SignUpForm = function ({
 
   return (
     <VStack
-      as={'form'}
+      as="form"
       onSubmit={handleSubmit(onSubmit)}
-      alignItems={'flex-end'}
-      gap={'4'}
-      maxWidth={'full'}
-      overflowY={'scroll'}
+      alignItems="flex-end"
+      gap="4"
+      maxWidth="full"
+      overflowY="scroll"
     >
-      <Box ref={ref} width={FORM_WIDTH} overflowX={'hidden'} p={'2'}>
+      <Box ref={ref} width={FORM_WIDTH} overflowX="hidden" p="2">
         <HStack
           gap={0}
           as={motion.div}
           animate={{ x: formPosition }}
-          transition={'0.1s linear'}
+          transition="0.1s linear"
         >
-          <VStack minWidth={FORM_WIDTH} gap={'4'} pr={'4'}>
+          <VStack minWidth={FORM_WIDTH} gap="4" pr="4">
             <FormControl
-              width={'full'}
+              width="full"
               isRequired
               isInvalid={errors.step0?.email}
             >
@@ -130,7 +133,7 @@ const SignUpForm = function ({
             </FormControl>
 
             <FormControl
-              width={'full'}
+              width="full"
               isRequired
               isInvalid={errors.step0?.username}
             >
@@ -148,7 +151,7 @@ const SignUpForm = function ({
             </FormControl>
 
             <FormControl
-              width={'full'}
+              width="full"
               isRequired
               isInvalid={errors.step0?.password}
             >
@@ -168,7 +171,7 @@ const SignUpForm = function ({
             </FormControl>
 
             <FormControl
-              width={'full'}
+              width="full"
               isRequired
               isInvalid={errors.step0?.checkPassword}
             >
@@ -193,9 +196,9 @@ const SignUpForm = function ({
               </FormErrorMessage>
             </FormControl>
           </VStack>
-          <VStack minWidth={FORM_WIDTH} gap={'4'} pr={'4'}>
+          <VStack minWidth={FORM_WIDTH} gap="4" pr="4">
             <FormControl
-              width={'full'}
+              width="full"
               isRequired
               isInvalid={errors.step1?.birthDate}
             >
@@ -214,7 +217,7 @@ const SignUpForm = function ({
             </FormControl>
 
             <FormControl
-              width={'full'}
+              width="full"
               isRequired
               isInvalid={errors.step1?.address}
             >
@@ -232,7 +235,7 @@ const SignUpForm = function ({
             </FormControl>
 
             <FormControl
-              width={'full'}
+              width="full"
               isRequired
               isInvalid={errors.step1?.phoneNumber}
             >
@@ -242,7 +245,7 @@ const SignUpForm = function ({
                 <Input
                   required
                   type="tel"
-                  maxLength={'8'}
+                  maxLength="8"
                   placeholder="필수 요소입니다."
                   {...register('step1.phoneNumber', {
                     required: '이 항목은 필수입니다.',
@@ -259,7 +262,7 @@ const SignUpForm = function ({
             </FormControl>
 
             <FormControl
-              width={'full'}
+              width="full"
               isInvalid={errors.step1?.secondPhoneNumber}
             >
               <FormLabel>비상 시 연락처</FormLabel>
@@ -267,7 +270,7 @@ const SignUpForm = function ({
                 <InputLeftAddon>010</InputLeftAddon>
                 <Input
                   type="tel"
-                  maxLength={'8'}
+                  maxLength="8"
                   placeholder="옵션 요소입니다."
                   {...register('step1.secondPhoneNumber', {
                     pattern: {
@@ -282,9 +285,9 @@ const SignUpForm = function ({
               </FormErrorMessage>
             </FormControl>
           </VStack>
-          <VStack minWidth={FORM_WIDTH} gap={'4'} pr={'4'}>
-            <HStack width={'full'} gap={'4'}>
-              <FormControl width={'full'} isInvalid={errors.step2?.bloodType}>
+          <VStack minWidth={FORM_WIDTH} gap="4" pr="4">
+            <HStack width="full" gap="4">
+              <FormControl width="full" isInvalid={errors.step2?.bloodType}>
                 <FormLabel>혈액형</FormLabel>
                 <Select placeholder="혈액형" {...register('step2.bloodType')}>
                   <option value="blood_A">A형</option>
@@ -297,7 +300,7 @@ const SignUpForm = function ({
                 </FormErrorMessage>
               </FormControl>
 
-              <FormControl width={'full'} isInvalid={errors.step?.height}>
+              <FormControl width="full" isInvalid={errors.step?.height}>
                 <FormLabel>키</FormLabel>
                 <InputGroup>
                   <Input
@@ -317,7 +320,7 @@ const SignUpForm = function ({
                 </FormErrorMessage>
               </FormControl>
 
-              <FormControl width={'full'} isInvalid={errors.step2?.weight}>
+              <FormControl width="full" isInvalid={errors.step2?.weight}>
                 <FormLabel>몸무게</FormLabel>
                 <InputGroup>
                   <Input
@@ -334,12 +337,12 @@ const SignUpForm = function ({
             </HStack>
 
             <FormControl
-              width={'full'}
+              width="full"
               isInvalid={errors.step2?.chronicDisease}
             >
               <FormLabel>질환 정보</FormLabel>
               <Textarea
-                resize={'none'}
+                resize="none"
                 placeholder="평소 앓고 있었던 질병이 있다면 입력해주세요."
                 {...register('step2.chronicDisease')}
               />
@@ -349,12 +352,12 @@ const SignUpForm = function ({
             </FormControl>
 
             <FormControl
-              width={'full'}
+              width="full"
               isInvalid={errors.step2?.regularMedicines}
             >
               <FormLabel>복약 정보</FormLabel>
               <Textarea
-                resize={'none'}
+                resize="none"
                 placeholder="평소 지속적으로 복용하고 있는 약이 있다면 입력해주세요."
                 {...register('step2.regularMedicines')}
               />
@@ -363,33 +366,33 @@ const SignUpForm = function ({
               </FormErrorMessage>
             </FormControl>
           </VStack>
-          <VStack minWidth={FORM_WIDTH} gap={'4'} pr={'4'}>
+          <VStack minWidth={FORM_WIDTH} gap="4" pr="4">
             <UserFace />
           </VStack>
         </HStack>
       </Box>
 
-      <ButtonGroup gap={'4'}>
+      <ButtonGroup gap="4">
         {isCompleteStep(0) && (
           <Button
-            type={'button'}
+            type="button"
             onClick={handlePrev}
-            colorScheme={'primary'}
-            variant={'outline'}
+            colorScheme="primary"
+            variant="outline"
           >
             이전으로
           </Button>
         )}
         {isActiveStep(3) ? (
-          <Button type={'submit'} colorScheme={'primary'}>
+          <Button type="submit" colorScheme="primary">
             가입하기
           </Button>
         ) : (
           <Button
-            key={'noSubmit'}
-            type={'button'}
+            key="noSubmit"
+            type="button"
             onClick={handleNext}
-            colorScheme={'primary'}
+            colorScheme="primary"
           >
             다음으로
           </Button>

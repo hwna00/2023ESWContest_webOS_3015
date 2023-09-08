@@ -3,16 +3,51 @@
     "browser": true,
     "es2021": true,
     "node": true,
-    "jest": true,
-    "commonjs": true
+    "jest": true
   },
-  "extends": ["plugin:react/recommended", "airbnb", "enact-proxy", "prettier"],
+  "extends": [
+    "plugin:react/recommended",
+    "plugin:import/recommended",
+    "airbnb",
+    "enact-proxy",
+    "prettier"
+  ],
   "overrides": [],
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["react"],
-  "rules": {},
-  "parser": "babel-eslint"
+  "plugins": ["react", "import"],
+  "rules": {
+    "import/no-unresolved": "error",
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index",
+          "object",
+          "type"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "react",
+            "group": "builtin",
+            "position": "before"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["react"],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "desc",
+          "caseInsensitive": true
+        }
+      }
+    ]
+  },
+  "parser": "@babel/eslint-parser"
 }

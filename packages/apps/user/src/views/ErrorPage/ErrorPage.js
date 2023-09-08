@@ -1,6 +1,5 @@
 import { Link as ReactRouterLink } from 'react-router-dom';
-import { Link as ChakraLink } from '@chakra-ui/react';
-import { Flex, Heading, Stack, Button } from '@chakra-ui/react';
+import { Link as ChakraLink , Flex, Heading, Stack, Button } from '@chakra-ui/react';
 
 function ErrorPage() {
   return (

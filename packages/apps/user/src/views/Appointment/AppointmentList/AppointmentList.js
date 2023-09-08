@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+
+import { useLocation } from 'react-router-dom';
 import {
   Box,
   Flex,
@@ -17,11 +19,11 @@ import {
   HStack,
   SimpleGrid,
 } from '@chakra-ui/react';
-import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
-import BackButton from '../../../components/BackButton/BackButton';
+
 import specialties from '../Specialties.js';
 import { DoctorList, HospitalList } from '../dataList';
-import { useLocation } from 'react-router-dom';
+import BackButton from '../../../components/BackButton/BackButton';
+import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
 
 function AppointmentList() {
   const { pathname } = useLocation();
@@ -137,8 +139,8 @@ function AppointmentList() {
         </Modal>
       </Box>
 
-      <Box width={'full'} maxHeight="80vh" overflowY="scroll">
-        <SimpleGrid columns={2} gap="8" mt="4" width={'full'} padding="8">
+      <Box width="full" maxHeight="80vh" overflowY="scroll">
+        <SimpleGrid columns={2} gap="8" mt="4" width="full" padding="8">
           {filteredList.map(item => (
             <AppointmentCard data={item} key={item.name} />
           ))}

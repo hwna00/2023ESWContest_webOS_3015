@@ -27,15 +27,15 @@ function AppointmentCard({ data }) {
           <Text fontSize="sm" mb={1}>
             {data.specialty && <span>{data.specialty}</span>}
           </Text>
-          <Text fontSize={'sm'} mb={'2'}>
+          <Text fontSize="sm" mb="2">
             {data.fields.join(', ')}
           </Text>
           <Text fontSize="sm" mb="1">
             {data.distance && <span>{data.distance}</span>}
           </Text>
-          <Flex alignItems={'center'}>
-            <Icon as={StarIcon} boxSize={'4'} mr={'2'} />
-            <Text fontSize={'sm'}>{data.rate}</Text>
+          <Flex alignItems="center">
+            <Icon as={StarIcon} boxSize="4" mr="2" />
+            <Text fontSize="sm">{data.rate}</Text>
           </Flex>
         </Box>
       </Flex>

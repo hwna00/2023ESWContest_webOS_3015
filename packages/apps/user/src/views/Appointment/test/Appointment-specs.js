@@ -1,8 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { BrowserRouter } from 'react-router-dom';
+
 import Appointment from '../Appointment';
 import AppointmentViewList from '../../../components/AppointmentViewList/AppointmentViewList';
-import { BrowserRouter } from 'react-router-dom';
 
 const testHospitalInfo = [
   {
@@ -41,7 +42,7 @@ describe('필요한 컨텐츠가 렌더링 된다', () => {
 
   it('병원별 보기 텍스트가 뜬다', () => {
     render(
-      <AppointmentViewList type={'hospital'} information={testHospitalInfo} />,
+      <AppointmentViewList type="hospital" information={testHospitalInfo} />,
       { wrapper: BrowserRouter },
     );
     const txtHospital = screen.getByText('병원별 보기');
@@ -59,7 +60,7 @@ describe('필요한 컨텐츠가 렌더링 된다', () => {
 
   it('의사별 보기 텍스트가 뜬다', () => {
     render(
-      <AppointmentViewList type={'doctor'} information={testDoctorInfo} />,
+      <AppointmentViewList type="doctor" information={testDoctorInfo} />,
       {
         wrapper: BrowserRouter,
       },

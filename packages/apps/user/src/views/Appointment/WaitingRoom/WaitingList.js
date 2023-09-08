@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import BackButton from './BackButton';
+
 import { Flex } from '@chakra-ui/react';
+
 import WaitingItem from './WaitingItem';
+import BackButton from './BackButton';
 
 function WaitingList() {
   const [AppointmentList, setAppointmentList] = useState([
@@ -52,29 +54,29 @@ function WaitingList() {
   return (
     <div>
       <Flex>
-        <BackButton goPrev={goPrev} title={'예약현황'} />
+        <BackButton goPrev={goPrev} title="예약현황" />
       </Flex>
 
-      <VStack mx={'5'} align={'stretch'}>
-        <HStack mt={'7'} mb={'-2'} justifyContent={'space-evenly'}>
-          <Box width={'48'} textAlign={'center'} fontWeight={'bold'}>
+      <VStack mx="5" align="stretch">
+        <HStack mt="7" mb="-2" justifyContent="space-evenly">
+          <Box width="48" textAlign="center" fontWeight="bold">
             예약 일시
           </Box>
-          <Box width={'48'} textAlign={'center'} fontWeight={'bold'}>
+          <Box width="48" textAlign="center" fontWeight="bold">
             병원
           </Box>
-          <Box width={'48'} textAlign={'center'} fontWeight={'bold'}>
+          <Box width="48" textAlign="center" fontWeight="bold">
             의사
           </Box>
-          <Box width={'20'} />
+          <Box width="20" />
         </HStack>
-        <Divider h={'0.5'} mb={'1'} bgColor="black" />
+        <Divider h="0.5" mb="1" bgColor="black" />
         <Box
-          display={'flex'}
-          flexDirection={'column'}
-          gap={'3'}
-          h={'470'}
-          overflowY={'scroll'}
+          display="flex"
+          flexDirection="column"
+          gap="3"
+          h="470"
+          overflowY="scroll"
         >
           {WaitingItem.map((waiting, index) => (
             <WaitingList key={index} waiting={waiting} />
