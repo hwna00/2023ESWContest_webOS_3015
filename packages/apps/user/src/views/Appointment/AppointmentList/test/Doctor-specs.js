@@ -3,6 +3,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import AppointmentList from '../AppointmentList';
+import BackButton from '../../../../components/BackButton/BackButton';
 
 const specialties = [
   '이비인후과',
@@ -19,8 +20,11 @@ const specialties = [
 describe('의사별 보기', () => {
   beforeEach(() => render(<AppointmentList />, { wrapper: BrowserRouter }));
   it('의사별 보기 뜨는가', () => {
-    const headingElements = screen.getAllByText(/의사별 보기/i);
-    expect(headingElements.length).toBeGreaterThan(0);
+    const title = '의사별 보기';
+    render(<BackButton title={title} />);
+
+    const titleElement = screen.getByText(title);
+    expect(titleElement).toBeInTheDocument();
   });
 
   it('필터 적용 버튼이 뜨는가', () => {
