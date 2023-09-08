@@ -8,16 +8,16 @@ const WaitingItem = function ({ waiting, cancelAppointment, index }) {
       borderRadius={'10'}
       justifyContent={'space-evenly'}
     >
-      <Box w={'48'} textAlign={'center'}>
+      <Box w={'44'} textAlign={'center'}>
         {waiting.date}
       </Box>
-      <Box w={'48'} textAlign={'center'}>
+      <Box w={'44'} textAlign={'center'}>
         {waiting.hospital}
       </Box>
-      <Box w={'48'} textAlign={'center'}>
+      <Box w={'44'} textAlign={'center'}>
         {waiting.name}
       </Box>
-      <Box w={'20'} textAlign={'center'}>
+      <Box w={'16'} textAlign={'center'}>
         <Button onClick={() => cancelAppointment(index)}>취소하기</Button>
       </Box>
     </HStack>
