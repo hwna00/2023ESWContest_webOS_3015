@@ -39,7 +39,6 @@ function AppointmentList() {
     if (path === 'doctors') {
       setList(DoctorList);
       setTitle('의사별 보기');
-      console.log(list, title);
     } else if (path === 'hospitals') {
       setList(HospitalList);
       setTitle('병원별 보기');
