@@ -19,9 +19,8 @@ import {
 } from '@chakra-ui/react';
 import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
 import BackButton from '../../../components/BackButton/BackButton';
-import specialties from '../Specialties';
-import HospitalList from '../Hospital/HospitalList';
-import DoctorList from '../Doctor/DoctorList';
+import specialties from '../specialties';
+import { DoctorList, HospitalList } from '../dataList';
 import { useLocation } from 'react-router-dom';
 
 function AppointmentList() {
