@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Flex, Box, VStack, HStack, Divider } from '@chakra-ui/react';
 import BackButton from '../../../components/BackButton/BackButton';
 import WaitingItem from './WaitingItem';
