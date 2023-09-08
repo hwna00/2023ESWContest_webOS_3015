@@ -8,11 +8,13 @@ import MyPage from './views/MyPage/MyPage';
 import MainPage from './views/MainPage/MainPage';
 import SignUp from './views/Auth/SignUp/SignUp';
 import LogIn from './views/Auth/LogIn/LogIn';
+import Appointment from './views/Appointment/Appointment';
+import AppointDoctor from './views/Appointment/Doctor/AppointDoctor';
+import AppointHospital from './views/Appointment/Hospital/AppointHospital';
 import BeforeCapture from './components/SignUpForm/BeforeCapture';
 import OnCapture from './components/SignUpForm/OnCapture';
 import AfterCapture from './components/SignUpForm/AfterCapture';
 import AppointmentList from './views/Appointment/AppointmentList';
-
 
 const router = createBrowserRouter(
   [
@@ -31,24 +33,15 @@ const router = createBrowserRouter(
         },
         {
           path: 'appointment',
-          element: (
-            <>
-              <Link to={'/appointment/doctors'}>doctor</Link>
-              <br />
-              <Link to={'/appointment/hospitals'}>hospital</Link>
-              <Outlet />
-            </>
-          ),
-          children: [
-            {
-              path: 'doctors',
-              element: <AppointmentList />,
-            },
-            {
-              path: 'hospitals',
-              element: <AppointmentList />,
-            },
-          ],
+          element: <Appointment />,
+        },
+        {
+          path: 'appointment/doctors',
+          element: <AppointDoctor />,
+        },
+        {
+          path: 'appointment/hospitals',
+          element: <AppointHospital />,
         },
         {
           path: 'appointment-history',
