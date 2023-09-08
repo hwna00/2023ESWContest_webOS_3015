@@ -1,7 +1,7 @@
 import Appointment from '../views/Appointment';
 import AppointmentList from '../views/Appointment/AppointmentList';
 import AppointmentHistory from '../views/AppointmentHistory';
-import AppointmentHistoryDetail from '../views/AppointmentHistory';
+import AppointmentHistoryDetail from '../views/AppointmentHistory/AppointmentHistoryDetail';
 
 const appointmentRoutes = [
   {
