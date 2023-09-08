@@ -11,7 +11,7 @@ const HealthHistory = function () {
     { name: '몸무게', measuementTime: '17:00', value: 60 },
   ];
   return (
-    <Flex h={'full '} justifyContent={'center'} alignItems={'center'}>
+    <Flex h={'full'} justifyContent={'center'} alignItems={'center'}>
       <Grid
         w={'85%'}
         templateRows="repeat(2, 1fr)"
