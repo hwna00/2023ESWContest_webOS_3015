@@ -8,7 +8,7 @@ function BackButton({ title }) {
   }, []);
 
   return (
-    <HStack>
+    <HStack alignItems="center" height="10">
       <ArrowBackIcon boxSize="10" onClick={goPrev} />
       {title && (
         <Heading
@@ -18,6 +18,8 @@ function BackButton({ title }) {
           color="black"
           fontWeight="500"
           textAlign="center"
+          height="10"
+          lineHeight="2"
         >
           {title}
         </Heading>

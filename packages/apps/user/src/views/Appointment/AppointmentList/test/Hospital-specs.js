@@ -2,7 +2,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import AppointHospital from '../AppointHospital';
+import AppointmentList from '../AppointmentList';
 
 const specialties = [
   '이비인후과',
@@ -17,7 +17,7 @@ const specialties = [
 ];
 
 describe('병원별 보기', () => {
-  beforeEach(() => render(<AppointHospital />, { wrapper: BrowserRouter }));
+  beforeEach(() => render(<AppointmentList />, { wrapper: BrowserRouter }));
   it('병원별 보기 뜨는가', () => {
     const headingElements = screen.getAllByText(/병원별 보기/i);
     expect(headingElements.length).toBeGreaterThan(0);
