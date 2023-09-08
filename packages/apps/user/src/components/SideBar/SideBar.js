@@ -7,18 +7,19 @@ import {
   Button,
   HStack,
   Flex,
+  SkeletonCircle,
+  SkeletonText,
 } from '@chakra-ui/react';
-import { FaUser, FaCog } from 'react-icons/fa';
+import { FaCog } from 'react-icons/fa';
 
 const menuNames = [
   { name: '메인 화면', path: '' },
   { name: '진료 예약', path: 'appointment' },
   { name: '진료 내역', path: 'appointment-history' },
-  { name: '건강 기록', path: 'health' },
+  { name: '건강 기록', path: 'health-history' },
   { name: '복약 관리', path: 'medicines' },
 ];
 
-//TODO: 로그인 기능 구현 후 실제 user를 props 로 받아와야 한다.
 //TODO: 버튼 클릭 시, 배경 색상이 유지되는 기능을 추가해야 한다.
 const SideBar = function ({ user }) {
   return (
@@ -38,19 +39,34 @@ const SideBar = function ({ user }) {
       zIndex={2}
     >
       <VStack width={'full'} py={'2'}>
-        <ChakraLink as={ReactRouterLink} to={'/mypage'}>
-          {user ? (
-            <Avatar src={user?.img} size={'xl'} />
-          ) : (
-            <Avatar icon={<FaUser />} size={'xl'} />
-          )}
-        </ChakraLink>
-
-        <ChakraLink as={ReactRouterLink} to={'/auth/log-in'}>
-          <Text fontSize={'xl'} fontWeight={'bold'}>
-            {user ? `${user?.name}님` : '로그인하기'}
-          </Text>
-        </ChakraLink>
+        {user ? (
+          <ChakraLink
+            as={ReactRouterLink}
+            to={'/mypage'}
+            textDecorationLine={'none'}
+            _hover={{ textDecoration: 'none' }}
+          >
+            <Avatar src={user?.photoURL} size={'xl'} />
+            <Text
+              mt={2}
+              fontSize={'xl'}
+              fontWeight={'bold'}
+              textAlign={'center'}
+            >
+              {user?.displayName}님
+            </Text>
+          </ChakraLink>
+        ) : (
+          <>
+            <SkeletonCircle size={'24'} />
+            <SkeletonText
+              mt={2}
+              skeletonHeight={'5'}
+              width={'16'}
+              noOfLines={1}
+            />
+          </>
+        )}
       </VStack>
 
       <VStack width={'full'} gap={0}>

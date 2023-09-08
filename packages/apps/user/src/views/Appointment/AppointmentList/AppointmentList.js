@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box,
   Flex,
@@ -12,60 +12,78 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Checkbox,
   CheckboxGroup,
-  SimpleGrid,
+  Checkbox,
   HStack,
+  SimpleGrid,
 } from '@chakra-ui/react';
-
 import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
 import BackButton from '../../../components/BackButton/BackButton';
 import HospitalList from './HospitalList';
-import specialties from '../Specialties';
+import specialties from '../Specialties.js';
 
-function AppointHospital() {
-  const [sortBy, setSortBy] = useState();
-  const [selectedSpecialties, setSelectedSpecialties] = useState([]);
-  const [hospitalList, setHospitalList] = useState(HospitalList);
+import { DoctorList, HospitalList } from '../dataList';
+import { useLocation } from 'react-router-dom';
+
+function AppointmentList() {
+  const { pathname } = useLocation();
+  const path = pathname.split('/')[2];
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const handleSortByChange = event => {
-    const newSortBy = event;
-    if (newSortBy !== sortBy) {
-      setSortBy(newSortBy);
-    } else {
-      setHospitalList([...hospitalList]);
+  const [sortBy, setSortBy] = useState();
+  const [selectedSpecialties, setSelectedSpecialties] = useState([]);
+  const [list, setList] = useState([]);
+  const [filteredList, setFilteredList] = useState([]);
+  const [title, setTitle] = useState();
+
+  useEffect(() => {
+    if (path === 'doctors') {
+      setList(DoctorList);
+      setTitle('의사별 보기');
+      console.log(list, title);
+    } else if (path === 'hospitals') {
+      setList(HospitalList);
+      setTitle('병원별 보기');
     }
+  }, [path, list, title]);
+
+  const handleSortByChange = event => {
+    setSortBy(event);
   };
 
   const handleSpecialtyChange = selectedOptions => {
     setSelectedSpecialties(selectedOptions);
   };
-  const hospitalToDisplay = hospitalList.filter(hospital => {
-    const isSelectedSpecialty = hospital.field.some(specialty =>
-      selectedSpecialties.includes(specialty),
-    );
-    return selectedSpecialties.length === 0 || isSelectedSpecialty;
-  });
 
-  if (sortBy === 'name') {
-    hospitalToDisplay.sort((a, b) => (a.hospital > b.hospital ? 1 : -1));
-  } else if (sortBy === 'distance') {
-    hospitalToDisplay.sort(
-      (a, b) => parseFloat(a.distance) - parseFloat(b.distance),
-    );
-  } else {
-    hospitalToDisplay.sort((a, b) => (a.rate < b.rate ? 1 : -1));
-  }
+  useEffect(() => {
+    let itemsToFilter = [...list];
+
+    if (selectedSpecialties.length > 0) {
+      itemsToFilter = itemsToFilter.filter(item =>
+        item.fields.some(specialty => selectedSpecialties.includes(specialty)),
+      );
+    }
+
+    if (sortBy === 'name') {
+      itemsToFilter.sort((a, b) => (a.name > b.name ? 1 : -1));
+    } else if (sortBy === 'distance') {
+      itemsToFilter.sort(
+        (a, b) => parseFloat(a.distance) - parseFloat(b.distance),
+      );
+    } else if (sortBy === 'rating') {
+      itemsToFilter.sort((a, b) => (a.rate < b.rate ? 1 : -1));
+    }
+
+    setFilteredList(itemsToFilter);
+  }, [sortBy, selectedSpecialties, list]);
 
   return (
     <Flex direction="column" alignItems="flex-start">
       <Box>
-        <HStack>
-          <BackButton title={'병원별 보기'} />
-          <Button onClick={onOpen} position="fixed" right="8" top="4">
-            필터적용
-          </Button>
+        <HStack gap="31.5rem">
+          <BackButton title={title} />
+          <Button onClick={onOpen}>필터적용</Button>
         </HStack>
         <Modal isOpen={isOpen} onClose={onClose} size="4xl">
           <ModalOverlay />
@@ -123,8 +141,8 @@ function AppointHospital() {
 
       <Box width={'full'} maxHeight="80vh" overflowY="scroll">
         <SimpleGrid columns={2} gap="8" mt="4" width={'full'} padding="8">
-          {hospitalToDisplay.map(info => (
-            <AppointmentCard info={info} />
+          {filteredList.map(item => (
+            <AppointmentCard data={item} key={item.name} />
           ))}
         </SimpleGrid>
       </Box>
@@ -132,4 +150,4 @@ function AppointHospital() {
   );
 }
 
-export default AppointHospital;
+export default AppointmentList;

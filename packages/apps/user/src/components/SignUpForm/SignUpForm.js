@@ -18,9 +18,15 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-import { signIn } from '../../../firebase';
-import { updateProfile } from 'firebase/auth';
+import {
+  browserLocalPersistence,
+  setPersistence,
+  updateProfile,
+} from 'firebase/auth';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import { auth, signIn } from '../../../firebase';
+import UserFace from './UserFace';
 
 const SignUpForm = function ({
   activeStep,
@@ -56,21 +62,28 @@ const SignUpForm = function ({
     goToPrevious();
   }, [goToPrevious, setFormPosition, formPosition]);
 
+  const profileImgSrc = useSelector(state => state.url);
+  console.log(profileImgSrc);
+
   const onSubmit = function (data) {
     const {
       step0: { email, password, username },
     } = data;
 
-    signIn(email, password)
-      .then(userCredential => {
-        updateProfile(userCredential.user, {
-          displayName: username,
-        }).then(() => navigate('/'));
+    setPersistence(auth, browserLocalPersistence)
+      .then(() => {
+        signIn(email, password)
+          .then(userCredential => {
+            updateProfile(userCredential.user, {
+              displayName: username,
+            }).then(() => navigate('/'));
+          })
+          .catch(error => {
+            console.log(error);
+            navigate('/error');
+          });
       })
-      .catch(error => {
-        console.log(error);
-        navigate('/error');
-      });
+      .catch(() => navigate('/error'));
   };
 
   const FORM_WIDTH = 700;
@@ -180,7 +193,6 @@ const SignUpForm = function ({
               </FormErrorMessage>
             </FormControl>
           </VStack>
-
           <VStack minWidth={FORM_WIDTH} gap={'4'} pr={'4'}>
             <FormControl
               width={'full'}
@@ -270,7 +282,6 @@ const SignUpForm = function ({
               </FormErrorMessage>
             </FormControl>
           </VStack>
-
           <VStack minWidth={FORM_WIDTH} gap={'4'} pr={'4'}>
             <HStack width={'full'} gap={'4'}>
               <FormControl width={'full'} isInvalid={errors.step2?.bloodType}>
@@ -352,9 +363,8 @@ const SignUpForm = function ({
               </FormErrorMessage>
             </FormControl>
           </VStack>
-
           <VStack minWidth={FORM_WIDTH} gap={'4'} pr={'4'}>
-            프로필 사진 추가 필요 //Todo: 프로필 사진 찍기 기능 추가하기
+            <UserFace />
           </VStack>
         </HStack>
       </Box>
