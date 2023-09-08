@@ -24,7 +24,7 @@ const SignUp = function () {
     <VStack height={'100vh'} p={'6'}>
       <HStack width={'full'} justifyContent={'start'} alignItems={'end'}>
         <Heading as={'h1'}>Housepital 회원가입</Heading>
-        <ChakraLink as={ReactRouterLink} to={'/auth/login'}>
+        <ChakraLink as={ReactRouterLink} to={'/auth/log-in'}>
           이미 계정이 있으신가요? 로그인
         </ChakraLink>
       </HStack>
