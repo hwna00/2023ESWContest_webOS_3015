@@ -4,7 +4,7 @@ import { RouterProvider } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import { Provider } from 'react-redux';
 import { store } from './store';
-import router from './router';
+import router from './routes/index';
 import theme from '../theme';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
