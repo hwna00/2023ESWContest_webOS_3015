@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Flex, Box, VStack, HStack, Divider } from '@chakra-ui/react';
 import BackButton from '../../../components/BackButton/BackButton';
-import WaitingItem from './WaitingItem';
+import WaitingItem from '../../../components/WaitingItem/WaitingItem';
 
 function WaitingRoom() {
   const [AppointmentList, setAppointmentList] = useState([
@@ -52,23 +52,23 @@ function WaitingRoom() {
       </Flex>
       <VStack mx={'5'} align={'stretch'}>
         <HStack mt={'7'} mb={'-2'} justifyContent={'space-evenly'}>
-          <Box width={'48'} textAlign={'center'} fontWeight={'bold'}>
+          <Box width={'25%'} textAlign={'center'} fontWeight={'bold'}>
             예약 일시
           </Box>
-          <Box width={'48'} textAlign={'center'} fontWeight={'bold'}>
+          <Box width={'25%'} textAlign={'center'} fontWeight={'bold'}>
             병원
           </Box>
-          <Box width={'48'} textAlign={'center'} fontWeight={'bold'}>
+          <Box width={'25%'} textAlign={'center'} fontWeight={'bold'}>
             의사
           </Box>
-          <Box width={'20'} />
+          <Box width={'25%'} />
         </HStack>
         <Divider h={'0.5'} mb={'1'} bgColor="black" />
         <Box
           display="flex"
           flexDirection="column"
           gap="3"
-          h="470"
+          h="96"
           overflowY="scroll"
         >
           {AppointmentList.map((appointment, index) => (
