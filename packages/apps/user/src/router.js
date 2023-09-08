@@ -11,6 +11,7 @@ import LogIn from './views/Auth/LogIn/LogIn';
 import Appointment from './views/Appointment/Appointment';
 import AppointDoctor from './views/Appointment/Doctor/AppointDoctor';
 import AppointHospital from './views/Appointment/Hospital/AppointHospital';
+import WaitingRoom from './views/Appointment/WaitingRoom/WaitingRoom';
 import BeforeCapture from './components/SignUpForm/BeforeCapture';
 import OnCapture from './components/SignUpForm/OnCapture';
 import AfterCapture from './components/SignUpForm/AfterCapture';
