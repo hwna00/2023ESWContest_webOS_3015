@@ -52,7 +52,7 @@ function WaitingList() {
   return (
     <div>
       <Flex>
-        <BackButton goPrev={goPrev} title={'대기실'} />
+        <BackButton goPrev={goPrev} title={'예약현황'} />
       </Flex>
 
       <VStack mx={'5'} align={'stretch'}>
