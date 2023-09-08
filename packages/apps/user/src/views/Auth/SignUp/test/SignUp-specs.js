@@ -14,19 +14,19 @@ const testForm = {
   phoneNumber: '12345678',
 };
 
-describe('Test SignUp Page', () => {
-  beforeEach(async () => {
+describe('Test SignUp Page', async () => {
+  it('로그인화면으로 넘어가는 버튼이 존재하는가', () => {
     act(() => {
       render(<SignUp />, { wrapper: BrowserRouter });
     });
-  });
-
-  it('로그인화면으로 넘어가는 버튼이 존재하는가', () => {
     const loginBtn = screen.getByText(/로그인/i);
     expect(loginBtn).toBeInTheDocument();
   });
 
   it('필수 입력 요소를 모두 채웠을 때 정상적으로 최종화면으로 이동하는가', async () => {
+    act(() => {
+      render(<SignUp />, { wrapper: BrowserRouter });
+    });
     const email = screen.getByLabelText(/이메일/i);
     const name = screen.getByLabelText(/이름/i);
     const password = screen.getByPlaceholderText(/비밀번호/i);
@@ -40,7 +40,7 @@ describe('Test SignUp Page', () => {
     await waitFor(() => userEvent.type(checkPassword, testForm.checkPassword));
 
     const nextBtn = screen.getByRole('button', { name: /다음으로/i });
-    await act(() => {
+    act(() => {
       userEvent.click(nextBtn);
     });
 
@@ -60,6 +60,9 @@ describe('Test SignUp Page', () => {
   });
 
   it.only('필수 입력 요소를 모두 채우지 않았을 때 에러 메시지가 보이는가', async () => {
+    act(() => {
+      render(<SignUp />, { wrapper: BrowserRouter });
+    });
     const nextBtn = screen.getByRole('button', { name: /다음으로/i });
     await act(() => userEvent.click(nextBtn));
 
