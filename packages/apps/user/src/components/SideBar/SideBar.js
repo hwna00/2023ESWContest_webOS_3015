@@ -14,9 +14,9 @@ import { FaCog } from 'react-icons/fa';
 
 const menuNames = [
   { name: '메인 화면', path: '' },
-  { name: '진료 예약', path: 'doctor-appointment' },
+  { name: '진료 예약', path: 'appointment' },
   { name: '진료 내역', path: 'appointment-history' },
-  { name: '건강 기록', path: 'health' },
+  { name: '건강 기록', path: 'health-history' },
   { name: '복약 관리', path: 'medicines' },
 ];
 
