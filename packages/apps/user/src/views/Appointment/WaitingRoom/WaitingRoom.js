@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Flex, Box, VStack, HStack, Divider } from '@chakra-ui/react';
 import BackButton from '../../../components/BackButton/BackButton';
 import WaitingItem from '../../../components/WaitingItem/WaitingItem';
@@ -37,11 +37,11 @@ function WaitingRoom() {
     },
   ]);
 
-  const cancelAppointment = index => {
+  const cancelAppointment = useCallback(index => {
     setAppointmentList(prevAppointments =>
       prevAppointments.filter((appointment, i) => i !== index),
     );
-  };
+  }, []);
 
   return (
     <Box>
@@ -74,7 +74,7 @@ function WaitingRoom() {
               key={index}
               waiting={appointment}
               index={index}
-              cancelAppointment={() => cancelAppointment(index)}
+              cancelAppointment={cancelAppointment}
             />
           ))}
         </Box>

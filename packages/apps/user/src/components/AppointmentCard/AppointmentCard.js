@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import {
   Box,
   Flex,
@@ -15,9 +15,9 @@ import { GoBookmark, GoBookmarkFill } from 'react-icons/go';
 function AppointmentCard({ data }) {
   const [isFavorite, setIsFavorite] = useState(data.isFavorite);
 
-  const handleFavoriteClick = () => {
-    setIsFavorite(!isFavorite);
-  };
+  const handleFavoriteClick = useCallback(() => {
+    setIsFavorite(prevIsFavorite => !prevIsFavorite);
+  }, []);
 
   return (
     <Box
@@ -39,13 +39,13 @@ function AppointmentCard({ data }) {
         />
         <Box ml={{ base: '2', md: '4' }} width="100%">
           <HStack width="100%" justifyContent="space-between">
-            <Heading as="h3" size="md" mb="1">
+            <Heading as="h3" size="md" mb={1}>
               {data.name}
             </Heading>
             {data.isFavorite && (
               <Button
                 onClick={handleFavoriteClick}
-                backgroundColor="transparent"
+                backgroundColor={'transparent'}
                 _hover={{ backgroundColor: 'transparent' }}
                 _active={{ backgroundColor: 'transparent' }}
                 _focus={{ boxShadow: 'none' }}
@@ -58,7 +58,6 @@ function AppointmentCard({ data }) {
               </Button>
             )}
           </HStack>
-
           <Text fontSize="sm" mb={1}>
             {data.specialty && <span>{data.specialty}</span>}
           </Text>

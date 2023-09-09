@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Flex,
@@ -48,10 +48,22 @@ function AppointmentList() {
     }
   }, [path, list, title]);
 
-  const handleSortByChange = event => {
+  const handleSortByChange = useCallback(event => {
     setSortBy(event);
-  };
+  }, []);
+  const handleSortByName = useCallback(() => {
+    handleSortByChange('name');
+  }, [handleSortByChange]);
 
+  const handleSortByRating = useCallback(() => {
+    handleSortByChange('rating');
+  }, [handleSortByChange]);
+
+  const handleSortByDistance = useCallback(() => {
+    handleSortByChange('distance');
+  }, [handleSortByChange]);
+
+  //useCallback 사용하면 진료 과목 필터링이 정상적으로 작동하지 않음
   const handleSpecialtyChange = selectedOptions => {
     setSelectedSpecialties(selectedOptions);
   };
@@ -98,21 +110,21 @@ function AppointmentList() {
                 <Checkbox
                   id="name"
                   checked={sortBy === 'name'}
-                  onChange={() => handleSortByChange('name')}
+                  onChange={handleSortByName}
                 >
                   이름순
                 </Checkbox>
                 <Checkbox
                   id="rating"
                   checked={sortBy === 'rating'}
-                  onChange={() => handleSortByChange('rating')}
+                  onChange={handleSortByRating}
                 >
                   별점순
                 </Checkbox>
                 <Checkbox
                   id="distance"
                   checked={sortBy === 'distance'}
-                  onChange={() => handleSortByChange('distance')}
+                  onChange={handleSortByDistance}
                 >
                   거리순
                 </Checkbox>

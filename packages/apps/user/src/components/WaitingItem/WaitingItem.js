@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import {
   Box,
   HStack,
@@ -13,6 +14,11 @@ import {
 } from '@chakra-ui/react';
 
 function CancelModal({ isOpen, onClose, cancelAppointment }) {
+  const handleConfirm = useCallback(() => {
+    cancelAppointment();
+    onClose();
+  }, [cancelAppointment, onClose]);
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered="true">
       <ModalOverlay />
@@ -25,14 +31,7 @@ function CancelModal({ isOpen, onClose, cancelAppointment }) {
           <Button colorScheme="blue" mr="3" width="12" onClick={onClose}>
             아니요
           </Button>
-          <Button
-            colorScheme="red"
-            width="12"
-            onClick={() => {
-              cancelAppointment();
-              onClose();
-            }}
-          >
+          <Button colorScheme="red" width="12" onClick={handleConfirm}>
             예
           </Button>
         </ModalFooter>
@@ -43,6 +42,11 @@ function CancelModal({ isOpen, onClose, cancelAppointment }) {
 
 const WaitingItem = function ({ waiting, cancelAppointment, index }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const handleCancel = useCallback(() => {
+    cancelAppointment(index);
+    onClose();
+  }, [cancelAppointment, index, onClose]);
   return (
     <HStack
       bg={'primary.100'}
@@ -65,7 +69,7 @@ const WaitingItem = function ({ waiting, cancelAppointment, index }) {
         <CancelModal
           isOpen={isOpen}
           onClose={onClose}
-          cancelAppointment={() => cancelAppointment(index)}
+          cancelAppointment={handleCancel}
         />
       </Box>
     </HStack>
