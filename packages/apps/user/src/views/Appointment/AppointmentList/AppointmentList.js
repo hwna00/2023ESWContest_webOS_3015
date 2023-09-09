@@ -83,7 +83,9 @@ function AppointmentList() {
       <Box width="100%">
         <HStack width="100%" justifyContent="space-between">
           <BackButton title={title} />
-          <Button onClick={onOpen}>필터적용</Button>
+          <Button onClick={onOpen} padding="4">
+            필터적용
+          </Button>
         </HStack>
         <Modal isOpen={isOpen} onClose={onClose} size="4xl">
           <ModalOverlay />
@@ -140,7 +142,7 @@ function AppointmentList() {
       </Box>
 
       <Box width={'full'} maxHeight="80vh" overflowY="scroll">
-        <SimpleGrid columns={2} gap="8" mt="4" width={'full'} padding="8">
+        <SimpleGrid columns={2} gap="5" width={'full'} padding="4">
           {filteredList.map(item => (
             <AppointmentCard data={item} key={item.name} />
           ))}
