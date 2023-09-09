@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Box,
   Flex,
@@ -8,16 +9,16 @@ import {
   Button,
   HStack,
 } from '@chakra-ui/react';
-
 import { StarIcon } from '@chakra-ui/icons';
-import { useState } from 'react';
 import { GoBookmark, GoBookmarkFill } from 'react-icons/go';
+
 function AppointmentCard({ data }) {
   const [isFavorite, setIsFavorite] = useState(data.isFavorite);
 
   const handleFavoriteClick = () => {
     setIsFavorite(!isFavorite);
   };
+
   return (
     <Box
       key={data.name}
