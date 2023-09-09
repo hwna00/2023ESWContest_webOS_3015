@@ -1,6 +1,48 @@
-import { Box, HStack, Button } from '@chakra-ui/react';
+import {
+  Box,
+  HStack,
+  Button,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+} from '@chakra-ui/react';
+
+function CancelModal({ isOpen, onClose, cancelAppointment }) {
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} isCentered="true">
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>예약 취소</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>정말로 예약을 취소하시겠습니까?</ModalBody>
+
+        <ModalFooter>
+          <Button colorScheme="blue" mr="3" width="12" onClick={onClose}>
+            아니요
+          </Button>
+          <Button
+            colorScheme="red"
+            width="12"
+            onClick={() => {
+              cancelAppointment();
+              onClose();
+            }}
+          >
+            예
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  );
+}
 
 const WaitingItem = function ({ waiting, cancelAppointment, index }) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <HStack
       bg={'primary.100'}
@@ -18,7 +60,13 @@ const WaitingItem = function ({ waiting, cancelAppointment, index }) {
         {waiting.name}
       </Box>
       <Box w={'25%'} textAlign={'center'} alignContent={'center'}>
-        <Button onClick={() => cancelAppointment(index)}>취소하기</Button>
+        <Button onClick={onOpen}>취소하기</Button>
+
+        <CancelModal
+          isOpen={isOpen}
+          onClose={onClose}
+          cancelAppointment={() => cancelAppointment(index)}
+        />
       </Box>
     </HStack>
   );

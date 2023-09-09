@@ -38,15 +38,13 @@ function WaitingRoom() {
   ]);
 
   const cancelAppointment = index => {
-    if (window.confirm('예약을 취소하시겠습니까?')) {
-      setAppointmentList(prevAppointments =>
-        prevAppointments.filter((appointment, i) => i !== index),
-      );
-    }
+    setAppointmentList(prevAppointments =>
+      prevAppointments.filter((appointment, i) => i !== index),
+    );
   };
 
   return (
-    <div>
+    <Box>
       <Flex>
         <BackButton title={'대기실'} />
       </Flex>
@@ -76,12 +74,12 @@ function WaitingRoom() {
               key={index}
               waiting={appointment}
               index={index}
-              cancelAppointment={cancelAppointment}
+              cancelAppointment={() => cancelAppointment(index)}
             />
           ))}
         </Box>
       </VStack>
-    </div>
+    </Box>
   );
 }
 
