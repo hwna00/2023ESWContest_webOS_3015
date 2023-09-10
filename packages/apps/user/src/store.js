@@ -10,6 +10,24 @@ const userImgSlice = createSlice({
   },
 });
 
-export const store = configureStore({ reducer: userImgSlice.reducer });
+const apointmentSlice = createSlice({
+  name: 'appointment',
+  initialState: { date: '', time: '' },
+  reducers: {
+    setAppointDatetime: (state, action) => {
+      state.date = action.payload.date;
+      state.time = action.payload.time;
+    },
+  },
+});
+
+export const store = configureStore({
+  reducer: {
+    userImg: userImgSlice.reducer,
+    appointment: apointmentSlice.reducer,
+  },
+  devTools: process.env.NODE_ENV !== 'production',
+});
 
 export const { setImg } = userImgSlice.actions;
+export const { setAppointDatetime } = apointmentSlice.actions;

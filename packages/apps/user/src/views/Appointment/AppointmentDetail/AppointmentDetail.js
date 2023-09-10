@@ -26,10 +26,21 @@ import { DoctorList } from '../dataList';
 import BackButton from '../../../components/BackButton/BackButton';
 import { FaBookmark, FaRegBookmark, FaStar } from 'react-icons/fa6';
 import { Icon } from '@chakra-ui/react';
+import { useDispatch } from 'react-redux';
+import { setAppointDatetime } from '../../../store';
 
 const AppointmentDetail = function () {
   const { id } = useParams();
   const [doctor, setDoctor] = useState({});
+  const [appointDate, setAppointDate] = useState();
+  const [appointTime, setAppointTime] = useState();
+  useEffect(() => {
+    const found = DoctorList.find(d => d?.id === id);
+    setDoctor(found);
+  }, []);
+
+  const dispatch = useDispatch();
+
   const timeTable = [
     '09:00',
     '09:30',
@@ -55,10 +66,17 @@ const AppointmentDetail = function () {
     '20:30',
   ];
 
-  useEffect(() => {
-    const found = DoctorList.find(d => d?.id === id);
-    setDoctor(found);
-  }, []);
+  const onDateChange = e => {
+    setAppointDate(e.target.value);
+  };
+
+  const onTimeChange = e => {
+    setAppointTime(e.target.innerText);
+  };
+
+  const onNextClick = () => {
+    dispatch(setAppointDatetime({ date: appointDate, time: appointTime }));
+  };
 
   return (
     <HStack height={'full'}>
@@ -230,6 +248,7 @@ const AppointmentDetail = function () {
               placeholder="예약하실 날짜를 선택하세요"
               size="lg"
               type="date"
+              onChange={onDateChange}
             />
             <Box width={'full'}>
               <Grid
@@ -245,7 +264,12 @@ const AppointmentDetail = function () {
               >
                 {timeTable.map((time, idx) => (
                   <GridItem key={idx} width={'full'} textAlign={'center'}>
-                    <Button width={'full'} py={'2'} colorScheme="primary">
+                    <Button
+                      width={'full'}
+                      py={'2'}
+                      colorScheme="primary"
+                      onClick={onTimeChange}
+                    >
                       {time}
                     </Button>
                   </GridItem>
@@ -256,7 +280,13 @@ const AppointmentDetail = function () {
               </Text>
             </Box>
 
-            <Button width={'full'} colorScheme="primary" py={'4'} size={'lg'}>
+            <Button
+              width={'full'}
+              colorScheme="primary"
+              py={'4'}
+              size={'lg'}
+              onClick={onNextClick}
+            >
               다음단계
             </Button>
           </TabPanel>
