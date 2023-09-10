@@ -1,10 +1,14 @@
 import {
   AspectRatio,
   Box,
+  Button,
   Divider,
+  Grid,
+  GridItem,
   HStack,
   Heading,
   Image,
+  Input,
   ListItem,
   Tab,
   TabList,
@@ -26,6 +30,30 @@ import { Icon } from '@chakra-ui/react';
 const AppointmentDetail = function () {
   const { id } = useParams();
   const [doctor, setDoctor] = useState({});
+  const timeTable = [
+    '09:00',
+    '09:30',
+    '10:00',
+    '10:30',
+    '11:00',
+    '11:30',
+    '12:00',
+    '12:30',
+    '13:00',
+    '13:30',
+    '14:00',
+    '14:30',
+    '15:00',
+    '15:30',
+    '16:00',
+    '16:30',
+    '17:00',
+    '17:30',
+    '18:00',
+    '19:30',
+    '20:00',
+    '20:30',
+  ];
 
   useEffect(() => {
     const found = DoctorList.find(d => d?.id === id);
@@ -191,9 +219,48 @@ const AppointmentDetail = function () {
               </Box>
             </Box>
           </TabPanel>
-          <TabPanel>
-            <p>two!</p>
+
+          <TabPanel
+            height={'full'}
+            display={'flex'}
+            flexDirection={'column'}
+            justifyContent={'space-between'}
+          >
+            <Input
+              placeholder="예약하실 날짜를 선택하세요"
+              size="lg"
+              type="date"
+            />
+            <Box width={'full'}>
+              <Grid
+                width={'full'}
+                maxH={'64'}
+                overflowY={'scroll'}
+                bgColor={'primary.200'}
+                padding={'4'}
+                templateColumns={'repeat(4, 1fr)'}
+                placeItems={'center'}
+                gap={4}
+                borderRadius={'md'}
+              >
+                {timeTable.map((time, idx) => (
+                  <GridItem key={idx} width={'full'} textAlign={'center'}>
+                    <Button width={'full'} py={'2'} colorScheme="primary">
+                      {time}
+                    </Button>
+                  </GridItem>
+                ))}
+              </Grid>
+              <Text mt={'2'}>
+                병원 상황에 따라 대기 시간이 발생할 수 있습니다.
+              </Text>
+            </Box>
+
+            <Button width={'full'} colorScheme="primary" py={'4'} size={'lg'}>
+              다음단계
+            </Button>
           </TabPanel>
+
           <TabPanel>
             <UnorderedList styleType={'none'} spacing={'6'}>
               <ListItem
