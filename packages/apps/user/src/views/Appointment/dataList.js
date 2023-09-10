@@ -56,6 +56,36 @@ export const DoctorList = [
     hospital: '연세 새로운 내과',
     tel: '031-123-1234',
     address: '서울시 어쩌구 이러면',
+    businessHours: {
+      monday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      tuesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      wednesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      thursday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      friday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      saturday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      sunday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+    },
   },
   {
     id: '2',
@@ -69,6 +99,36 @@ export const DoctorList = [
     hospital: '연세 새로운 내과',
     tel: '031-123-1234',
     address: '서울시 어쩌구 이러면',
+    businessHours: {
+      monday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      tuesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      wednesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      thursday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      friday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      saturday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      sunday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+    },
   },
   {
     id: '3',
@@ -79,6 +139,39 @@ export const DoctorList = [
     profileImg:
       'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
     isFavorite: false,
+    hospital: '연세 새로운 내과',
+    tel: '031-123-1234',
+    address: '서울시 어쩌구 이러면',
+    businessHours: {
+      monday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      tuesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      wednesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      thursday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      friday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      saturday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      sunday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+    },
   },
   {
     id: '4',
@@ -89,6 +182,39 @@ export const DoctorList = [
     profileImg:
       'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
     isFavorite: false,
+    hospital: '연세 새로운 내과',
+    tel: '031-123-1234',
+    address: '서울시 어쩌구 이러면',
+    businessHours: {
+      monday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      tuesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      wednesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      thursday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      friday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      saturday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      sunday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+    },
   },
   {
     id: '5',
@@ -102,6 +228,36 @@ export const DoctorList = [
     hospital: '연세 새로운 내과',
     tel: '031-123-1234',
     address: '서울시 어쩌구 이러면',
+    businessHours: {
+      monday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      tuesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      wednesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      thursday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      friday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      saturday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      sunday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+    },
   },
   {
     id: '6',
@@ -115,6 +271,36 @@ export const DoctorList = [
     hospital: '연세 새로운 내과',
     tel: '031-123-1234',
     address: '서울시 어쩌구 이러면',
+    businessHours: {
+      monday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      tuesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      wednesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      thursday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      friday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      saturday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      sunday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+    },
   },
   {
     id: '7',
@@ -125,6 +311,39 @@ export const DoctorList = [
     profileImg:
       'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
     isFavorite: false,
+    hospital: '연세 새로운 내과',
+    tel: '031-123-1234',
+    address: '서울시 어쩌구 이러면',
+    businessHours: {
+      monday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      tuesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      wednesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      thursday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      friday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      saturday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      sunday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+    },
   },
   {
     id: '8',
@@ -135,6 +354,39 @@ export const DoctorList = [
     profileImg:
       'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
     isFavorite: false,
+    hospital: '연세 새로운 내과',
+    tel: '031-123-1234',
+    address: '서울시 어쩌구 이러면',
+    businessHours: {
+      monday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      tuesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      wednesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      thursday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      friday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      saturday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      sunday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+    },
   },
   {
     id: '9',
@@ -148,5 +400,35 @@ export const DoctorList = [
     hospital: '연세 새로운 내과',
     tel: '031-123-1234',
     address: '서울시 어쩌구 이러면',
+    businessHours: {
+      monday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      tuesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      wednesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      thursday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      friday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      saturday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      sunday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+    },
   },
 ];

@@ -2,9 +2,10 @@ import {
   AspectRatio,
   Box,
   Divider,
-  Flex,
   HStack,
+  Heading,
   Image,
+  ListItem,
   Tab,
   TabIndicator,
   TabList,
@@ -13,6 +14,7 @@ import {
   Tabs,
   Tag,
   Text,
+  UnorderedList,
   VStack,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
@@ -131,9 +133,68 @@ const AppointmentDetail = function () {
           borderRadius="1px"
         />
 
-        <TabPanels>
+        <TabPanels width={'full'} height={'full'} overflowY={'scroll'}>
           <TabPanel>
-            <p>one!</p>
+            <Box>
+              <Heading as={'h2'} size={'lg'}>
+                의사 소개
+              </Heading>
+              <Box
+                width={'full'}
+                minH={'10'}
+                mt={'4'}
+                padding={'4'}
+                bgColor={'primary.200'}
+                borderRadius={'md'}
+              >
+                <Text>{doctor?.description}</Text>
+              </Box>
+            </Box>
+
+            <Box mt={'8'}>
+              <Heading as={'h2'} size={'lg'}>
+                영업 시간
+              </Heading>
+              <Box
+                width={'full'}
+                minH={'10'}
+                mt={'4'}
+                padding={'4'}
+                bgColor={'primary.200'}
+                borderRadius={'md'}
+              >
+                <UnorderedList styleType={'none'} ml={0} spacing={'2'}>
+                  <ListItem>
+                    <b>월요일</b> {doctor.businessHours?.monday.open} (점심시간{' '}
+                    {doctor.businessHours?.monday.break})
+                  </ListItem>
+                  <ListItem>
+                    <b>화요일</b> {doctor.businessHours?.tuesday.open} (점심시간{' '}
+                    {doctor.businessHours?.tuesday.break})
+                  </ListItem>
+                  <ListItem>
+                    <b>수요일</b> {doctor.businessHours?.wednesday.open}{' '}
+                    (점심시간 {doctor.businessHours?.wednesday.break})
+                  </ListItem>
+                  <ListItem>
+                    <b>목요일</b> {doctor.businessHours?.thursday.open}{' '}
+                    (점심시간 {doctor.businessHours?.thursday.break})
+                  </ListItem>
+                  <ListItem>
+                    <b>금요일</b> {doctor.businessHours?.friday.open} (점심시간{' '}
+                    {doctor.businessHours?.friday.break})
+                  </ListItem>
+                  <ListItem>
+                    <b>토요일</b> {doctor.businessHours?.saturday.open}{' '}
+                    (점심시간 {doctor.businessHours?.saturday.break})
+                  </ListItem>
+                  <ListItem>
+                    <b>일요일</b> {doctor.businessHours?.sunday.open} (점심시간{' '}
+                    {doctor.businessHours?.sunday.break})
+                  </ListItem>
+                </UnorderedList>
+              </Box>
+            </Box>
           </TabPanel>
           <TabPanel>
             <p>two!</p>
