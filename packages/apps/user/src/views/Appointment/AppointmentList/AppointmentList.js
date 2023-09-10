@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link as ReactRouterLink } from 'react-router-dom';
 import {
   Box,
   Flex,
@@ -18,6 +18,7 @@ import {
   Checkbox,
   HStack,
   SimpleGrid,
+  Link as ChakraLink,
 } from '@chakra-ui/react';
 
 import specialties from '../Specialties.js';
@@ -142,7 +143,9 @@ function AppointmentList() {
       <Box width="full" maxHeight="80vh" overflowY="scroll">
         <SimpleGrid columns={2} gap="8" mt="4" width="full" padding="8">
           {filteredList.map(item => (
-            <AppointmentCard data={item} key={item.name} />
+            <ChakraLink as={ReactRouterLink} to={`${item.id}`} key={item.name}>
+              <AppointmentCard data={item} />
+            </ChakraLink>
           ))}
         </SimpleGrid>
       </Box>

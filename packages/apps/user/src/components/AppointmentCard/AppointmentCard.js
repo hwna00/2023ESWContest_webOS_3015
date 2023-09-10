@@ -1,4 +1,5 @@
 import { Box, Flex, Heading, Text, Image, Icon } from '@chakra-ui/react';
+
 import { StarIcon } from '@chakra-ui/icons';
 
 function AppointmentCard({ data }) {
