@@ -7,7 +7,7 @@ import {
   Link as ChakraLink,
 } from '@chakra-ui/react';
 
-const AppointmentViewList = function ({ type, information }) {
+const AppointmentViewList = function ({ type, selectedList }) {
   const nameOfView = type === 'hospital' ? '병원별 보기' : '의사별 보기';
 
   return (
@@ -28,18 +28,18 @@ const AppointmentViewList = function ({ type, information }) {
       </HStack>
 
       <VStack w="full" h="80" overflowY="auto">
-        {information.map(info => (
+        {selectedList.map(item => (
           <VStack
             w="full"
             alignItems="flex-start"
             px="2"
-            key={info.hospitalKey}
+            key={item.hospitalKey}
           >
             <Divider w="full" h="0.5" bgColor="primary.300" />
             <VStack pl="2" gap="0" alignItems="flex-start">
-              <Text>{info.name}</Text>
+              <Text>{item.name}</Text>
               <HStack gap="6">
-                {info.isOpen ? (
+                {item.isOpen ? (
                   <Text fontSize="md" color="primary.400">
                     진료중
                   </Text>
@@ -49,13 +49,13 @@ const AppointmentViewList = function ({ type, information }) {
                   </Text>
                 )}
                 <Text>
-                  {info.rating.toFixed(1)}&nbsp;&#40;
-                  {info.numberOfRatings}
+                  {item.rating.toFixed(1)}&nbsp;&#40;
+                  {item.numberOfRatings}
                   &#41;
                 </Text>
               </HStack>
               <HStack my="2" flexWrap="wrap" rowGap="0" columnGap="3">
-                {info.specialities.map((speciality, index) => (
+                {item.specialities.map((speciality, index) => (
                   <Text key={index}>{speciality}</Text>
                 ))}
               </HStack>
