@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+
 import { Flex, Box, VStack, HStack, Divider } from '@chakra-ui/react';
+
 import BackButton from '../../../components/BackButton/BackButton';
+
 import WaitingItem from './WaitingItem';
 
 function WaitingRoom() {
@@ -48,22 +51,22 @@ function WaitingRoom() {
   return (
     <div>
       <Flex>
-        <BackButton title={'대기실'} />
+        <BackButton title="대기실" />
       </Flex>
-      <VStack mx={'5'} align={'stretch'}>
-        <HStack mt={'7'} mb={'-2'} justifyContent={'space-evenly'}>
-          <Box width={'48'} textAlign={'center'} fontWeight={'bold'}>
+      <VStack mx="5" align="stretch">
+        <HStack mt="7" mb="-2" justifyContent="space-evenly">
+          <Box width="48" textAlign="center" fontWeight="bold">
             예약 일시
           </Box>
-          <Box width={'48'} textAlign={'center'} fontWeight={'bold'}>
+          <Box width="48" textAlign="center" fontWeight="bold">
             병원
           </Box>
-          <Box width={'48'} textAlign={'center'} fontWeight={'bold'}>
+          <Box width="48" textAlign="center" fontWeight="bold">
             의사
           </Box>
-          <Box width={'20'} />
+          <Box width="20" />
         </HStack>
-        <Divider h={'0.5'} mb={'1'} bgColor="black" />
+        <Divider h="0.5" mb="1" bgColor="black" />
         <Box
           display="flex"
           flexDirection="column"

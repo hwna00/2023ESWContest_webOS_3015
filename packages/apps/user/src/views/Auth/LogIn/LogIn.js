@@ -1,7 +1,13 @@
 import { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+
+import { useNavigate , Link as ReactRouterLink } from 'react-router-dom';
+import { FaUserAlt, FaLock } from 'react-icons/fa';
+import {
+  AiFillGithub,
+  AiFillGoogleCircle,
+  AiFillTwitterCircle,
+} from 'react-icons/ai';
 import { useForm } from 'react-hook-form';
-import { Link as ReactRouterLink } from 'react-router-dom';
 import {
   Box,
   Flex,
@@ -18,13 +24,8 @@ import {
   FormErrorMessage,
   Icon,
 } from '@chakra-ui/react';
-import { FaUserAlt, FaLock } from 'react-icons/fa';
+
 import { logIn, googleLogin, auth, provider } from '../../../../firebase';
-import {
-  AiFillGithub,
-  AiFillGoogleCircle,
-  AiFillTwitterCircle,
-} from 'react-icons/ai';
 
 function LogIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -93,7 +94,7 @@ function LogIn() {
           justifyContent="center"
           alignItems="center"
         >
-          <Box as={'form'} onSubmit={handleSubmit(onSubmit)}>
+          <Box as="form" onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={6} p="3rem" backgroundColor="white" boxShadow="md">
               <HStack
                 justifyContent="center"

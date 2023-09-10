@@ -1,4 +1,5 @@
 import { Grid, Flex } from '@chakra-ui/react';
+
 import HealthHistoryItem from '../../components/HealthHistoryItem/HealthHistoryItem.js';
 
 const HealthHistory = function () {
@@ -11,13 +12,13 @@ const HealthHistory = function () {
     { name: '몸무게', measuementTime: '17:00', value: 60 },
   ];
   return (
-    <Flex h={'full'} justifyContent={'center'} alignItems={'center'}>
+    <Flex h="full" justifyContent="center" alignItems="center">
       <Grid
-        w={'85%'}
+        w="85%"
         templateRows="repeat(2, 1fr)"
         templateColumns="repeat(3, 1fr)"
         gap={6}
-        placeItems={'center'}
+        placeItems="center"
       >
         {recentData.map((data, index) => (
           <HealthHistoryItem measureData={data} key={index} />

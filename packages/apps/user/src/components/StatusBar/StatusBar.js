@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { HStack, Text } from '@chakra-ui/react';
+
 import dayjs from 'dayjs';
+import { HStack, Text } from '@chakra-ui/react';
 import 'dayjs/locale/ko';
 
 const StatusBar = function () {
@@ -22,17 +23,17 @@ const StatusBar = function () {
 
   return (
     <HStack
-      justifyContent={'flex-end'}
-      alignItems={'center'}
-      bg={'primary.200'}
-      width={'full'}
-      height={'8'}
-      px={'4'}
-      fontWeight={'bold'}
-      position={'absolute'}
-      top={'0'}
-      left={'0'}
-      zIndex={'1'}
+      justifyContent="flex-end"
+      alignItems="center"
+      bg="primary.200"
+      width="full"
+      height="8"
+      px="4"
+      fontWeight="bold"
+      position="absolute"
+      top="0"
+      left="0"
+      zIndex="1"
     >
       <Text>{currentTime}</Text>
     </HStack>

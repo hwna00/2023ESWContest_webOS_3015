@@ -1,6 +1,8 @@
-import { Box, Divider, HStack, VStack } from '@chakra-ui/react';
-import AppointmentHistoryItem from '../../components/AppointmentHistoryItem/AppointmentHistoryItem';
 import { useState } from 'react';
+
+import { Box, Divider, HStack, VStack } from '@chakra-ui/react';
+
+import AppointmentHistoryItem from '../../components/AppointmentHistoryItem/AppointmentHistoryItem';
 
 const AppointmentHistory = function () {
   const [histories, setHistories] = useState([
@@ -73,29 +75,29 @@ const AppointmentHistory = function () {
   ]);
 
   return (
-    <VStack mx={'5'} align={'stretch'}>
-      <HStack mt={'7'} mb={'-2'} justifyContent={'space-evenly'}>
-        <Box width={'48'} textAlign={'center'} fontWeight={'bold'}>
+    <VStack mx="5" align="stretch">
+      <HStack mt="7" mb="-2" justifyContent="space-evenly">
+        <Box width="48" textAlign="center" fontWeight="bold">
           진료 일시
         </Box>
-        <Box width={'48'} textAlign={'center'} fontWeight={'bold'}>
+        <Box width="48" textAlign="center" fontWeight="bold">
           진료 병원
         </Box>
-        <Box width={'48'} textAlign={'center'} fontWeight={'bold'}>
+        <Box width="48" textAlign="center" fontWeight="bold">
           제조 약국
         </Box>
-        <Box width={'20'} />
+        <Box width="20" />
       </HStack>
-      <Divider h={'0.5'} mb={'1'} bgColor="black" />
+      <Divider h="0.5" mb="1" bgColor="black" />
       <Box
-        display={'flex'}
-        flexDirection={'column'}
-        gap={'3'}
-        h={'470'}
-        overflowY={'scroll'}
+        display="flex"
+        flexDirection="column"
+        gap="3"
+        h="470"
+        overflowY="scroll"
       >
         {histories
-          .sort(function (a, b) {
+          .sort((a, b) => {
             if (a.prescriptionDate > b.prescriptionDate) return 1;
             if (a.prescriptionDate === b.prescriptionDate) return 0;
             if (a.prescriptionDate < b.prescriptionDate) return -1;

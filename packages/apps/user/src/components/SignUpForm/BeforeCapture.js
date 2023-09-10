@@ -1,3 +1,4 @@
+import { Link as ReactRouterLink } from 'react-router-dom';
 import {
   AspectRatio,
   Avatar,
@@ -5,22 +6,21 @@ import {
   HStack,
   Link as ChakraLink,
 } from '@chakra-ui/react';
-import { Link as ReactRouterLink } from 'react-router-dom';
 
 const BeforeCapture = function () {
   return (
-    <HStack width={'full'} justifyContent={'space-evenly'}>
+    <HStack width="full" justifyContent="space-evenly">
       <AspectRatio
-        width={'xs'}
+        width="xs"
         ratio={1}
-        borderRadius={'full'}
-        overflow={'hidden'}
+        borderRadius="full"
+        overflow="hidden"
       >
         <Avatar />
       </AspectRatio>
 
-      <ChakraLink as={ReactRouterLink} to={'/auth/sign-up/on-capture'}>
-        <Button colorScheme={'primary'}>프로필 사진 추가</Button>
+      <ChakraLink as={ReactRouterLink} to="/auth/sign-up/on-capture">
+        <Button colorScheme="primary">프로필 사진 추가</Button>
       </ChakraLink>
     </HStack>
   );
