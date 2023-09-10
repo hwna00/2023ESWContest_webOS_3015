@@ -38,7 +38,7 @@ const favorites = [
   },
 ];
 
-const hospitalInfo = [
+const hospitalList = [
   {
     hospitalKey: 0,
     name: '지웅병원',
@@ -89,7 +89,7 @@ const hospitalInfo = [
   },
 ];
 
-const doctorInfo = [
+const doctorList = [
   {
     hospitalKey: 0,
     name: '양지웅',
@@ -142,8 +142,8 @@ const Appointment = function () {
       </HStack>
 
       <HStack w="full" mt="4">
-        <AppointmentViewList type="hospital" selectedList={hospitalInfo} />
-        <AppointmentViewList type="doctor" selectedList={doctorInfo} />
+        <AppointmentViewList type="hospital" selectedList={hospitalList} />
+        <AppointmentViewList type="doctor" selectedList={doctorList} />
       </HStack>
     </VStack>
   );
