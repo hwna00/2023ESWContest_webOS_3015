@@ -7,7 +7,6 @@ import {
   Image,
   ListItem,
   Tab,
-  TabIndicator,
   TabList,
   TabPanel,
   TabPanels,
@@ -118,20 +117,16 @@ const AppointmentDetail = function () {
         width={'full'}
         height={'full'}
         size={'md'}
-        position="relative"
-        variant="unstyled"
+        colorScheme="primary"
+        display={'flex'}
+        flexDirection={'column'}
+        justifyContent={'flex-start'}
       >
         <TabList>
           <Tab>의사 정보</Tab>
           <Tab>예약</Tab>
           <Tab>리뷰</Tab>
         </TabList>
-        <TabIndicator
-          mt="-1.5px"
-          height="2px"
-          bg="primary.900"
-          borderRadius="1px"
-        />
 
         <TabPanels width={'full'} height={'full'} overflowY={'scroll'}>
           <TabPanel>
@@ -200,7 +195,80 @@ const AppointmentDetail = function () {
             <p>two!</p>
           </TabPanel>
           <TabPanel>
-            <p>three!</p>
+            <UnorderedList styleType={'none'} spacing={'6'}>
+              <ListItem
+                bgColor={'primary.200'}
+                borderRadius={'md'}
+                padding={'4'}
+              >
+                <HStack
+                  justifyContent={'space-between'}
+                  alignItems={'center'}
+                  mb={'4'}
+                >
+                  <Text fontWeight={'bold'}>양지웅님 (담당의사: 김재인)</Text>
+                  <HStack gap={'2'} alignItems={'center'} fontWeight={'bold'}>
+                    <Icon as={FaStar} color="yellow.400" />
+                    <Text>{doctor.rate}</Text>
+                  </HStack>
+                </HStack>
+                <Text>의사 선생님이 약간 불친절해요</Text>
+              </ListItem>
+              <ListItem
+                bgColor={'primary.200'}
+                borderRadius={'md'}
+                padding={'4'}
+              >
+                <HStack
+                  justifyContent={'space-between'}
+                  alignItems={'center'}
+                  mb={'4'}
+                >
+                  <Text fontWeight={'bold'}>양지웅님 (담당의사: 김재인)</Text>
+                  <HStack gap={'2'} alignItems={'center'} fontWeight={'bold'}>
+                    <Icon as={FaStar} color="yellow.400" />
+                    <Text>{doctor.rate}</Text>
+                  </HStack>
+                </HStack>
+                <Text>의사 선생님이 약간 불친절해요</Text>
+              </ListItem>
+              <ListItem
+                bgColor={'primary.200'}
+                borderRadius={'md'}
+                padding={'4'}
+              >
+                <HStack
+                  justifyContent={'space-between'}
+                  alignItems={'center'}
+                  mb={'4'}
+                >
+                  <Text fontWeight={'bold'}>양지웅님 (담당의사: 김재인)</Text>
+                  <HStack gap={'2'} alignItems={'center'} fontWeight={'bold'}>
+                    <Icon as={FaStar} color="yellow.400" />
+                    <Text>{doctor.rate}</Text>
+                  </HStack>
+                </HStack>
+                <Text>의사 선생님이 약간 불친절해요</Text>
+              </ListItem>
+              <ListItem
+                bgColor={'primary.200'}
+                borderRadius={'md'}
+                padding={'4'}
+              >
+                <HStack
+                  justifyContent={'space-between'}
+                  alignItems={'center'}
+                  mb={'4'}
+                >
+                  <Text fontWeight={'bold'}>양지웅님 (담당의사: 김재인)</Text>
+                  <HStack gap={'2'} alignItems={'center'} fontWeight={'bold'}>
+                    <Icon as={FaStar} color="yellow.400" />
+                    <Text>{doctor.rate}</Text>
+                  </HStack>
+                </HStack>
+                <Text>의사 선생님이 약간 불친절해요</Text>
+              </ListItem>
+            </UnorderedList>
           </TabPanel>
         </TabPanels>
       </Tabs>
