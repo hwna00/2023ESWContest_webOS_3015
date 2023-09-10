@@ -53,6 +53,9 @@ export const DoctorList = [
     profileImg:
       'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
     isFavorite: true,
+    hospital: '연세 새로운 내과',
+    tel: '031-123-1234',
+    address: '서울시 어쩌구 이러면',
   },
   {
     id: '2',
@@ -63,6 +66,9 @@ export const DoctorList = [
     profileImg:
       'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
     isFavorite: true,
+    hospital: '연세 새로운 내과',
+    tel: '031-123-1234',
+    address: '서울시 어쩌구 이러면',
   },
   {
     id: '3',
@@ -93,6 +99,9 @@ export const DoctorList = [
     profileImg:
       'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
     isFavorite: true,
+    hospital: '연세 새로운 내과',
+    tel: '031-123-1234',
+    address: '서울시 어쩌구 이러면',
   },
   {
     id: '6',
@@ -103,6 +112,9 @@ export const DoctorList = [
     profileImg:
       'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
     isFavorite: true,
+    hospital: '연세 새로운 내과',
+    tel: '031-123-1234',
+    address: '서울시 어쩌구 이러면',
   },
   {
     id: '7',
@@ -133,5 +145,8 @@ export const DoctorList = [
     profileImg:
       'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
     isFavorite: true,
+    hospital: '연세 새로운 내과',
+    tel: '031-123-1234',
+    address: '서울시 어쩌구 이러면',
   },
 ];
