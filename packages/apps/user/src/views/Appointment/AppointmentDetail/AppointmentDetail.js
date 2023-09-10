@@ -5,6 +5,12 @@ import {
   Flex,
   HStack,
   Image,
+  Tab,
+  TabIndicator,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
   Tag,
   Text,
   VStack,
@@ -35,7 +41,7 @@ const AppointmentDetail = function () {
         <BackButton />
       </VStack>
 
-      <VStack width={'60'} height={'full'} overflowY={'auto'}>
+      <VStack width={'60'} minW={'60'} height={'full'} overflowY={'auto'}>
         <Box
           width={'full'}
           minH={'60'}
@@ -105,7 +111,38 @@ const AppointmentDetail = function () {
         </HStack>
       </VStack>
 
-      <VStack></VStack>
+      <Tabs
+        isFitted
+        width={'full'}
+        height={'full'}
+        size={'md'}
+        position="relative"
+        variant="unstyled"
+      >
+        <TabList>
+          <Tab>의사 정보</Tab>
+          <Tab>예약</Tab>
+          <Tab>리뷰</Tab>
+        </TabList>
+        <TabIndicator
+          mt="-1.5px"
+          height="2px"
+          bg="primary.900"
+          borderRadius="1px"
+        />
+
+        <TabPanels>
+          <TabPanel>
+            <p>one!</p>
+          </TabPanel>
+          <TabPanel>
+            <p>two!</p>
+          </TabPanel>
+          <TabPanel>
+            <p>three!</p>
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
     </HStack>
   );
 };
