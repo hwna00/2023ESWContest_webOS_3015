@@ -1,7 +1,15 @@
 import { Link as ReactRouterLink } from 'react-router-dom';
-import { HStack, VStack, Text, Divider , Link as ChakraLink } from '@chakra-ui/react';
+import {
+  HStack,
+  VStack,
+  Text,
+  Divider,
+  Link as ChakraLink,
+} from '@chakra-ui/react';
 
 const AppointmentViewList = function ({ type, information }) {
+  const nameOfView = type === 'hospital' ? '병원별 보기' : '의사별 보기';
+
   return (
     <VStack w="full" h="full">
       <HStack
@@ -12,17 +20,11 @@ const AppointmentViewList = function ({ type, information }) {
         pr="6"
       >
         <Text fontSize="xl" fontWeight="bold">
-          {type === 'hospital' ? '병원별 보기' : '의사별 보기'}
+          {nameOfView}
         </Text>
-        {type === 'hospital' ? (
-          <ChakraLink as={ReactRouterLink} to="/appointment/hospitals">
-            + 더보기
-          </ChakraLink>
-        ) : (
-          <ChakraLink as={ReactRouterLink} to="/appointment/doctors">
-            + 더보기
-          </ChakraLink>
-        )}
+        <ChakraLink as={ReactRouterLink} to={`/appointment/${type}s`}>
+          +더보기
+        </ChakraLink>
       </HStack>
 
       <VStack w="full" h="80" overflowY="auto">
