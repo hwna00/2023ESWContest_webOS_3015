@@ -79,7 +79,7 @@ const AppointmentDetail = function () {
   };
 
   return (
-    <HStack height={'full'}>
+    <HStack height={'full'} gap={'6'}>
       <VStack
         height={'full'}
         justifyContent={'flex-start'}
