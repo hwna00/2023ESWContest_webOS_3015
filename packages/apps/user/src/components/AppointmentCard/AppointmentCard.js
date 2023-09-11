@@ -30,7 +30,7 @@ function AppointmentCard({ data }) {
       alignItems="center"
       gap="6"
     >
-      <AspectRatio ratio={1} width={'100%'} maxW={'32'}>
+      <AspectRatio ratio={1} width="100%" maxW="32">
         <Image
           src={data.profileImg}
           alt={data.name}

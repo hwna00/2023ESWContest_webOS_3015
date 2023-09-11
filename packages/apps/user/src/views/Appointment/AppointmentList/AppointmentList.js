@@ -1,9 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import {
   Box,
-  Flex,
   Heading,
   Button,
   Stack,
@@ -27,8 +26,7 @@ import BackButton from '../../../components/BackButton/BackButton';
 import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
 
 function AppointmentList() {
-  const { pathname } = useLocation();
-  const path = pathname.split('/')[2];
+  const { category } = useParams();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -39,17 +37,17 @@ function AppointmentList() {
   const [title, setTitle] = useState();
 
   useEffect(() => {
-    if (path === 'doctors') {
+    if (category === 'doctors') {
       setList(DoctorList);
       setTitle('의사별 보기');
-    } else if (path === 'hospitals') {
+    } else if (category === 'hospitals') {
       setList(HospitalList);
       setTitle('병원별 보기');
-    } else if (path === 'favorites') {
+    } else if (category === 'favorites') {
       setList(FavoriteList);
       setTitle('즐겨찾기 관리');
     }
-  }, [path, list, title]);
+  }, [category, list, title]);
 
   const handleSortByChange = useCallback(event => {
     setSortBy(event);
@@ -94,7 +92,7 @@ function AppointmentList() {
   }, [sortBy, selectedSpecialties, list]);
 
   return (
-    <VStack width={'full'} height={'full'} gap="4">
+    <VStack width="full" height="full" gap="4">
       <Box width="100%">
         <HStack width="100%" justifyContent="space-between">
           <BackButton title={title} />
