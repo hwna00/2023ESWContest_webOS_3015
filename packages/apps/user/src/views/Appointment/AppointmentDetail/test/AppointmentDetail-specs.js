@@ -1,7 +1,9 @@
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import AppointmentDetail from '../AppointmentDetail';
 import { BrowserRouter } from 'react-router-dom';
+import userEvent from '@testing-library/user-event';
+import { render, screen } from '@testing-library/react';
+
+import AppointmentDetail from '../AppointmentDetail';
+
 
 describe('Test Appointment Detail Page', () => {
   it('예약 메뉴에서 시간을 지정하지 않고 다음 단계를 눌렀을 때, 경고 메시지가 보여야 한다.', async () => {

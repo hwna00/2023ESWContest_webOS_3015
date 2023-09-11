@@ -12,7 +12,7 @@ const userImgSlice = createSlice({
 
 const apointmentSlice = createSlice({
   name: 'appointment',
-  initialState: { date: '', time: '' },
+  initialState: { list: [], reservation: { date: '', time: '', type: '' } },
   reducers: {
     setAppointDatetime: (state, action) => {
       state.date = action.payload.date;
