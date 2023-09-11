@@ -1,4 +1,4 @@
-import { Grid, Flex } from '@chakra-ui/react';
+import { SimpleGrid, Flex, VStack } from '@chakra-ui/react';
 
 import HealthHistoryItem from '../../components/HealthHistoryItem/HealthHistoryItem.js';
 
@@ -12,19 +12,24 @@ const HealthHistory = function () {
     { name: '몸무게', measuementTime: '17:00', value: 60 },
   ];
   return (
-    <Flex h="full" justifyContent="center" alignItems="center">
-      <Grid
-        w="85%"
-        templateRows="repeat(2, 1fr)"
-        templateColumns="repeat(3, 1fr)"
-        gap={6}
-        placeItems="center"
+    <VStack
+      h="full"
+      w="full"
+      alignContent="center"
+      justifyContent={{ base: 'flex-start', sm: 'center' }}
+      overflow="auto"
+    >
+      <SimpleGrid
+        w="full"
+        spacing="8"
+        placeItems={'center'}
+        columns={{ base: 1, sm: 2, md: 3 }}
       >
         {recentData.map((data, index) => (
           <HealthHistoryItem measureData={data} key={index} />
         ))}
-      </Grid>
-    </Flex>
+      </SimpleGrid>
+    </VStack>
   );
 };
 
