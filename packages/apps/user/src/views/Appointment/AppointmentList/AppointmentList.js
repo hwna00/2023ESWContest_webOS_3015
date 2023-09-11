@@ -156,15 +156,7 @@ function AppointmentList() {
         </Modal>
       </Box>
 
-      <SimpleGrid
-        columns={2}
-        gap="5"
-        width="full"
-        pr="4"
-        pl="4"
-        maxHeight="80vh"
-        overflowY="scroll"
-      >
+      <SimpleGrid columns={2} gap="5" width="full" px="4" overflowY="scroll">
         {filteredList.map(item => (
           <AppointmentCard data={item} key={item.name} />
         ))}
