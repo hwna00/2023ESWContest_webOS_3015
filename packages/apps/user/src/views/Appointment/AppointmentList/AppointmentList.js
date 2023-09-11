@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import { useLocation } from 'react-router-dom';
 import {
@@ -21,7 +21,7 @@ import {
 } from '@chakra-ui/react';
 
 import specialties from '../Specialties.js';
-import { DoctorList, HospitalList } from '../dataList';
+import { DoctorList, HospitalList, FavoriteList } from '../dataList';
 import BackButton from '../../../components/BackButton/BackButton';
 import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
 
@@ -41,17 +41,31 @@ function AppointmentList() {
     if (path === 'doctors') {
       setList(DoctorList);
       setTitle('의사별 보기');
-      console.log(list, title);
     } else if (path === 'hospitals') {
       setList(HospitalList);
       setTitle('병원별 보기');
+    } else if (path === 'favorites') {
+      setList(FavoriteList);
+      setTitle('즐겨찾기 관리');
     }
   }, [path, list, title]);
 
-  const handleSortByChange = event => {
+  const handleSortByChange = useCallback(event => {
     setSortBy(event);
-  };
+  }, []);
+  const handleSortByName = useCallback(() => {
+    handleSortByChange('name');
+  }, [handleSortByChange]);
 
+  const handleSortByRating = useCallback(() => {
+    handleSortByChange('rating');
+  }, [handleSortByChange]);
+
+  const handleSortByDistance = useCallback(() => {
+    handleSortByChange('distance');
+  }, [handleSortByChange]);
+
+  // useCallback 사용하면 진료 과목 필터링이 정상적으로 작동하지 않음
   const handleSpecialtyChange = selectedOptions => {
     setSelectedSpecialties(selectedOptions);
   };
@@ -80,10 +94,12 @@ function AppointmentList() {
 
   return (
     <Flex direction="column" alignItems="flex-start">
-      <Box>
-        <HStack gap="31.5rem">
+      <Box width="100%">
+        <HStack width="100%" justifyContent="space-between">
           <BackButton title={title} />
-          <Button onClick={onOpen}>필터적용</Button>
+          <Button onClick={onOpen} padding="4">
+            필터적용
+          </Button>
         </HStack>
         <Modal isOpen={isOpen} onClose={onClose} size="4xl">
           <ModalOverlay />
@@ -96,21 +112,21 @@ function AppointmentList() {
                 <Checkbox
                   id="name"
                   checked={sortBy === 'name'}
-                  onChange={() => handleSortByChange('name')}
+                  onChange={handleSortByName}
                 >
                   이름순
                 </Checkbox>
                 <Checkbox
                   id="rating"
                   checked={sortBy === 'rating'}
-                  onChange={() => handleSortByChange('rating')}
+                  onChange={handleSortByRating}
                 >
                   별점순
                 </Checkbox>
                 <Checkbox
                   id="distance"
                   checked={sortBy === 'distance'}
-                  onChange={() => handleSortByChange('distance')}
+                  onChange={handleSortByDistance}
                 >
                   거리순
                 </Checkbox>
@@ -140,7 +156,7 @@ function AppointmentList() {
       </Box>
 
       <Box width="full" maxHeight="80vh" overflowY="scroll">
-        <SimpleGrid columns={2} gap="8" mt="4" width="full" padding="8">
+        <SimpleGrid columns={2} gap="5" width="full" padding="4">
           {filteredList.map(item => (
             <AppointmentCard data={item} key={item.name} />
           ))}

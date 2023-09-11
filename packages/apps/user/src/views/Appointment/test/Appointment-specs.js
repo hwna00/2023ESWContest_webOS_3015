@@ -51,7 +51,7 @@ describe('필요한 컨텐츠가 렌더링 된다', () => {
 
   it('병원별 보기 더보기 링크가 뜬다', () => {
     render(
-      <AppointmentViewList type={'hospital'} information={testHospitalInfo} />,
+      <AppointmentViewList type="hospital" information={testHospitalInfo} />,
       { wrapper: BrowserRouter },
     );
     const btnShowMore = screen.getByRole('link', { name: '+ 더보기' });
@@ -71,7 +71,7 @@ describe('필요한 컨텐츠가 렌더링 된다', () => {
 
   it('의사별 보기 더보기 링크가 뜬다', () => {
     render(
-      <AppointmentViewList type={'doctor'} information={testDoctorInfo} />,
+      <AppointmentViewList type="doctor" information={testDoctorInfo} />,
       {
         wrapper: BrowserRouter,
       },

@@ -7,7 +7,7 @@ const AppointmentHistoryItem = function ({ history }) {
     <ChakraLink
       as={ReactRouterLink}
       to="/appointment-history/1"
-      textDecoration={'none !important'}
+      textDecoration="none !important"
     >
       <HStack
         bg="primary.100"

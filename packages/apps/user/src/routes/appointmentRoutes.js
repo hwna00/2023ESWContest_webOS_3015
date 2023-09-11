@@ -17,6 +17,10 @@ const appointmentRoutes = [
     element: <AppointmentList />,
   },
   {
+    path: 'appointment/favorites',
+    element: <AppointmentList />,
+  },
+  {
     path: 'appointment-history',
     element: <AppointmentHistory />,
   },

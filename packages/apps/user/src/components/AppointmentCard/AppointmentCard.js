@@ -1,7 +1,25 @@
-import { Box, Flex, Heading, Text, Image, Icon } from '@chakra-ui/react';
+import { useState, useCallback } from 'react';
+
+import { GoBookmark, GoBookmarkFill } from 'react-icons/go';
+import {
+  Box,
+  Flex,
+  Heading,
+  Text,
+  Image,
+  Icon,
+  Button,
+  HStack,
+} from '@chakra-ui/react';
 import { StarIcon } from '@chakra-ui/icons';
 
 function AppointmentCard({ data }) {
+  const [isFavorite, setIsFavorite] = useState(data.isFavorite);
+
+  const handleFavoriteClick = useCallback(() => {
+    setIsFavorite(prevIsFavorite => !prevIsFavorite);
+  }, []);
+
   return (
     <Box
       key={data.name}
@@ -20,10 +38,27 @@ function AppointmentCard({ data }) {
           objectFit="cover"
           borderRadius="full"
         />
-        <Box ml={{ base: '2', md: '4' }}>
-          <Heading as="h3" size="md" mb="1">
-            {data.name}
-          </Heading>
+        <Box ml={{ base: '2', md: '4' }} width="100%">
+          <HStack width="100%" justifyContent="space-between">
+            <Heading as="h3" size="md" mb={1}>
+              {data.name}
+            </Heading>
+            {data.isFavorite && (
+              <Button
+                onClick={handleFavoriteClick}
+                backgroundColor="transparent"
+                _hover={{ backgroundColor: 'transparent' }}
+                _active={{ backgroundColor: 'transparent' }}
+                _focus={{ boxShadow: 'none' }}
+              >
+                {isFavorite ? (
+                  <Icon as={GoBookmarkFill} boxSize="20px" mr="2" />
+                ) : (
+                  <Icon as={GoBookmark} boxSize="20px" mr="2" />
+                )}
+              </Button>
+            )}
+          </HStack>
           <Text fontSize="sm" mb={1}>
             {data.specialty && <span>{data.specialty}</span>}
           </Text>
