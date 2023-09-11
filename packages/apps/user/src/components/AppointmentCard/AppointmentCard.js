@@ -10,6 +10,7 @@ import {
   Icon,
   Button,
   HStack,
+  AspectRatio,
 } from '@chakra-ui/react';
 import { StarIcon } from '@chakra-ui/icons';
 
@@ -21,60 +22,67 @@ function AppointmentCard({ data }) {
   }, []);
 
   return (
-    <Box
+    <Flex
       key={data.name}
-      backgroundColor="primary.300"
-      padding="2"
+      backgroundColor="primary.200"
+      padding="4"
       borderRadius="md"
-      width={{ base: 'full', md: 'auto' }}
-      marginBottom="4"
+      alignItems="center"
+      gap="6"
     >
-      <Flex alignItems="center">
+      <AspectRatio ratio={1} width={'100%'} maxW={'32'}>
         <Image
           src={data.profileImg}
           alt={data.name}
-          width="24"
-          height="24"
           objectFit="cover"
           borderRadius="full"
         />
-        <Box ml={{ base: '2', md: '4' }} width="100%">
-          <HStack width="100%" justifyContent="space-between">
-            <Heading as="h3" size="md" mb={1}>
-              {data.name}
-            </Heading>
-            {data.isFavorite && (
-              <Button
-                onClick={handleFavoriteClick}
-                backgroundColor="transparent"
-                _hover={{ backgroundColor: 'transparent' }}
-                _active={{ backgroundColor: 'transparent' }}
-                _focus={{ boxShadow: 'none' }}
-              >
-                {isFavorite ? (
-                  <Icon as={GoBookmarkFill} boxSize="20px" mr="2" />
-                ) : (
-                  <Icon as={GoBookmark} boxSize="20px" mr="2" />
-                )}
-              </Button>
-            )}
-          </HStack>
-          <Text fontSize="sm" mb={1}>
-            {data.specialty && <span>{data.specialty}</span>}
-          </Text>
-          <Text fontSize="sm" mb="2">
-            {data.fields.join(', ')}
-          </Text>
-          <Text fontSize="sm" mb="1">
-            {data.distance && <span>{data.distance}</span>}
-          </Text>
-          <Flex alignItems="center">
-            <Icon as={StarIcon} boxSize="4" mr="2" />
-            <Text fontSize="sm">{data.rate}</Text>
-          </Flex>
-        </Box>
-      </Flex>
-    </Box>
+      </AspectRatio>
+
+      <Box width="100%">
+        <HStack justifyContent="space-between">
+          <Heading as="h3" size="md" mb={1}>
+            {data.name}
+          </Heading>
+          {data.isFavorite && (
+            <>
+              {isFavorite ? (
+                <Icon
+                  as={GoBookmarkFill}
+                  onClick={handleFavoriteClick}
+                  boxSize="25px"
+                  mr="2"
+                  mb="1"
+                />
+              ) : (
+                <Icon
+                  as={GoBookmark}
+                  onClick={handleFavoriteClick}
+                  boxSize="25px"
+                  mr="2"
+                  mb="1"
+                />
+              )}
+            </>
+          )}
+        </HStack>
+
+        <Text fontSize="sm" mb="1">
+          {data.specialty && <span>{data.specialty}</span>}
+        </Text>
+        <Text fontSize="sm" mb="2" noOfLines="1">
+          {data.fields.join(', ')}
+        </Text>
+        <Text fontSize="sm" mb="1">
+          {data.distance && <span>{data.distance}</span>}
+        </Text>
+
+        <Flex alignItems="center" gap="2">
+          <Icon as={StarIcon} boxSize="4" />
+          <Text fontSize="sm">{data.rate}</Text>
+        </Flex>
+      </Box>
+    </Flex>
   );
 }
 

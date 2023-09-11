@@ -17,6 +17,7 @@ import {
   CheckboxGroup,
   Checkbox,
   HStack,
+  VStack,
   SimpleGrid,
 } from '@chakra-ui/react';
 
@@ -93,7 +94,7 @@ function AppointmentList() {
   }, [sortBy, selectedSpecialties, list]);
 
   return (
-    <Flex direction="column" alignItems="flex-start">
+    <VStack width={'full'} height={'full'} gap="4">
       <Box width="100%">
         <HStack width="100%" justifyContent="space-between">
           <BackButton title={title} />
@@ -155,14 +156,12 @@ function AppointmentList() {
         </Modal>
       </Box>
 
-      <Box width="full" maxHeight="80vh" overflowY="scroll">
-        <SimpleGrid columns={2} gap="5" width="full" padding="4">
-          {filteredList.map(item => (
-            <AppointmentCard data={item} key={item.name} />
-          ))}
-        </SimpleGrid>
-      </Box>
-    </Flex>
+      <SimpleGrid columns={2} gap="5" width="full" px="4" overflowY="scroll">
+        {filteredList.map(item => (
+          <AppointmentCard data={item} key={item.name} />
+        ))}
+      </SimpleGrid>
+    </VStack>
   );
 }
 
