@@ -6,9 +6,17 @@ import {
   Divider,
   Link as ChakraLink,
 } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 
 const AppointmentViewList = function ({ type, selectedList }) {
-  const nameOfView = type === 'hospital' ? '병원별 보기' : '의사별 보기';
+  const [nameOfView, setNameOfView] = useState('');
+  useEffect(() => {
+    if (type === 'hospital') {
+      setNameOfView('병원별 보기');
+    } else if (type === 'doctor') {
+      setNameOfView('의사별 보기');
+    }
+  }, [type]);
 
   return (
     <VStack w="full" h="full">
