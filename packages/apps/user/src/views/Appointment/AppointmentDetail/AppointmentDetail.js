@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { FaBookmark, FaRegBookmark, FaStar } from 'react-icons/fa6';
+import dayjs from 'dayjs';
 import {
   AspectRatio,
   Box,
@@ -24,51 +25,35 @@ import {
   Text,
   UnorderedList,
   VStack,
- Icon } from '@chakra-ui/react';
-
+  Icon,
+} from '@chakra-ui/react';
 
 import { DoctorList } from '../dataList';
 import { setAppointDatetime } from '../../../store';
 import BackButton from '../../../components/BackButton/BackButton';
-
+import reservatons from '../../../../fixture/reservation.json';
 
 const AppointmentDetail = function () {
   const { id } = useParams();
   const [doctor, setDoctor] = useState({});
-  const [appointDate, setAppointDate] = useState();
+  const [appointDate, setAppointDate] = useState(
+    dayjs(new Date()).format('YYYY-MM-DD'),
+  );
   const [appointTime, setAppointTime] = useState();
+  const [reservationOfDay, setReservationOfDay] = useState({});
   const dispatch = useDispatch();
+
+  const clickStyle = {
+    bgColor: 'primary.500',
+    color: 'white',
+  };
 
   useEffect(() => {
     // Todo: 추후에 id를 이용한 axios get 함수로 변경해야 함.
     const found = DoctorList.find(d => d?.id === id);
     setDoctor(found);
+    setReservationOfDay(reservatons[dayjs(new Date()).format('YYYY-MM-DD')]);
   }, [id]);
-
-  const timeTable = [
-    '09:00',
-    '09:30',
-    '10:00',
-    '10:30',
-    '11:00',
-    '11:30',
-    '12:00',
-    '12:30',
-    '13:00',
-    '13:30',
-    '14:00',
-    '14:30',
-    '15:00',
-    '15:30',
-    '16:00',
-    '16:30',
-    '17:00',
-    '17:30',
-    '18:00',
-    '19:30',
-    '20:00',
-    '20:30',
-  ];
 
   const onDateChange = e => {
     setAppointDate(e.target.value);
@@ -92,15 +77,11 @@ const AppointmentDetail = function () {
 
   return (
     <HStack height="full" gap="6">
-      <VStack
-        height="full"
-        justifyContent="flex-start"
-        alignItems="center"
-      >
+      <VStack height="full" justifyContent="flex-start" alignItems="center">
         <BackButton />
       </VStack>
 
-      <VStack width="60" minW="60" height="full" overflowY="auto">
+      <VStack minW="60" height="full" overflowY="auto">
         <Box
           width="full"
           minH="60"
@@ -132,11 +113,7 @@ const AppointmentDetail = function () {
           </Text>
         </Box>
 
-        <HStack
-          width="full"
-          justifyContent="space-between"
-          alignItems="center"
-        >
+        <HStack width="full" justifyContent="space-between" alignItems="center">
           <Box>
             <Text color="primary.500" fontWeight="bold">
               영업중
@@ -268,6 +245,7 @@ const AppointmentDetail = function () {
               placeholder="예약하실 날짜를 선택하세요"
               size="lg"
               type="date"
+              defaultValue={appointDate}
               onChange={onDateChange}
             />
             <Box width="full">
@@ -282,15 +260,18 @@ const AppointmentDetail = function () {
                 gap={4}
                 borderRadius="md"
               >
-                {timeTable.map((time, idx) => (
-                  <GridItem key={idx} width="full" textAlign="center">
+                {Object.entries(reservationOfDay).map(([key, value]) => (
+                  <GridItem key={key} width="full" textAlign="center">
                     <Button
                       width="full"
                       py="2"
                       colorScheme="primary"
                       onClick={onTimeChange}
+                      isDisabled={value === 3}
+                      variant="outline"
+                      _focus={{ ...clickStyle }}
                     >
-                      {time}
+                      {key}
                     </Button>
                   </GridItem>
                 ))}
@@ -313,11 +294,7 @@ const AppointmentDetail = function () {
 
           <TabPanel>
             <UnorderedList styleType="none" spacing="6">
-              <ListItem
-                bgColor="primary.200"
-                borderRadius="md"
-                padding="4"
-              >
+              <ListItem bgColor="primary.200" borderRadius="md" padding="4">
                 <HStack
                   justifyContent="space-between"
                   alignItems="center"
@@ -331,11 +308,7 @@ const AppointmentDetail = function () {
                 </HStack>
                 <Text>의사 선생님이 약간 불친절해요</Text>
               </ListItem>
-              <ListItem
-                bgColor="primary.200"
-                borderRadius="md"
-                padding="4"
-              >
+              <ListItem bgColor="primary.200" borderRadius="md" padding="4">
                 <HStack
                   justifyContent="space-between"
                   alignItems="center"
@@ -349,11 +322,7 @@ const AppointmentDetail = function () {
                 </HStack>
                 <Text>의사 선생님이 약간 불친절해요</Text>
               </ListItem>
-              <ListItem
-                bgColor="primary.200"
-                borderRadius="md"
-                padding="4"
-              >
+              <ListItem bgColor="primary.200" borderRadius="md" padding="4">
                 <HStack
                   justifyContent="space-between"
                   alignItems="center"
@@ -367,11 +336,7 @@ const AppointmentDetail = function () {
                 </HStack>
                 <Text>의사 선생님이 약간 불친절해요</Text>
               </ListItem>
-              <ListItem
-                bgColor="primary.200"
-                borderRadius="md"
-                padding="4"
-              >
+              <ListItem bgColor="primary.200" borderRadius="md" padding="4">
                 <HStack
                   justifyContent="space-between"
                   alignItems="center"

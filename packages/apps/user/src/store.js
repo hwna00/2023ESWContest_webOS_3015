@@ -10,9 +10,9 @@ const userImgSlice = createSlice({
   },
 });
 
-const apointmentSlice = createSlice({
+const appointmentSlice = createSlice({
   name: 'appointment',
-  initialState: { list: [], reservation: { date: '', time: '', type: '' } },
+  initialState: { date: '', time: '', type: '' },
   reducers: {
     setAppointDatetime: (state, action) => {
       state.date = action.payload.date;
@@ -24,10 +24,10 @@ const apointmentSlice = createSlice({
 export const store = configureStore({
   reducer: {
     userImg: userImgSlice.reducer,
-    appointment: apointmentSlice.reducer,
+    appointment: appointmentSlice.reducer,
   },
   devTools: process.env.NODE_ENV !== 'production',
 });
 
 export const { setImg } = userImgSlice.actions;
-export const { setAppointDatetime } = apointmentSlice.actions;
+export const { setAppointDatetime } = appointmentSlice.actions;
