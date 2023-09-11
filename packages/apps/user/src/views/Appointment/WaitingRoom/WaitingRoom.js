@@ -68,7 +68,7 @@ function WaitingRoom() {
           display="flex"
           flexDirection="column"
           gap="3"
-          h="96"
+          h="80vh"
           overflowY="scroll"
         >
           {AppointmentList.map((appointment, index) => (
