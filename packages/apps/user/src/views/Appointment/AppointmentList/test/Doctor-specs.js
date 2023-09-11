@@ -4,6 +4,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 
 import '@testing-library/jest-dom';
 import AppointmentList from '../AppointmentList';
+import BackButton from '../../../../components/BackButton/BackButton';
 
 const specialties = [
   '이비인후과',
