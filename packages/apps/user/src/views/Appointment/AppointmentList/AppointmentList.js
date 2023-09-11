@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
+
+import { useLocation } from 'react-router-dom';
 import {
   Box,
   Flex,
@@ -17,11 +19,11 @@ import {
   HStack,
   SimpleGrid,
 } from '@chakra-ui/react';
-import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
-import BackButton from '../../../components/BackButton/BackButton';
+
 import specialties from '../Specialties.js';
 import { DoctorList, HospitalList, FavoriteList } from '../dataList';
-import { useLocation } from 'react-router-dom';
+import BackButton from '../../../components/BackButton/BackButton';
+import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
 
 function AppointmentList() {
   const { pathname } = useLocation();
@@ -63,7 +65,7 @@ function AppointmentList() {
     handleSortByChange('distance');
   }, [handleSortByChange]);
 
-  //useCallback 사용하면 진료 과목 필터링이 정상적으로 작동하지 않음
+  // useCallback 사용하면 진료 과목 필터링이 정상적으로 작동하지 않음
   const handleSpecialtyChange = selectedOptions => {
     setSelectedSpecialties(selectedOptions);
   };
@@ -153,8 +155,8 @@ function AppointmentList() {
         </Modal>
       </Box>
 
-      <Box width={'full'} maxHeight="80vh" overflowY="scroll">
-        <SimpleGrid columns={2} gap="5" width={'full'} padding="4">
+      <Box width="full" maxHeight="80vh" overflowY="scroll">
+        <SimpleGrid columns={2} gap="5" width="full" padding="4">
           {filteredList.map(item => (
             <AppointmentCard data={item} key={item.name} />
           ))}

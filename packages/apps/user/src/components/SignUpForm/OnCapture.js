@@ -1,7 +1,9 @@
-import { AspectRatio, Button, HStack } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { AspectRatio, Button, HStack } from '@chakra-ui/react';
+
 import { setImg } from '../../store';
 
 const OnCapture = function () {
@@ -75,12 +77,12 @@ const OnCapture = function () {
   }, [error, navigate]);
 
   return (
-    <HStack width={'full'} justifyContent={'space-evenly'}>
+    <HStack width="full" justifyContent="space-evenly">
       <AspectRatio
-        width={'xs'}
+        width="xs"
         ratio={1}
-        borderRadius={'full'}
-        overflow={'hidden'}
+        borderRadius="full"
+        overflow="hidden"
       >
         <video autoPlay ref={videoRef} />
       </AspectRatio>

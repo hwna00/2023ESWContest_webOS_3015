@@ -1,4 +1,6 @@
 import { useState, useCallback } from 'react';
+
+import { GoBookmark, GoBookmarkFill } from 'react-icons/go';
 import {
   Box,
   Flex,
@@ -10,7 +12,6 @@ import {
   HStack,
 } from '@chakra-ui/react';
 import { StarIcon } from '@chakra-ui/icons';
-import { GoBookmark, GoBookmarkFill } from 'react-icons/go';
 
 function AppointmentCard({ data }) {
   const [isFavorite, setIsFavorite] = useState(data.isFavorite);
@@ -45,15 +46,15 @@ function AppointmentCard({ data }) {
             {data.isFavorite && (
               <Button
                 onClick={handleFavoriteClick}
-                backgroundColor={'transparent'}
+                backgroundColor="transparent"
                 _hover={{ backgroundColor: 'transparent' }}
                 _active={{ backgroundColor: 'transparent' }}
                 _focus={{ boxShadow: 'none' }}
               >
                 {isFavorite ? (
-                  <Icon as={GoBookmarkFill} boxSize={'20px'} mr={'2'} />
+                  <Icon as={GoBookmarkFill} boxSize="20px" mr="2" />
                 ) : (
-                  <Icon as={GoBookmark} boxSize={'20px'} mr={'2'} />
+                  <Icon as={GoBookmark} boxSize="20px" mr="2" />
                 )}
               </Button>
             )}
@@ -61,15 +62,15 @@ function AppointmentCard({ data }) {
           <Text fontSize="sm" mb={1}>
             {data.specialty && <span>{data.specialty}</span>}
           </Text>
-          <Text fontSize={'sm'} mb={'2'}>
+          <Text fontSize="sm" mb="2">
             {data.fields.join(', ')}
           </Text>
           <Text fontSize="sm" mb="1">
             {data.distance && <span>{data.distance}</span>}
           </Text>
-          <Flex alignItems={'center'}>
-            <Icon as={StarIcon} boxSize={'4'} mr={'2'} />
-            <Text fontSize={'sm'}>{data.rate}</Text>
+          <Flex alignItems="center">
+            <Icon as={StarIcon} boxSize="4" mr="2" />
+            <Text fontSize="sm">{data.rate}</Text>
           </Flex>
         </Box>
       </Flex>

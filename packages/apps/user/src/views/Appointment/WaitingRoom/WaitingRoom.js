@@ -1,7 +1,9 @@
 import { useState, useCallback } from 'react';
+
 import { Flex, Box, VStack, HStack, Divider } from '@chakra-ui/react';
-import BackButton from '../../../components/BackButton/BackButton';
+
 import WaitingItem from '../../../components/WaitingItem/WaitingItem';
+import BackButton from '../../../components/BackButton/BackButton';
 
 function WaitingRoom() {
   const [AppointmentList, setAppointmentList] = useState([
@@ -46,22 +48,22 @@ function WaitingRoom() {
   return (
     <Box>
       <Flex>
-        <BackButton title={'대기실'} />
+        <BackButton title="대기실" />
       </Flex>
-      <VStack mx={'5'} align={'stretch'}>
-        <HStack mt={'7'} mb={'-2'} justifyContent={'space-evenly'}>
-          <Box width={'25%'} textAlign={'center'} fontWeight={'bold'}>
+      <VStack mx="5" align="stretch">
+        <HStack mt="7" mb="-2" justifyContent="space-evenly">
+          <Box width="25%" textAlign="center" fontWeight="bold">
             예약 일시
           </Box>
-          <Box width={'25%'} textAlign={'center'} fontWeight={'bold'}>
+          <Box width="25%" textAlign="center" fontWeight="bold">
             병원
           </Box>
-          <Box width={'25%'} textAlign={'center'} fontWeight={'bold'}>
+          <Box width="25%" textAlign="center" fontWeight="bold">
             의사
           </Box>
-          <Box width={'25%'} />
+          <Box width="25%" />
         </HStack>
-        <Divider h={'0.5'} mb={'1'} bgColor="black" />
+        <Divider h="0.5" mb="1" bgColor="black" />
         <Box
           display="flex"
           flexDirection="column"

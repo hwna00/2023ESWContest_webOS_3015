@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
+
 import { Outlet, useNavigate } from 'react-router-dom';
-import { Box } from '@chakra-ui/react';
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
-import SideBar from '../SideBar/SideBar';
+import { Box } from '@chakra-ui/react';
+
 import StatusBar from '../StatusBar/StatusBar';
+import SideBar from '../SideBar/SideBar';
 
 const Root = function () {
   const [currentUser, setCurrentUser] = useState(null);
@@ -26,7 +28,7 @@ const Root = function () {
     <>
       <SideBar user={currentUser} />
       <StatusBar />
-      <Box ml="40" p="6" pt={'14'} height={'100vh'}>
+      <Box ml="40" p="6" pt="14" height="100vh">
         <Outlet />
       </Box>
     </>

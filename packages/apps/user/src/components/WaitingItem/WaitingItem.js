@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+
 import {
   Box,
   HStack,
@@ -49,21 +50,21 @@ const WaitingItem = function ({ waiting, cancelAppointment, index }) {
   }, [cancelAppointment, index, onClose]);
   return (
     <HStack
-      bg={'primary.100'}
-      py={'4'}
-      borderRadius={'10'}
-      justifyContent={'space-evenly'}
+      bg="primary.100"
+      py="4"
+      borderRadius="10"
+      justifyContent="space-evenly"
     >
-      <Box w={'25%'} textAlign={'center'}>
+      <Box w="25%" textAlign="center">
         {waiting.date}
       </Box>
-      <Box w={'25%'} textAlign={'center'}>
+      <Box w="25%" textAlign="center">
         {waiting.hospital}
       </Box>
-      <Box w={'25%'} textAlign={'center'}>
+      <Box w="25%" textAlign="center">
         {waiting.name}
       </Box>
-      <Box w={'25%'} textAlign={'center'} alignContent={'center'}>
+      <Box w="25%" textAlign="center" alignContent="center">
         <Button onClick={onOpen}>취소하기</Button>
 
         <CancelModal

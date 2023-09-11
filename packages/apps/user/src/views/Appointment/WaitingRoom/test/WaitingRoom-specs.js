@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { render, fireEvent } from '@testing-library/react';
+
 import '@testing-library/jest-dom';
 import WaitingRoom from '../WaitingRoom';
 
@@ -15,7 +17,7 @@ describe('대기실', () => {
     expect(getByText(/김종석/)).toBeInTheDocument();
   });
 
-  it('취소라기 버튼을 누르면 예약이 취소되는가', () => {
+  it('취소하기 버튼을 누르면 예약이 취소되는가', () => {
     window.confirm = jest.fn(() => true);
 
     const { getByText, getAllByText, queryByText } = render(<WaitingRoom />);

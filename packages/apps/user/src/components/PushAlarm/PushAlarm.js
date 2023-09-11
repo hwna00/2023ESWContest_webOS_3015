@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+
 import {
   Drawer,
   DrawerBody,
@@ -47,7 +48,7 @@ const PushAlarm = function () {
   return (
     <>
       <Button
-        width={'full'}
+        width="full"
         ref={pushRef}
         colorScheme="primary"
         onClick={onOpen}
@@ -63,46 +64,44 @@ const PushAlarm = function () {
       >
         <DrawerOverlay />
         <DrawerContent
-          bgColor={'white'}
-          backdropBlur={'md'}
-          boxShadow={'none'}
-          transition={'0.2s ease-out'}
+          bgColor="white"
+          backdropBlur="md"
+          boxShadow="none"
+          transition="0.2s ease-out"
         >
           <DrawerHeader>푸시 알림</DrawerHeader>
 
           <DrawerBody>
             <UnorderedList
-              styleType={'none'}
-              spacing={'6'}
-              maxHeight={'80%'}
-              overflow={'scroll'}
-              scrollBehavior={'smooth'}
+              styleType="none"
+              spacing="6"
+              maxHeight="80%"
+              overflow="scroll"
+              scrollBehavior="smooth"
             >
               {notifications.length !== 0 ? (
-                notifications.map(notification => {
-                  return (
+                notifications.map(notification => (
                     <ListItem
                       key={notification.title}
-                      width={'full'}
-                      p={'4'}
-                      bgColor={'primary.200'}
-                      borderRadius={'lg'}
+                      width="full"
+                      p="4"
+                      bgColor="primary.200"
+                      borderRadius="lg"
                     >
                       <HStack
-                        justifyContent={'space-between'}
-                        alignItems={'center'}
+                        justifyContent="space-between"
+                        alignItems="center"
                       >
                         <Text>{notification.title}</Text>
                         <Checkbox
                           // eslint-disable-next-line
                           onChange={() => removePushAlarm(notification.id)}
                           colorScheme="primary"
-                          borderColor={'black'}
+                          borderColor="black"
                         />
                       </HStack>
                     </ListItem>
-                  );
-                })
+                  ))
               ) : (
                 <Text>모든 알림을 확인했습니다</Text>
               )}

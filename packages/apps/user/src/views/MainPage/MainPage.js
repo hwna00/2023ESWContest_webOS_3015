@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
+
 import Calendar from '../../components/Calendar/Calendar';
+
 import 'react-calendar/dist/Calendar.css';
 import dayjs from 'dayjs';
 import { Button, ButtonGroup, HStack, VStack } from '@chakra-ui/react';
-import PushAlarm from '../../components/PushAlarm/PushAlarm';
+
 import TodoList from '../../components/TodoList/TodoList';
+import PushAlarm from '../../components/PushAlarm/PushAlarm';
 
 const todos = [
   {
@@ -86,32 +89,32 @@ const MainPage = function () {
   }, [selectedDay]);
 
   return (
-    <HStack height={'full'}>
+    <HStack height="full">
       <Calendar
         selectedDay={selectedDay}
         setSelectedDay={setSelectedDay}
         todos={todos}
       />
-      <VStack flex={2} height={'full'} justifyContent={'space-evenly'}>
+      <VStack flex={2} height="full" justifyContent="space-evenly">
         <PushAlarm />
         <TodoList
           selectedDay={selectedDay}
           todoOfSelectedDay={todoOfSelectedDay}
         />
         <ButtonGroup
-          width={'full'}
-          justifyContent={'space-between'}
-          alignItems={'center'}
+          width="full"
+          justifyContent="space-between"
+          alignItems="center"
         >
-          <Button colorScheme="red" py={'8'} width={'full'} fontSize={'lg'}>
+          <Button colorScheme="red" py="8" width="full" fontSize="lg">
             긴급 전화
           </Button>
           <Button
-            variant={'outline'}
+            variant="outline"
             colorScheme="primary"
-            py={'8'}
-            width={'full'}
-            fontSize={'lg'}
+            py="8"
+            width="full"
+            fontSize="lg"
           >
             챗봇 호출
           </Button>
