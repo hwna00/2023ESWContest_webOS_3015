@@ -169,11 +169,12 @@ function AppointmentList() {
                   onChange={handleSpecialtyChange}
                 >
                   <Stack spacing={2} direction={['column', 'row']}>
-                    {specialties.map(specialty => (
+                    {specialties.map((specialty, idx) => (
                       <Box
                         borderRadius="8"
                         border="solid 2px"
                         color="primary.500"
+                        key={idx}
                       >
                         <Checkbox
                           name={specialty}
@@ -194,7 +195,7 @@ function AppointmentList() {
 
       <SimpleGrid columns={2} gap="5" width="full" px="4" overflowY="scroll">
         {filteredList.map(item => (
-          <AppointmentCard data={item} key={item.name} />
+          <AppointmentCard data={item} key={item.id} />
         ))}
       </SimpleGrid>
     </VStack>
