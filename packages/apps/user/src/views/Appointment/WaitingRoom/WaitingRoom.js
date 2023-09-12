@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 import { Flex, Box, VStack, HStack, Divider } from '@chakra-ui/react';
 
+import WaitingItem from '../../../components/WaitingItem/WaitingItem';
 import BackButton from '../../../components/BackButton/BackButton';
-
-import WaitingItem from './WaitingItem';
 
 function WaitingRoom() {
   const [AppointmentList, setAppointmentList] = useState([
@@ -40,38 +39,36 @@ function WaitingRoom() {
     },
   ]);
 
-  const cancelAppointment = index => {
-    if (window.confirm('예약을 취소하시겠습니까?')) {
-      setAppointmentList(prevAppointments =>
-        prevAppointments.filter((appointment, i) => i !== index),
-      );
-    }
-  };
+  const cancelAppointment = useCallback(index => {
+    setAppointmentList(prevAppointments =>
+      prevAppointments.filter((appointment, i) => i !== index),
+    );
+  }, []);
 
   return (
-    <div>
+    <Box>
       <Flex>
         <BackButton title="대기실" />
       </Flex>
       <VStack mx="5" align="stretch">
         <HStack mt="7" mb="-2" justifyContent="space-evenly">
-          <Box width="48" textAlign="center" fontWeight="bold">
+          <Box width="25%" textAlign="center" fontWeight="bold">
             예약 일시
           </Box>
-          <Box width="48" textAlign="center" fontWeight="bold">
+          <Box width="25%" textAlign="center" fontWeight="bold">
             병원
           </Box>
-          <Box width="48" textAlign="center" fontWeight="bold">
+          <Box width="25%" textAlign="center" fontWeight="bold">
             의사
           </Box>
-          <Box width="20" />
+          <Box width="25%" />
         </HStack>
         <Divider h="0.5" mb="1" bgColor="black" />
         <Box
           display="flex"
           flexDirection="column"
           gap="3"
-          h="470"
+          h="80vh"
           overflowY="scroll"
         >
           {AppointmentList.map((appointment, index) => (
@@ -84,7 +81,7 @@ function WaitingRoom() {
           ))}
         </Box>
       </VStack>
-    </div>
+    </Box>
   );
 }
 

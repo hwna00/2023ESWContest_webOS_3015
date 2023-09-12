@@ -4,7 +4,11 @@ import { Box, HStack, Link as ChakraLink } from '@chakra-ui/react';
 
 const AppointmentHistoryItem = function ({ history }) {
   return (
-    <ChakraLink as={ReactRouterLink} to="/appointment-history/1">
+    <ChakraLink
+      as={ReactRouterLink}
+      to="/appointment-history/1"
+      textDecoration="none !important"
+    >
       <HStack
         bg="primary.100"
         py="4"

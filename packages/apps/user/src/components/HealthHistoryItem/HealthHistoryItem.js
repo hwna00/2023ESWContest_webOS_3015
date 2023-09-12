@@ -5,6 +5,7 @@ const HealthHistoryItem = function ({ measureData }) {
     <VStack
       h="full"
       w="full"
+      minW="40"
       bg="primary.200"
       borderRadius={10}
       padding="4"

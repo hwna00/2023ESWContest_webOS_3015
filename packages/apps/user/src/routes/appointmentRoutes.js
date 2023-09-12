@@ -10,15 +10,7 @@ const appointmentRoutes = [
     element: <Appointment />,
   },
   {
-    path: 'appointment/doctors',
-    element: <AppointmentList />,
-  },
-  {
-    path: 'appointment/doctors/:id',
-    element: <AppointmentDetail />,
-  },
-  {
-    path: 'appointment/hospitals',
+    path: 'appointment/:category',
     element: <AppointmentList />,
   },
   {

@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
-import { useLocation, Link as ReactRouterLink } from 'react-router-dom';
+import { useParams, Link as ReactRouterLink } from 'react-router-dom';
 import {
   Box,
-  Flex,
   Heading,
   Button,
   Stack,
@@ -17,18 +16,18 @@ import {
   CheckboxGroup,
   Checkbox,
   HStack,
+  VStack,
   SimpleGrid,
   Link as ChakraLink,
 } from '@chakra-ui/react';
 
 import specialties from '../Specialties.js';
-import { DoctorList, HospitalList } from '../dataList';
+import { DoctorList, HospitalList, FavoriteList } from '../dataList';
 import BackButton from '../../../components/BackButton/BackButton';
 import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
 
 function AppointmentList() {
-  const { pathname } = useLocation();
-  const path = pathname.split('/')[2];
+  const { category } = useParams();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -39,20 +38,34 @@ function AppointmentList() {
   const [title, setTitle] = useState();
 
   useEffect(() => {
-    if (path === 'doctors') {
+    if (category === 'doctors') {
       setList(DoctorList);
       setTitle('의사별 보기');
-      console.log(list, title);
-    } else if (path === 'hospitals') {
+    } else if (category === 'hospitals') {
       setList(HospitalList);
       setTitle('병원별 보기');
+    } else if (category === 'favorites') {
+      setList(FavoriteList);
+      setTitle('즐겨찾기 관리');
     }
-  }, [path, list, title]);
+  }, [category, list, title]);
 
-  const handleSortByChange = event => {
+  const handleSortByChange = useCallback(event => {
     setSortBy(event);
-  };
+  }, []);
+  const handleSortByName = useCallback(() => {
+    handleSortByChange('name');
+  }, [handleSortByChange]);
 
+  const handleSortByRating = useCallback(() => {
+    handleSortByChange('rating');
+  }, [handleSortByChange]);
+
+  const handleSortByDistance = useCallback(() => {
+    handleSortByChange('distance');
+  }, [handleSortByChange]);
+
+  // useCallback 사용하면 진료 과목 필터링이 정상적으로 작동하지 않음
   const handleSpecialtyChange = selectedOptions => {
     setSelectedSpecialties(selectedOptions);
   };
@@ -80,11 +93,13 @@ function AppointmentList() {
   }, [sortBy, selectedSpecialties, list]);
 
   return (
-    <Flex direction="column" alignItems="flex-start">
-      <Box>
-        <HStack gap="31.5rem">
+    <VStack width="full" height="full" gap="4">
+      <Box width="100%">
+        <HStack width="100%" justifyContent="space-between">
           <BackButton title={title} />
-          <Button onClick={onOpen}>필터적용</Button>
+          <Button onClick={onOpen} padding="4">
+            필터적용
+          </Button>
         </HStack>
         <Modal isOpen={isOpen} onClose={onClose} size="4xl">
           <ModalOverlay />
@@ -97,21 +112,21 @@ function AppointmentList() {
                 <Checkbox
                   id="name"
                   checked={sortBy === 'name'}
-                  onChange={() => handleSortByChange('name')}
+                  onChange={handleSortByName}
                 >
                   이름순
                 </Checkbox>
                 <Checkbox
                   id="rating"
                   checked={sortBy === 'rating'}
-                  onChange={() => handleSortByChange('rating')}
+                  onChange={handleSortByRating}
                 >
                   별점순
                 </Checkbox>
                 <Checkbox
                   id="distance"
                   checked={sortBy === 'distance'}
-                  onChange={() => handleSortByChange('distance')}
+                  onChange={handleSortByDistance}
                 >
                   거리순
                 </Checkbox>
