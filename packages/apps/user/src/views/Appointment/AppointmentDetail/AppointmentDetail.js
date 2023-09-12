@@ -26,12 +26,48 @@ import {
   UnorderedList,
   VStack,
   Icon,
+  useRadioGroup,
+  useRadio,
 } from '@chakra-ui/react';
 
 import { DoctorList } from '../dataList';
 import { setAppointDatetime } from '../../../store';
 import BackButton from '../../../components/BackButton/BackButton';
 import reservatons from '../../../../fixture/reservation.json';
+
+const RadioCard = ({ remainingSeats, ...radioProps }) => {
+  const { getInputProps, getRadioProps } = useRadio(radioProps);
+
+  const input = getInputProps();
+  const checkbox = getRadioProps();
+
+  return (
+    <Box as="label">
+      <input {...input} />
+      <Box
+        {...checkbox}
+        cursor="pointer"
+        borderRadius="md"
+        bgColor={'primary.100'}
+        color={'black'}
+        aria-disabled={remainingSeats === 0 ? true : false}
+        _checked={{
+          bgColor: 'primary.500',
+          color: 'white',
+        }}
+        _disabled={{
+          bgColor: 'black',
+          opacity: '0.2',
+          color: 'white',
+        }}
+        px={4}
+        py={2}
+      >
+        {radioProps.children}
+      </Box>
+    </Box>
+  );
+};
 
 const AppointmentDetail = function () {
   const { id } = useParams();
@@ -52,15 +88,15 @@ const AppointmentDetail = function () {
     // Todo: 추후에 id를 이용한 axios get 함수로 변경해야 함.
     const found = DoctorList.find(d => d?.id === id);
     setDoctor(found);
-    setReservationOfDay(reservatons[dayjs(new Date()).format('YYYY-MM-DD')]);
-  }, [id]);
+    setReservationOfDay(reservatons[appointDate]);
+  }, [id, appointDate]);
 
   const onDateChange = e => {
     setAppointDate(e.target.value);
   };
 
-  const onTimeChange = e => {
-    setAppointTime(e.target.innerText);
+  const onTimeChange = value => {
+    setAppointTime(value);
   };
 
   const onNextClick = () => {
@@ -74,6 +110,14 @@ const AppointmentDetail = function () {
       isFavorite: !doctor.isFavorite,
     });
   };
+
+  const { getRootProps, getRadioProps } = useRadioGroup({
+    name: 'framework',
+    defaultValue: 'react',
+    onChange: onTimeChange,
+  });
+
+  const group = getRootProps();
 
   return (
     <HStack height="full" gap="6">
@@ -259,22 +303,19 @@ const AppointmentDetail = function () {
                 placeItems="center"
                 gap={4}
                 borderRadius="md"
+                {...group}
               >
-                {Object.entries(reservationOfDay).map(([key, value]) => (
-                  <GridItem key={key} width="full" textAlign="center">
-                    <Button
-                      width="full"
-                      py="2"
-                      colorScheme="primary"
-                      onClick={onTimeChange}
-                      isDisabled={value === 3}
-                      variant="outline"
-                      _focus={{ ...clickStyle }}
-                    >
-                      {key}
-                    </Button>
-                  </GridItem>
-                ))}
+                {Object.keys(reservationOfDay).map(key => {
+                  const radio = getRadioProps({ value: key });
+                  const remainingSeats = reservationOfDay[key];
+                  return (
+                    <GridItem key={key} width="full" textAlign="center">
+                      <RadioCard remainingSeats={remainingSeats} {...radio}>
+                        {key}
+                      </RadioCard>
+                    </GridItem>
+                  );
+                })}
               </Grid>
               <Text mt="2">
                 병원 상황에 따라 대기 시간이 발생할 수 있습니다.
