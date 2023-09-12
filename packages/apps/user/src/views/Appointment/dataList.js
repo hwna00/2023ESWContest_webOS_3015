@@ -45,6 +45,7 @@ export const HospitalList = [
 
 export const DoctorList = [
   {
+    id: '1',
     name: '이현철',
     specialty: '내과 전문의',
     fields: ['내과', '가정의학과'],
@@ -52,8 +53,42 @@ export const DoctorList = [
     profileImg:
       'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
     isFavorite: true,
+    hospital: '연세 새로운 내과',
+    tel: '031-123-1234',
+    address: '서울시 어쩌구 이러면',
+    businessHours: {
+      monday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      tuesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      wednesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      thursday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      friday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      saturday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      sunday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+    },
   },
   {
+    id: '2',
     name: '양지웅',
     specialty: '안과 전문의',
     fields: ['안과'],
@@ -61,8 +96,42 @@ export const DoctorList = [
     profileImg:
       'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
     isFavorite: true,
+    hospital: '연세 새로운 내과',
+    tel: '031-123-1234',
+    address: '서울시 어쩌구 이러면',
+    businessHours: {
+      monday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      tuesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      wednesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      thursday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      friday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      saturday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      sunday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+    },
   },
   {
+    id: '3',
     name: '김재인',
     specialty: '내과 전문의',
     fields: ['내과'],
@@ -70,17 +139,42 @@ export const DoctorList = [
     profileImg:
       'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
     isFavorite: false,
+    hospital: '연세 새로운 내과',
+    tel: '031-123-1234',
+    address: '서울시 어쩌구 이러면',
+    businessHours: {
+      monday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      tuesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      wednesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      thursday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      friday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      saturday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      sunday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+    },
   },
   {
-    name: '하철환',
-    specialty: '소아과 전문의',
-    fields: ['소아과', '내과'],
-    rate: '4.7',
-    profileImg:
-      'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
-    isFavorite: true,
-  },
-  {
+    id: '4',
     name: '서진형',
     specialty: '가정의학과 전문의',
     fields: ['가정의학과'],
@@ -88,8 +182,42 @@ export const DoctorList = [
     profileImg:
       'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
     isFavorite: false,
+    hospital: '연세 새로운 내과',
+    tel: '031-123-1234',
+    address: '서울시 어쩌구 이러면',
+    businessHours: {
+      monday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      tuesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      wednesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      thursday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      friday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      saturday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      sunday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+    },
   },
   {
+    id: '5',
     name: '송보경',
     specialty: '이비인후과 전문의',
     fields: ['이비인후과'],
@@ -97,8 +225,42 @@ export const DoctorList = [
     profileImg:
       'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
     isFavorite: true,
+    hospital: '연세 새로운 내과',
+    tel: '031-123-1234',
+    address: '서울시 어쩌구 이러면',
+    businessHours: {
+      monday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      tuesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      wednesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      thursday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      friday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      saturday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      sunday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+    },
   },
   {
+    id: '6',
     name: '홍길동',
     specialty: '소아과 전문의',
     fields: ['소아과', '내과'],
@@ -106,8 +268,42 @@ export const DoctorList = [
     profileImg:
       'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
     isFavorite: true,
+    hospital: '연세 새로운 내과',
+    tel: '031-123-1234',
+    address: '서울시 어쩌구 이러면',
+    businessHours: {
+      monday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      tuesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      wednesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      thursday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      friday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      saturday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      sunday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+    },
   },
   {
+    id: '7',
     name: '콩쥐',
     specialty: '가정의학과 전문의',
     fields: ['가정의학과'],
@@ -115,8 +311,42 @@ export const DoctorList = [
     profileImg:
       'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
     isFavorite: false,
+    hospital: '연세 새로운 내과',
+    tel: '031-123-1234',
+    address: '서울시 어쩌구 이러면',
+    businessHours: {
+      monday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      tuesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      wednesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      thursday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      friday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      saturday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      sunday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+    },
   },
   {
+    id: '8',
     name: '팥쥐',
     specialty: '이비인후과 전문의',
     fields: ['이비인후과'],
@@ -124,6 +354,82 @@ export const DoctorList = [
     profileImg:
       'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
     isFavorite: false,
+    hospital: '연세 새로운 내과',
+    tel: '031-123-1234',
+    address: '서울시 어쩌구 이러면',
+    businessHours: {
+      monday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      tuesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      wednesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      thursday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      friday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      saturday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      sunday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+    },
+  },
+  {
+    id: '9',
+    name: '하철환',
+    specialty: '소아과 전문의',
+    fields: ['소아과', '내과'],
+    rate: '4.7',
+    profileImg:
+      'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
+    isFavorite: true,
+    hospital: '연세 새로운 내과',
+    tel: '031-123-1234',
+    address: '서울시 어쩌구 이러면',
+    businessHours: {
+      monday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      tuesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      wednesday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      thursday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      friday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      saturday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+      sunday: {
+        open: '09:00 ~ 18:00',
+        break: '13:00 ~ 14:00',
+      },
+    },
   },
 ];
 
