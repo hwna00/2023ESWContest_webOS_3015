@@ -3,7 +3,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import {
   Box,
-  Flex,
   Heading,
   Button,
   Stack,
@@ -19,6 +18,8 @@ import {
   HStack,
   VStack,
   SimpleGrid,
+  Radio,
+  RadioGroup,
 } from '@chakra-ui/react';
 
 import specialties from '../Specialties.js';
@@ -37,6 +38,7 @@ function AppointmentList() {
   const [list, setList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [title, setTitle] = useState();
+  const [value, setValue] = useState();
 
   useEffect(() => {
     if (path === 'doctors') {
@@ -98,55 +100,89 @@ function AppointmentList() {
       <Box width="100%">
         <HStack width="100%" justifyContent="space-between">
           <BackButton title={title} />
-          <Button onClick={onOpen} padding="4">
+          <Button
+            onClick={onOpen}
+            h="10"
+            w="24"
+            padding="4"
+            border="solid 2px"
+            borderColor="primary.500"
+            colorScheme="primary.100"
+            color="primary.500"
+          >
             필터적용
           </Button>
         </HStack>
-        <Modal isOpen={isOpen} onClose={onClose} size="4xl">
+        <Modal
+          isOpen={isOpen}
+          onClose={onClose}
+          isCentered
+          width="70%"
+          height="75%"
+        >
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>필터적용</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <Box>
-                <Heading as="h3">정렬 기준</Heading>
-                <Checkbox
-                  id="name"
-                  checked={sortBy === 'name'}
-                  onChange={handleSortByName}
-                >
-                  이름순
-                </Checkbox>
-                <Checkbox
-                  id="rating"
-                  checked={sortBy === 'rating'}
-                  onChange={handleSortByRating}
-                >
-                  별점순
-                </Checkbox>
-                <Checkbox
-                  id="distance"
-                  checked={sortBy === 'distance'}
-                  onChange={handleSortByDistance}
-                >
-                  거리순
-                </Checkbox>
+              <Box mb="4">
+                <Heading as="h3" fontSize="24" mb="2">
+                  정렬 기준
+                </Heading>
+                <RadioGroup onChange={setValue} value={value}>
+                  <Stack direction="row">
+                    <Radio
+                      value="name"
+                      checked={sortBy === 'name'}
+                      onChange={handleSortByName}
+                      name="sort"
+                    >
+                      이름순
+                    </Radio>
+
+                    <Radio
+                      value="rating"
+                      checked={sortBy === 'rating'}
+                      onChange={handleSortByRating}
+                      name="sort"
+                    >
+                      별점순
+                    </Radio>
+
+                    <Radio
+                      value="distance"
+                      checked={sortBy === 'distance'}
+                      onChange={handleSortByDistance}
+                      name="sort"
+                    >
+                      거리순
+                    </Radio>
+                  </Stack>
+                </RadioGroup>
               </Box>
               <Box>
-                <Heading as="h3">진료 과목</Heading>
+                <Heading as="h3" fontSize="24" mb="2">
+                  진료 과목
+                </Heading>
                 <CheckboxGroup
                   defaultValue={selectedSpecialties}
                   onChange={handleSpecialtyChange}
                 >
                   <Stack spacing={2} direction={['column', 'row']}>
                     {specialties.map(specialty => (
-                      <Checkbox
-                        name={specialty}
-                        value={specialty}
-                        key={specialty}
+                      <Box
+                        borderRadius="8"
+                        border="solid 2px"
+                        color="primary.500"
                       >
-                        {specialty}
-                      </Checkbox>
+                        <Checkbox
+                          name={specialty}
+                          value={specialty}
+                          key={specialty}
+                        >
+                          {specialty}
+                        </Checkbox>
+                      </Box>
                     ))}
                   </Stack>
                 </CheckboxGroup>

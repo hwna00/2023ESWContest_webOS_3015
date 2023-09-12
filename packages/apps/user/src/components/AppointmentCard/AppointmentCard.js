@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react';
-
 import { GoBookmark, GoBookmarkFill } from 'react-icons/go';
 import {
   Box,
@@ -8,7 +7,6 @@ import {
   Text,
   Image,
   Icon,
-  Button,
   HStack,
   AspectRatio,
 } from '@chakra-ui/react';
