@@ -49,7 +49,7 @@ const PushAlarm = function () {
     <>
       <Button
         width="full"
-        size={'lg'}
+        size="lg"
         ref={pushRef}
         colorScheme="primary"
         onClick={onOpen}

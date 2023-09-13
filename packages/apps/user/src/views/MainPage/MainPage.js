@@ -88,7 +88,7 @@ const MainPage = function () {
   }, [selectedDay]);
 
   return (
-    <HStack height="full" gap={'6'}>
+    <HStack height="full" gap="6">
       <Calendar
         selectedDay={selectedDay}
         setSelectedDay={setSelectedDay}
