@@ -336,14 +336,11 @@ const SignUpForm = function ({
               </FormControl>
             </HStack>
 
-            <FormControl
-              width="full"
-              isInvalid={errors.step2?.chronicDisease}
-            >
+            <FormControl width="full" isInvalid={errors.step2?.chronicDisease}>
               <FormLabel>질환 정보</FormLabel>
               <Textarea
                 resize="none"
-                placeholder="평소 앓고 있었던 질병이 있다면 입력해주세요."
+                placeholder="평소 앓고 있었던 질병이나 수술 이력이 있다면 입력해주세요."
                 {...register('step2.chronicDisease')}
               />
               <FormErrorMessage>
