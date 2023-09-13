@@ -1,5 +1,13 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 
+const userSlice = createSlice({
+  name: 'user',
+  initialState: {},
+  reducers: {
+    setUser: (state, action) => action.payload,
+  },
+});
+
 const userImgSlice = createSlice({
   name: 'userImg',
   initialState: { url: '' },
@@ -23,11 +31,13 @@ const appointmentSlice = createSlice({
 
 export const store = configureStore({
   reducer: {
+    user: userSlice.reducer,
     userImg: userImgSlice.reducer,
     appointment: appointmentSlice.reducer,
   },
   devTools: process.env.NODE_ENV !== 'production',
 });
 
+export const { setUser } = userSlice.actions;
 export const { setImg } = userImgSlice.actions;
 export const { setAppointDatetime } = appointmentSlice.actions;
