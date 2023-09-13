@@ -94,7 +94,7 @@ function AppointmentList() {
   }, [sortBy, selectedSpecialties, list]);
 
   return (
-    <VStack width={'full'} height={'full'} gap="4">
+    <VStack width="full" height="full" gap="4">
       <Box width="100%">
         <HStack width="100%" justifyContent="space-between">
           <BackButton title={title} />
