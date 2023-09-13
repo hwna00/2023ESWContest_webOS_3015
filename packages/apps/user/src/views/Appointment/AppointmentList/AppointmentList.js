@@ -164,7 +164,7 @@ function AppointmentList() {
           ))}
         </SimpleGrid>
       </Box>
-    </Flex>
+    </VStack>
   );
 }
 
