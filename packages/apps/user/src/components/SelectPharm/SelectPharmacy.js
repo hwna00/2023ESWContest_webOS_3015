@@ -13,8 +13,10 @@ import {
   SimpleGrid,
   Select,
 } from '@chakra-ui/react';
-import { PharmList } from './PharmList.js';
+
 import AppointmentCard from '../AppointmentCard/AppointmentCard.js';
+
+import { PharmList } from './PharmList.js';
 
 function SelectPharm() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -28,8 +30,9 @@ function SelectPharm() {
     },
     [onOpen],
   );
+
   return (
-    <VStack width={'full'} height={'full'} gap="4">
+    <VStack width="full" height="full" gap="4">
       <Box width="100%">
         <VStack width="100%" justifyContent="space-between">
           <Heading as="h2" fontSize="24">
@@ -42,7 +45,7 @@ function SelectPharm() {
       </Box>
       <SimpleGrid columns={2} gap="5" width="full" px="4" overflowY="scroll">
         {filteredList.map((item, idx) => (
-          <Box onClick={handlePharmacy} key={idx}>
+          <Box onClick={handlePharmacy(item)} key={idx}>
             <AppointmentCard data={item} key={idx} />
           </Box>
         ))}
@@ -52,7 +55,10 @@ function SelectPharm() {
         <Modal isOpen={isOpen} onClose={onClose} isCentered>
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>{selectedPharmacy.name}</ModalHeader>
+            <ModalHeader>
+              {selectedPharmacy && selectedPharmacy.name}
+            </ModalHeader>
+
             <ModalCloseButton />
             <ModalBody>
               <Box display="flex" alignItems="center" whiteSpace="nowrap">

@@ -175,6 +175,7 @@ function AppointmentList() {
                         border="solid 2px"
                         color="primary.500"
                         key={idx}
+                        w="36"
                       >
                         <Checkbox
                           name={specialty}
@@ -192,7 +193,6 @@ function AppointmentList() {
           </ModalContent>
         </Modal>
       </Box>
-
       <SimpleGrid columns={2} gap="5" width="full" px="4" overflowY="scroll">
         {filteredList.map(item => (
           <AppointmentCard data={item} key={item.id} />
