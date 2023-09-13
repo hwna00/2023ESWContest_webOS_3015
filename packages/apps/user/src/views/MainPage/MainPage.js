@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 
-import Calendar from '../../components/Calendar/Calendar';
-
 import 'react-calendar/dist/Calendar.css';
 import dayjs from 'dayjs';
 import { Button, ButtonGroup, HStack, VStack } from '@chakra-ui/react';
 
 import TodoList from '../../components/TodoList/TodoList';
 import PushAlarm from '../../components/PushAlarm/PushAlarm';
+import Calendar from '../../components/Calendar/Calendar';
 
 const todos = [
   {
