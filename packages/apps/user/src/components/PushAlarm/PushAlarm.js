@@ -49,12 +49,14 @@ const PushAlarm = function () {
     <>
       <Button
         width="full"
+        size="lg"
         ref={pushRef}
         colorScheme="primary"
         onClick={onOpen}
       >
         푸시 알림 ({notifications.length})
       </Button>
+
       <Drawer
         isOpen={isOpen}
         placement="right"
@@ -81,27 +83,24 @@ const PushAlarm = function () {
             >
               {notifications.length !== 0 ? (
                 notifications.map(notification => (
-                    <ListItem
-                      key={notification.title}
-                      width="full"
-                      p="4"
-                      bgColor="primary.200"
-                      borderRadius="lg"
-                    >
-                      <HStack
-                        justifyContent="space-between"
-                        alignItems="center"
-                      >
-                        <Text>{notification.title}</Text>
-                        <Checkbox
-                          // eslint-disable-next-line
-                          onChange={() => removePushAlarm(notification.id)}
-                          colorScheme="primary"
-                          borderColor="black"
-                        />
-                      </HStack>
-                    </ListItem>
-                  ))
+                  <ListItem
+                    key={notification.title}
+                    width="full"
+                    p="4"
+                    bgColor="primary.200"
+                    borderRadius="lg"
+                  >
+                    <HStack justifyContent="space-between" alignItems="center">
+                      <Text>{notification.title}</Text>
+                      <Checkbox
+                        // eslint-disable-next-line
+                        onChange={() => removePushAlarm(notification.id)}
+                        colorScheme="primary"
+                        borderColor="black"
+                      />
+                    </HStack>
+                  </ListItem>
+                ))
               ) : (
                 <Text>모든 알림을 확인했습니다</Text>
               )}
