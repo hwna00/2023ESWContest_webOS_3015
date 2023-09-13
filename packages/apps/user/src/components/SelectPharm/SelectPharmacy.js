@@ -45,7 +45,7 @@ function SelectPharm() {
       </Box>
       <SimpleGrid columns={2} gap="5" width="full" px="4" overflowY="scroll">
         {filteredList.map((item, idx) => (
-          <Box onClick={handlePharmacy(item)} key={idx}>
+          <Box onClick={() => handlePharmacy(item)} key={idx}>
             <AppointmentCard data={item} key={idx} />
           </Box>
         ))}
