@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 
-import { useLocation } from 'react-router-dom';
+import { useParams, Link as ReactRouterLink } from 'react-router-dom';
 import {
   Box,
   Heading,
@@ -20,6 +20,8 @@ import {
   SimpleGrid,
   Radio,
   RadioGroup,
+  Link as ChakraLink,
+
 } from '@chakra-ui/react';
 
 import specialties from '../Specialties.js';
@@ -28,8 +30,7 @@ import BackButton from '../../../components/BackButton/BackButton';
 import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
 
 function AppointmentList() {
-  const { pathname } = useLocation();
-  const path = pathname.split('/')[2];
+  const { category } = useParams();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -41,17 +42,17 @@ function AppointmentList() {
   const [value, setValue] = useState();
 
   useEffect(() => {
-    if (path === 'doctors') {
+    if (category === 'doctors') {
       setList(DoctorList);
       setTitle('의사별 보기');
-    } else if (path === 'hospitals') {
+    } else if (category === 'hospitals') {
       setList(HospitalList);
       setTitle('병원별 보기');
-    } else if (path === 'favorites') {
+    } else if (category === 'favorites') {
       setList(FavoriteList);
       setTitle('즐겨찾기 관리');
     }
-  }, [path, list, title]);
+  }, [category, list, title]);
 
   const handleSortByChange = useCallback(event => {
     setSortBy(event);
@@ -96,7 +97,7 @@ function AppointmentList() {
   }, [sortBy, selectedSpecialties, list]);
 
   return (
-    <VStack width={'full'} height={'full'} gap="4">
+    <VStack width="full" height="full" gap="4">
       <Box width="100%">
         <HStack width="100%" justifyContent="space-between">
           <BackButton title={title} />
@@ -193,11 +194,17 @@ function AppointmentList() {
           </ModalContent>
         </Modal>
       </Box>
-      <SimpleGrid columns={2} gap="5" width="full" px="4" overflowY="scroll">
-        {filteredList.map(item => (
-          <AppointmentCard data={item} key={item.id} />
-        ))}
-      </SimpleGrid>
+
+      <Box width="full" maxHeight="80vh" overflowY="scroll">
+        <SimpleGrid columns={2} gap="8" mt="4" width="full" padding="8">
+          {filteredList.map(item => (
+            <ChakraLink as={ReactRouterLink} to={`${item.id}`} key={item.name}>
+              <AppointmentCard data={item} />
+            </ChakraLink>
+          ))}
+        </SimpleGrid>
+      </Box>
+
     </VStack>
   );
 }

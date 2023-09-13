@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import { Link as ReactRouterLink } from 'react-router-dom';
 import {
   HStack,
@@ -6,7 +8,6 @@ import {
   Divider,
   Link as ChakraLink,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
 
 const AppointmentViewList = function ({ type, selectedList }) {
   const [nameOfView, setNameOfView] = useState('');

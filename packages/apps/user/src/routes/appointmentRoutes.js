@@ -1,6 +1,7 @@
 import AppointmentHistoryDetail from '../views/AppointmentHistory/AppointmentHistoryDetail';
 import AppointmentHistory from '../views/AppointmentHistory';
 import AppointmentList from '../views/Appointment/AppointmentList';
+import AppointmentDetail from '../views/Appointment/AppointmentDetail/AppointmentDetail';
 import Appointment from '../views/Appointment';
 
 const appointmentRoutes = [
@@ -9,15 +10,7 @@ const appointmentRoutes = [
     element: <Appointment />,
   },
   {
-    path: 'appointment/doctors',
-    element: <AppointmentList />,
-  },
-  {
-    path: 'appointment/hospitals',
-    element: <AppointmentList />,
-  },
-  {
-    path: 'appointment/favorites',
+    path: 'appointment/:category',
     element: <AppointmentList />,
   },
   {

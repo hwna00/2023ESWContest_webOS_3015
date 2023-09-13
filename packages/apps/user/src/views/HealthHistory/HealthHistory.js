@@ -22,7 +22,7 @@ const HealthHistory = function () {
       <SimpleGrid
         w="full"
         spacing="8"
-        placeItems={'center'}
+        placeItems="center"
         columns={{ base: 1, sm: 2, md: 3 }}
       >
         {recentData.map((data, index) => (
