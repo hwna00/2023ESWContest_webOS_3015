@@ -1,9 +1,7 @@
 import { Outlet } from 'react-router-dom';
 
-const UserFase = function () {
-  return (
-    <Outlet />
-  );
+const UserFace = function () {
+  return <Outlet />;
 };
 
-export default UserFase;
+export default UserFace;

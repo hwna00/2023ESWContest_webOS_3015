@@ -63,7 +63,7 @@ const OnCapture = function () {
   const handleClick = async () => {
     const profileImg = captureCam();
     dispatch(setImg(profileImg));
-    navigate('/auth/sign-up/after-capture', { state: { profileImg } });
+    navigate('/auth/sign-up/step4/after-capture', { state: { profileImg } });
   };
 
   useEffect(() => {
@@ -78,12 +78,7 @@ const OnCapture = function () {
 
   return (
     <HStack width="full" justifyContent="space-evenly">
-      <AspectRatio
-        width="xs"
-        ratio={1}
-        borderRadius="full"
-        overflow="hidden"
-      >
+      <AspectRatio width="xs" ratio={1} borderRadius="full" overflow="hidden">
         <video autoPlay ref={videoRef} />
       </AspectRatio>
 

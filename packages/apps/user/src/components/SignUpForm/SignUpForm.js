@@ -42,12 +42,12 @@ const SignUpForm = function ({
   const ref = useRef();
 
   const handleNext = useCallback(async () => {
-    const isFullfilled = await reactHookForm.trigger();
+    // const isFullfilled = await reactHookForm.trigger();
 
-    if (isFullfilled) {
-      navigate(`/auth/sign-up/step${activeStep + 2}`);
-      goToNext();
-    }
+    // if (isFullfilled) {
+    navigate(`/auth/sign-up/step${activeStep + 2}`);
+    goToNext();
+    // }
   }, [activeStep, goToNext, navigate, reactHookForm]);
 
   const handlePrev = useCallback(() => {

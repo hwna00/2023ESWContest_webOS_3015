@@ -1,12 +1,7 @@
-import UserFase from '../../../components/SignUpForm/UserFace';
+import UserFace from '../../../components/SignUpForm/UserFace';
 
-//TODO: UserFase -> UserFace 오타 수정
 const Step4 = function () {
-  return (
-    <UserFase width={'full'} gap={'4'}>
-      <UserFase />
-    </UserFase>
-  );
+  return <UserFace />;
 };
 
 export default Step4;
