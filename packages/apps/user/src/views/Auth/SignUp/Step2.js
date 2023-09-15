@@ -7,13 +7,12 @@ import {
   InputLeftAddon,
   VStack,
 } from '@chakra-ui/react';
+import { useSelector } from 'react-redux';
 import { useOutletContext } from 'react-router-dom';
 
 const Step2 = function () {
-  const {
-    register,
-    formState: { errors },
-  } = useOutletContext();
+  const { register } = useOutletContext();
+  const errors = useSelector(state => state.signUp.errors);
 
   return (
     <VStack width={'full'} gap={'4'}>
@@ -23,7 +22,7 @@ const Step2 = function () {
           required
           type="date"
           placeholder="생년월일을 선택해주세요."
-          {...register('step1.birthDate', {
+          {...register('birthDate', {
             required: '이 항목은 필수입니다.',
           })}
         />
@@ -35,7 +34,7 @@ const Step2 = function () {
         <Input
           required
           placeholder="옵션 요소입니다."
-          {...register('step1.address', {
+          {...register('address', {
             required: '이 항목은 필수입니다.',
           })}
         />
@@ -51,7 +50,7 @@ const Step2 = function () {
             type="tel"
             maxLength="8"
             placeholder="필수 요소입니다."
-            {...register('step1.phoneNumber', {
+            {...register('phoneNumber', {
               required: '이 항목은 필수입니다.',
               pattern: {
                 value: /^[0-9]{8}$/i,
@@ -71,7 +70,7 @@ const Step2 = function () {
             type="tel"
             maxLength="8"
             placeholder="옵션 요소입니다."
-            {...register('step1.secondPhoneNumber', {
+            {...register('secondPhoneNumber', {
               pattern: {
                 value: /^[0-9]{8}$/i,
                 message: '전화번호는 8자리의 숫자로만 이루어져야 합니다.',

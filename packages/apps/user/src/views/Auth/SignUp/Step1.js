@@ -5,14 +5,12 @@ import {
   Input,
   VStack,
 } from '@chakra-ui/react';
+import { useSelector } from 'react-redux';
 import { useOutletContext } from 'react-router-dom';
 
 const Step1 = function () {
-  const {
-    register,
-    getValues,
-    formState: { errors },
-  } = useOutletContext();
+  const { register, getValues } = useOutletContext();
+  const errors = useSelector(state => state.signUp.errors);
 
   return (
     <VStack width={'full'} gap={'4'}>

@@ -4,7 +4,7 @@ import UserFase from '../../../components/SignUpForm/UserFace';
 const Step4 = function () {
   return (
     <UserFase width={'full'} gap={'4'}>
-      <UserFace />
+      <UserFase />
     </UserFase>
   );
 };

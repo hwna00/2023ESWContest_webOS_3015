@@ -1,7 +1,7 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { Outlet, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
@@ -10,26 +10,12 @@ import {
   setPersistence,
   updateProfile,
 } from 'firebase/auth';
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  HStack,
-  Input,
-  InputGroup,
-  InputLeftAddon,
-  InputRightAddon,
-  Select,
-  Textarea,
-  VStack,
-} from '@chakra-ui/react';
+import { Button, ButtonGroup, VStack } from '@chakra-ui/react';
 
 import { auth, signIn } from '../../../firebase';
 
 import UserFace from './UserFace';
+import { setErrors } from '../../store';
 
 const SignUpForm = function ({
   activeStep,
@@ -39,31 +25,40 @@ const SignUpForm = function ({
   isCompleteStep,
 }) {
   const reactHookForm = useForm({ mode: 'all' });
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const errors = reactHookForm.formState.errors;
+
+    const filteredErrors = {};
+    Object.entries(errors).map(([key, value]) => {
+      filteredErrors[key] = { message: value.message };
+    });
+
+    dispatch(setErrors(filteredErrors));
+  }, [dispatch, reactHookForm.formState]);
 
   const navigate = useNavigate();
-  const [formPosition, setFormPosition] = useState(0);
   const ref = useRef();
 
   const handleNext = useCallback(async () => {
-    // const currentFormWidth = ref.current?.offsetWidth;
-    // setFormPosition(formPosition - currentFormWidth);
-    navigate(`/auth/sign-up/step${activeStep + 2}`);
-    goToNext();
-  }, [activeStep, goToNext, setFormPosition, formPosition]);
+    const isFullfilled = await reactHookForm.trigger();
+
+    if (isFullfilled) {
+      navigate(`/auth/sign-up/step${activeStep + 2}`);
+      goToNext();
+    }
+  }, [activeStep, goToNext, navigate, reactHookForm]);
 
   const handlePrev = useCallback(() => {
-    // const currentFormWidth = ref.current?.offsetWidth;
-    // setFormPosition(formPosition + currentFormWidth);
     navigate(`/auth/sign-up/step${activeStep}`);
     goToPrevious();
-  }, [goToPrevious, setFormPosition, formPosition]);
+  }, [goToPrevious, activeStep, navigate]);
 
   const profileImgSrc = useSelector(state => state.url);
 
   const onSubmit = function (data) {
     //Todo: 데이터 무결성 확인하기
-    //Todo: 데이터를 store에 저장하기
-    //Todo: navigate('/auth/sign-up/step2');
     // setPersistence(auth, browserLocalPersistence)
     //   .then(() => {
     //     signIn(email, password)
@@ -86,7 +81,7 @@ const SignUpForm = function ({
       onSubmit={reactHookForm.handleSubmit(onSubmit)}
       alignItems="flex-end"
       gap="4"
-      maxWidth="full"
+      width="full"
       overflowY="scroll"
     >
       <Outlet context={reactHookForm} />
