@@ -43,7 +43,6 @@ function AppointmentList() {
           borderRadius="md"
           bgColor={'primary.100'}
           color={'black'}
-          aria-disabled={specialty === 0 ? true : false}
           _checked={{
             bgColor: 'primary.500',
             color: 'white',
@@ -145,15 +144,9 @@ function AppointmentList() {
           </Button>
         </HStack>
 
-        <Modal
-          isOpen={isOpen}
-          onClose={onClose}
-          isCentered
-          width="80%"
-          height="75%"
-        >
+        <Modal isOpen={isOpen} onClose={onClose} isCentered>
           <ModalOverlay />
-          <ModalContent>
+          <ModalContent padding="4" width="90%" height="70%">
             <ModalHeader>필터적용</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
