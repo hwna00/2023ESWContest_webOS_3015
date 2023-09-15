@@ -145,15 +145,9 @@ function AppointmentList() {
           </Button>
         </HStack>
 
-        <Modal
-          isOpen={isOpen}
-          onClose={onClose}
-          isCentered
-          width="80%"
-          height="75%"
-        >
+        <Modal isOpen={isOpen} onClose={onClose} isCentered>
           <ModalOverlay />
-          <ModalContent>
+          <ModalContent padding="4" width="90%" height="70%">
             <ModalHeader>필터적용</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
