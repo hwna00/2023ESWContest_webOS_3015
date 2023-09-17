@@ -3,6 +3,7 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
+  HStack,
   Input,
   InputGroup,
   InputLeftAddon,
@@ -20,6 +21,7 @@ import { useOutletContext } from 'react-router-dom';
 
 const Step2 = function () {
   const [address, setAddress] = useState();
+
   const { register } = useOutletContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const errors = useSelector(state => state.signUp.errors);
@@ -44,30 +46,18 @@ const Step2 = function () {
         <FormErrorMessage>{errors.birthDate?.message}</FormErrorMessage>
       </FormControl>
 
-      <FormControl width="full" isRequired isInvalid={errors.address}>
-        <FormLabel>주소</FormLabel>
-
-        {address ? (
-          <>
-            <Input
-              required
-              placeholder="주소"
-              mb={'2'}
-              value={address}
-              {...register('address', {
-                required: '이 항목은 필수입니다.',
-              })}
-              readOnly
-            />
-            <Input
-              required
-              placeholder="상세 주소"
-              {...register('addressDetail', {
-                required: '이 항목은 필수입니다.',
-              })}
-            />
-          </>
-        ) : (
+      <FormControl
+        width="full"
+        isRequired
+        isInvalid={errors.address || errors.addressDetail}
+      >
+        <HStack
+          width={'full'}
+          justifyContent={'space-between'}
+          alignItems={'center'}
+          mb={'2'}
+        >
+          <FormLabel margin={0}>주소</FormLabel>
           <Button
             leftIcon={<FaSearch />}
             colorScheme="primary"
@@ -76,7 +66,25 @@ const Step2 = function () {
           >
             주소 찾기
           </Button>
-        )}
+        </HStack>
+
+        <Input
+          required
+          placeholder="주소"
+          mb={'2'}
+          value={address}
+          {...register('address', {
+            required: '이 항목은 필수입니다.',
+          })}
+          readOnly
+        />
+        <Input
+          required
+          placeholder="상세 주소"
+          {...register('addressDetail', {
+            required: '이 항목은 필수입니다.',
+          })}
+        />
 
         <FormErrorMessage>{errors.address?.message}</FormErrorMessage>
       </FormControl>

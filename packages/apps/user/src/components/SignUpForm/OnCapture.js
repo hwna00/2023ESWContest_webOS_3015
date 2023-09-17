@@ -1,52 +1,29 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { AspectRatio, Button, HStack } from '@chakra-ui/react';
+import { AspectRatio, Button, HStack, SkeletonCircle } from '@chakra-ui/react';
 
 import { setImgBlob } from '../../store';
+import useCamera from '../../hooks/useCamera';
 
 const OnCapture = function () {
-  const dispatch = useDispatch();
-
-  const [error, setError] = useState();
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const fetchStream = async () => {
-    const devices = await window.navigator.mediaDevices.enumerateDevices();
-    const cameras = devices.filter(device => device.kind === 'videoinput');
-
-    try {
-      const devicdId = cameras[0].deviceId;
-
-      const cameraContraints = {
-        audio: true,
-        video: {
-          deviceId: { exact: devicdId },
-        },
-      };
-
-      const myStream = await window.navigator.mediaDevices.getUserMedia(
-        cameraContraints,
-      );
-      if (videoRef?.current) {
-        videoRef.current.srcObject = myStream;
-      }
-    } catch (err) {
-      setError(err);
-    }
-  };
+  const { isLoading, stream, error } = useCamera();
 
   const captureCam = () => {
     const video = videoRef.current;
-
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
+
     const width = videoRef.current?.offsetWidth;
     const height = videoRef.current?.offsetHeight;
+
     canvas.setAttribute('width', width);
     canvas.setAttribute('height', height);
 
@@ -62,21 +39,26 @@ const OnCapture = function () {
   };
 
   useEffect(() => {
-    fetchStream();
-  }, []);
+    if (videoRef?.current) {
+      videoRef.current.srcObject = stream;
+    }
+  }, [videoRef, stream]);
 
   useEffect(() => {
     if (error) {
-      console.log(error);
       navigate('/error');
     }
-  }, [error, navigate]);
+  }, [error]);
 
   return (
     <HStack width="full" justifyContent="space-evenly">
-      <AspectRatio width="xs" ratio={1} borderRadius="full" overflow="hidden">
-        <video autoPlay ref={videoRef} />
-      </AspectRatio>
+      {isLoading ? (
+        <SkeletonCircle size={'80'} />
+      ) : (
+        <AspectRatio width="xs" ratio={1} borderRadius="full" overflow="hidden">
+          <video autoPlay ref={videoRef} />
+        </AspectRatio>
+      )}
 
       {/* eslint-disable */}
       <Button colorScheme={'primary'} onClick={captureCam}>
