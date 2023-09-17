@@ -1,18 +1,33 @@
 import {
+  Button,
   FormControl,
   FormErrorMessage,
   FormLabel,
   Input,
   InputGroup,
   InputLeftAddon,
+  Modal,
+  ModalContent,
+  ModalOverlay,
   VStack,
+  useDisclosure,
 } from '@chakra-ui/react';
+import { useState } from 'react';
+import { DaumPostcodeEmbed } from 'react-daum-postcode';
+import { FaSearch } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import { useOutletContext } from 'react-router-dom';
 
 const Step2 = function () {
+  const [address, setAddress] = useState();
   const { register } = useOutletContext();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const errors = useSelector(state => state.signUp.errors);
+
+  const handleComplete = data => {
+    onClose();
+    setAddress(data.address);
+  };
 
   return (
     <VStack width={'full'} gap={'4'}>
@@ -31,13 +46,38 @@ const Step2 = function () {
 
       <FormControl width="full" isRequired isInvalid={errors.address}>
         <FormLabel>주소</FormLabel>
-        <Input
-          required
-          placeholder="옵션 요소입니다."
-          {...register('address', {
-            required: '이 항목은 필수입니다.',
-          })}
-        />
+
+        {address ? (
+          <>
+            <Input
+              required
+              placeholder="주소"
+              mb={'2'}
+              value={address}
+              {...register('address', {
+                required: '이 항목은 필수입니다.',
+              })}
+              readOnly
+            />
+            <Input
+              required
+              placeholder="상세 주소"
+              {...register('addressDetail', {
+                required: '이 항목은 필수입니다.',
+              })}
+            />
+          </>
+        ) : (
+          <Button
+            leftIcon={<FaSearch />}
+            colorScheme="primary"
+            variant={'outline'}
+            onClick={onOpen}
+          >
+            주소 찾기
+          </Button>
+        )}
+
         <FormErrorMessage>{errors.address?.message}</FormErrorMessage>
       </FormControl>
 
@@ -80,6 +120,13 @@ const Step2 = function () {
         </InputGroup>
         <FormErrorMessage>{errors.secondPhoneNumber?.message}</FormErrorMessage>
       </FormControl>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <DaumPostcodeEmbed onComplete={handleComplete} />
+        </ModalContent>
+      </Modal>
     </VStack>
   );
 };
