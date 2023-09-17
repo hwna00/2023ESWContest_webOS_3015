@@ -9,6 +9,7 @@ import theme from '../theme';
 
 import { store } from './store';
 import router from './routes/index';
+import { AnimatePresence } from 'framer-motion';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -18,7 +19,9 @@ if (typeof window !== 'undefined') {
     <React.StrictMode>
       <ChakraProvider theme={theme}>
         <Provider store={store}>
-          <RouterProvider router={router} />
+          <AnimatePresence>
+            <RouterProvider router={router} />
+          </AnimatePresence>
         </Provider>
       </ChakraProvider>
     </React.StrictMode>,

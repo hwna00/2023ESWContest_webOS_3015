@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import PropTypes from 'prop-types';
@@ -11,7 +11,7 @@ import {
   setPersistence,
   updateProfile,
 } from 'firebase/auth';
-import { Button, ButtonGroup, VStack } from '@chakra-ui/react';
+import { Box, Button, ButtonGroup, VStack } from '@chakra-ui/react';
 
 import { auth, signIn } from '../../../firebase';
 import { storage } from '../../../firebase';
@@ -82,6 +82,8 @@ const SignUpForm = function ({
     //   .catch(() => navigate('/error'));
   };
 
+  const location = useLocation();
+
   return (
     <VStack
       as="form"
@@ -91,7 +93,17 @@ const SignUpForm = function ({
       width="full"
       overflowY="scroll"
     >
-      <Outlet context={reactHookForm} />
+      <Box
+        key={location.pathname}
+        width={'full'}
+        as={motion.div}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 1.0 }}
+      >
+        <Outlet context={reactHookForm} />
+      </Box>
 
       <ButtonGroup gap="4">
         {isCompleteStep(0) && (
