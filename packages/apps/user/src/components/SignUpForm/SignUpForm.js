@@ -4,6 +4,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import PropTypes from 'prop-types';
+import { ref, uploadBytes } from 'firebase/storage';
 import { motion } from 'framer-motion';
 import {
   browserLocalPersistence,
@@ -13,8 +14,7 @@ import {
 import { Button, ButtonGroup, VStack } from '@chakra-ui/react';
 
 import { auth, signIn } from '../../../firebase';
-
-import UserFace from './UserFace';
+import { storage } from '../../../firebase';
 import { setErrors } from '../../store';
 
 const SignUpForm = function ({
@@ -24,8 +24,10 @@ const SignUpForm = function ({
   isActiveStep,
   isCompleteStep,
 }) {
+  const navigate = useNavigate();
   const reactHookForm = useForm({ mode: 'all' });
   const dispatch = useDispatch();
+  const profileImgBlob = useSelector(state => state.signUp.blob);
 
   useEffect(() => {
     const errors = reactHookForm.formState.errors;
@@ -37,9 +39,6 @@ const SignUpForm = function ({
 
     dispatch(setErrors(filteredErrors));
   }, [dispatch, reactHookForm.formState]);
-
-  const navigate = useNavigate();
-  const ref = useRef();
 
   const handleNext = useCallback(async () => {
     // const isFullfilled = await reactHookForm.trigger();
@@ -55,10 +54,18 @@ const SignUpForm = function ({
     goToPrevious();
   }, [goToPrevious, activeStep, navigate]);
 
-  const profileImgSrc = useSelector(state => state.url);
+  const uploadBlob = blob => {
+    const storageRef = ref(storage, 'images/' + new Date().getTime() + '.png');
+
+    uploadBytes(storageRef, blob).catch(() => {
+      navigate('/error');
+    });
+  };
 
   const onSubmit = function (data) {
-    //Todo: 데이터 무결성 확인하기
+    uploadBlob(profileImgBlob);
+
+    //Todo: firebase로부터 받아온 토큰을 DB에 저장하기
     // setPersistence(auth, browserLocalPersistence)
     //   .then(() => {
     //     signIn(email, password)

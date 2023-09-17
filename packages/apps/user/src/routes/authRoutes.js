@@ -43,6 +43,10 @@ const authRoutes = {
               element: <BeforeCapture />,
             },
             {
+              path: 'before-capture',
+              element: <BeforeCapture />,
+            },
+            {
               path: 'on-capture',
               element: <OnCapture />,
             },

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { AspectRatio, Button, HStack } from '@chakra-ui/react';
 
-import { setImg } from '../../store';
+import { setImgBlob } from '../../store';
 
 const OnCapture = function () {
   const dispatch = useDispatch();
@@ -20,7 +20,7 @@ const OnCapture = function () {
     const cameras = devices.filter(device => device.kind === 'videoinput');
 
     try {
-      const devicdId = cameras[1].deviceId;
+      const devicdId = cameras[0].deviceId;
 
       const cameraContraints = {
         audio: true,
@@ -52,18 +52,13 @@ const OnCapture = function () {
 
     context.drawImage(video, 0, 0, width, height);
 
-    const data = canvas.toDataURL('image/png');
+    canvas.toBlob(async blob => {
+      dispatch(setImgBlob(blob));
+      navigate('/auth/sign-up/step4/after-capture');
+    });
 
     canvas.setAttribute('width', 0);
     canvas.setAttribute('height', 0);
-
-    return data;
-  };
-
-  const handleClick = async () => {
-    const profileImg = captureCam();
-    dispatch(setImg(profileImg));
-    navigate('/auth/sign-up/step4/after-capture', { state: { profileImg } });
   };
 
   useEffect(() => {
@@ -72,6 +67,7 @@ const OnCapture = function () {
 
   useEffect(() => {
     if (error) {
+      console.log(error);
       navigate('/error');
     }
   }, [error, navigate]);
@@ -83,7 +79,7 @@ const OnCapture = function () {
       </AspectRatio>
 
       {/* eslint-disable */}
-      <Button colorScheme={'primary'} onClick={handleClick}>
+      <Button colorScheme={'primary'} onClick={captureCam}>
         사진 찍기
       </Button>
       <canvas ref={canvasRef} height={0} width={0} />

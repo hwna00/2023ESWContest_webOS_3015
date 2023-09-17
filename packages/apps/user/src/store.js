@@ -2,13 +2,13 @@ import { configureStore, createSlice } from '@reduxjs/toolkit';
 
 const signUpSlice = createSlice({
   name: 'signUp',
-  initialState: { errors: {}, url: '' },
+  initialState: { errors: {}, blob: '' },
   reducers: {
-    setImg: (state, action) => {
-      state.url = action.payload;
+    setImgBlob: (state, action) => {
+      state.blob = action.payload;
     },
-    setErrors: (_, action) => {
-      return { errors: { ...action.payload } };
+    setErrors: (state, action) => {
+      state.errors = { ...action.payload };
     },
   },
 });
@@ -29,8 +29,15 @@ export const store = configureStore({
     signUp: signUpSlice.reducer,
     appointment: appointmentSlice.reducer,
   },
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ['signUp/setImgBlob'],
+        ignoredPaths: ['signUp.blob'],
+      },
+    }),
   devTools: process.env.NODE_ENV !== 'production',
 });
 
-export const { setImg, setErrors } = signUpSlice.actions;
+export const { setImgBlob, setErrors } = signUpSlice.actions;
 export const { setAppointDatetime } = appointmentSlice.actions;
