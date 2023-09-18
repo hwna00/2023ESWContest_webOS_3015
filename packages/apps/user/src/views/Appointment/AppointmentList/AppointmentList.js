@@ -13,18 +13,53 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  CheckboxGroup,
-  Checkbox,
   HStack,
   VStack,
   SimpleGrid,
+  Radio,
+  RadioGroup,
+  useCheckbox,
+  useCheckboxGroup,
   Link as ChakraLink,
 } from '@chakra-ui/react';
 
-import specialties from '../Specialties.js';
+import specialties from '../Specialties';
 import { DoctorList, HospitalList, FavoriteList } from '../dataList';
 import BackButton from '../../../components/BackButton/BackButton';
 import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
+
+function CheckCard({ specialty, ...checkboxProps }) {
+  const { getInputProps, getCheckboxProps } = useCheckbox(checkboxProps);
+
+  const input = getInputProps();
+  const checkbox = getCheckboxProps();
+
+  return (
+    <Box as="label">
+      <input {...input} />
+      <Box
+        {...checkbox}
+        cursor="pointer"
+        borderRadius="md"
+        bgColor="primary.100"
+        color="black"
+        _checked={{
+          bgColor: 'primary.500',
+          color: 'white',
+        }}
+        _disabled={{
+          bgColor: 'black',
+          opacity: '0.2',
+          color: 'white',
+        }}
+        px={4}
+        py={2}
+      >
+        {checkboxProps.children}
+      </Box>
+    </Box>
+  );
+}
 
 function AppointmentList() {
   const { category } = useParams();
@@ -36,6 +71,7 @@ function AppointmentList() {
   const [list, setList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [title, setTitle] = useState();
+  const [value, setValue] = useState('name');
 
   useEffect(() => {
     if (category === 'doctors') {
@@ -50,8 +86,8 @@ function AppointmentList() {
     }
   }, [category, list, title]);
 
-  const handleSortByChange = useCallback(event => {
-    setSortBy(event);
+  const handleSortByChange = useCallback(sort => {
+    setSortBy(sort);
   }, []);
   const handleSortByName = useCallback(() => {
     handleSortByChange('name');
@@ -64,11 +100,6 @@ function AppointmentList() {
   const handleSortByDistance = useCallback(() => {
     handleSortByChange('distance');
   }, [handleSortByChange]);
-
-  // useCallback 사용하면 진료 과목 필터링이 정상적으로 작동하지 않음
-  const handleSpecialtyChange = selectedOptions => {
-    setSelectedSpecialties(selectedOptions);
-  };
 
   useEffect(() => {
     let itemsToFilter = [...list];
@@ -91,64 +122,85 @@ function AppointmentList() {
 
     setFilteredList(itemsToFilter);
   }, [sortBy, selectedSpecialties, list]);
-
+  const checkboxGroup = useCheckboxGroup({
+    defaultValue: [],
+    onChange: setSelectedSpecialties,
+  });
   return (
     <VStack width="full" height="full" gap="4">
       <Box width="100%">
         <HStack width="100%" justifyContent="space-between">
           <BackButton title={title} />
-          <Button onClick={onOpen} padding="4">
+          <Button
+            onClick={onOpen}
+            height="10"
+            width="24"
+            padding="4"
+            border="solid 2px"
+            borderColor="primary.500"
+            colorScheme="primary.100"
+            color="primary.500"
+          >
             필터적용
           </Button>
         </HStack>
-        <Modal isOpen={isOpen} onClose={onClose} size="4xl">
+
+        <Modal isOpen={isOpen} onClose={onClose} isCentered>
           <ModalOverlay />
-          <ModalContent>
+          <ModalContent padding="4" width="90%" height="70%">
             <ModalHeader>필터적용</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <Box>
-                <Heading as="h3">정렬 기준</Heading>
-                <Checkbox
-                  id="name"
-                  checked={sortBy === 'name'}
-                  onChange={handleSortByName}
-                >
-                  이름순
-                </Checkbox>
-                <Checkbox
-                  id="rating"
-                  checked={sortBy === 'rating'}
-                  onChange={handleSortByRating}
-                >
-                  별점순
-                </Checkbox>
-                <Checkbox
-                  id="distance"
-                  checked={sortBy === 'distance'}
-                  onChange={handleSortByDistance}
-                >
-                  거리순
-                </Checkbox>
+              <Box mb="4">
+                <Heading as="h3" fontSize="24" mb="2">
+                  정렬 기준
+                </Heading>
+                <RadioGroup onChange={setValue} value={value}>
+                  <Stack direction="row">
+                    <Radio
+                      value="name"
+                      checked={sortBy === 'name'}
+                      onChange={handleSortByName}
+                      name="sort"
+                    >
+                      이름순
+                    </Radio>
+
+                    <Radio
+                      value="rating"
+                      checked={sortBy === 'rating'}
+                      onChange={handleSortByRating}
+                      name="sort"
+                    >
+                      별점순
+                    </Radio>
+
+                    <Radio
+                      value="distance"
+                      checked={sortBy === 'distance'}
+                      onChange={handleSortByDistance}
+                      name="sort"
+                    >
+                      거리순
+                    </Radio>
+                  </Stack>
+                </RadioGroup>
               </Box>
               <Box>
-                <Heading as="h3">진료 과목</Heading>
-                <CheckboxGroup
-                  defaultValue={selectedSpecialties}
-                  onChange={handleSpecialtyChange}
-                >
-                  <Stack spacing={2} direction={['column', 'row']}>
-                    {specialties.map(specialty => (
-                      <Checkbox
-                        name={specialty}
-                        value={specialty}
-                        key={specialty}
-                      >
-                        {specialty}
-                      </Checkbox>
-                    ))}
-                  </Stack>
-                </CheckboxGroup>
+                <Heading as="h3" fontSize="24" mb="2">
+                  진료 과목
+                </Heading>
+                <HStack gap="4" width="full" flexWrap="wrap">
+                  {specialties.map(specialty => (
+                    <CheckCard
+                      {...checkboxGroup.getCheckboxProps({ value: specialty })}
+                      specialty={specialty}
+                      key={specialty}
+                    >
+                      {specialty}
+                    </CheckCard>
+                  ))}
+                </HStack>
               </Box>
             </ModalBody>
           </ModalContent>

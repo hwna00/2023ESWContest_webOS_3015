@@ -88,13 +88,13 @@ const MainPage = function () {
   }, [selectedDay]);
 
   return (
-    <HStack height="full">
+    <HStack height="full" gap="6">
       <Calendar
         selectedDay={selectedDay}
         setSelectedDay={setSelectedDay}
         todos={todos}
       />
-      <VStack flex={2} height="full" justifyContent="space-evenly">
+      <VStack flex={2} height="full" justifyContent="space-between">
         <PushAlarm />
         <TodoList
           selectedDay={selectedDay}

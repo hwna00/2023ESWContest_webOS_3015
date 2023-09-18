@@ -16,6 +16,14 @@ const signUpSlice = createSlice({
   },
 });
 
+const userSlice = createSlice({
+  name: 'user',
+  initialState: {},
+  reducers: {
+    setUser: (state, action) => action.payload,
+  },
+});
+
 const appointmentSlice = createSlice({
   name: 'appointment',
   initialState: { date: '', time: '', type: '' },
@@ -30,6 +38,7 @@ const appointmentSlice = createSlice({
 export const store = configureStore({
   reducer: {
     signUp: signUpSlice.reducer,
+    user: userSlice.reducer,
     appointment: appointmentSlice.reducer,
   },
   middleware: getDefaultMiddleware =>
@@ -44,3 +53,4 @@ export const store = configureStore({
 
 export const { setImgBlob, setErrors, setAddress } = signUpSlice.actions;
 export const { setAppointDatetime } = appointmentSlice.actions;
+export const { setUser } = userSlice.actions;
