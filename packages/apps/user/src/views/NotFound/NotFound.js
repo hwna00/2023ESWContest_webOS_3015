@@ -1,7 +1,13 @@
 import { useCallback } from 'react';
 
 import { Link as ReactRouterLink } from 'react-router-dom';
-import { Link as ChakraLink , Flex, Heading, Stack, Button } from '@chakra-ui/react';
+import {
+  Link as ChakraLink,
+  Flex,
+  Heading,
+  Button,
+  VStack,
+} from '@chakra-ui/react';
 
 function NotFound() {
   const goPrev = useCallback(() => {
@@ -23,14 +29,14 @@ function NotFound() {
         페이지를 찾을 수 없습니다.
       </Heading>
 
-      <Stack direction="row" spacing={4} align="center">
+      <VStack spacing={4} align="center">
         <ChakraLink as={ReactRouterLink} onClick={goPrev}>
           <Button colorScheme="primary">이전 페이지로</Button>
         </ChakraLink>
         <ChakraLink as={ReactRouterLink} to="/">
           <Button colorScheme="primary">메인 페이지로</Button>
         </ChakraLink>
-      </Stack>
+      </VStack>
     </Flex>
   );
 }

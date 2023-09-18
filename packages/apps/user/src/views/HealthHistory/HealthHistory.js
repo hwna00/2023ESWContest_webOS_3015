@@ -1,4 +1,4 @@
-import { SimpleGrid, Flex, VStack } from '@chakra-ui/react';
+import { SimpleGrid, VStack } from '@chakra-ui/react';
 
 import HealthHistoryItem from '../../components/HealthHistoryItem/HealthHistoryItem.js';
 
