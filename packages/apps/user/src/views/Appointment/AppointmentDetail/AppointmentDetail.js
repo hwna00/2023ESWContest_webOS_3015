@@ -35,7 +35,7 @@ import { setAppointDatetime } from '../../../store';
 import BackButton from '../../../components/BackButton/BackButton';
 import reservatons from '../../../../fixture/reservation.json';
 
-const RadioCard = ({ remainingSeats, ...radioProps }) => {
+function RadioCard({ remainingSeats, ...radioProps }) {
   const { getInputProps, getRadioProps } = useRadio(radioProps);
 
   const input = getInputProps();
@@ -48,9 +48,9 @@ const RadioCard = ({ remainingSeats, ...radioProps }) => {
         {...checkbox}
         cursor="pointer"
         borderRadius="md"
-        bgColor={'primary.100'}
-        color={'black'}
-        aria-disabled={remainingSeats === 0 ? true : false}
+        bgColor="primary.100"
+        color="black"
+        aria-disabled={remainingSeats === 0}
         _checked={{
           bgColor: 'primary.500',
           color: 'white',
@@ -67,7 +67,7 @@ const RadioCard = ({ remainingSeats, ...radioProps }) => {
       </Box>
     </Box>
   );
-};
+}
 
 const AppointmentDetail = function () {
   const { id } = useParams();

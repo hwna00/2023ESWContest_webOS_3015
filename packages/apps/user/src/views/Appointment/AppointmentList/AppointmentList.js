@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+
 import { useParams, Link as ReactRouterLink } from 'react-router-dom';
 import {
   Box,
@@ -22,13 +23,13 @@ import {
   Link as ChakraLink,
 } from '@chakra-ui/react';
 
-import specialties from '../Specialties.js';
+import specialties from '../Specialties';
 import { DoctorList, HospitalList, FavoriteList } from '../dataList';
 import BackButton from '../../../components/BackButton/BackButton';
 import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
 
 function AppointmentList() {
-  const CheckCard = ({ specialty, ...checkboxProps }) => {
+  function CheckCard({ specialty, ...checkboxProps }) {
     const { getInputProps, getCheckboxProps } = useCheckbox(checkboxProps);
 
     const input = getInputProps();
@@ -41,8 +42,8 @@ function AppointmentList() {
           {...checkbox}
           cursor="pointer"
           borderRadius="md"
-          bgColor={'primary.100'}
-          color={'black'}
+          bgColor="primary.100"
+          color="black"
           _checked={{
             bgColor: 'primary.500',
             color: 'white',
@@ -59,7 +60,7 @@ function AppointmentList() {
         </Box>
       </Box>
     );
-  };
+  }
 
   const { category } = useParams();
 
@@ -85,8 +86,8 @@ function AppointmentList() {
     }
   }, [category, list, title]);
 
-  const handleSortByChange = useCallback(event => {
-    setSortBy(event);
+  const handleSortByChange = useCallback(sort => {
+    setSortBy(sort);
   }, []);
   const handleSortByName = useCallback(() => {
     handleSortByChange('name');
@@ -189,7 +190,7 @@ function AppointmentList() {
                 <Heading as="h3" fontSize="24" mb="2">
                   진료 과목
                 </Heading>
-                <HStack gap={'4'} width={'full'} flexWrap={'wrap'}>
+                <HStack gap="4" width="full" flexWrap="wrap">
                   {specialties.map((specialty, idx) => (
                     <CheckCard
                       {...checkboxGroup.getCheckboxProps({ value: specialty })}
