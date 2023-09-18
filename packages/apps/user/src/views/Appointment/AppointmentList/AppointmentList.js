@@ -28,40 +28,40 @@ import { DoctorList, HospitalList, FavoriteList } from '../dataList';
 import BackButton from '../../../components/BackButton/BackButton';
 import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
 
-function AppointmentList() {
-  function CheckCard({ specialty, ...checkboxProps }) {
-    const { getInputProps, getCheckboxProps } = useCheckbox(checkboxProps);
+function CheckCard({ specialty, ...checkboxProps }) {
+  const { getInputProps, getCheckboxProps } = useCheckbox(checkboxProps);
 
-    const input = getInputProps();
-    const checkbox = getCheckboxProps();
+  const input = getInputProps();
+  const checkbox = getCheckboxProps();
 
-    return (
-      <Box as="label">
-        <input {...input} />
-        <Box
-          {...checkbox}
-          cursor="pointer"
-          borderRadius="md"
-          bgColor="primary.100"
-          color="black"
-          _checked={{
-            bgColor: 'primary.500',
-            color: 'white',
-          }}
-          _disabled={{
-            bgColor: 'black',
-            opacity: '0.2',
-            color: 'white',
-          }}
-          px={4}
-          py={2}
-        >
-          {checkboxProps.children}
-        </Box>
+  return (
+    <Box as="label">
+      <input {...input} />
+      <Box
+        {...checkbox}
+        cursor="pointer"
+        borderRadius="md"
+        bgColor="primary.100"
+        color="black"
+        _checked={{
+          bgColor: 'primary.500',
+          color: 'white',
+        }}
+        _disabled={{
+          bgColor: 'black',
+          opacity: '0.2',
+          color: 'white',
+        }}
+        px={4}
+        py={2}
+      >
+        {checkboxProps.children}
       </Box>
-    );
-  }
+    </Box>
+  );
+}
 
+function AppointmentList() {
   const { category } = useParams();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -191,11 +191,11 @@ function AppointmentList() {
                   진료 과목
                 </Heading>
                 <HStack gap="4" width="full" flexWrap="wrap">
-                  {specialties.map((specialty, idx) => (
+                  {specialties.map(specialty => (
                     <CheckCard
                       {...checkboxGroup.getCheckboxProps({ value: specialty })}
                       specialty={specialty}
-                      key={idx}
+                      key={specialty}
                     >
                       {specialty}
                     </CheckCard>
