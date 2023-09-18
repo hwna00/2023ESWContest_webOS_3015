@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+const CAMERA_NUMBER = 0;
+
 const useCamera = () => {
   const [state, setState] = useState({
     isLoading: true,
@@ -11,7 +13,7 @@ const useCamera = () => {
     const fetchStream = async () => {
       const devices = await window.navigator.mediaDevices.enumerateDevices();
       const cameras = devices.filter(device => device.kind === 'videoinput');
-      const devicdId = cameras[1].deviceId;
+      const devicdId = cameras[CAMERA_NUMBER].deviceId;
 
       const cameraContraints = {
         audio: true,

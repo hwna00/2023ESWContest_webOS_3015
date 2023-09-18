@@ -42,6 +42,14 @@ const OnCapture = function () {
     if (videoRef?.current) {
       videoRef.current.srcObject = stream;
     }
+
+    return () => {
+      console.log('clean up', stream?.getTracks());
+
+      stream?.getTracks().forEach(track => {
+        track.stop();
+      });
+    };
   }, [videoRef, stream]);
 
   useEffect(() => {

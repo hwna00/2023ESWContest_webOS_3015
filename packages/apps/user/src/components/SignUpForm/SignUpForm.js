@@ -64,6 +64,7 @@ const SignUpForm = function ({
 
   const onSubmit = function (data) {
     uploadBlob(profileImgBlob);
+    navigate('/');
 
     //Todo: firebase로부터 받아온 토큰을 DB에 저장하기
     // setPersistence(auth, browserLocalPersistence)

@@ -51,22 +51,7 @@ const Step2 = function () {
         isRequired
         isInvalid={errors.address || errors.addressDetail}
       >
-        <HStack
-          width={'full'}
-          justifyContent={'space-between'}
-          alignItems={'center'}
-          mb={'2'}
-        >
-          <FormLabel margin={0}>주소</FormLabel>
-          <Button
-            leftIcon={<FaSearch />}
-            colorScheme="primary"
-            variant={'outline'}
-            onClick={onOpen}
-          >
-            주소 찾기
-          </Button>
-        </HStack>
+        <FormLabel margin={0}>주소</FormLabel>
 
         <Input
           required
@@ -76,6 +61,7 @@ const Step2 = function () {
           {...register('address', {
             required: '이 항목은 필수입니다.',
           })}
+          onClick={onOpen}
           readOnly
         />
         <Input
