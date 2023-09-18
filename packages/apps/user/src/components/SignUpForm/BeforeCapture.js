@@ -10,16 +10,11 @@ import {
 const BeforeCapture = function () {
   return (
     <HStack width="full" justifyContent="space-evenly">
-      <AspectRatio
-        width="xs"
-        ratio={1}
-        borderRadius="full"
-        overflow="hidden"
-      >
+      <AspectRatio width="xs" ratio={1} borderRadius="full" overflow="hidden">
         <Avatar />
       </AspectRatio>
 
-      <ChakraLink as={ReactRouterLink} to="/auth/sign-up/on-capture">
+      <ChakraLink as={ReactRouterLink} to="on-capture">
         <Button colorScheme="primary">프로필 사진 추가</Button>
       </ChakraLink>
     </HStack>

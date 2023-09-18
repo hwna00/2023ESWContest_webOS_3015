@@ -29,7 +29,7 @@ const SignUp = function () {
         </ChakraLink>
       </HStack>
 
-      <Container centerContent height="full" maxW="container.xl">
+      <Container centerContent height="full" maxW="3xl">
         <HStack
           justifyContent="center"
           gap="12"

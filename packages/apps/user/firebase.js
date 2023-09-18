@@ -6,6 +6,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from 'firebase/auth';
+import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FB_API_KEY,
@@ -18,6 +19,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const storage = getStorage(app);
 const provider = new GoogleAuthProvider();
 
 const signIn = (email, password) => {
@@ -32,4 +34,4 @@ const googleLogin = () => {
   return signInWithPopup(auth, provider);
 };
 
-export { auth, signIn, logIn, googleLogin, provider };
+export { auth, signIn, logIn, googleLogin, provider, storage };

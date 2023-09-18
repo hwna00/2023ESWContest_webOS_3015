@@ -1,20 +1,26 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 
+const signUpSlice = createSlice({
+  name: 'signUp',
+  initialState: { errors: {}, blob: '', address: '' },
+  reducers: {
+    setImgBlob: (state, action) => {
+      state.blob = action.payload;
+    },
+    setAddress: (state, action) => {
+      state.address = action.payload;
+    },
+    setErrors: (state, action) => {
+      state.errors = { ...action.payload };
+    },
+  },
+});
+
 const userSlice = createSlice({
   name: 'user',
   initialState: {},
   reducers: {
     setUser: (state, action) => action.payload,
-  },
-});
-
-const userImgSlice = createSlice({
-  name: 'userImg',
-  initialState: { url: '' },
-  reducers: {
-    setImg: (state, action) => {
-      state.url = action.payload;
-    },
   },
 });
 
@@ -31,13 +37,20 @@ const appointmentSlice = createSlice({
 
 export const store = configureStore({
   reducer: {
+    signUp: signUpSlice.reducer,
     user: userSlice.reducer,
-    userImg: userImgSlice.reducer,
     appointment: appointmentSlice.reducer,
   },
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ['signUp/setImgBlob'],
+        ignoredPaths: ['signUp.blob'],
+      },
+    }),
   devTools: process.env.NODE_ENV !== 'production',
 });
 
-export const { setUser } = userSlice.actions;
-export const { setImg } = userImgSlice.actions;
+export const { setImgBlob, setErrors, setAddress } = signUpSlice.actions;
 export const { setAppointDatetime } = appointmentSlice.actions;
+export const { setUser } = userSlice.actions;
