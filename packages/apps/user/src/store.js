@@ -2,10 +2,13 @@ import { configureStore, createSlice } from '@reduxjs/toolkit';
 
 const signUpSlice = createSlice({
   name: 'signUp',
-  initialState: { errors: {}, blob: '' },
+  initialState: { errors: {}, blob: '', address: '' },
   reducers: {
     setImgBlob: (state, action) => {
       state.blob = action.payload;
+    },
+    setAddress: (state, action) => {
+      state.address = action.payload;
     },
     setErrors: (state, action) => {
       state.errors = { ...action.payload };
@@ -39,5 +42,5 @@ export const store = configureStore({
   devTools: process.env.NODE_ENV !== 'production',
 });
 
-export const { setImgBlob, setErrors } = signUpSlice.actions;
+export const { setImgBlob, setErrors, setAddress } = signUpSlice.actions;
 export const { setAppointDatetime } = appointmentSlice.actions;

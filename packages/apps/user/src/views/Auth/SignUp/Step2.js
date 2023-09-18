@@ -1,9 +1,7 @@
 import {
-  Button,
   FormControl,
   FormErrorMessage,
   FormLabel,
-  HStack,
   Input,
   InputGroup,
   InputLeftAddon,
@@ -13,14 +11,14 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react';
-import { useState } from 'react';
 import { DaumPostcodeEmbed } from 'react-daum-postcode';
-import { FaSearch } from 'react-icons/fa';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useOutletContext } from 'react-router-dom';
+import { setAddress } from '../../../store';
 
 const Step2 = function () {
-  const [address, setAddress] = useState();
+  const dispatch = useDispatch();
+  const address = useSelector(state => state.signUp.address);
 
   const { register } = useOutletContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -28,7 +26,7 @@ const Step2 = function () {
 
   const handleComplete = data => {
     onClose();
-    setAddress(data.address);
+    dispatch(setAddress(data.address));
   };
 
   return (
