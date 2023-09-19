@@ -1,5 +1,7 @@
-import { Link as ReactRouterLink } from 'react-router-dom';
 import { useState } from 'react';
+
+import { Link as ReactRouterLink } from 'react-router-dom';
+import { BiCommentEdit, BiUndo } from 'react-icons/bi';
 import {
   VStack,
   Heading,
@@ -16,7 +18,7 @@ import {
   ModalOverlay,
   Icon,
 } from '@chakra-ui/react';
-import { BiCommentEdit, BiUndo } from 'react-icons/bi';
+
 import Rating from '../../components/StarRating/Rating';
 
 function ConfirmModal({ isOpen, onClose }) {
@@ -49,7 +51,7 @@ function Review() {
   const onClose = () => setIsOpen(false);
 
   return (
-    <VStack justifyContent="center" height={'full'}>
+    <VStack justifyContent="center" height="full">
       <Box p="4">
         <Heading as="h2" fontSize="40px" textAlign="center" p="2">
           오늘 진료는 어떠셨나요?
