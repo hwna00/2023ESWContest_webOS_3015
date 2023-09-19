@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Icon, Stack, Text } from '@chakra-ui/react';
+import { Box, Icon, Stack } from '@chakra-ui/react';
 import { FaStar } from 'react-icons/fa6';
 
 const Rating = React.forwardRef(
@@ -52,7 +52,7 @@ const Rating = React.forwardRef(
     }
 
     return (
-      <Stack isInline mt={8} justify="center">
+      <Stack isInline justify="center">
         <input name="rating" type="hidden" value={rating} ref={ref} />
         {buttons}
       </Stack>
