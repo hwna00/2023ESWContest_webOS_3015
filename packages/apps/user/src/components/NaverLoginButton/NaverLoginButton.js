@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 
 const NaverForm = function () {
   const base_url = 'https://nid.naver.com/oauth2.0/authorize';
-  const REDIRECT_URI = `http://localhost:8080/auth/login/naver-callback`;
+  const REDIRECT_URI = `http://localhost:3000/naver-callback`;
   const STATE = 'slfjsdf';
   const NAVER_AUTH_URL = `${base_url}?response_type=code&client_id=${
     process.env.REACT_APP_NAVER_CLIENT_ID
