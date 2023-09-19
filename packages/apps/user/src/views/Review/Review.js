@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 
 import { Link as ReactRouterLink } from 'react-router-dom';
-import { BiCommentEdit, BiUndo } from 'react-icons/bi';
+import { BiComment, BiCommentEdit, BiUndo } from 'react-icons/bi';
 import {
   VStack,
   Box,
@@ -16,6 +16,7 @@ import {
   ModalOverlay,
   Icon,
   Text,
+  ModalHeader,
 } from '@chakra-ui/react';
 
 import Rating from '../../components/StarRating/Rating';
@@ -24,15 +25,16 @@ function ConfirmModal({ isOpen, onClose }) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered="true">
       <ModalOverlay />
-      <ModalContent>
-        <ModalBody textAlign="center" pt="16" fontSize="20" fontWeight="bold">
-          리뷰가 저장되었습니다.
-        </ModalBody>
+      <ModalContent py={'8'}>
+        <ModalHeader>
+          <Text textAlign="center" fontSize="20" fontWeight="bold">
+            리뷰가 저장되었습니다.
+          </Text>
+        </ModalHeader>
 
         <ModalFooter display="flex" justifyContent="center">
           <ChakraLink as={ReactRouterLink} to="/">
-            <Button colorScheme="primary" w="36">
-              <Icon as={BiUndo} p="1" boxSize="8" />
+            <Button leftIcon={<BiUndo />} colorScheme="primary">
               메인 페이지로
             </Button>
           </ChakraLink>
@@ -66,12 +68,7 @@ function Review() {
         </Text>
       </Box>
       <Box p="4">
-        <Rating
-          size={48}
-          scale={5}
-          fillColor="primary.500"
-          strokeColor="grey"
-        />
+        <Rating size={48} scale={5} fillColor="yellow.400" strokeColor="grey" />
       </Box>
       <Textarea
         width="520px"
@@ -82,14 +79,12 @@ function Review() {
 
       <HStack spacing="4" p="4">
         <ChakraLink as={ReactRouterLink} to="/">
-          <Button colorScheme="primary" w="36">
-            <Icon as={BiUndo} p="1" boxSize="8" />
+          <Button leftIcon={<BiUndo />} colorScheme="primary">
             메인 페이지로
           </Button>
         </ChakraLink>
-        <Button colorScheme="primary" w="36" onClick={onOpen}>
-          <Icon as={BiCommentEdit} p="1" boxSize="8" />
-          리뷰 남기기
+        <Button leftIcon={<BiComment />} colorScheme="primary" onClick={onOpen}>
+          저장하기
         </Button>
       </HStack>
       <ConfirmModal isOpen={isOpen} onClose={onClose} />
