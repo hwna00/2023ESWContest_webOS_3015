@@ -1,12 +1,8 @@
 import { useCallback, useState } from 'react';
 
-import { useNavigate , Link as ReactRouterLink } from 'react-router-dom';
+import { useNavigate, Link as ReactRouterLink } from 'react-router-dom';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
-import {
-  AiFillGithub,
-  AiFillGoogleCircle,
-  AiFillTwitterCircle,
-} from 'react-icons/ai';
+import { AiFillGoogleCircle, AiFillTwitterCircle } from 'react-icons/ai';
 import { useForm } from 'react-hook-form';
 import {
   Box,
@@ -26,6 +22,7 @@ import {
 } from '@chakra-ui/react';
 
 import { logIn, googleLogin, auth, provider } from '../../../../firebase';
+import NaverLoginButton from '../../../components/NaverLoginButton/NaverLoginButton';
 
 function LogIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -101,9 +98,7 @@ function LogIn() {
                 alignItems="center"
                 padding="15px"
               >
-                <Button bgColor="white">
-                  <Icon as={AiFillGithub} boxSize="30px" />
-                </Button>
+                <NaverLoginButton />
 
                 <Button bgColor="white" onClick={googleClick}>
                   <Icon as={AiFillGoogleCircle} boxSize="30px" />
@@ -112,6 +107,7 @@ function LogIn() {
                   <Icon as={AiFillTwitterCircle} boxSize="30px" />
                 </Button>
               </HStack>
+
               <FormControl isInvalid={errors.email}>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none">
