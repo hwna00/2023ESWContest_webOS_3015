@@ -4,19 +4,18 @@ import { Link as ReactRouterLink } from 'react-router-dom';
 import { BiCommentEdit, BiUndo } from 'react-icons/bi';
 import {
   VStack,
-  Heading,
   Box,
-  Input,
+  Textarea,
   Button,
   HStack,
   Link as ChakraLink,
   Modal,
   ModalContent,
-  ModalCloseButton,
   ModalBody,
   ModalFooter,
   ModalOverlay,
   Icon,
+  Text,
 } from '@chakra-ui/react';
 
 import Rating from '../../components/StarRating/Rating';
@@ -26,9 +25,7 @@ function ConfirmModal({ isOpen, onClose }) {
     <Modal isOpen={isOpen} onClose={onClose} isCentered="true">
       <ModalOverlay />
       <ModalContent>
-        <ModalCloseButton />
-
-        <ModalBody textAlign="center" pt="20" fontSize="20" fontWeight="bold">
+        <ModalBody textAlign="center" pt="16" fontSize="20" fontWeight="bold">
           리뷰가 저장되었습니다.
         </ModalBody>
 
@@ -52,18 +49,36 @@ function Review() {
 
   return (
     <VStack justifyContent="center" height="full">
-      <Box p="4">
-        <Heading as="h2" fontSize="40px" textAlign="center" p="2">
+      <Box>
+        <Text fontSize="40px" textAlign="center" p="2">
           오늘 진료는 어떠셨나요?
-        </Heading>
-        <Heading as="h3" fontSize="24px" textAlign="center" p="2">
-          처방전은 &ldquo;진료 내역&rdquo;에서 확인하실 수 있습니다.
-        </Heading>
+        </Text>
+        <Text fontSize="24px" textAlign="center" p="2">
+          처방전은{' '}
+          <ChakraLink
+            as={ReactRouterLink}
+            to="/appointment-history"
+            fontWeight="bold"
+          >
+            진료 내역
+          </ChakraLink>
+          에서 확인하실 수 있습니다.
+        </Text>
       </Box>
       <Box p="4">
-        <Rating size={32} scale={5} fillColor="gold" strokeColor="grey" />
+        <Rating
+          size={48}
+          scale={5}
+          fillColor="primary.500"
+          strokeColor="grey"
+        />
       </Box>
-      <Input width="520px" height="120px" placeholder="리뷰를 남겨주세요" />
+      <Textarea
+        width="520px"
+        height="120px"
+        placeholder="리뷰를 남겨주세요"
+        p="4"
+      />
 
       <HStack spacing="4" p="4">
         <ChakraLink as={ReactRouterLink} to="/">
