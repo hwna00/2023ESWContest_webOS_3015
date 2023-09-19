@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { BiCommentEdit, BiUndo } from 'react-icons/bi';
@@ -44,8 +44,8 @@ function ConfirmModal({ isOpen, onClose }) {
 
 function Review() {
   const [isOpen, setIsOpen] = useState(false);
-  const onOpen = () => setIsOpen(true);
-  const onClose = () => setIsOpen(false);
+  const onOpen = useCallback(() => setIsOpen(true), []);
+  const onClose = useCallback(() => setIsOpen(false), []);
 
   return (
     <VStack justifyContent="center" height="full">
