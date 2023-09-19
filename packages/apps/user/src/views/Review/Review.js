@@ -14,8 +14,9 @@ import {
   ModalBody,
   ModalFooter,
   ModalOverlay,
+  Icon,
 } from '@chakra-ui/react';
-
+import { BiCommentEdit, BiUndo } from 'react-icons/bi';
 import Rating from '../../components/StarRating/Rating';
 
 function ConfirmModal({ isOpen, onClose }) {
@@ -31,7 +32,8 @@ function ConfirmModal({ isOpen, onClose }) {
 
         <ModalFooter display="flex" justifyContent="center">
           <ChakraLink as={ReactRouterLink} to="/">
-            <Button colorScheme="primary" w="48">
+            <Button colorScheme="primary" w="36">
+              <Icon as={BiUndo} p="1" boxSize="8" />
               메인 페이지로
             </Button>
           </ChakraLink>
@@ -45,7 +47,6 @@ function Review() {
   const [isOpen, setIsOpen] = useState(false);
   const onOpen = () => setIsOpen(true);
   const onClose = () => setIsOpen(false);
-  const [rating, setRating] = useState(0);
 
   return (
     <VStack justifyContent="center" height={'full'}>
@@ -64,11 +65,13 @@ function Review() {
 
       <HStack spacing="4" p="4">
         <ChakraLink as={ReactRouterLink} to="/">
-          <Button colorScheme="primary" w="28">
+          <Button colorScheme="primary" w="36">
+            <Icon as={BiUndo} p="1" boxSize="8" />
             메인 페이지로
           </Button>
         </ChakraLink>
-        <Button colorScheme="primary" w="28" onClick={onOpen}>
+        <Button colorScheme="primary" w="36" onClick={onOpen}>
+          <Icon as={BiCommentEdit} p="1" boxSize="8" />
           리뷰 남기기
         </Button>
       </HStack>
