@@ -4,18 +4,11 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import PropTypes from 'prop-types';
-import { ref, uploadBytes } from 'firebase/storage';
 import { motion } from 'framer-motion';
-import {
-  browserLocalPersistence,
-  setPersistence,
-  updateProfile,
-} from 'firebase/auth';
 import { Box, Button, ButtonGroup, VStack } from '@chakra-ui/react';
 
-import { auth, signIn } from '../../../firebase';
-import { storage } from '../../../firebase';
 import { setErrors } from '../../store';
+import { fbSignUp } from '../../../firebase';
 
 const SignUpForm = function ({
   activeStep,
@@ -54,33 +47,8 @@ const SignUpForm = function ({
     goToPrevious();
   }, [goToPrevious, activeStep, navigate]);
 
-  const uploadBlob = blob => {
-    const storageRef = ref(storage, 'images/' + new Date().getTime() + '.png');
-
-    uploadBytes(storageRef, blob).catch(() => {
-      navigate('/error');
-    });
-  };
-
   const onSubmit = function (data) {
-    uploadBlob(profileImgBlob);
-    navigate('/');
-
-    //Todo: firebase로부터 받아온 토큰을 DB에 저장하기
-    // setPersistence(auth, browserLocalPersistence)
-    //   .then(() => {
-    //     signIn(email, password)
-    //       .then(userCredential => {
-    //         updateProfile(userCredential.user, {
-    //           displayName: username,
-    //         }).then(() => navigate('/'));
-    //       })
-    //       .catch(error => {
-    //         console.log(error);
-    //         navigate('/error');
-    //       });
-    //   })
-    //   .catch(() => navigate('/error'));
+    fbSignUp({ ...data, profileImgBlob });
   };
 
   const location = useLocation();
