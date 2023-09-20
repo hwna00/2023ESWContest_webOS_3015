@@ -21,7 +21,7 @@ import {
   Icon,
 } from '@chakra-ui/react';
 
-import { logIn, googleLogin, auth, provider } from '../../../../firebase';
+import { googleLogin, auth, provider, fbLogIn } from '../../../../firebase';
 import NaverLoginButton from '../../../components/NaverLoginButton/NaverLoginButton';
 
 function LogIn() {
@@ -29,6 +29,7 @@ function LogIn() {
   const handleShowClick = useCallback(() => {
     setShowPassword(!showPassword);
   }, [showPassword]);
+
   const navigate = useNavigate();
   const {
     register,
@@ -37,15 +38,7 @@ function LogIn() {
   } = useForm();
 
   const onSubmit = function (data) {
-    const { email, password } = data;
-    logIn(email, password)
-      .then(() => {
-        navigate('/');
-      })
-      .catch(error => {
-        console.log(error);
-        navigate('/error');
-      });
+    fbLogIn(data);
   };
 
   const googleClick = useCallback(() => {

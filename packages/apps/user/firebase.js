@@ -49,12 +49,21 @@ const fbSignUp = data => {
     });
 };
 
-const logIn = (email, password) => {
-  return signInWithEmailAndPassword(auth, email, password);
+const fbLogIn = data => {
+  const { email, data } = data;
+
+  //TODO: DB에 해당 email과 같은 메일이 존재하는지 확인. 존재한다면 해당 아이디가 이미 존재한다는 경고메시지 전송
+
+  signInWithEmailAndPassword(auth, email, password)
+    .then(userCredential => {
+      const { email } = userCredential.user;
+      //TODO: email을 가지는 user 정보를 DB에서 가져온다.
+    })
+    .catch();
 };
 
 const googleLogin = () => {
   return signInWithPopup(auth, provider);
 };
 
-export { auth, fbSignUp, logIn, googleLogin, provider, storage };
+export { auth, fbSignUp, fbLogIn, googleLogin, provider, storage };
