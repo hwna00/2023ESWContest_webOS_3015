@@ -15,11 +15,18 @@
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module",
-    "requireConfigFile": false
+    "requireConfigFile": false,
+    "babelOptions": {
+      "presets": ["@babel/preset-react"]
+    }
   },
   "plugins": ["react", "import"],
   "rules": {
+    "react/jsx-filename-extension": "off",
+    "no-shadow": "off",
     "import/no-unresolved": "error",
+    "import/no-extraneous-dependencies": "off",
+    "func-names": "off",
     "import/order": [
       "error",
       {
@@ -49,8 +56,5 @@
       }
     ]
   },
-  "parser": "@babel/eslint-parser",
-  "babelOptions": {
-    "presets": ["@babel/preset-react"]
-  }
+  "parser": "@babel/eslint-parser"
 }
