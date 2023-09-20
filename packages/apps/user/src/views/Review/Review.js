@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 
 import { Link as ReactRouterLink } from 'react-router-dom';
-import { BiComment, BiCommentEdit, BiUndo } from 'react-icons/bi';
+import { BiCommentEdit, BiUndo } from 'react-icons/bi';
 import {
   VStack,
   Box,
@@ -11,10 +11,8 @@ import {
   Link as ChakraLink,
   Modal,
   ModalContent,
-  ModalBody,
   ModalFooter,
   ModalOverlay,
-  Icon,
   Text,
   ModalHeader,
 } from '@chakra-ui/react';
@@ -83,7 +81,11 @@ function Review() {
             메인 페이지로
           </Button>
         </ChakraLink>
-        <Button leftIcon={<BiComment />} colorScheme="primary" onClick={onOpen}>
+        <Button
+          leftIcon={<BiCommentEdit />}
+          colorScheme="primary"
+          onClick={onOpen}
+        >
           저장하기
         </Button>
       </HStack>
