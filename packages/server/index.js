@@ -83,39 +83,42 @@ app.get('/api/users/me', (req, res) => {
 });
 
 app.get('/naver-callback', async (req, res) => {
-  code = req.query.code;
-  state = req.query.state;
-  const redirectURI = `http://localhost:3000/naver-callback`;
+  const { code, state } = req.query;
+  const REDIRECT_URI = `http://localhost:3000/naver-callback`;
 
-  api_url =
+  const API_URI =
     'https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=' +
     process.env.REACT_APP_NAVER_CLIENT_ID +
     '&client_secret=' +
     process.env.REACT_APP_NAVER_CLIENT_SECRET +
     '&redirect_uri=' +
-    redirectURI +
+    REDIRECT_URI +
     '&code=' +
     code +
     '&state=' +
     state;
 
-  const response = await axios.get(api_url, {
+  const {
+    data: { access_token },
+  } = await axios.get(API_URI, {
     headers: {
       'X-Naver-Client-Id': process.env.REACT_APP_NAVER_CLIENT_ID,
       'X-Naver-Client-Secret': process.env.REACT_APP_NAVER_CLIENT_SECRET,
     },
   });
-  const {
-    data: { access_token },
-  } = response;
 
-  const userProfile = await axios.get('https://openapi.naver.com/v1/nid/me', {
+  const {
+    data: { response },
+  } = await axios.get('https://openapi.naver.com/v1/nid/me', {
     headers: {
       Authorization: 'Bearer ' + access_token,
     },
   });
 
-  console.log(userProfile);
+  //TODO: response의 사용자 데이터를 DB에 저장하는 로직 추가 필요
+
+  //TODO: 받지 못한 정보를 받기 위해서 form 페이지로 이동
+  res.redirect('http://localhost:8080/thirdparth-callback');
 });
 
 app.listen(port, () => {
