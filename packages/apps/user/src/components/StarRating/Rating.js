@@ -3,17 +3,17 @@ import { Box, Icon, Stack } from '@chakra-ui/react';
 import { FaStar } from 'react-icons/fa6';
 
 const Rating = React.forwardRef(
-  ({ size, scale, fillColor, strokeColor }, ref) => {
-    const [rating, setRating] = useState(0);
+  ({ size, scale, fillColor, strokeColor, rating, onRatingChange }, ref) => {
     const buttons = [];
 
     const onClick = idx => {
       if (!isNaN(idx)) {
-        // allow user to click first icon and set rating to zero if rating is already 1
         if (rating === 1 && idx === 1) {
-          setRating(0);
+          onRatingChange(0);
         } else {
-          setRating(idx);
+          onRatingChange(idx);
+
+          console.log('별점 : ', idx);
         }
       }
     };

@@ -23,7 +23,7 @@ function ConfirmModal({ isOpen, onClose }) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered="true">
       <ModalOverlay />
-      <ModalContent py={'8'}>
+      <ModalContent py="8">
         <ModalHeader>
           <Text textAlign="center" fontSize="20" fontWeight="bold">
             리뷰가 저장되었습니다.
@@ -44,8 +44,20 @@ function ConfirmModal({ isOpen, onClose }) {
 
 function Review() {
   const [isOpen, setIsOpen] = useState(false);
+  const [reviewText, setReviewText] = useState('');
+  const [rating, setRating] = useState(0);
+
   const onOpen = useCallback(() => setIsOpen(true), []);
   const onClose = useCallback(() => setIsOpen(false), []);
+  const handlereview = useCallback(e => {
+    setReviewText(e.target.value);
+  }, []);
+  const saveReview = useCallback(() => {
+    // DB로 리뷰랑 별점 전송
+    console.log('리뷰 내용:', reviewText);
+
+    onOpen();
+  }, [onOpen, reviewText]);
 
   return (
     <VStack justifyContent="center" height="full">
@@ -66,13 +78,22 @@ function Review() {
         </Text>
       </Box>
       <Box p="4">
-        <Rating size={48} scale={5} fillColor="yellow.400" strokeColor="grey" />
+        <Rating
+          size={48}
+          scale={5}
+          fillColor="yellow.400"
+          strokeColor="grey"
+          rating={rating}
+          onRatingChange={setRating}
+        />
       </Box>
+
       <Textarea
         width="520px"
         height="120px"
         placeholder="리뷰를 남겨주세요"
         p="4"
+        onChange={handlereview}
       />
 
       <HStack spacing="4" p="4">
@@ -84,7 +105,7 @@ function Review() {
         <Button
           leftIcon={<BiCommentEdit />}
           colorScheme="primary"
-          onClick={onOpen}
+          onClick={saveReview}
         >
           저장하기
         </Button>
