@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import { useNavigate , Link as ReactRouterLink } from 'react-router-dom';
+import { useNavigate, Link as ReactRouterLink } from 'react-router-dom';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
 import {
   AiFillGithub,
@@ -25,13 +25,20 @@ import {
   Icon,
 } from '@chakra-ui/react';
 
-import { logIn, googleLogin, auth, provider } from '../../../../firebase';
+import {
+  logIn,
+  googleLogin,
+  auth,
+  provider,
+  fbLogIn,
+} from '../../../../firebase';
 
 function LogIn() {
   const [showPassword, setShowPassword] = useState(false);
   const handleShowClick = useCallback(() => {
     setShowPassword(!showPassword);
   }, [showPassword]);
+
   const navigate = useNavigate();
   const {
     register,
@@ -40,15 +47,7 @@ function LogIn() {
   } = useForm();
 
   const onSubmit = function (data) {
-    const { email, password } = data;
-    logIn(email, password)
-      .then(() => {
-        navigate('/');
-      })
-      .catch(error => {
-        console.log(error);
-        navigate('/error');
-      });
+    fbLogIn(data);
   };
 
   const googleClick = useCallback(() => {
