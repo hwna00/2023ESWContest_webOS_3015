@@ -48,7 +48,11 @@ const SignUpForm = function ({
   }, [goToPrevious, activeStep, navigate]);
 
   const onSubmit = function (data) {
-    fbSignUp({ ...data, profileImgBlob });
+    const user = fbSignUp({ ...data, profileImgBlob });
+
+    if (user) {
+      //TODO: redux-persist를 이용하여 사용자 정보를 저장
+    }
   };
 
   const location = useLocation();

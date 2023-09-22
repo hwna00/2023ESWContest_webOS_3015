@@ -5,8 +5,12 @@ const instance = axios.create({
 });
 
 export const signUpWithFb = data => {
-  //TODO: DB에 User 정보 저장
-  instance.post('/auth/firebase/sign-up', data).then(() => [
-    //TODO: 메인 화면으로 리디렉트
-  ]);
+  instance.post('/auth/firebase/sign-up', data).then(user => user);
+};
+
+export const checkUserExist = email => {
+  instance
+    .get(`/users?email=${email}`)
+    .then(res => res.data)
+    .catch(error => error);
 };

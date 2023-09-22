@@ -6,7 +6,7 @@ import {
   signInWithPopup,
 } from 'firebase/auth';
 import { getStorage, ref, uploadBytes } from 'firebase/storage';
-import { signUpWithFb } from './src/api';
+import { checkUserExist, signUpWithFb } from './src/api';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FB_API_KEY,
@@ -22,31 +22,27 @@ const auth = getAuth(app);
 const storage = getStorage(app);
 const provider = new GoogleAuthProvider();
 
-const uploadBlob = blob => {
-  //TODO: 사진을 저장할 위치를 구분하기 쉽게 변경
-  const storageRef = ref(storage, 'images/' + new Date().getTime() + '.png');
+const uploadBlob = (blob, email) => {
+  const storageRef = ref(storage, `${email}/profileImg.png`);
 
-  uploadBytes(storageRef, blob).catch(() => {
-    // navigate('/error');
-  });
+  uploadBytes(storageRef, blob).catch(() => {});
 };
 
 const fbSignUp = data => {
   const { email, password, ...rest } = data;
+  const isUserExist = checkUserExist(email);
 
-  //TODO: DB에 해당 email과 같은 메일이 존재하는지 확인. 존재한다면 해당 아이디가 이미 존재한다는 경고메시지 전송
-
-  createUserWithEmailAndPassword(auth, email, password)
-    .then(userCredential => {
-      const { email } = userCredential.user;
-      uploadBlob(rest.profileImgBlob);
-      signUpWithFb({ ...rest, email });
-    })
-    .catch(error => {
-      //TODO: CASE1. 이미 존재하는 경우 -> 경고알림 or 바로 로그인
-      //TODO: CASE2. 존재하지 않는 경우 -> 회원가입 진행
-      console.log(error);
-    });
+  if (isUserExist) {
+    return null;
+  } else {
+    createUserWithEmailAndPassword(auth, email, password).then(
+      userCredential => {
+        const { email } = userCredential.user;
+        uploadBlob(rest.profileImgBlob, email);
+        return signUpWithFb({ ...rest, email });
+      },
+    );
+  }
 };
 
 const fbLogIn = data => {
@@ -59,7 +55,11 @@ const fbLogIn = data => {
       const { email } = userCredential.user;
       //TODO: email을 가지는 user 정보를 DB에서 가져온다.
     })
-    .catch();
+    .catch(error => {
+      //TODO: CASE1. 이미 존재하는 경우 -> 경고알림 or 바로 로그인
+      //TODO: CASE2. 존재하지 않는 경우 -> 회원가입 진행
+      console.log(error);
+    });
 };
 
 const googleLogin = () => {
