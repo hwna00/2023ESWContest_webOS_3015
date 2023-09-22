@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { createBrowserRouter } from 'react-router-dom';
 
 import SignUp from './views/SignUp';
