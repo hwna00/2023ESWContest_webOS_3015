@@ -26,6 +26,7 @@ import {
 } from '@chakra-ui/react';
 
 import { logIn, googleLogin, auth, provider } from '../../../../firebase';
+import KakaoForm from '../../../components/KakaoLoginButton/KaKaoLoginButton';
 
 function LogIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -108,9 +109,7 @@ function LogIn() {
                 <Button bgColor="white" onClick={googleClick}>
                   <Icon as={AiFillGoogleCircle} boxSize="30px" />
                 </Button>
-                <Button bgColor="white">
-                  <Icon as={AiFillTwitterCircle} boxSize="30px" />
-                </Button>
+                <KakaoForm />
               </HStack>
               <FormControl isInvalid={errors.email}>
                 <InputGroup>
