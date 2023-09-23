@@ -4,6 +4,7 @@ import { Box } from '@chakra-ui/react';
 import StatusBar from '../StatusBar/StatusBar';
 import SideBar from '../SideBar/SideBar';
 import useUser from '../../hooks/useUser';
+import LoadingPage from '../../../../../common/LoadingPage';
 
 const Root = function () {
   const navigate = useNavigate();
@@ -12,8 +13,8 @@ const Root = function () {
 
   return (
     <>
-      {userLoading ? (
-        'loading...'
+      {true ? (
+        <LoadingPage />
       ) : user ? (
         <>
           <SideBar />
