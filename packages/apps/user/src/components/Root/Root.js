@@ -13,7 +13,7 @@ const Root = function () {
 
   return (
     <>
-      {true ? (
+      {userLoading ? (
         <LoadingPage />
       ) : user ? (
         <>
