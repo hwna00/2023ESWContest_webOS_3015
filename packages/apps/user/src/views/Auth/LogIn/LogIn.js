@@ -25,13 +25,7 @@ import {
   Icon,
 } from '@chakra-ui/react';
 
-import {
-  logIn,
-  googleLogin,
-  auth,
-  provider,
-  fbLogIn,
-} from '../../../../firebase';
+import { googleLogin, auth, provider, fbLogIn } from '../../../../firebase';
 
 function LogIn() {
   const [showPassword, setShowPassword] = useState(false);

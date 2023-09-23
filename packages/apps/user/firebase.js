@@ -4,9 +4,10 @@ import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
+  createUserWithEmailAndPassword,
 } from 'firebase/auth';
-import { getStorage, ref, uploadBytes } from 'firebase/storage';
-import { checkUserExist, signUpWithFb } from './src/api';
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
+import { checkUserExist, createUser } from './src/api';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FB_API_KEY,
@@ -22,48 +23,51 @@ const auth = getAuth(app);
 const storage = getStorage(app);
 const provider = new GoogleAuthProvider();
 
-const uploadBlob = (blob, email) => {
+export const uploadBlob = async (blob, email) => {
   const storageRef = ref(storage, `${email}/profileImg.png`);
-
-  uploadBytes(storageRef, blob).catch(() => {});
+  await uploadBytes(storageRef, blob);
 };
 
-const fbSignUp = data => {
+export const getUserImage = email => {
+  getDownloadURL(ref(storage, `${email}/profileImg.png`))
+    .then(url => console.log(url))
+    .catch(() => null);
+};
+
+export const fbSignUp = async data => {
   const { email, password, ...rest } = data;
   const isUserExist = checkUserExist(email);
 
-  if (isUserExist) {
+  if (!isUserExist) {
     return null;
   } else {
-    createUserWithEmailAndPassword(auth, email, password).then(
-      userCredential => {
-        const { email } = userCredential.user;
-        uploadBlob(rest.profileImgBlob, email);
-        return signUpWithFb({ ...rest, email });
-      },
-    );
+    await createUserWithEmailAndPassword(auth, email, password);
+    uploadBlob(rest.profileImgBlob, email);
+    return createUser({ ...rest, email });
   }
 };
 
-const fbLogIn = data => {
-  const { email, data } = data;
+export const fbLogIn = async data => {
+  const { email, password } = data;
+  const isUserExist = true; //checkUserExist(email);
 
-  //TODO: DB에 해당 email과 같은 메일이 존재하는지 확인. 존재한다면 해당 아이디가 이미 존재한다는 경고메시지 전송
+  if (!isUserExist) {
+    //TODO: 존재하지 않는 회원입니다 알림 발송
+  } else {
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password,
+    );
+    console.log(userCredential);
+    console.log(userCredential._tokenResponse);
+    //TODO: email을 가지는 user 정보를 DB에서 가져온다.
 
-  signInWithEmailAndPassword(auth, email, password)
-    .then(userCredential => {
-      const { email } = userCredential.user;
-      //TODO: email을 가지는 user 정보를 DB에서 가져온다.
-    })
-    .catch(error => {
-      //TODO: CASE1. 이미 존재하는 경우 -> 경고알림 or 바로 로그인
-      //TODO: CASE2. 존재하지 않는 경우 -> 회원가입 진행
-      console.log(error);
-    });
+    //TODO: CASE1. 이미 존재하는 경우 -> 경고알림 or 바로 로그인
+    //TODO: CASE2. 존재하지 않는 경우 -> 회원가입 진행
+  }
 };
 
-const googleLogin = () => {
+export const googleLogin = () => {
   return signInWithPopup(auth, provider);
 };
-
-export { auth, fbSignUp, fbLogIn, googleLogin, provider, storage };
