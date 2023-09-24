@@ -4,12 +4,11 @@ const axios = require('axios');
 require('dotenv').config();
 
 const app = express();
-const port = 3000 || process.env.PORT;
+const port = 3000; //TODO: .env 파일의 PORT 이름 DBPORT 등으로 수정하기
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:8080' }));
 
 const getNaverAuthApiUri = (code, state) => {
   const REDIRECT_URI = 'http://localhost:3000/api/auth/naver-callback';
@@ -60,6 +59,11 @@ app.get('/api/auth/naver-callback', async (req, res) => {
     const token = ''; //TODO: fb 커스텀 토큰 생성 함수 연결
     res.json(token).redirect('http://localhost:8080/auth/callback');
   }
+});
+
+app.post('/api/auth/create-user', (req, res) => {
+  console.log(req.body);
+  //TODO: firebase로부터 온 요쳥이라면 JWT 토큰 생성하기
 });
 
 app.listen(port, () => {

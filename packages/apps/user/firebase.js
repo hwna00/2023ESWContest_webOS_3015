@@ -7,7 +7,7 @@ import {
   createUserWithEmailAndPassword,
 } from 'firebase/auth';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
-import { checkUserExist, createUser } from './src/api';
+import { getMe, createUser } from './src/api';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FB_API_KEY,
@@ -36,20 +36,23 @@ export const getUserImage = email => {
 
 export const fbSignUp = async data => {
   const { email, password, ...rest } = data;
-  const isUserExist = checkUserExist(email);
+  const isUserExist = false; // getMe();
 
-  if (!isUserExist) {
-    return null;
+  if (isUserExist) {
+    //TODO: 사용자가 존재한다는 알림 전송
+    //TODO: 로그인 페이지로 리디렉트
   } else {
-    await createUserWithEmailAndPassword(auth, email, password);
-    uploadBlob(rest.profileImgBlob, email);
+    createUserWithEmailAndPassword(auth, email, password).then(() => {
+      createUser({ email, ...rest });
+      uploadBlob(rest.profileImgBlob, email);
+    });
     return createUser({ ...rest, email });
   }
 };
 
 export const fbLogIn = async data => {
   const { email, password } = data;
-  const isUserExist = true; //checkUserExist(email);
+  const isUserExist = true;
 
   if (!isUserExist) {
     //TODO: 존재하지 않는 회원입니다 알림 발송
