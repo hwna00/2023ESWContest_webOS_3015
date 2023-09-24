@@ -9,7 +9,10 @@ const AuthRoot = function () {
   console.log(userLoading, user, isLoggedIn);
 
   return (
-    <>{userLoading ? <LoadingPage /> : user ? navigate('/') : <Outlet />}</>
+    // <>{userLoading ? <LoadingPage /> : user ? navigate('/') : <Outlet />}</>
+    <>
+      <Outlet />
+    </>
   );
 };
 

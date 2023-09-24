@@ -9,7 +9,8 @@
     "doctor": "yarn workspace @housepital/doctor",
     "hospital-desk": "yarn workspace @housepital/hospital-desk",
     "center119": "yarn workspace @housepital/center119",
-    "pharmacy": "yarn workspace @housepital/pharmacy"
+    "pharmacy": "yarn workspace @housepital/pharmacy",
+    "server": "yarn workspace @housepital/server"
   },
   "private": true,
   "workspaces": {
@@ -38,7 +39,7 @@
     "react-router-dom": "^6.14.2"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^10.1.0",
+    "@babel/eslint-parser": "^7.22.15",
     "@jest/globals": "^29.6.2",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.0.0",
