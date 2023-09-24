@@ -1,9 +1,10 @@
 const express = require('express');
-const mysql = require('mysql2');
 const cors = require('cors');
 const axios = require('axios');
-require('dotenv').config();
+const db = require('./config/db');
 const fbAdmin = require('./config/fbAdmin');
+
+require('dotenv').config();
 
 const app = express();
 const port = 3000; //TODO: .env 파일의 PORT 이름 DBPORT 등으로 수정하기
@@ -79,23 +80,6 @@ app.get('/api/users/me', (req, res) => {
   console.log('me');
   //TODO: DB로부터 사용자 정보 검색
   res.json({});
-});
-
-const dbConfig = {
-  host: process.env.HOST,
-  user: process.env.USERNAME,
-  password: process.env.PASSWORD,
-  port: process.env.PORT,
-};
-
-const pool = mysql.createPool(dbConfig);
-
-pool.getConnection(err => {
-  if (err) {
-    console.error('MySQL 연결 실패:', err);
-  } else {
-    console.log('MySQL 연결 성공');
-  }
 });
 
 app.get('/', (req, res) => {
