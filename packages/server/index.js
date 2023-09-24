@@ -99,7 +99,7 @@ app.get('/naver-callback', async (req, res) => {
     state;
 
   const {
-    data: { access_token },
+    data: { access_token, refresh_token },
   } = await axios.get(API_URI, {
     headers: {
       'X-Naver-Client-Id': process.env.REACT_APP_NAVER_CLIENT_ID,
@@ -108,17 +108,24 @@ app.get('/naver-callback', async (req, res) => {
   });
 
   const {
-    data: { response },
+    data: { response: user },
   } = await axios.get('https://openapi.naver.com/v1/nid/me', {
     headers: {
       Authorization: 'Bearer ' + access_token,
     },
   });
 
-  //TODO: response의 사용자 데이터를 DB에 저장하는 로직 추가 필요
+  try {
+    const { email } = user;
 
-  //TODO: 받지 못한 정보를 받기 위해서 form 페이지로 이동
-  res.redirect('http://localhost:8080/thirdparth-callback');
+    //TODO: SQL을 사용하여 user객체 안에 있는 email로 사용자 정보 가져오기
+    //TODO: 사용자가 존재한다면 acces_token, refresh 토큰을 반환
+    res
+      .cookie('refreshToken', refresh_token, { httpOnly: true })
+      .json({ accessToken: access_token });
+  } catch {
+    //TODO: 해당 email을 가진 사용자가 없는 경우, 새로운 유저를 생성
+  }
 });
 
 app.listen(port, () => {
