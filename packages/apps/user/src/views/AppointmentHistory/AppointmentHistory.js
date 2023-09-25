@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Box, Divider, HStack, VStack } from '@chakra-ui/react';
 
@@ -6,74 +6,76 @@ import AppointmentHistoryItem from '../../components/AppointmentHistoryItem/Appo
 
 const AppointmentHistory = function () {
   const [histories, setHistories] = useState([]);
-  setHistories([
-    {
-      prescriptionDate: '2023.07.31',
-      hospitalName: '힘내라힘 병원',
-      pharmacyName: '다나아 약국',
-      favorites: '등록',
-    },
-    {
-      prescriptionDate: '2023.07.20',
-      hospitalName: '힘내라힘 병원',
-      pharmacyName: '다나아 약국',
-      favorites: '등록',
-    },
-    {
-      prescriptionDate: '2023.07.23',
-      hospitalName: '힘내라힘 병원',
-      pharmacyName: '다나아 약국',
-      favorites: '등록',
-    },
-    {
-      prescriptionDate: '2023.07.23',
-      hospitalName: '힘내라힘 병원',
-      pharmacyName: '다나아 약국',
-      favorites: '등록',
-    },
-    {
-      prescriptionDate: '2023.07.23',
-      hospitalName: '힘내라힘 병원',
-      pharmacyName: '다나아 약국',
-      favorites: '등록',
-    },
-    {
-      prescriptionDate: '2023.07.23',
-      hospitalName: '힘내라힘 병원',
-      pharmacyName: '다나아 약국',
-      favorites: '등록',
-    },
-    {
-      prescriptionDate: '2023.07.23',
-      hospitalName: '힘내라힘 병원',
-      pharmacyName: '다나아 약국',
-      favorites: '등록',
-    },
-    {
-      prescriptionDate: '2023.07.23',
-      hospitalName: '힘내라힘 병원',
-      pharmacyName: '다나아 약국',
-      favorites: '등록',
-    },
-    {
-      prescriptionDate: '2023.07.23',
-      hospitalName: '힘내라힘 병원',
-      pharmacyName: '다나아 약국',
-      favorites: '등록',
-    },
-    {
-      prescriptionDate: '2023.07.23',
-      hospitalName: '힘내라힘 병원',
-      pharmacyName: '다나아 약국',
-      favorites: '등록',
-    },
-    {
-      prescriptionDate: '2023.07.23',
-      hospitalName: '힘내라힘 병원',
-      pharmacyName: '다나아 약국',
-      favorites: '등록',
-    },
-  ]);
+  useEffect(() => {
+    setHistories([
+      {
+        prescriptionDate: '2023.07.31',
+        hospitalName: '힘내라힘 병원',
+        pharmacyName: '다나아 약국',
+        favorites: '등록',
+      },
+      {
+        prescriptionDate: '2023.07.20',
+        hospitalName: '힘내라힘 병원',
+        pharmacyName: '다나아 약국',
+        favorites: '등록',
+      },
+      {
+        prescriptionDate: '2023.07.23',
+        hospitalName: '힘내라힘 병원',
+        pharmacyName: '다나아 약국',
+        favorites: '등록',
+      },
+      {
+        prescriptionDate: '2023.07.23',
+        hospitalName: '힘내라힘 병원',
+        pharmacyName: '다나아 약국',
+        favorites: '등록',
+      },
+      {
+        prescriptionDate: '2023.07.23',
+        hospitalName: '힘내라힘 병원',
+        pharmacyName: '다나아 약국',
+        favorites: '등록',
+      },
+      {
+        prescriptionDate: '2023.07.23',
+        hospitalName: '힘내라힘 병원',
+        pharmacyName: '다나아 약국',
+        favorites: '등록',
+      },
+      {
+        prescriptionDate: '2023.07.23',
+        hospitalName: '힘내라힘 병원',
+        pharmacyName: '다나아 약국',
+        favorites: '등록',
+      },
+      {
+        prescriptionDate: '2023.07.23',
+        hospitalName: '힘내라힘 병원',
+        pharmacyName: '다나아 약국',
+        favorites: '등록',
+      },
+      {
+        prescriptionDate: '2023.07.23',
+        hospitalName: '힘내라힘 병원',
+        pharmacyName: '다나아 약국',
+        favorites: '등록',
+      },
+      {
+        prescriptionDate: '2023.07.23',
+        hospitalName: '힘내라힘 병원',
+        pharmacyName: '다나아 약국',
+        favorites: '등록',
+      },
+      {
+        prescriptionDate: '2023.07.23',
+        hospitalName: '힘내라힘 병원',
+        pharmacyName: '다나아 약국',
+        favorites: '등록',
+      },
+    ]);
+  }, []);
 
   return (
     <VStack mx="5" align="stretch">

@@ -126,6 +126,7 @@ function AppointmentList() {
     defaultValue: [],
     onChange: setSelectedSpecialties,
   });
+
   return (
     <VStack width="full" height="full" gap="4">
       <Box width="100%">

@@ -33,7 +33,6 @@ import {
 import { DoctorList } from '../dataList';
 import { setAppointDatetime } from '../../../store';
 import BackButton from '../../../components/BackButton/BackButton';
-import reservatons from '../../../../fixture/reservation.json';
 
 function RadioCard({ remainingSeats, ...radioProps }) {
   const { getInputProps, getRadioProps } = useRadio(radioProps);
@@ -79,13 +78,6 @@ const AppointmentDetail = function () {
   const [reservationOfDay, setReservationOfDay] = useState({});
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    // Todo: 추후에 id를 이용한 axios get 함수로 변경해야 함.
-    const found = DoctorList.find(d => d?.id === id);
-    setDoctor(found);
-    setReservationOfDay(reservatons[appointDate]);
-  }, [id, appointDate]);
-
   const onDateChange = useCallback(e => {
     setAppointDate(e.target.value);
   }, []);
@@ -107,12 +99,37 @@ const AppointmentDetail = function () {
   }, [doctor]);
 
   const { getRootProps, getRadioProps } = useRadioGroup({
-    name: 'framework',
-    defaultValue: 'react',
+    name: 'timeGroup',
     onChange: onTimeChange,
   });
 
   const group = getRootProps();
+
+  useEffect(() => {
+    // Todo: 추후에 id를 이용한 axios get 함수로 변경해야 함.
+    const found = DoctorList.find(d => d?.id === id);
+    setDoctor(found);
+    setReservationOfDay({
+      '09:00': 2,
+      '09:30': 1,
+      '10:00': 0,
+      '10:30': 3,
+      '11:00': 3,
+      '11:30': 3,
+      '12:00': 2,
+      '12:30': 1,
+      '13:00': 0,
+      '13:30': 0,
+      '14:00': 0,
+      '14:30': 0,
+      '15:00': 3,
+      '15:30': 0,
+      '16:00': 1,
+      '16:30': 0,
+      '17:00': 0,
+      '17:30': 0,
+    });
+  }, [id, appointDate]);
 
   return (
     <HStack height="full" gap="6">

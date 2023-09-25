@@ -3,12 +3,13 @@ import { Box, Text } from '@chakra-ui/react';
 
 import StatusBar from '../StatusBar/StatusBar';
 import SideBar from '../SideBar/SideBar';
-import useUser from '../../hooks/useUser';
 
 const Root = function () {
   const navigate = useNavigate();
-  const { userLoading, user, isLoggedIn } = useUser();
-  console.log(userLoading, user, isLoggedIn);
+  const userLoading = false;
+  const user = {
+    username: '하철환',
+  };
 
   return (
     <>
