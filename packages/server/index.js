@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
 require('dotenv').config();
+const fbAdmin = require('./config/fbAdmin');
 
 const app = express();
 const port = 3000; //TODO: .env 파일의 PORT 이름 DBPORT 등으로 수정하기
@@ -61,9 +62,22 @@ app.get('/api/auth/naver-callback', async (req, res) => {
   }
 });
 
-app.post('/api/auth/create-user', (req, res) => {
-  console.log(req.body);
-  //TODO: firebase로부터 온 요쳥이라면 JWT 토큰 생성하기
+const fbCreateCustomToken = uid => {
+  fbAdmin
+    .auth()
+    .createCustomToken(uid)
+    .then(customToken => {
+      return customToken;
+    })
+    .catch(error => {
+      console.log('Error creating custom token:', error);
+    });
+};
+
+app.get('/api/users/me', (req, res) => {
+  console.log('me');
+  //TODO: DB로부터 사용자 정보 검색
+  res.json({});
 });
 
 app.listen(port, () => {
