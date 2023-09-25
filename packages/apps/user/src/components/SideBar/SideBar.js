@@ -37,7 +37,7 @@ const CustomTab = function ({ children, to }) {
 };
 
 const SideBar = function () {
-  const user = useSelector(state => state.user);
+  const me = useSelector(state => state.me);
 
   return (
     <Tabs
@@ -76,7 +76,7 @@ const SideBar = function () {
             fontWeight: 'bold',
           }}
         >
-          {user ? (
+          {me ? (
             <ChakraLink
               width="full"
               display="flex"
@@ -87,9 +87,9 @@ const SideBar = function () {
               as={ReactRouterLink}
               to="mypage"
             >
-              <Avatar src={user.photoURL} size="xl" />
+              <Avatar src={me.photoURL} size="xl" />
               <Text fontSize="xl" fontWeight="bold" textAlign="center">
-                {user.displayName}
+                {me.displayName}
               </Text>
             </ChakraLink>
           ) : (

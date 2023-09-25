@@ -6,18 +6,25 @@ import SideBar from '../SideBar/SideBar';
 import { auth } from '../../../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getMe } from '../../api';
+import { resetMe } from '../../store';
 
 const Root = function () {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const me = useSelector(state => state.me);
+  const dispatch = useDispatch();
 
   onAuthStateChanged(auth, user => {
     setIsLoading(false);
     if (user) {
       setIsLoggedIn(true);
-      //TODO: DB에서 정보 요청 및 store에 저장
+      if (!me) {
+        getMe(user.email);
+      }
     } else {
-      //TODO: store 정보 삭제
+      dispatch(resetMe());
       setIsLoading(false);
     }
   });
