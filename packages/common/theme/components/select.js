@@ -1,5 +1,5 @@
-import { selectAnatomy } from '@chakra-ui/anatomy';
 import { createMultiStyleConfigHelpers } from '@chakra-ui/react';
+import { selectAnatomy } from '@chakra-ui/anatomy';
 
 const { definePartsStyle, defineMultiStyleConfig } =
   createMultiStyleConfigHelpers(selectAnatomy.keys);
