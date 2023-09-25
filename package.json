@@ -9,7 +9,8 @@
     "doctor": "yarn workspace @housepital/doctor",
     "hospital-desk": "yarn workspace @housepital/hospital-desk",
     "center119": "yarn workspace @housepital/center119",
-    "pharmacy": "yarn workspace @housepital/pharmacy"
+    "pharmacy": "yarn workspace @housepital/pharmacy",
+    "server": "yarn workspace @housepital/server"
   },
   "private": true,
   "workspaces": {
@@ -51,6 +52,7 @@
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.33.1",
     "eslint-plugin-react-hooks": "^4.3.0",
+    "firebase-admin": "^11.10.1",
     "prettier": "^3.0.1",
     "react-daum-postcode": "^3.1.3"
   }
