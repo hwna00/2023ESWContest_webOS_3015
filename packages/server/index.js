@@ -1,6 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const fbAdmin = require('./config/fbAdmin');
+const db = require('./config/db');
+
+require('dotenv').config();
 
 const app = express();
 const port = 3000; //TODO: .env 파일의 PORT 이름 DBPORT 등으로 수정하기
