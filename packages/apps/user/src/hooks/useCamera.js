@@ -41,7 +41,7 @@ const useCamera = () => {
     };
 
     fetchStream();
-  }, []);
+  }, [state]);
 
   return state;
 };

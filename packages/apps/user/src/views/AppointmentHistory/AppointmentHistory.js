@@ -5,7 +5,8 @@ import { Box, Divider, HStack, VStack } from '@chakra-ui/react';
 import AppointmentHistoryItem from '../../components/AppointmentHistoryItem/AppointmentHistoryItem';
 
 const AppointmentHistory = function () {
-  const [histories, setHistories] = useState([
+  const [histories, setHistories] = useState([]);
+  setHistories([
     {
       prescriptionDate: '2023.07.31',
       hospitalName: '힘내라힘 병원',

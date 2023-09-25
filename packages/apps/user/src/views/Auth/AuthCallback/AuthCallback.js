@@ -1,3 +1,8 @@
+import { useCallback, useState } from 'react';
+
+import { Form } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { DaumPostcodeEmbed } from 'react-daum-postcode';
 import {
   Button,
   ButtonGroup,
@@ -12,10 +17,7 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react';
-import { useForm } from 'react-hook-form';
-import { Form } from 'react-router-dom';
-import { DaumPostcodeEmbed } from 'react-daum-postcode';
-import { useState } from 'react';
+
 
 const AuthCallback = function () {
   const [address, setAddress] = useState('');
@@ -26,18 +28,22 @@ const AuthCallback = function () {
     formState: { errors },
   } = useForm();
 
-  const handleComplete = data => {
-    setAddress(data.address);
-    onClose();
-  };
+  const handleComplete = useCallback(
+    data => {
+      setAddress(data.address);
+      onClose();
+    },
+    [onClose],
+  );
 
   const onSubmit = data => {
-    //TODO 데이터의 address와 addressDetail을 서버로 전송
+    // TODO 데이터의 address와 addressDetail을 서버로 전송
+    console.log(data);
   };
 
   return (
-    <VStack height={'100vh'} justifyContent={'center'}>
-      <Heading as={'h1'} mb={'8'}>
+    <VStack height="100vh" justifyContent="center">
+      <Heading as="h1" mb="8">
         필수 정보를 입력해주세요
       </Heading>
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -47,7 +53,7 @@ const AuthCallback = function () {
           <Input
             required
             placeholder="주소"
-            mb={'2'}
+            mb="2"
             {...register('address', {
               required: '이 항목은 필수입니다.',
             })}
@@ -66,7 +72,7 @@ const AuthCallback = function () {
           <FormErrorMessage>{errors?.message}</FormErrorMessage>
         </FormControl>
 
-        <ButtonGroup mt={'6'} display={'flex'} justifyContent={'flex-end'}>
+        <ButtonGroup mt="6" display="flex" justifyContent="flex-end">
           <Button type="submit" colorScheme="primary">
             제출하기
           </Button>

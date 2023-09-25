@@ -23,7 +23,7 @@ const SignUpForm = function ({
   const profileImgBlob = useSelector(state => state.signUp.blob);
 
   useEffect(() => {
-    const errors = reactHookForm.formState.errors;
+    const {errors} = reactHookForm.formState;
 
     const filteredErrors = {};
     Object.entries(errors).map(([key, value]) => {
@@ -51,7 +51,7 @@ const SignUpForm = function ({
     const user = fbSignUp({ ...data, profileImgBlob });
 
     if (user) {
-      //TODO: redux-persist를 이용하여 사용자 정보를 저장
+      // TODO: redux-persist를 이용하여 사용자 정보를 저장
     }
   };
 
@@ -68,7 +68,7 @@ const SignUpForm = function ({
     >
       <Box
         key={location.pathname}
-        width={'full'}
+        width="full"
         as={motion.div}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

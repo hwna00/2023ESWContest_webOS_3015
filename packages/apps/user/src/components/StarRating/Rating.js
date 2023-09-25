@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Box, Icon, Stack } from '@chakra-ui/react';
+
 import { FaStar } from 'react-icons/fa6';
+import { Box, Icon, Stack } from '@chakra-ui/react';
 
 const Rating = React.forwardRef(
   ({ size, scale, fillColor, strokeColor, rating, onRatingChange }, ref) => {
@@ -18,7 +19,7 @@ const Rating = React.forwardRef(
       }
     };
 
-    const RatingIcon = ({ fill }) => {
+    function RatingIcon({ fill }) {
       return (
         <Icon
           as={FaStar}
@@ -29,9 +30,9 @@ const Rating = React.forwardRef(
           fillOpacity={fill ? '100%' : '30%'}
         />
       );
-    };
+    }
 
-    const RatingButton = ({ idx, fill }) => {
+    function RatingButton({ idx, fill }) {
       return (
         <Box
           as="button"
@@ -45,7 +46,7 @@ const Rating = React.forwardRef(
           <RatingIcon fill={fill} />
         </Box>
       );
-    };
+    }
 
     for (let i = 1; i <= scale; i++) {
       buttons.push(<RatingButton key={i} idx={i} fill={i <= rating} />);

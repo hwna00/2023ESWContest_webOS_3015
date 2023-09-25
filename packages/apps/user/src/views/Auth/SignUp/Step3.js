@@ -1,3 +1,5 @@
+import { useOutletContext } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import {
   FormControl,
   FormErrorMessage,
@@ -10,15 +12,13 @@ import {
   Textarea,
   Select,
 } from '@chakra-ui/react';
-import { useSelector } from 'react-redux';
-import { useOutletContext } from 'react-router-dom';
 
 const Step3 = function () {
   const { register } = useOutletContext();
   const errors = useSelector(state => state.signUp.errors);
 
   return (
-    <VStack width={'full'} gap={'4'}>
+    <VStack width="full" gap="4">
       <HStack width="full" gap="4">
         <FormControl width="full" isInvalid={errors.bloodType}>
           <FormLabel>혈액형</FormLabel>

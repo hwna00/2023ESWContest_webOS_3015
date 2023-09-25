@@ -1,4 +1,4 @@
-import { initializeApp } from 'firebase/app';
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -6,8 +6,9 @@ import {
   signInWithPopup,
   createUserWithEmailAndPassword,
 } from 'firebase/auth';
-import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
-import { getMe, createUser } from './src/api';
+import { initializeApp } from 'firebase/app';
+
+import { createUser } from './src/api';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FB_API_KEY,
@@ -39,8 +40,8 @@ export const fbSignUp = async data => {
   const isUserExist = false; // getMe();
 
   if (isUserExist) {
-    //TODO: 사용자가 존재한다는 알림 전송
-    //TODO: 로그인 페이지로 리디렉트
+    // TODO: 사용자가 존재한다는 알림 전송
+    // TODO: 로그인 페이지로 리디렉트
   } else {
     createUserWithEmailAndPassword(auth, email, password).then(() => {
       createUser({ email, ...rest });
@@ -55,7 +56,7 @@ export const fbLogIn = async data => {
   const isUserExist = true;
 
   if (!isUserExist) {
-    //TODO: 존재하지 않는 회원입니다 알림 발송
+    // TODO: 존재하지 않는 회원입니다 알림 발송
   } else {
     const userCredential = await signInWithEmailAndPassword(
       auth,
@@ -64,13 +65,11 @@ export const fbLogIn = async data => {
     );
     console.log(userCredential);
     console.log(userCredential._tokenResponse);
-    //TODO: email을 가지는 user 정보를 DB에서 가져온다.
+    // TODO: email을 가지는 user 정보를 DB에서 가져온다.
 
-    //TODO: CASE1. 이미 존재하는 경우 -> 경고알림 or 바로 로그인
-    //TODO: CASE2. 존재하지 않는 경우 -> 회원가입 진행
+    // TODO: CASE1. 이미 존재하는 경우 -> 경고알림 or 바로 로그인
+    // TODO: CASE2. 존재하지 않는 경우 -> 회원가입 진행
   }
 };
 
-export const googleLogin = () => {
-  return signInWithPopup(auth, provider);
-};
+export const googleLogin = () => signInWithPopup(auth, provider);

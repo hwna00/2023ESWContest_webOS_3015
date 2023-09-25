@@ -19,7 +19,12 @@
   },
   "plugins": ["react", "import"],
   "rules": {
+    "react/jsx-props-no-spreading": "off",
+    "react/jsx-filename-extension": "off",
+    "no-shadow": "off",
     "import/no-unresolved": "error",
+    "import/no-extraneous-dependencies": "off",
+    "func-names": "off",
     "import/order": [
       "error",
       {

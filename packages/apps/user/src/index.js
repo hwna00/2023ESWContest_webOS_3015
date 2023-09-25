@@ -3,13 +3,15 @@ import React from 'react';
 import { RouterProvider } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom/client';
-import { ChakraProvider } from '@chakra-ui/react';
+import { AnimatePresence } from 'framer-motion';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ChakraProvider } from '@chakra-ui/react';
 
 import theme from '../theme';
+
 import { store } from './store';
 import router from './routes/index';
-import { AnimatePresence } from 'framer-motion';
+
 
 const client = new QueryClient();
 

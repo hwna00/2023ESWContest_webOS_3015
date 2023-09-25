@@ -21,8 +21,8 @@ import {
   Icon,
 } from '@chakra-ui/react';
 
-import { googleLogin, auth, provider, fbLogIn } from '../../../../firebase';
 import NaverLoginButton from '../../../components/NaverLoginButton/NaverLoginButton';
+import { googleLogin, fbLogIn } from '../../../../firebase';
 
 function LogIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -41,17 +41,17 @@ function LogIn() {
     fbLogIn(data);
   };
 
-  const googleClick = useCallback(() => {
-    googleLogin(auth, provider)
-      .then(result => {
-        console.log(result);
-        navigate('/');
-      })
-      .catch(error => {
-        console.log(error);
-        navigate('/error');
-      });
-  }, [navigate]);
+  // const googleClick = useCallback(() => {
+  //   googleLogin(auth, provider)
+  //     .then(result => {
+  //       console.log(result);
+  //       navigate('/');
+  //     })
+  //     .catch(error => {
+  //       console.log(error);
+  //       navigate('/error');
+  //     });
+  // }, [navigate]);
 
   return (
     <Flex
@@ -93,7 +93,7 @@ function LogIn() {
               >
                 <NaverLoginButton />
 
-                <Button bgColor="white" onClick={googleClick}>
+                <Button bgColor="white">
                   <Icon as={AiFillGoogleCircle} boxSize="30px" />
                 </Button>
                 <Button bgColor="white">

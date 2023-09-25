@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -79,11 +79,6 @@ const AppointmentDetail = function () {
   const [reservationOfDay, setReservationOfDay] = useState({});
   const dispatch = useDispatch();
 
-  const clickStyle = {
-    bgColor: 'primary.500',
-    color: 'white',
-  };
-
   useEffect(() => {
     // Todo: 추후에 id를 이용한 axios get 함수로 변경해야 함.
     const found = DoctorList.find(d => d?.id === id);
@@ -91,25 +86,25 @@ const AppointmentDetail = function () {
     setReservationOfDay(reservatons[appointDate]);
   }, [id, appointDate]);
 
-  const onDateChange = e => {
+  const onDateChange = useCallback(e => {
     setAppointDate(e.target.value);
-  };
+  }, []);
 
   const onTimeChange = value => {
     setAppointTime(value);
   };
 
-  const onNextClick = () => {
+  const onNextClick = useCallback(() => {
     dispatch(setAppointDatetime({ date: appointDate, time: appointTime }));
-  };
+  }, [appointDate, appointTime, dispatch]);
 
-  const onToggleBookmarkClick = () => {
+  const onToggleBookmarkClick = useCallback(() => {
     // Todo: 추후에 isFavorite 항목을 수정하는 axios patch 함수로 변경해야 함.
     setDoctor({
       ...doctor,
       isFavorite: !doctor.isFavorite,
     });
-  };
+  }, [doctor]);
 
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: 'framework',

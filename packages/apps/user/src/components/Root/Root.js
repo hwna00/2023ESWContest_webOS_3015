@@ -1,10 +1,10 @@
 import { Outlet, useNavigate } from 'react-router-dom';
+import LoadingPage from "@housepital/common/LoadingPage";
 import { Box } from '@chakra-ui/react';
 
 import StatusBar from '../StatusBar/StatusBar';
 import SideBar from '../SideBar/SideBar';
 import useUser from '../../hooks/useUser';
-import LoadingPage from '../../../../../common/LoadingPage';
 
 const Root = function () {
   const navigate = useNavigate();

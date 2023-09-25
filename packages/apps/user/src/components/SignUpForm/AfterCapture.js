@@ -1,6 +1,6 @@
+import { useSelector } from 'react-redux';
 import { AspectRatio, HStack } from '@chakra-ui/react';
 
-import { useSelector } from 'react-redux';
 
 const AfterCapture = function () {
   const imgBlob = useSelector(state => state.signUp.blob);

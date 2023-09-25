@@ -28,7 +28,7 @@ import { DoctorList, HospitalList, FavoriteList } from '../dataList';
 import BackButton from '../../../components/BackButton/BackButton';
 import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
 
-function CheckCard({ specialty, ...checkboxProps }) {
+function CheckCard({ ...checkboxProps }) {
   const { getInputProps, getCheckboxProps } = useCheckbox(checkboxProps);
 
   const input = getInputProps();
