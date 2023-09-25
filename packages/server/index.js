@@ -11,11 +11,10 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cors());
 
-app.get('/naver-callback', async (req, res) => {
-  const { code, state } = req.query;
-  const REDIRECT_URI = `http://localhost:3000/naver-callback`;
+const getNaverAuthApiUri = (code, state) => {
+  const REDIRECT_URI = 'http://localhost:3000/naver-callback';
 
-  const API_URI =
+  return (
     'https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=' +
     process.env.REACT_APP_NAVER_CLIENT_ID +
     '&client_secret=' +
@@ -25,10 +24,16 @@ app.get('/naver-callback', async (req, res) => {
     '&code=' +
     code +
     '&state=' +
-    state;
+    state
+  );
+};
+
+app.get('/naver-callback', async (req, res) => {
+  const { code, state } = req.query;
+  const API_URI = getNaverAuthApiUri(code, state);
 
   const {
-    data: { access_token, refresh_token },
+    data: { access_token },
   } = await axios.get(API_URI, {
     headers: {
       'X-Naver-Client-Id': process.env.REACT_APP_NAVER_CLIENT_ID,
@@ -45,15 +50,15 @@ app.get('/naver-callback', async (req, res) => {
   });
 
   try {
-    const { email } = user;
-
-    //TODO: SQL을 사용하여 user객체 안에 있는 email로 사용자 정보 가져오기
-    //TODO: 사용자가 존재한다면 acces_token, refresh 토큰을 반환
-    res
-      .cookie('refreshToken', refresh_token, { httpOnly: true })
-      .json({ accessToken: access_token });
+    //TODO: DB에 유저 정보 저장하는 쿼리 실행
+    //TODO: user객체의 정보는 노션 API 명세를 참고할 것
+    //TODO 주소는 일단 아무 값으로나 저장하고 redirect 페이지에서 받는걸로
+    console.log(user);
   } catch {
-    //TODO: 해당 email을 가진 사용자가 없는 경우, 새로운 유저를 생성
+    //TODO: email 중복이 발생할 경우 DB에 정보를 저장하지 않음
+  } finally {
+    const token = ''; //TODO: fb 커스텀 토큰 생성 함수 연결
+    res.json(token).redirect('http://localhost:8080/auth/callback');
   }
 });
 
