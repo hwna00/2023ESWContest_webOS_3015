@@ -2,12 +2,12 @@ import React from 'react';
 
 import { createBrowserRouter } from 'react-router-dom';
 
-import SignUp from './views/SignUp';
+import MainPage from './views/MainPage/MainPage';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <SignUp />,
+    element: <MainPage />,
     children: [],
   },
 ]);
