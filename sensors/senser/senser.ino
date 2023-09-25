@@ -8,14 +8,14 @@
 #define led2 2
 
 //WiFi공유기의 아이디 비밀번호
-const char* ssid = "nockanda";
-const char* password = "11213144";
+const char* ssid = "abc";
+const char* password = "99991234";
 //브로커의 주소
-const char* mqtt_server = "broker.mqtt-dashboard.com";
+const char* mqtt_server = "192.168.1.74";
 
 //DHT dht(DHTPIN, DHTTYPE);
 WiFiClient espClient;
-   client(espClient);
+PubSubClient client(espClient);
 unsigned long lastMsg = 0;
 #define MSG_BUFFER_SIZE  (50)
 char msg[MSG_BUFFER_SIZE];
@@ -77,12 +77,13 @@ void reconnect() {
     // Create a random client ID
     String clientId = "ESP32Client-";
     clientId += String(random(0xffff), HEX);
+    //Serial.println(clientId);
     // Attempt to connect
     if (client.connect(clientId.c_str())) {
       //ESP32가 서버와 연결을 완전이 확정하는 부분
       Serial.println("connected");
       //서버와 연결되었으니 구독신청을 하겠다!
-      client.subscribe("nockanda/esp32/input");
+      client.subscribe("my_topic");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
@@ -95,8 +96,8 @@ void reconnect() {
 
 void setup() {
   Serial.begin(115200);
-  pinMode(led1,OUTPUT);
-  pinMode(led2,OUTPUT);
+  //pinMode(led1,OUTPUT);
+  //pinMode(led2,OUTPUT);
   //dht.begin();
   setup_wifi(); //인터넷 공유기와 접속할것!
   client.setServer(mqtt_server, 1883);//MQTT서버의 설정!
@@ -127,9 +128,9 @@ void loop() {
     Serial.println(F("°C "));
     */
     //측정값을 CSV로 만들기!
-    String mydata = String(t) + "," + String(h);
+    String mydata = String(040514);
     
     //TOPIC하고 PAYLOAD를 발행하겠다!
-    client.publish("nockanda/esp32/output", mydata.c_str());
+    client.publish("my_topic", mydata.c_str());
   }
 }
