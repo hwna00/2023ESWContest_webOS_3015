@@ -4,6 +4,7 @@ const axios = require('axios');
 const db = require('./config/db');
 const {
   fbCreateCustomToken,
+  fbTokenLogin,
   getNaverAuthApiUri,
 } = require('./controllers/authController');
 
@@ -44,8 +45,9 @@ app.get('/api/auth/naver-callback', async (req, res) => {
   } catch {
     //TODO: email 중복이 발생할 경우 DB에 정보를 저장하지 않음
   } finally {
-    fbCreateCustomToken(user.id).then(token => console.log(token));
+    fbCreateCustomToken(user.id).then(token => fbTokenLogin(token));
 
+    //TODO: 토큰을 프론트엔드로 전송
     res.redirect('http://localhost:8080/auth/callback');
   }
 });

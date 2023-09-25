@@ -1,21 +1,32 @@
-import { Outlet, useNavigate } from 'react-router-dom';
-import { Box, Text } from '@chakra-ui/react';
+import { Navigate, Outlet } from 'react-router-dom';
+import { Box } from '@chakra-ui/react';
 
 import StatusBar from '../StatusBar/StatusBar';
 import SideBar from '../SideBar/SideBar';
+import { auth } from '../../../firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { useState } from 'react';
 
 const Root = function () {
-  const navigate = useNavigate();
-  const userLoading = false;
-  const user = {
-    username: '하철환',
-  };
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  onAuthStateChanged(auth, user => {
+    setIsLoading(false);
+    if (user) {
+      setIsLoggedIn(true);
+      //TODO: DB에서 정보 요청 및 store에 저장
+    } else {
+      //TODO: store 정보 삭제
+      setIsLoading(false);
+    }
+  });
 
   return (
     <>
-      {userLoading ? (
-        <Text>Loading..</Text>
-      ) : user ? (
+      {isLoading ? (
+        'loading...'
+      ) : isLoggedIn ? (
         <>
           <SideBar />
           <StatusBar />
@@ -24,7 +35,7 @@ const Root = function () {
           </Box>
         </>
       ) : (
-        navigate('/auth/log-in')
+        <Navigate to={'/auth/log-in'} />
       )}
     </>
   );

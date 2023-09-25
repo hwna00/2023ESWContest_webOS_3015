@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import { Link as ReactRouterLink } from 'react-router-dom';
+import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
 import { AiFillGoogleCircle, AiFillTwitterCircle } from 'react-icons/ai';
 import { useForm } from 'react-hook-form';
@@ -22,7 +22,7 @@ import {
 } from '@chakra-ui/react';
 
 import NaverLoginButton from '../../../components/NaverLoginButton/NaverLoginButton';
-import { fbLogIn } from '../../../../firebase';
+import { fbEmailLogIn } from '../../../../firebase';
 
 function LogIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -30,6 +30,7 @@ function LogIn() {
     setShowPassword(!showPassword);
   }, [showPassword]);
 
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -37,7 +38,13 @@ function LogIn() {
   } = useForm();
 
   const onSubmit = function (data) {
-    fbLogIn(data);
+    fbEmailLogIn(data).then(user => {
+      if (user) {
+        navigate('/');
+      } else {
+        //TODO: 상황에 맞는 알림 전송하기 ex. 존재하지 않는 사용자입니다.
+      }
+    });
   };
 
   return (

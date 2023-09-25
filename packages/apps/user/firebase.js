@@ -2,9 +2,10 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import {
   getAuth,
   signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
   createUserWithEmailAndPassword,
+  signInWithCustomToken,
+  setPersistence,
+  browserLocalPersistence,
 } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 
@@ -20,9 +21,8 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 const storage = getStorage(app);
-const provider = new GoogleAuthProvider();
+export const auth = getAuth(app);
 
 export const uploadBlob = async (blob, email) => {
   const storageRef = ref(storage, `${email}/profileImg.png`);
@@ -51,25 +51,22 @@ export const fbSignUp = async data => {
   }
 };
 
-export const fbLogIn = async data => {
+export const fbEmailLogIn = async data => {
+  await setPersistence(auth, browserLocalPersistence);
   const { email, password } = data;
-  const isUserExist = true;
-
-  if (!isUserExist) {
-    // TODO: 존재하지 않는 회원입니다 알림 발송
-  } else {
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      email,
-      password,
-    );
-    console.log(userCredential);
-    console.log(userCredential._tokenResponse);
-    // TODO: email을 가지는 user 정보를 DB에서 가져온다.
-
-    // TODO: CASE1. 이미 존재하는 경우 -> 경고알림 or 바로 로그인
-    // TODO: CASE2. 존재하지 않는 경우 -> 회원가입 진행
+  try {
+    const { user } = await signInWithEmailAndPassword(auth, email, password);
+    return user;
+  } catch (error) {
+    console.log(error);
   }
 };
 
-export const googleLogin = () => signInWithPopup(auth, provider);
+export const fbTokenLogin = async token => {
+  try {
+    const { user } = await signInWithCustomToken(token);
+    return user;
+  } catch (error) {
+    console.log(error);
+  }
+};

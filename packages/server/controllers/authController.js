@@ -19,16 +19,15 @@ const getNaverAuthApiUri = (code, state) => {
 
 const fbCreateCustomToken = async uid => {
   return await fbAdmin.auth().createCustomToken(uid);
+};
 
-  // then(customToken => {
-  //   console.log(customToken);
-  //   return customToken;
-  // }).catch(error => {
-  //   console.log('Error creating custom token:', error);
-  // });
+const fbTokenLogin = token => {
+  console.log(token);
+  fbAdmin.auth();
 };
 
 module.exports = {
   getNaverAuthApiUri,
   fbCreateCustomToken,
+  fbTokenLogin,
 };
