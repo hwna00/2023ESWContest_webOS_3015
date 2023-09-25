@@ -6,14 +6,8 @@ import { useForm } from 'react-hook-form';
 import PropTypes from 'prop-types';
 import { ref, uploadBytes } from 'firebase/storage';
 import { motion } from 'framer-motion';
-import {
-  browserLocalPersistence,
-  setPersistence,
-  updateProfile,
-} from 'firebase/auth';
 import { Box, Button, ButtonGroup, VStack } from '@chakra-ui/react';
 
-import { auth, signIn } from '../../../firebase';
 import { storage } from '../../../firebase';
 import { setErrors } from '../../store';
 
