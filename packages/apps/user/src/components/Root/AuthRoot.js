@@ -1,7 +1,4 @@
-import { Outlet, useNavigate } from 'react-router-dom';
-import LoadingPage from "@housepital/common/LoadingPage";
-
-import useUser from '../../hooks/useUser';
+import { Outlet } from 'react-router-dom';
 
 const AuthRoot = function () {
   // const navigate = useNavigate();

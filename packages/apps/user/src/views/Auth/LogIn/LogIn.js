@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import { useNavigate, Link as ReactRouterLink } from 'react-router-dom';
+import { Link as ReactRouterLink } from 'react-router-dom';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
 import { AiFillGoogleCircle, AiFillTwitterCircle } from 'react-icons/ai';
 import { useForm } from 'react-hook-form';
@@ -22,7 +22,7 @@ import {
 } from '@chakra-ui/react';
 
 import NaverLoginButton from '../../../components/NaverLoginButton/NaverLoginButton';
-import { googleLogin, fbLogIn } from '../../../../firebase';
+import { fbLogIn } from '../../../../firebase';
 
 function LogIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -30,7 +30,6 @@ function LogIn() {
     setShowPassword(!showPassword);
   }, [showPassword]);
 
-  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -40,18 +39,6 @@ function LogIn() {
   const onSubmit = function (data) {
     fbLogIn(data);
   };
-
-  // const googleClick = useCallback(() => {
-  //   googleLogin(auth, provider)
-  //     .then(result => {
-  //       console.log(result);
-  //       navigate('/');
-  //     })
-  //     .catch(error => {
-  //       console.log(error);
-  //       navigate('/error');
-  //     });
-  // }, [navigate]);
 
   return (
     <Flex

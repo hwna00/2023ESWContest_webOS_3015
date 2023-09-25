@@ -1,6 +1,5 @@
 import { Outlet, useNavigate } from 'react-router-dom';
-import LoadingPage from "@housepital/common/LoadingPage";
-import { Box } from '@chakra-ui/react';
+import { Box, Text } from '@chakra-ui/react';
 
 import StatusBar from '../StatusBar/StatusBar';
 import SideBar from '../SideBar/SideBar';
@@ -14,7 +13,7 @@ const Root = function () {
   return (
     <>
       {userLoading ? (
-        <LoadingPage />
+        <Text>Loading..</Text>
       ) : user ? (
         <>
           <SideBar />
