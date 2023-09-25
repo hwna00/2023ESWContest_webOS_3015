@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 
 const NaverForm = function () {
   const BASE_URL = 'https://nid.naver.com/oauth2.0/authorize';
-  const REDIRECT_URI = 'http://localhost:3000/naver-callback';
+  const REDIRECT_URI = 'http://localhost:3000/api/auth/naver-callback';
   const STATE = 'slfjsdf'; //TODO: 랜덤 값을 생성하도록 변경하기
   const NAVER_AUTH_URL = `${BASE_URL}?response_type=code&client_id=${
     process.env.REACT_APP_NAVER_CLIENT_ID

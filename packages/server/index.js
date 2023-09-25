@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 const getNaverAuthApiUri = (code, state) => {
-  const REDIRECT_URI = 'http://localhost:3000/naver-callback';
+  const REDIRECT_URI = 'http://localhost:3000/api/auth/naver-callback';
 
   return (
     'https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=' +
@@ -28,7 +28,7 @@ const getNaverAuthApiUri = (code, state) => {
   );
 };
 
-app.get('/naver-callback', async (req, res) => {
+app.get('/api/auth/naver-callback', async (req, res) => {
   const { code, state } = req.query;
   const API_URI = getNaverAuthApiUri(code, state);
 
