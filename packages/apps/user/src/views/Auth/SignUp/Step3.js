@@ -31,7 +31,7 @@ const Step3 = function () {
           <FormErrorMessage>{errors.bloodType?.message}</FormErrorMessage>
         </FormControl>
 
-        <FormControl width="full" isInvalid={errors.step?.height}>
+        <FormControl width="full" isInvalid={errors.height}>
           <FormLabel>키</FormLabel>
           <InputGroup>
             <Input
