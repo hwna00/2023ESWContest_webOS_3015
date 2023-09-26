@@ -1,7 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
-const db = require('./config/db');
+const pool = require('./config/db');
+
 const {
   fbCreateCustomToken,
   getNaverAuthApiUri,
@@ -15,6 +16,103 @@ const port = 3000 || process.env.PORT;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: 'http://localhost:8080' }));
+
+const insertUsers = async function (
+  connection,
+  id,
+  name,
+  email,
+  mobile,
+  birthyear,
+  birthday,
+  gender,
+  profile_image,
+) {
+  const createUserQuery = `INSERT INTO Users (user_id, name, email, phone_number, address, address_detail, birthdate, gender, profile_img) VALUES (?, ?, ?, ?, '', '', ?, ?, ?);`;
+  const Params = [
+    id,
+    name,
+    email,
+    mobile,
+    birthyear + '-' + birthday,
+    gender,
+    profile_image,
+  ];
+
+  await connection.query(createUserQuery, Params);
+};
+
+const createUsers = async function (req, res) {
+  const {
+    id,
+    name,
+    email,
+    mobile,
+    birthyear,
+    birthday,
+    gender,
+    profile_image,
+  } = req.body;
+
+  if (
+    typeof id !== 'string' ||
+    typeof name !== 'string' ||
+    typeof email !== 'string' ||
+    typeof mobile !== 'string' ||
+    typeof gender !== 'string' ||
+    typeof profile_image !== 'string'
+  ) {
+    return res.send({
+      isSuccess: false,
+      code: 400,
+      message: '문자열을 입력해주세요.',
+    });
+  }
+
+  var regex = RegExp(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/);
+  if (!regex.test(birthyear + '-' + birthday)) {
+    return res.send({
+      isSucess: false,
+      code: 400,
+      message: '날짜 형식을 제대로 입력해주세요.',
+    });
+  }
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      await insertUsers(
+        connection,
+        id,
+        name,
+        email,
+        mobile,
+        birthyear,
+        birthday,
+        gender,
+        profile_image,
+      );
+
+      return res.send({
+        isSucess: true,
+        code: 200,
+        message: '유저 생성 성공',
+      });
+    } catch (err) {
+      //이메일 중복이 발생하는 등의 에러
+      console.log(err.sqlMessage);
+      console.log('이미 가입된 회원입니다.');
+      return false;
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    console.log('데이터베이스 연결 실패');
+    return false;
+  }
+};
+
+app.post('/api/create-user', createUsers);
 
 app.get('/api/auth/naver-callback', async (req, res) => {
   const { code, state } = req.query;
