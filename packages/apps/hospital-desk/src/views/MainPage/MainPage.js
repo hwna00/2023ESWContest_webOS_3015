@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Link as ReactRouterLink } from 'react-router-dom';
-import { css } from '@emotion/react';
+import styles from '@housepital/common/css/HideScrollBar.module.css';
 import {
   Box,
   HStack,
@@ -41,24 +41,13 @@ const MainPage = function () {
           headers={['이름', '전화번호', '진료시간', '타입', '액션']}
         />
 
-        <Box
-          maxH="135px"
-          overflowY="scroll"
-          css={css`
-            /* Hide scrollbar for Chrome, Safari and Opera */
-            ::-webkit-scrollbar {
-              display: none;
-            }
-
-            /* Hide scrollbar for IE, Edge and Firefox */
-            -ms-overflow-style: none; /* IE and Edge */
-            scrollbar-width: none; /* Firefox */
-          `}
-        >
-          {ConfirmedReservation.map((reservation, index) => (
-            <TableRow key={index} data={reservation} />
-          ))}
-        </Box>
+        <div className={styles.hideScrollBar}>
+          <Box maxH="135px" overflowY="scroll">
+            {ConfirmedReservation.map((reservation, index) => (
+              <TableRow key={index} data={reservation} />
+            ))}
+          </Box>
+        </div>
       </Box>
       <Box>
         <HStack justifyContent="space-between">
@@ -71,24 +60,13 @@ const MainPage = function () {
         <TableHeader
           headers={['이름', '전화번호', '진료시간', '타입', '결제상태']}
         />
-        <Box
-          maxH="135px"
-          overflowY="scroll"
-          css={css`
-            /* Hide scrollbar for Chrome, Safari and Opera */
-            ::-webkit-scrollbar {
-              display: none;
-            }
-
-            /* Hide scrollbar for IE, Edge and Firefox */
-            -ms-overflow-style: none; /* IE and Edge */
-            scrollbar-width: none; /* Firefox */
-          `}
-        >
-          {CompleteReservation.map((reservation, index) => (
-            <TableRow key={index} data={reservation} />
-          ))}
-        </Box>
+        <div className={styles.hideScrollBar}>
+          <Box maxH="135px" overflowY="scroll">
+            {CompleteReservation.map((reservation, index) => (
+              <TableRow key={index} data={reservation} />
+            ))}
+          </Box>
+        </div>
       </Box>
     </VStack>
   );
