@@ -23,8 +23,10 @@ function TableRow({ data }) {
     <HStack
       bg="primary.100"
       py="4"
+      mb="2"
       borderRadius="10"
       justifyContent="space-evenly"
+      h="14"
     >
       <Box w="20%" textAlign="center">
         {data.name}
@@ -47,7 +49,9 @@ function TableRow({ data }) {
             '결제 완료'
           ) : (
             <>
-              <Button onClick={openPaymentModal}>금액 입력</Button>
+              <Button h="10" onClick={openPaymentModal}>
+                금액 입력
+              </Button>
               <PaymentModal
                 isOpen={isPaymentOpen}
                 onClose={closePaymentModal}
@@ -56,7 +60,9 @@ function TableRow({ data }) {
           )
         ) : (
           <>
-            <Button onClick={openCancelModal}>취소하기</Button>
+            <Button h="10" onClick={openCancelModal}>
+              취소하기
+            </Button>
             <CancelModal isOpen={isCancelOpen} onClose={closeCancelModal} />
           </>
         )}
