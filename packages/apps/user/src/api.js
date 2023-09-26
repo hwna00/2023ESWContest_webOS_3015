@@ -8,6 +8,11 @@ const instance = axios.create({
 
 export const createUser = () => {};
 
+export const updateMe = async data => {
+  instance.patch('/users/me', data);
+};
+
+//TODO: email을 uid로 교체해야 한다
 export const getMe = async email => {
   const { data: me } = await instance.get(`/users/me?email=${email}`);
 

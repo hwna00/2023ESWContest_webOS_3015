@@ -10,7 +10,7 @@ import {
 import { initializeApp } from 'firebase/app';
 import Cookie from 'js-cookie';
 
-import { createUser } from './src/api';
+import { createUser, updateMe } from './src/api';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FB_API_KEY,
@@ -67,11 +67,10 @@ export const fbEmailLogIn = async data => {
 export const fbTokenLogIn = async data => {
   await setPersistence(auth, browserLocalPersistence);
   const token = Cookie.get('token');
-  console.log(token);
-  const { address, addressDetail } = data;
 
   try {
     const { user } = await signInWithCustomToken(auth, token);
+    await updateMe({ ...data, uid: user.uid });
     return user;
   } catch (error) {
     console.log(error);

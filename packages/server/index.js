@@ -63,6 +63,10 @@ app.get('/api/users/me', (req, res) => {
   });
 });
 
+app.patch('/api/users/me', (req, res) => {
+  console.log(req.body);
+});
+
 app.listen(port, () => {
   console.log(`Server on port: ${port}`);
 });

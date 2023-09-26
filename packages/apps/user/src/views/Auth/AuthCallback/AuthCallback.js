@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import { Form, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { DaumPostcodeEmbed } from 'react-daum-postcode';
 import {
@@ -46,11 +46,8 @@ const AuthCallback = function () {
   );
 
   const onSubmit = data => {
-    fbTokenLogIn(data).then(user => {
-      if (user) {
-        navigate('/mypage');
-      }
-    });
+    fbTokenLogIn(data);
+    navigate('/');
   };
 
   return (
