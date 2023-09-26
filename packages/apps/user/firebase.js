@@ -8,6 +8,7 @@ import {
   browserLocalPersistence,
 } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
+import Cookie from 'js-cookie';
 
 import { createUser } from './src/api';
 
@@ -54,6 +55,7 @@ export const fbSignUp = async data => {
 export const fbEmailLogIn = async data => {
   await setPersistence(auth, browserLocalPersistence);
   const { email, password } = data;
+
   try {
     const { user } = await signInWithEmailAndPassword(auth, email, password);
     return user;
@@ -62,9 +64,23 @@ export const fbEmailLogIn = async data => {
   }
 };
 
+export const fbTokenLogIn = async data => {
+  await setPersistence(auth, browserLocalPersistence);
+  const token = Cookie.get('token');
+  console.log(token);
+  const { address, addressDetail } = data;
+
+  try {
+    const { user } = await signInWithCustomToken(auth, token);
+    return user;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const fbTokenLogin = async token => {
   try {
-    const { user } = await signInWithCustomToken(token);
+    const { user } = await signInWithCustomToken(auth, token);
     return user;
   } catch (error) {
     console.log(error);

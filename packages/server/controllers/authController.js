@@ -21,13 +21,7 @@ const fbCreateCustomToken = async uid => {
   return await fbAdmin.auth().createCustomToken(uid);
 };
 
-const fbTokenLogin = token => {
-  console.log(token);
-  fbAdmin.auth();
-};
-
 module.exports = {
   getNaverAuthApiUri,
   fbCreateCustomToken,
-  fbTokenLogin,
 };

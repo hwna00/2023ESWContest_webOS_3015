@@ -14,8 +14,6 @@ export const getMe = async email => {
   if (!me) {
     // TODO: 해당 유저가 존재하지 않는 경우에 대한 처리
   } else {
-    // return { ...me, profileImg: getUserImage(email) };
-    console.log(me);
     return me;
   }
 };

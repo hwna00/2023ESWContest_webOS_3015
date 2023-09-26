@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import { Form } from 'react-router-dom';
+import { Form, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { DaumPostcodeEmbed } from 'react-daum-postcode';
 import {
@@ -17,11 +17,13 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react';
-
+import { fbTokenLogIn } from '../../../../firebase';
 
 const AuthCallback = function () {
   const [address, setAddress] = useState('');
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -37,8 +39,11 @@ const AuthCallback = function () {
   );
 
   const onSubmit = data => {
-    // TODO 데이터의 address와 addressDetail을 서버로 전송
-    console.log(data);
+    fbTokenLogIn(data).then(user => {
+      if (user) {
+        navigate('/mypage');
+      }
+    });
   };
 
   return (
