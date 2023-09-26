@@ -8,7 +8,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMe } from '../../api';
-import { resetMe } from '../../store';
+import { resetMe, setMe } from '../../store';
 
 const Root = function () {
   const [isLoading, setIsLoading] = useState(true);
@@ -20,8 +20,10 @@ const Root = function () {
     setIsLoading(false);
     if (user) {
       setIsLoggedIn(true);
-      if (!me) {
-        getMe(user.email);
+      if (Object.keys(me).length === 0) {
+        getMe(user.email).then(res => {
+          dispatch(setMe(res));
+        });
       }
     } else {
       dispatch(resetMe());

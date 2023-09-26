@@ -89,7 +89,7 @@ const SideBar = function () {
             >
               <Avatar src={me.photoURL} size="xl" />
               <Text fontSize="xl" fontWeight="bold" textAlign="center">
-                {me.displayName}
+                {me.name}
               </Text>
             </ChakraLink>
           ) : (

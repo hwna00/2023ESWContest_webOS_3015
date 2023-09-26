@@ -55,7 +55,10 @@ app.get('/api/auth/naver-callback', async (req, res) => {
 app.get('/api/users/me', (req, res) => {
   console.log('me');
   //TODO: DB로부터 사용자 정보 검색
-  res.json({});
+  res.json({
+    name: '하철환',
+    // profileImg: getUserImage(email),
+  });
 });
 
 app.listen(port, () => {

@@ -44,10 +44,11 @@ export const store = configureStore({
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: ['signUp/setImgBlob'],
-        ignoredPaths: ['signUp.blob'],
-      },
+      serializableCheck: false,
+      // serializableCheck: {
+      //   ignoredActions: ['signUp/setImgBlob', 'me/setMe', 'me/resetMe'],
+      //   ignoredPaths: ['signUp.blob', 'me'],
+      // },
     }),
   devTools: process.env.NODE_ENV !== 'production',
 });
