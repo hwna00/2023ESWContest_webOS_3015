@@ -1,5 +1,3 @@
-import { Outlet } from 'react-router-dom';
-
 import NotFound from '../views/NotFound/NotFound';
 import SignUp from '../views/Auth/SignUp/SignUp';
 import LogIn from '../views/Auth/LogIn/LogIn';
@@ -9,10 +7,12 @@ import AfterCapture from '../components/SignUpForm/AfterCapture';
 import Step1 from '../views/Auth/SignUp/Step1';
 import Step2 from '../views/Auth/SignUp/Step2';
 import Step3 from '../views/Auth/SignUp/Step3';
+import AuthRoot from '../components/Root/AuthRoot';
+import AuthCallback from '../views/Auth/AuthCallback/AuthCallback';
 
 const authRoutes = {
   path: 'auth',
-  element: <Outlet />,
+  element: <AuthRoot />,
   errorElement: <NotFound />,
   children: [
     {
@@ -61,6 +61,10 @@ const authRoutes = {
     {
       path: 'log-in',
       element: <LogIn />,
+    },
+    {
+      path: 'callback',
+      element: <AuthCallback />,
     },
   ],
 };
