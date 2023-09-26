@@ -1,9 +1,10 @@
 import { extendTheme } from '@chakra-ui/react';
+
 import styles from './styles';
-import Stepper from './components/stepper';
-import { inputTheme } from './components/input';
-import { selectTheme } from './components/select';
 import { textareaTheme } from './components/textarea';
+import Stepper from './components/stepper';
+import { selectTheme } from './components/select';
+import { inputTheme } from './components/input';
 
 const theme = extendTheme({
   styles,
