@@ -1,5 +1,4 @@
-/* eslint-disable react/prop-types */
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import { Box, HStack, Button, useDisclosure } from '@chakra-ui/react';
 
@@ -18,6 +17,9 @@ function TableRow({ data }) {
     onOpen: openPaymentModal,
     onClose: closePaymentModal,
   } = useDisclosure();
+  const moveToDetail = useCallback(() => {
+    window.location.href = '/detail';
+  }, []);
 
   return (
     <HStack
@@ -43,7 +45,7 @@ function TableRow({ data }) {
         {data.type}
       </Box>
 
-      <Box w="20%" textAlign="center">
+      <Box w="20%" alignContent="center" display="flex" justifyContent="center">
         {'payment' in data ? (
           data.payment ? (
             '결제 완료'
@@ -58,11 +60,29 @@ function TableRow({ data }) {
               />
             </>
           )
-        ) : (
+        ) : data.confirm === true ? (
           <>
-            <Button h="10" onClick={openCancelModal}>
+            <Button h="10" onClick={openCancelModal} colorScheme="red">
               취소하기
             </Button>
+            <CancelModal isOpen={isCancelOpen} onClose={closeCancelModal} />
+          </>
+        ) : (
+          <>
+            {/* 환자 상세정보 뜨도록 */}
+            <HStack spacing="2" alignItems="center">
+              <Button h="10" onClick={moveToDetail} colorScheme="blue">
+                상세정보
+              </Button>
+              <PaymentModal
+                isOpen={isPaymentOpen}
+                onClose={closePaymentModal}
+              />
+
+              <Button h="10" onClick={openCancelModal} colorScheme="red">
+                취소하기
+              </Button>
+            </HStack>
             <CancelModal isOpen={isCancelOpen} onClose={closeCancelModal} />
           </>
         )}

@@ -1,10 +1,67 @@
 export const ConfirmedReservation = [
-  { name: '김재인', tel: '010-1234-5678', time: '09:10', type: '대면' },
-  { name: '양지웅', tel: '010-1234-5678', time: '09:20', type: '비대면' },
-  { name: '송보경', tel: '010-1234-5678', time: '09:40', type: '대면' },
-  { name: '서진형', tel: '010-1234-5678', time: '10:10', type: '비대면' },
-  { name: '하철환', tel: '010-1234-5678', time: '13:00', type: '대면' },
-  { name: '오예스', tel: '010-1234-5678', time: '15:10', type: '대면' },
+  {
+    name: '김재인',
+    tel: '010-1234-5678',
+    time: '09:10',
+    type: '대면',
+    confirm: true,
+  },
+  {
+    name: '양지웅',
+    tel: '010-1234-5678',
+    time: '09:20',
+    type: '비대면',
+    confirm: false,
+  },
+  {
+    name: '송보경',
+    tel: '010-1234-5678',
+    time: '09:40',
+    type: '대면',
+    confirm: true,
+  },
+  {
+    name: '서진형',
+    tel: '010-1234-5678',
+    time: '10:10',
+    type: '비대면',
+    confirm: false,
+  },
+  {
+    name: '하철환',
+    tel: '010-1234-5678',
+    time: '13:00',
+    type: '대면',
+    confirm: true,
+  },
+  {
+    name: '오예스',
+    tel: '010-1234-5678',
+    time: '11:10',
+    type: '대면',
+    confirm: true,
+  },
+  {
+    name: '오잉스',
+    tel: '010-1234-5678',
+    time: '15:10',
+    type: '대면',
+    confirm: false,
+  },
+  {
+    name: '박아파',
+    tel: '010-1234-5678',
+    time: '16:10',
+    type: '대면',
+    confirm: false,
+  },
+  {
+    name: '나환자',
+    tel: '010-1234-5678',
+    time: '16:10',
+    type: '대면',
+    confirm: false,
+  },
 ];
 
 export const CompleteReservation = [
