@@ -35,12 +35,13 @@ function ManageAppointment() {
         <TableHeader
           tableHeaders={['이름', '전화번호', '진료시간', '타입', '액션']}
         />
+
         <div className={styles.hideScrollBar}>
           <Box maxH="250px" overflowY="scroll">
             {ConfirmedReservation.filter(
               reservation => reservation.confirm === true,
-            ).map((reservation, index) => (
-              <TableRow key={index} data={reservation} />
+            ).map(reservation => (
+              <TableRow key={reservation.user_id} data={reservation} />
             ))}
           </Box>
         </div>
@@ -67,8 +68,8 @@ function ManageAppointment() {
             <Box maxH="250px" overflowY="scroll">
               {ConfirmedReservation.filter(
                 reservation => reservation.confirm === false,
-              ).map((reservation, index) => (
-                <TableRow key={index} data={reservation} />
+              ).map(reservation => (
+                <TableRow key={reservation.user_id} data={reservation} />
               ))}
             </Box>
           </Box>

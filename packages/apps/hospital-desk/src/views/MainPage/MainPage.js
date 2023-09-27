@@ -45,8 +45,8 @@ const MainPage = function () {
           <Box maxH="135px" overflowY="scroll">
             {ConfirmedReservation.filter(
               reservation => reservation.confirm === true,
-            ).map((reservation, index) => (
-              <TableRow key={index} data={reservation} />
+            ).map(reservation => (
+              <TableRow key={reservation.user_id} data={reservation} />
             ))}
           </Box>
         </div>
@@ -64,8 +64,8 @@ const MainPage = function () {
         />
         <div className={styles.hideScrollBar}>
           <Box maxH="135px" overflowY="scroll">
-            {CompleteReservation.map((reservation, index) => (
-              <TableRow key={index} data={reservation} />
+            {CompleteReservation.map(reservation => (
+              <TableRow key={reservation.user_id} data={reservation} />
             ))}
           </Box>
         </div>

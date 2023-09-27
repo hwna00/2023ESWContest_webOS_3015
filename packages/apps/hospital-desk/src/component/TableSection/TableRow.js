@@ -39,11 +39,11 @@ function TableRow({ data }) {
       </Box>
 
       <Box w="20%" textAlign="center">
-        {data.tel}
+        {data.phone_number}
       </Box>
 
       <Box w="20%" textAlign="center">
-        {data.time}
+        {data.date_time}
       </Box>
       <Box w="20%" textAlign="center">
         {data.type}
