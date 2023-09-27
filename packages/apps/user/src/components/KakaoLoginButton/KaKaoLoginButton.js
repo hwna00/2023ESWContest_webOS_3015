@@ -1,4 +1,5 @@
-import { Button } from '@chakra-ui/react';
+import { Image } from '@chakra-ui/react';
+import logo from '../../images/kakao_icon_circle.png';
 import { useCallback } from 'react';
 
 const KakaoForm = function(){
@@ -9,10 +10,7 @@ const KakaoForm = function(){
     window.location.href = KAKAO_AUTH_URL;
   }, [KAKAO_AUTH_URL]);
 
-  return (
-    <Button onClick={onLoginClick}>카카오 로그인</Button>
-  )
-
+  return <Image onClick={onLoginClick} height={'14'} src={logo} />;
 };
 
 export default KakaoForm;

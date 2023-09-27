@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react';
-
-import { useNavigate , Link as ReactRouterLink } from 'react-router-dom';
+import { useNavigate, Link as ReactRouterLink } from 'react-router-dom';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
 import {
   AiFillGithub,
@@ -26,7 +25,7 @@ import {
 } from '@chakra-ui/react';
 
 import { logIn, googleLogin, auth, provider } from '../../../../firebase';
-import KakaoForm from '../../../components/KakaoLoginButton/KaKaoLoginButton';
+import KakaoForm from '../../../components/KakaoLoginButton/KakaoLoginButton';
 
 function LogIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -109,7 +108,9 @@ function LogIn() {
                 <Button bgColor="white" onClick={googleClick}>
                   <Icon as={AiFillGoogleCircle} boxSize="30px" />
                 </Button>
+
                 <KakaoForm />
+                
               </HStack>
               <FormControl isInvalid={errors.email}>
                 <InputGroup>
