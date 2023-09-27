@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 
+import { useNavigate } from 'react-router-dom';
 import { Box, HStack, Button, useDisclosure } from '@chakra-ui/react';
 
 import PaymentModal from '../PaymentModal/PaymentModal';
@@ -7,18 +8,21 @@ import CancelModal from '../CancelModal/CancelModal';
 
 // eslint-disable-next-line react/prop-types
 function TableRow({ data }) {
+  const navigate = useNavigate();
   const {
     isOpen: isCancelOpen,
     onOpen: openCancelModal,
     onClose: closeCancelModal,
   } = useDisclosure();
+
   const {
     isOpen: isPaymentOpen,
     onOpen: openPaymentModal,
     onClose: closePaymentModal,
   } = useDisclosure();
+
   const moveToDetail = useCallback(() => {
-    window.location.href = '/detail';
+    navigate('/detail');
   }, []);
 
   return (
@@ -71,7 +75,7 @@ function TableRow({ data }) {
           <>
             {/* 환자 상세정보 뜨도록 */}
             <HStack spacing="2" alignItems="center">
-              <Button h="10" onClick={moveToDetail} colorScheme="blue">
+              <Button h="10" onClick={moveToDetail} colorScheme="primary">
                 상세정보
               </Button>
               <PaymentModal
