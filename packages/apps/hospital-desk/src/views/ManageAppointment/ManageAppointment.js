@@ -12,7 +12,7 @@ import {
 
 import { ConfirmedReservation } from '../MainPage/Data';
 import TableRow from '../../component/TableSection/TableRow';
-import TableHeader from '../../component/TableSection/TabelHeader';
+import TableHeader from '../../component/TableSection/TableHeader';
 
 function ManageAppointment() {
   return (
@@ -33,9 +33,8 @@ function ManageAppointment() {
           </ChakraLink>
         </HStack>
         <TableHeader
-          headers={['이름', '전화번호', '진료시간', '타입', '액션']}
+          tableHeaders={['이름', '전화번호', '진료시간', '타입', '액션']}
         />
-
         <div className={styles.hideScrollBar}>
           <Box maxH="250px" overflowY="scroll">
             {ConfirmedReservation.filter(
@@ -54,7 +53,13 @@ function ManageAppointment() {
           </ChakraLink>
         </HStack>
         <TableHeader
-          headers={['이름', '전화번호', '진료시간', '타입', '상세정보 확인']}
+          tableHeaders={[
+            '이름',
+            '전화번호',
+            '진료시간',
+            '타입',
+            '상세정보 확인',
+          ]}
         />
 
         <div className={styles.hideScrollBar}>

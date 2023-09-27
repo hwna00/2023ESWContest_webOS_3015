@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 
 import TableRow from '../../component/TableSection/TableRow';
-import TableHeader from '../../component/TableSection/TabelHeader';
+import TableHeader from '../../component/TableSection/TableHeader';
 import StatisticCard from '../../component/StatisticCard/StatisticCard';
 
 import { CompleteReservation, ConfirmedReservation } from './Data';
@@ -38,7 +38,7 @@ const MainPage = function () {
           </ChakraLink>
         </HStack>
         <TableHeader
-          headers={['이름', '전화번호', '진료시간', '타입', '액션']}
+          tableHeaders={['이름', '전화번호', '진료시간', '타입', '액션']}
         />
 
         <div className={styles.hideScrollBar}>
@@ -60,7 +60,7 @@ const MainPage = function () {
         </HStack>
 
         <TableHeader
-          headers={['이름', '전화번호', '진료시간', '타입', '결제상태']}
+          tableHeaders={['이름', '전화번호', '진료시간', '타입', '결제상태']}
         />
         <div className={styles.hideScrollBar}>
           <Box maxH="135px" overflowY="scroll">
