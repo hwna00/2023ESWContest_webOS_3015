@@ -41,7 +41,7 @@ function ManageAppointment() {
             {ConfirmedReservation.filter(
               reservation => reservation.confirm === true,
             ).map(reservation => (
-              <TableRow key={reservation.user_id} data={reservation} />
+              <TableRow key={reservation.uid} data={reservation} />
             ))}
           </Box>
         </div>
@@ -69,7 +69,7 @@ function ManageAppointment() {
               {ConfirmedReservation.filter(
                 reservation => reservation.confirm === false,
               ).map(reservation => (
-                <TableRow key={reservation.user_id} data={reservation} />
+                <TableRow key={reservation.uid} data={reservation} />
               ))}
             </Box>
           </Box>

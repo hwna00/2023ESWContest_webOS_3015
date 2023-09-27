@@ -2,7 +2,6 @@ import React from 'react';
 
 import { Box, Divider, HStack } from '@chakra-ui/react';
 
-// eslint-disable-next-line react/prop-types
 function TableHeader({ tableHeaders }) {
   return (
     <Box>
