@@ -1,5 +1,4 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
-import { act } from 'react-dom/test-utils';
 
 const signUpSlice = createSlice({
   name: 'signUp',
@@ -37,7 +36,11 @@ const meSlice = createSlice({
     profileImg: '',
   },
   reducers: {
-    setMe: (_, action) => action.payload,
+    setMe: (state, action) => {
+      Object.entries(action.payload).map(([key, value]) => {
+        state[key] = value;
+      });
+    },
     resetMe: state => Object.assign(state, {}),
   },
 });

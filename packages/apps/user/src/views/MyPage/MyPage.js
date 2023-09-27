@@ -18,29 +18,36 @@ import {
   ModalOverlay,
   ModalContent,
   Textarea,
-  Icon,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { DaumPostcodeEmbed } from 'react-daum-postcode';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { updateMe } from '../../api';
 
+//TODO: 성별 정보를 회원가입에서 받아야 함
+//TODO: 끝나면 인증페이지 접근 제한
 const MyPage = function () {
   const [address, setAddress] = useState('');
-  //TODO: defaultValues에 사용자 정보 받아오는 함수 연결해야 함
+
+  const me = useSelector(state => state.me);
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
-  } = useForm({ mode: 'all', defaultValues: '' });
-  const me = useSelector(state => state.me);
+  } = useForm({ mode: 'all', defaultValues: me });
   const { isOpen, onOpen, onClose } = useDisclosure();
-  //TODO: 성별 정보를 회원가입에서 받아야 함
-  //TODO: 끝나면 인증페이지 접근 제한
 
   const onSubmit = data => {
-    //TODO: 바뀐 데이터를 서버로 전송해야 함
-    console.log(data);
+    updateMe(data)
+      .then(res => {
+        //TODO: 성공했다고 알림
+      })
+      .catch(err => {
+        //TODO: 실패했다고 알림
+        console.log(err);
+      });
   };
 
   const handleComplete = useCallback(
@@ -50,6 +57,10 @@ const MyPage = function () {
     },
     [onClose],
   );
+
+  useEffect(() => {
+    reset(me);
+  }, [reset, me]);
 
   return (
     <Box height={'full'} overflowY={'scroll'}>
@@ -62,16 +73,16 @@ const MyPage = function () {
         >
           <Avatar src={me.profileImg} size={'2xl'} />
           <VStack width={'sm'}>
-            <FormControl width="full" isRequired isInvalid={errors.username}>
+            <FormControl width="full" isRequired isInvalid={errors.name}>
               <FormLabel>이름</FormLabel>
               <Input
                 required
                 placeholder="성함을 입력해주세요."
-                {...register('username', {
+                {...register('name', {
                   required: '이 항목은 필수입니다.',
                 })}
               />
-              <FormErrorMessage>{errors.username?.message}</FormErrorMessage>
+              <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
             </FormControl>
 
             <FormControl width="full" isRequired isInvalid={errors.email}>
@@ -252,7 +263,7 @@ const MyPage = function () {
           mt={'8'}
           gap={'4'}
         >
-          <Button size={'lg'} colorScheme="primary">
+          <Button type="submit" size={'lg'} colorScheme="primary">
             저장하기
           </Button>
         </ButtonGroup>
