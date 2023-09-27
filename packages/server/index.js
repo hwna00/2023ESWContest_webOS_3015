@@ -95,20 +95,33 @@ const createUsers = async function (req, res) {
 
       return res.send({
         isSucess: true,
-        code: 200,
+        code: 201,
         message: '유저 생성 성공',
       });
     } catch (err) {
       //이메일 중복이 발생하는 등의 에러
-      console.log(err.sqlMessage);
-      console.log('이미 가입된 회원입니다.');
-      return false;
+      if (err.errno === 1062) {
+        return res.send({
+          isSucess: false,
+          code: 409,
+          message: '이미 가입된 회원입니다.',
+        });
+      } else {
+        return res.send({
+          isSuccess: false,
+          code: 500,
+          message: '서버 오류',
+        });
+      }
     } finally {
       connection.release();
     }
   } catch (err) {
-    console.log('데이터베이스 연결 실패');
-    return false;
+    return res.send({
+      isSucess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
   }
 };
 
