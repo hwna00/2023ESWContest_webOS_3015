@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 
 import TableRow from '../../component/TableSection/TableRow';
-import TableHeader from '../../component/TableSection/TabelHeader';
+import TableHeader from '../../component/TableSection/TableHeader';
 import StatisticCard from '../../component/StatisticCard/StatisticCard';
 
 import { CompleteReservation, ConfirmedReservation } from './Data';
@@ -33,18 +33,20 @@ const MainPage = function () {
       <Box>
         <HStack justifyContent="space-between">
           <Heading fontSize="25px">다음 예약</Heading>
-          <ChakraLink as={ReactRouterLink} to="/">
+          <ChakraLink as={ReactRouterLink} to="ManageAppointment">
             + 전체보기
           </ChakraLink>
         </HStack>
         <TableHeader
-          headers={['이름', '전화번호', '진료시간', '타입', '액션']}
+          tableHeaders={['이름', '전화번호', '진료시간', '타입', '액션']}
         />
 
         <div className={styles.hideScrollBar}>
           <Box maxH="135px" overflowY="scroll">
-            {ConfirmedReservation.map((reservation, index) => (
-              <TableRow key={index} data={reservation} />
+            {ConfirmedReservation.filter(
+              reservation => reservation.confirm === true,
+            ).map(reservation => (
+              <TableRow key={reservation.uid} data={reservation} />
             ))}
           </Box>
         </div>
@@ -52,18 +54,18 @@ const MainPage = function () {
       <Box>
         <HStack justifyContent="space-between">
           <Heading fontSize="25px">완료 대기</Heading>
-          <ChakraLink as={ReactRouterLink} to="/">
+          <ChakraLink as={ReactRouterLink} to="/ManageAppointment">
             + 전체보기
           </ChakraLink>
         </HStack>
 
         <TableHeader
-          headers={['이름', '전화번호', '진료시간', '타입', '결제상태']}
+          tableHeaders={['이름', '전화번호', '진료시간', '타입', '결제상태']}
         />
         <div className={styles.hideScrollBar}>
           <Box maxH="135px" overflowY="scroll">
-            {CompleteReservation.map((reservation, index) => (
-              <TableRow key={index} data={reservation} />
+            {CompleteReservation.map(reservation => (
+              <TableRow key={reservation.uid} data={reservation} />
             ))}
           </Box>
         </div>
