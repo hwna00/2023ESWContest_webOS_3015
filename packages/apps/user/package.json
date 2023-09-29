@@ -36,6 +36,7 @@
     "@enact/spotlight": "^4.7.1",
     "@enact/ui": "^4.7.1",
     "@enact/webos": "^4.7.1",
+    "@housepital/common": "1.0.0",
     "dayjs": "^1.11.9",
     "ilib": "npm:ilib-webos@^14.17.0-webos1",
     "prop-types": "^15.8.1",
@@ -46,6 +47,5 @@
   },
   "devDependencies": {
     "eslint-config-enact-proxy": "^1.0.5"
-  },
-  "homepage": "./"
+  }
 }

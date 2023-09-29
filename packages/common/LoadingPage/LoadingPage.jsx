@@ -1,4 +1,4 @@
-import { Container, Spinner, VStack } from '@chakra-ui/react';
+import { Container, Spinner } from '@chakra-ui/react';
 
 const LoadingPage = () => {
   return (
