@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react';
 
 import { useNavigate } from 'react-router-dom';
-import { Box, HStack, Button, useDisclosure, Text } from '@chakra-ui/react';
+import { Box, HStack, Button, useDisclosure } from '@chakra-ui/react';
 
 import PaymentModal from '../PaymentModal/PaymentModal';
 import CancelModal from '../CancelModal/CancelModal';
 
-function TableRow({ data }) {
+function TableRow({ data, first, second, third, fourth, fifth }) {
   const navigate = useNavigate();
   const {
     isOpen: isCancelOpen,
@@ -26,7 +26,7 @@ function TableRow({ data }) {
 
   const paymentButton = (
     <>
-      <Button h="10" onClick={openPaymentModal}>
+      <Button h="10" colorScheme="primary" onClick={openPaymentModal}>
         금액 입력
       </Button>
       <PaymentModal isOpen={isPaymentOpen} onClose={closePaymentModal} />
@@ -43,6 +43,12 @@ function TableRow({ data }) {
   );
 
   const detailButtons = (
+    <Button h="10" onClick={moveToDetail} colorScheme="primary">
+      상세정보
+    </Button>
+  );
+
+  const detailAndCancelButtons = (
     <HStack spacing="2" alignItems="center">
       <Button h="10" onClick={moveToDetail} colorScheme="primary">
         상세정보
@@ -50,17 +56,23 @@ function TableRow({ data }) {
       {cancelButton}
     </HStack>
   );
-
   const renderButtons = () => {
-    if ('payment' in data) {
+    if (fifth === 'payment') {
       return data.payment ? '결제 완료' : paymentButton;
     }
 
-    if (data.confirm === true) {
+    if (fifth === 'cancel') {
       return cancelButton;
     }
 
-    return detailButtons;
+    if (fifth === 'detail') {
+      return detailButtons;
+    }
+    if (fifth === 'detailAndCancel') {
+      return detailAndCancelButtons;
+    }
+
+    return null;
   };
   return (
     <HStack
@@ -72,18 +84,18 @@ function TableRow({ data }) {
       h="14"
     >
       <Box w="20%" textAlign="center">
-        {data.name}
+        {first}
       </Box>
 
       <Box w="20%" textAlign="center">
-        {data.phone_number}
+        {second}
       </Box>
 
       <Box w="20%" textAlign="center">
-        {data.date_time}
+        {third}
       </Box>
       <Box w="20%" textAlign="center">
-        {data.is_NFTF ? <Text>대면</Text> : <Text>비대면</Text>}
+        {fourth}
       </Box>
       <Box w="20%" alignContent="center" display="flex" justifyContent="center">
         {renderButtons()}

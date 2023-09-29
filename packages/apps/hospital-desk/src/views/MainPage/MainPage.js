@@ -9,6 +9,7 @@ import {
   SimpleGrid,
   VStack,
   Link as ChakraLink,
+  Text,
 } from '@chakra-ui/react';
 
 import TableRow from '../../component/TableSection/TableRow';
@@ -46,7 +47,17 @@ const MainPage = function () {
             {ConfirmedReservation.filter(
               reservation => reservation.confirm === true,
             ).map(reservation => (
-              <TableRow key={reservation.uid} data={reservation} />
+              <TableRow
+                key={reservation.uid}
+                data={reservation}
+                first={reservation.name}
+                second={reservation.phone_number}
+                third={reservation.date_time}
+                fourth={
+                  reservation.is_NFTF ? <Text>대면</Text> : <Text>비대면</Text>
+                }
+                fifth="cancel"
+              />
             ))}
           </Box>
         </div>
@@ -65,7 +76,17 @@ const MainPage = function () {
         <div className={styles.hideScrollBar}>
           <Box maxH="135px" overflowY="scroll">
             {CompleteReservation.map(reservation => (
-              <TableRow key={reservation.uid} data={reservation} />
+              <TableRow
+                key={reservation.uid}
+                data={reservation}
+                first={reservation.name}
+                second={reservation.phone_number}
+                third={reservation.date_time}
+                fourth={
+                  reservation.is_NFTF ? <Text>대면</Text> : <Text>비대면</Text>
+                }
+                fifth="payment"
+              />
             ))}
           </Box>
         </div>

@@ -8,6 +8,7 @@ import {
   Link as ChakraLink,
   VStack,
   Button,
+  Text,
 } from '@chakra-ui/react';
 
 import { ConfirmedReservation } from '../MainPage/Data';
@@ -41,7 +42,17 @@ function ManageAppointment() {
             {ConfirmedReservation.filter(
               reservation => reservation.confirm === true,
             ).map(reservation => (
-              <TableRow key={reservation.uid} data={reservation} />
+              <TableRow
+                key={reservation.uid}
+                data={reservation}
+                first={reservation.name}
+                second={reservation.phone_number}
+                third={reservation.date_time}
+                fourth={
+                  reservation.is_NFTF ? <Text>대면</Text> : <Text>비대면</Text>
+                }
+                fifth="cancel"
+              />
             ))}
           </Box>
         </div>
@@ -69,7 +80,21 @@ function ManageAppointment() {
               {ConfirmedReservation.filter(
                 reservation => reservation.confirm === false,
               ).map(reservation => (
-                <TableRow key={reservation.uid} data={reservation} />
+                <TableRow
+                  key={reservation.uid}
+                  data={reservation}
+                  first={reservation.name}
+                  second={reservation.phone_number}
+                  third={reservation.date_time}
+                  fourth={
+                    reservation.is_NFTF ? (
+                      <Text>대면</Text>
+                    ) : (
+                      <Text>비대면</Text>
+                    )
+                  }
+                  fifth="detailAndCancel"
+                />
               ))}
             </Box>
           </Box>
