@@ -95,24 +95,91 @@ const createUsers = async function (req, res) {
 
       return res.send({
         isSucess: true,
-        code: 200,
+        code: 201,
         message: '유저 생성 성공',
       });
     } catch (err) {
       //이메일 중복이 발생하는 등의 에러
-      console.log(err.sqlMessage);
-      console.log('이미 가입된 회원입니다.');
-      return false;
+      if (err.errno === 1062) {
+        return res.send({
+          isSucess: false,
+          code: 409,
+          message: '이미 가입된 회원입니다.',
+        });
+      } else {
+        return res.send({
+          isSuccess: false,
+          code: 500,
+          message: '서버 오류',
+        });
+      }
     } finally {
       connection.release();
     }
   } catch (err) {
-    console.log('데이터베이스 연결 실패');
-    return false;
+    return res.send({
+      isSucess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
+const selectUsers = async function (connection, uid) {
+  const selectUserQuery = `SELECT * FROM Users WHERE user_id = ?;`;
+  const Params = [uid];
+
+  const rows = await connection.query(selectUserQuery, Params);
+
+  return rows;
+};
+
+const readUsers = async function (req, res) {
+  const { uid } = req.query;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      const [rows] = await selectUsers(connection, uid);
+      if (rows.length === 0) {
+        throw Error('User not found');
+      } else {
+        return res.send({
+          result: rows,
+          isSucess: true,
+          code: 200,
+          message: '유저 조회 성공',
+        });
+      }
+    } catch (err) {
+      if (err.message === 'User not found') {
+        return res.send({
+          isSucess: false,
+          code: 404,
+          message: '유저를 찾을 수 없습니다.',
+        });
+      } else {
+        return res.send({
+          isSuccess: false,
+          code: 500,
+          message: '서버 오류',
+        });
+      }
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.send({
+      isSucess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
   }
 };
 
 app.post('/api/create-user', createUsers);
+
+app.get('/api/read-user', readUsers);
 
 app.get('/api/auth/naver-callback', async (req, res) => {
   const { code, state } = req.query;
