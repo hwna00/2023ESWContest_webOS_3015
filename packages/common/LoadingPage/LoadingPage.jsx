@@ -1,13 +1,13 @@
 import { Container, Spinner } from '@chakra-ui/react';
 
-const LoadingPage = () => {
+const LoadingPage = function () {
   return (
     <Container
-      width={'100vh'}
-      height={'100vh'}
-      display={'flex'}
-      justifyContent={'center'}
-      alignItems={'center'}
+      width="100vh"
+      height="100vh"
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
     >
       <Spinner
         emptyColor="primary.200"
