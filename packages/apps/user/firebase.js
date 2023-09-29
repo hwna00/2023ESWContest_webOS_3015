@@ -25,8 +25,8 @@ const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 export const auth = getAuth(app);
 
-export const uploadBlob = async (blob, email) => {
-  const storageRef = ref(storage, `${email}/profileImg.png`);
+export const uploadBlob = async (blob, uid) => {
+  const storageRef = ref(storage, `${uid}/profileImg.png`);
   await uploadBytes(storageRef, blob);
 };
 

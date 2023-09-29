@@ -18,9 +18,29 @@ const signUpSlice = createSlice({
 
 const meSlice = createSlice({
   name: 'me',
-  initialState: {},
+  initialState: {
+    uid: '',
+    name: '',
+    email: '',
+    phoneNumber: '',
+    secondPhoneNumber: '',
+    address: '',
+    addressDetail: '',
+    birthDate: '',
+    bloodType: '',
+    height: '',
+    weight: '',
+    gender: '',
+    regularMedicines: '',
+    chronicDisease: '',
+    profileImg: '',
+  },
   reducers: {
-    setMe: (_, action) => action.payload,
+    setMe: (state, action) => {
+      Object.entries(action.payload).map(([key, value]) => {
+        state[key] = value;
+      });
+    },
     resetMe: state => Object.assign(state, {}),
   },
 });

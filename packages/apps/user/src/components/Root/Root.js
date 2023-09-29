@@ -20,8 +20,8 @@ const Root = function () {
     setIsLoading(false);
     if (user) {
       setIsLoggedIn(true);
-      if (Object.keys(me).length === 0) {
-        getMe(user.email).then(res => {
+      if (me.uid === '') {
+        getMe(user.uid).then(res => {
           dispatch(setMe(res));
         });
       }

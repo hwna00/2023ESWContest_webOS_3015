@@ -19,7 +19,6 @@ import {
 
 import { setAddress } from '../../../store';
 
-
 const Step2 = function () {
   const dispatch = useDispatch();
   const address = useSelector(state => state.signUp.address);

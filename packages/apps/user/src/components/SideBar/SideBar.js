@@ -87,7 +87,7 @@ const SideBar = function () {
               as={ReactRouterLink}
               to="mypage"
             >
-              <Avatar src={me.photoURL} size="xl" />
+              <Avatar src={me.profileImg} size="xl" />
               <Text fontSize="xl" fontWeight="bold" textAlign="center">
                 {me.name}
               </Text>
