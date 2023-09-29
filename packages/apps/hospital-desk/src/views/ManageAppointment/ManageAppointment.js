@@ -21,7 +21,7 @@ function ManageAppointment() {
         <Heading textAlign="left" p="4" fontSize="30px">
           예약관리
         </Heading>
-        <Button colorScheme="blue" leftIcon={<AiFillPlusCircle />}>
+        <Button colorScheme="primary" leftIcon={<AiFillPlusCircle />}>
           예약추가
         </Button>
       </HStack>

@@ -6,6 +6,7 @@ export const ConfirmedReservation = [
     date_time: '2023-09-30 09:10',
     is_NFTF: true,
     confirm: true,
+    doctorName: '차은우',
   },
   {
     uid: 2,
@@ -14,6 +15,7 @@ export const ConfirmedReservation = [
     date_time: '2023-09-30 09:20',
     is_NFTF: false,
     confirm: false,
+    doctorName: '차은우',
   },
   {
     uid: 3,
@@ -22,6 +24,7 @@ export const ConfirmedReservation = [
     date_time: '2023-09-30 09:40',
     is_NFTF: true,
     confirm: true,
+    doctorName: '차은우',
   },
   {
     uid: 4,
@@ -30,6 +33,7 @@ export const ConfirmedReservation = [
     date_time: '2023-09-30 10:10',
     is_NFTF: false,
     confirm: false,
+    doctorName: '차은우',
   },
   {
     uid: 5,
@@ -38,6 +42,7 @@ export const ConfirmedReservation = [
     date_time: '2023-09-30 13:00',
     is_NFTF: true,
     confirm: true,
+    doctorName: '차은우',
   },
   {
     uid: 6,
@@ -46,6 +51,7 @@ export const ConfirmedReservation = [
     date_time: '2023-09-30 11:10',
     is_NFTF: true,
     confirm: true,
+    doctorName: '차은우',
   },
   {
     uid: 7,
@@ -54,6 +60,7 @@ export const ConfirmedReservation = [
     date_time: '2023-09-30 15:10',
     is_NFTF: true,
     confirm: false,
+    doctorName: '차은우',
   },
   {
     uid: 8,
@@ -62,6 +69,7 @@ export const ConfirmedReservation = [
     date_time: '2023-09-30 16:10',
     is_NFTF: true,
     confirm: false,
+    doctorName: '차은우',
   },
   {
     uid: 9,
@@ -70,6 +78,7 @@ export const ConfirmedReservation = [
     date_time: '2023-09-30 16:10',
     is_NFTF: true,
     confirm: false,
+    doctorName: '차은우',
   },
 ];
 
@@ -81,6 +90,7 @@ export const CompleteReservation = [
     date_time: '2023-09-30 09:10',
     is_NFTF: true,
     payment: true,
+    doctorName: '차은우',
   },
   {
     uid: 11,
@@ -89,6 +99,7 @@ export const CompleteReservation = [
     date_time: '2023-09-30 09:20',
     is_NFTF: false,
     payment: false,
+    doctorName: '차은우',
   },
   {
     uid: 12,
@@ -97,6 +108,7 @@ export const CompleteReservation = [
     date_time: '2023-09-30 09:40',
     is_NFTF: true,
     payment: true,
+    doctorName: '차은우',
   },
   {
     uid: 13,
@@ -105,6 +117,7 @@ export const CompleteReservation = [
     date_time: '2023-09-30 10:10',
     is_NFTF: false,
     payment: true,
+    doctorName: '차은우',
   },
   {
     uid: 14,
@@ -113,6 +126,7 @@ export const CompleteReservation = [
     date_time: '2023-09-30 13:00',
     is_NFTF: true,
     payment: false,
+    doctorName: '차은우',
   },
   {
     uid: 15,
@@ -121,5 +135,6 @@ export const CompleteReservation = [
     date_time: '2023-09-30 15:10',
     is_NFTF: true,
     payment: false,
+    doctorName: '차은우',
   },
 ];
