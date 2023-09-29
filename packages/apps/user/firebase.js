@@ -1,3 +1,4 @@
+import Cookie from 'js-cookie';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import {
   getAuth,
@@ -6,9 +7,9 @@ import {
   signInWithCustomToken,
   setPersistence,
   browserLocalPersistence,
+  signOut,
 } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
-import Cookie from 'js-cookie';
 
 import { createUser, updateMe } from './src/api';
 
@@ -60,7 +61,7 @@ export const fbEmailLogIn = async data => {
     const { user } = await signInWithEmailAndPassword(auth, email, password);
     return user;
   } catch (error) {
-    console.log(error);
+    return console.log(error);
   }
 };
 
@@ -73,15 +74,8 @@ export const fbTokenLogIn = async data => {
     await updateMe({ ...data, uid: user.uid });
     return user;
   } catch (error) {
-    console.log(error);
+    return console.log(error);
   }
 };
 
-export const fbTokenLogin = async token => {
-  try {
-    const { user } = await signInWithCustomToken(auth, token);
-    return user;
-  } catch (error) {
-    console.log(error);
-  }
-};
+export const fbLogOut = async () => signOut(auth);
