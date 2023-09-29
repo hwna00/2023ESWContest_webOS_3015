@@ -19,6 +19,13 @@
   },
   "plugins": ["react", "import"],
   "rules": {
+    "no-param-reassign": [
+      "error",
+      {
+        "props": true,
+        "ignorePropertyModificationsFor": ["state"]
+      }
+    ],
     "react/jsx-props-no-spreading": "off",
     "react/jsx-filename-extension": "off",
     "no-shadow": "off",
