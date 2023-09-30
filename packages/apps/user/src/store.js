@@ -1,5 +1,23 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 
+const userInitialState = {
+  uid: '',
+  name: '',
+  email: '',
+  phoneNumber: '',
+  secondPhoneNumber: '',
+  address: '',
+  addressDetail: '',
+  birthDate: '',
+  bloodType: '',
+  height: '',
+  weight: '',
+  gender: '',
+  regularMedicines: '',
+  chronicDisease: '',
+  profileImg: '',
+};
+
 const signUpSlice = createSlice({
   name: 'signUp',
   initialState: { errors: {}, blob: '', address: '' },
@@ -18,30 +36,12 @@ const signUpSlice = createSlice({
 
 const meSlice = createSlice({
   name: 'me',
-  initialState: {
-    uid: '',
-    name: '',
-    email: '',
-    phoneNumber: '',
-    secondPhoneNumber: '',
-    address: '',
-    addressDetail: '',
-    birthDate: '',
-    bloodType: '',
-    height: '',
-    weight: '',
-    gender: '',
-    regularMedicines: '',
-    chronicDisease: '',
-    profileImg: '',
-  },
+  initialState: userInitialState,
   reducers: {
     setMe: (state, action) => {
-      Object.entries(action.payload).map(([key, value]) => {
-        state[key] = value;
-      });
+      Object.entries(action.payload).map(([key, value]) => (state[key] = value));
     },
-    resetMe: state => Object.assign(state, {}),
+    resetMe: () => userInitialState,
   },
 });
 

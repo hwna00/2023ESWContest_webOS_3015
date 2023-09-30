@@ -1,7 +1,5 @@
 import axios from 'axios';
 
-import { getUserImage } from '../firebase';
-
 const instance = axios.create({
   baseURL: 'http://localhost:3000/api',
 });
