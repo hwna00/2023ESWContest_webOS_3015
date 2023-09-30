@@ -57,11 +57,13 @@ const AppointmentDetail = function () {
   const onSubmit = useCallback(
     data => {
       if (!appointTime) {
-        //TODO: return 경고 전달
+        //TODO: webOS로 알림 전송하기
+        return null;
       }
-
-      //TODO: data.nftfType 확인해야 함.
-      //TODO: data.type이 ftf라면 nftfType을 무시해야 함.
+      if (data.type === 'nftf' && !data.nftfType) {
+        //TODO: webOS로 알림 전송하기
+        return null;
+      }
 
       const appointment = {
         uid,
