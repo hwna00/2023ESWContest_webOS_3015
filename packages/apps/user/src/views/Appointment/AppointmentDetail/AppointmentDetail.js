@@ -1,20 +1,15 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { FaBookmark, FaRegBookmark, FaStar } from 'react-icons/fa6';
 import dayjs from 'dayjs';
 import {
   AspectRatio,
   Box,
-  Button,
   Divider,
-  Grid,
-  GridItem,
   HStack,
   Heading,
   Image,
-  Input,
   ListItem,
   Tab,
   TabList,
@@ -26,69 +21,30 @@ import {
   UnorderedList,
   VStack,
   Icon,
-  useRadioGroup,
-  useRadio,
 } from '@chakra-ui/react';
+import { useSelector } from 'react-redux';
 
 import { DoctorList } from '../dataList';
-import { setAppointDatetime } from '../../../store';
 import BackButton from '../../../components/BackButton/BackButton';
-
-function RadioCard({ remainingSeats, ...radioProps }) {
-  const { getInputProps, getRadioProps } = useRadio(radioProps);
-
-  const input = getInputProps();
-  const checkbox = getRadioProps();
-
-  return (
-    <Box as="label">
-      <input {...input} />
-      <Box
-        {...checkbox}
-        cursor="pointer"
-        borderRadius="md"
-        bgColor="primary.100"
-        color="black"
-        aria-disabled={remainingSeats === 0}
-        _checked={{
-          bgColor: 'primary.500',
-          color: 'white',
-        }}
-        _disabled={{
-          bgColor: 'black',
-          opacity: '0.2',
-          color: 'white',
-        }}
-        px={4}
-        py={2}
-      >
-        {radioProps.children}
-      </Box>
-    </Box>
-  );
-}
+import { useForm } from 'react-hook-form';
+import { createAppointment } from '../../../api';
+import AppointForm from './AppiontForm';
 
 const AppointmentDetail = function () {
-  const { id } = useParams();
   const [doctor, setDoctor] = useState({});
-  const [appointDate, setAppointDate] = useState(
-    dayjs(new Date()).format('YYYY-MM-DD'),
-  );
-  const [appointTime, setAppointTime] = useState();
   const [reservationOfDay, setReservationOfDay] = useState({});
-  const dispatch = useDispatch();
+  const [appointTime, setAppointTime] = useState();
 
-  const onDateChange = useCallback(e => {
-    setAppointDate(e.target.value);
-  }, []);
-
-  const onTimeChange = value => {
-    setAppointTime(value);
-  };
-
-  const onNextClick = useCallback(() => {
-    dispatch(setAppointDatetime({ date: appointDate, time: appointTime }));
-  }, [appointDate, appointTime, dispatch]);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    mode: 'all',
+    defaultValues: { date: dayjs(new Date()).format('YYYY-MM-DD') },
+  });
+  const { id: doctorId } = useParams();
+  const uid = useSelector(state => state.me.uid);
 
   const onToggleBookmarkClick = useCallback(() => {
     // Todo: 추후에 isFavorite 항목을 수정하는 axios patch 함수로 변경해야 함.
@@ -98,16 +54,30 @@ const AppointmentDetail = function () {
     });
   }, [doctor]);
 
-  const { getRootProps, getRadioProps } = useRadioGroup({
-    name: 'timeGroup',
-    onChange: onTimeChange,
-  });
+  const onSubmit = useCallback(
+    data => {
+      if (!appointTime) {
+        //TODO: return 경고 전달
+      }
 
-  const group = getRootProps();
+      //TODO: data.nftfType 확인해야 함.
+      //TODO: data.type이 ftf라면 nftfType을 무시해야 함.
+
+      const appointment = {
+        uid,
+        doctorId,
+        time: appointTime,
+        ...data,
+      };
+
+      createAppointment(appointment);
+    },
+    [appointTime, uid, doctorId],
+  );
 
   useEffect(() => {
     // Todo: 추후에 id를 이용한 axios get 함수로 변경해야 함.
-    const found = DoctorList.find(d => d?.id === id);
+    const found = DoctorList.find(d => d?.id === doctorId);
     setDoctor(found);
     setReservationOfDay({
       '09:00': 2,
@@ -129,7 +99,7 @@ const AppointmentDetail = function () {
       '17:00': 0,
       '17:30': 0,
     });
-  }, [id, appointDate]);
+  }, [doctorId]);
 
   return (
     <HStack height="full" gap="6">
@@ -292,57 +262,20 @@ const AppointmentDetail = function () {
           </TabPanel>
 
           <TabPanel
+            as={'form'}
             height="full"
             display="flex"
             flexDirection="column"
             justifyContent="space-between"
+            gap={'4'}
+            onSubmit={handleSubmit(onSubmit)}
           >
-            <Input
-              placeholder="예약하실 날짜를 선택하세요"
-              size="lg"
-              type="date"
-              defaultValue={appointDate}
-              onChange={onDateChange}
+            <AppointForm
+              reservationOfDay={reservationOfDay}
+              register={register}
+              errors={errors}
+              setAppointTime={setAppointTime}
             />
-            <Box width="full">
-              <Grid
-                width="full"
-                maxH="64"
-                overflowY="scroll"
-                bgColor="primary.200"
-                padding="4"
-                templateColumns="repeat(4, 1fr)"
-                placeItems="center"
-                gap={4}
-                borderRadius="md"
-                {...group}
-              >
-                {Object.keys(reservationOfDay).map(key => {
-                  const radio = getRadioProps({ value: key });
-                  const remainingSeats = reservationOfDay[key];
-                  return (
-                    <GridItem key={key} width="full" textAlign="center">
-                      <RadioCard remainingSeats={remainingSeats} {...radio}>
-                        {key}
-                      </RadioCard>
-                    </GridItem>
-                  );
-                })}
-              </Grid>
-              <Text mt="2">
-                병원 상황에 따라 대기 시간이 발생할 수 있습니다.
-              </Text>
-            </Box>
-
-            <Button
-              width="full"
-              colorScheme="primary"
-              py="4"
-              size="lg"
-              onClick={onNextClick}
-            >
-              다음단계
-            </Button>
           </TabPanel>
 
           <TabPanel>

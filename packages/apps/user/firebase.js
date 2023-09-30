@@ -37,6 +37,11 @@ export const getUserImage = email => {
     .catch(() => null);
 };
 
+export const uploadNftfBlob = async (blob, uid) => {
+  const storageRef = ref(storage, `${uid}/nftf.png`);
+  await uploadBytes(storageRef, blob);
+};
+
 export const fbSignUp = async data => {
   const { email, password, ...rest } = data;
   const isUserExist = false; // getMe();
