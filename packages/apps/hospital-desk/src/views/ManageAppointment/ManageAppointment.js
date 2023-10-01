@@ -21,7 +21,7 @@ function ManageAppointment() {
         <Heading textAlign="left" p="4" fontSize="30px">
           예약관리
         </Heading>
-        <Button colorScheme="blue" leftIcon={<AiFillPlusCircle />}>
+        <Button colorScheme="primary" leftIcon={<AiFillPlusCircle />}>
           예약추가
         </Button>
       </HStack>
@@ -33,7 +33,14 @@ function ManageAppointment() {
           </ChakraLink>
         </HStack>
         <TableHeader
-          tableHeaders={['이름', '전화번호', '진료시간', '타입', '액션']}
+          tableHeaders={[
+            '이름',
+            '전화번호',
+            '진료시간',
+            '타입',
+            '담당의사',
+            '액션',
+          ]}
         />
 
         <div className={styles.hideScrollBar}>
@@ -41,7 +48,11 @@ function ManageAppointment() {
             {ConfirmedReservation.filter(
               reservation => reservation.confirm === true,
             ).map(reservation => (
-              <TableRow key={reservation.uid} data={reservation} />
+              <TableRow
+                key={reservation.id}
+                data={reservation}
+                buttonType="cancel"
+              />
             ))}
           </Box>
         </div>
@@ -59,6 +70,7 @@ function ManageAppointment() {
             '전화번호',
             '진료시간',
             '타입',
+            '담당의사',
             '상세정보 확인',
           ]}
         />
@@ -69,7 +81,11 @@ function ManageAppointment() {
               {ConfirmedReservation.filter(
                 reservation => reservation.confirm === false,
               ).map(reservation => (
-                <TableRow key={reservation.uid} data={reservation} />
+                <TableRow
+                  key={reservation.id}
+                  data={reservation}
+                  buttonType="detailAndCancel"
+                />
               ))}
             </Box>
           </Box>

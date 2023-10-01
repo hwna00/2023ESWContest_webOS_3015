@@ -38,7 +38,14 @@ const MainPage = function () {
           </ChakraLink>
         </HStack>
         <TableHeader
-          tableHeaders={['이름', '전화번호', '진료시간', '타입', '액션']}
+          tableHeaders={[
+            '이름',
+            '전화번호',
+            '진료시간',
+            '타입',
+            '담당의사',
+            '액션',
+          ]}
         />
 
         <div className={styles.hideScrollBar}>
@@ -46,7 +53,11 @@ const MainPage = function () {
             {ConfirmedReservation.filter(
               reservation => reservation.confirm === true,
             ).map(reservation => (
-              <TableRow key={reservation.uid} data={reservation} />
+              <TableRow
+                key={reservation.id}
+                data={reservation}
+                buttonType="cancel"
+              />
             ))}
           </Box>
         </div>
@@ -60,12 +71,23 @@ const MainPage = function () {
         </HStack>
 
         <TableHeader
-          tableHeaders={['이름', '전화번호', '진료시간', '타입', '결제상태']}
+          tableHeaders={[
+            '이름',
+            '전화번호',
+            '진료시간',
+            '타입',
+            '담당의사',
+            '결제상태',
+          ]}
         />
         <div className={styles.hideScrollBar}>
           <Box maxH="135px" overflowY="scroll">
             {CompleteReservation.map(reservation => (
-              <TableRow key={reservation.uid} data={reservation} />
+              <TableRow
+                key={reservation.id}
+                data={reservation}
+                buttonType="payment"
+              />
             ))}
           </Box>
         </div>
