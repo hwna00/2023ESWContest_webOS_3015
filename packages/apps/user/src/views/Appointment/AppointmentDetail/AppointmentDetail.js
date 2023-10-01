@@ -1,8 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { useParams } from 'react-router-dom';
+import { useParams, Link as ReactRouterLink } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { FaBookmark, FaRegBookmark, FaStar } from 'react-icons/fa6';
+import {
+  FaAngleRight,
+  FaBookmark,
+  FaRegBookmark,
+  FaStar,
+} from 'react-icons/fa6';
 import dayjs from 'dayjs';
 import {
   AspectRatio,
@@ -28,6 +33,7 @@ import {
   Icon,
   useRadioGroup,
   useRadio,
+  Link as ChakraLink,
 } from '@chakra-ui/react';
 
 import { DoctorList, HospitalList } from '../dataList';
@@ -144,7 +150,6 @@ const AppointmentDetail = function () {
         <BackButton />
       </VStack>
 
-      {/* //TODO: 조건부 렌더링 */}
       <VStack minW="60" height="full" overflowY="auto">
         <Box
           width="full"
@@ -178,13 +183,21 @@ const AppointmentDetail = function () {
             <Text color="primary.500" fontWeight="bold">
               영업중
             </Text>
-            {/* //TODO: 조건부 렌더링 */}
-            <>
-              <Text fontSize="xl" fontWeight="bold">
-                {data?.name} 의사
-              </Text>
-              <Text>{data?.specialty} 전문의</Text>
-            </>
+            {category === 'doctors' && (
+              <>
+                <Text fontSize="xl" fontWeight="bold">
+                  {data?.name} 의사
+                </Text>
+                <Text>{data?.specialty} 전문의</Text>
+              </>
+            )}
+            {category === 'hospitals' && (
+              <>
+                <Text fontSize="xl" fontWeight="bold">
+                  {data?.name}
+                </Text>
+              </>
+            )}
           </Box>
           <HStack gap="2" alignItems="center" fontWeight="bold">
             <Icon as={FaStar} color="yellow.400" />
@@ -229,9 +242,18 @@ const AppointmentDetail = function () {
         justifyContent="flex-start"
       >
         <TabList>
-          <Tab>의사 정보</Tab>
-          {/* //TODO: 조건부 렌더링 */}
-          <Tab>예약</Tab>
+          {category === 'doctors' && (
+            <>
+              <Tab>의사 정보</Tab>
+              <Tab>예약</Tab>
+            </>
+          )}
+          {category === 'hospitals' && (
+            <>
+              <Tab>병원 정보</Tab>
+              <Tab>의료진</Tab>
+            </>
+          )}
           <Tab>리뷰</Tab>
         </TabList>
 
@@ -239,7 +261,8 @@ const AppointmentDetail = function () {
           <TabPanel>
             <Box>
               <Heading as="h2" size="lg">
-                의사 소개
+                {category === 'doctors' && '의사 소개'}
+                {category === 'hospitals' && '병원 소개'}
               </Heading>
               <Box
                 width="full"
@@ -306,52 +329,100 @@ const AppointmentDetail = function () {
             flexDirection="column"
             justifyContent="space-between"
           >
-            <Input
-              placeholder="예약하실 날짜를 선택하세요"
-              size="lg"
-              type="date"
-              defaultValue={appointDate}
-              onChange={onDateChange}
-            />
-            <Box width="full">
-              <Grid
-                width="full"
-                maxH="64"
-                overflowY="scroll"
-                bgColor="primary.200"
-                padding="4"
-                templateColumns="repeat(4, 1fr)"
-                placeItems="center"
-                gap={4}
-                borderRadius="md"
-                {...group}
-              >
-                {Object.keys(reservationOfDay).map(key => {
-                  const radio = getRadioProps({ value: key });
-                  const remainingSeats = reservationOfDay[key];
+            {category === 'doctors' && (
+              <>
+                <Input
+                  placeholder="예약하실 날짜를 선택하세요"
+                  size="lg"
+                  type="date"
+                  defaultValue={appointDate}
+                  onChange={onDateChange}
+                />
+                <Box width="full">
+                  <Grid
+                    width="full"
+                    maxH="64"
+                    overflowY="scroll"
+                    bgColor="primary.200"
+                    padding="4"
+                    templateColumns="repeat(4, 1fr)"
+                    placeItems="center"
+                    gap={4}
+                    borderRadius="md"
+                    {...group}
+                  >
+                    {Object.keys(reservationOfDay).map(key => {
+                      const radio = getRadioProps({ value: key });
+                      const remainingSeats = reservationOfDay[key];
+                      return (
+                        <GridItem key={key} width="full" textAlign="center">
+                          <RadioCard remainingSeats={remainingSeats} {...radio}>
+                            {key}
+                          </RadioCard>
+                        </GridItem>
+                      );
+                    })}
+                  </Grid>
+                  <Text mt="2">
+                    병원 상황에 따라 대기 시간이 발생할 수 있습니다.
+                  </Text>
+                </Box>
+
+                <Button
+                  width="full"
+                  colorScheme="primary"
+                  py="4"
+                  size="lg"
+                  onClick={onNextClick}
+                >
+                  다음단계
+                </Button>
+              </>
+            )}
+            {category === 'hospitals' && (
+              <UnorderedList listStyleType={'none'} margin={0} spacing={'4'}>
+                {data.doctors?.map(doctor => {
                   return (
-                    <GridItem key={key} width="full" textAlign="center">
-                      <RadioCard remainingSeats={remainingSeats} {...radio}>
-                        {key}
-                      </RadioCard>
-                    </GridItem>
+                    <ListItem key={doctor.id}>
+                      <ChakraLink
+                        as={ReactRouterLink}
+                        to={`/appointment/doctors/${doctor.id}`}
+                        p={'4'}
+                        bgColor={'primary.200'}
+                        borderRadius={'md'}
+                        display={'flex'}
+                        justifyContent={'space-between'}
+                        alignItems={'center'}
+                      >
+                        <HStack gap={'6'}>
+                          <AspectRatio width={'28'} ratio={1}>
+                            <Image
+                              borderRadius={'full'}
+                              src={doctor.profileImg}
+                              alt="Doctor Profile"
+                              objectFit="cover"
+                            />
+                          </AspectRatio>
+
+                          <VStack
+                            height={'full'}
+                            justifyContent={'flex-start'}
+                            alignItems={'flex-start'}
+                          >
+                            <Text fontSize="xl" fontWeight="bold">
+                              {doctor.name} 의사
+                            </Text>
+                            <Text>{doctor.specialty} 전문의</Text>
+                          </VStack>
+                        </HStack>
+
+                        <Icon boxSize={8} as={FaAngleRight} />
+                      </ChakraLink>
+                    </ListItem>
                   );
                 })}
-              </Grid>
-              <Text mt="2">
-                병원 상황에 따라 대기 시간이 발생할 수 있습니다.
-              </Text>
-            </Box>
-
-            <Button
-              width="full"
-              colorScheme="primary"
-              py="4"
-              size="lg"
-              onClick={onNextClick}
-            >
-              다음단계
-            </Button>
+              </UnorderedList>
+            )}
           </TabPanel>
 
           <TabPanel>

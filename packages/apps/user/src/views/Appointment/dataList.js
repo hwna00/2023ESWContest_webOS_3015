@@ -39,6 +39,26 @@ export const HospitalList = [
         break: '13:00 ~ 14:00',
       },
     },
+    doctors: [
+      {
+        id: '0',
+        name: '이현철',
+        specialty: '내과 전문의',
+        fields: ['내과', '가정의학과'],
+        rate: '4.4',
+        profileImg:
+          'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
+      },
+      {
+        id: '1',
+        name: '이현철',
+        specialty: '내과 전문의',
+        fields: ['내과', '가정의학과'],
+        rate: '4.4',
+        profileImg:
+          'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
+      },
+    ],
   },
   {
     id: '1',
@@ -80,6 +100,26 @@ export const HospitalList = [
         break: '13:00 ~ 14:00',
       },
     },
+    doctors: [
+      {
+        id: '0',
+        name: '이현철',
+        specialty: '내과 전문의',
+        fields: ['내과', '가정의학과'],
+        rate: '4.4',
+        profileImg:
+          'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
+      },
+      {
+        id: '1',
+        name: '이현철',
+        specialty: '내과 전문의',
+        fields: ['내과', '가정의학과'],
+        rate: '4.4',
+        profileImg:
+          'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
+      },
+    ],
   },
   {
     id: '2',
@@ -121,6 +161,26 @@ export const HospitalList = [
         break: '13:00 ~ 14:00',
       },
     },
+    doctors: [
+      {
+        id: '0',
+        name: '이현철',
+        specialty: '내과 전문의',
+        fields: ['내과', '가정의학과'],
+        rate: '4.4',
+        profileImg:
+          'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
+      },
+      {
+        id: '1',
+        name: '이현철',
+        specialty: '내과 전문의',
+        fields: ['내과', '가정의학과'],
+        rate: '4.4',
+        profileImg:
+          'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
+      },
+    ],
   },
   {
     id: '3',
@@ -162,6 +222,26 @@ export const HospitalList = [
         break: '13:00 ~ 14:00',
       },
     },
+    doctors: [
+      {
+        id: '0',
+        name: '이현철',
+        specialty: '내과 전문의',
+        fields: ['내과', '가정의학과'],
+        rate: '4.4',
+        profileImg:
+          'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
+      },
+      {
+        id: '1',
+        name: '이현철',
+        specialty: '내과 전문의',
+        fields: ['내과', '가정의학과'],
+        rate: '4.4',
+        profileImg:
+          'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
+      },
+    ],
   },
   {
     id: '4',
@@ -203,6 +283,26 @@ export const HospitalList = [
         break: '13:00 ~ 14:00',
       },
     },
+    doctors: [
+      {
+        id: '0',
+        name: '이현철',
+        specialty: '내과 전문의',
+        fields: ['내과', '가정의학과'],
+        rate: '4.4',
+        profileImg:
+          'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
+      },
+      {
+        id: '1',
+        name: '이현철',
+        specialty: '내과 전문의',
+        fields: ['내과', '가정의학과'],
+        rate: '4.4',
+        profileImg:
+          'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
+      },
+    ],
   },
   {
     id: '5',
@@ -244,6 +344,26 @@ export const HospitalList = [
         break: '13:00 ~ 14:00',
       },
     },
+    doctors: [
+      {
+        id: '0',
+        name: '이현철',
+        specialty: '내과 전문의',
+        fields: ['내과', '가정의학과'],
+        rate: '4.4',
+        profileImg:
+          'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
+      },
+      {
+        id: '1',
+        name: '이현철',
+        specialty: '내과 전문의',
+        fields: ['내과', '가정의학과'],
+        rate: '4.4',
+        profileImg:
+          'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
+      },
+    ],
   },
 ];
 
