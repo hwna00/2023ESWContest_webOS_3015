@@ -21,7 +21,7 @@ const AppointmentViewList = function ({ type, selectedList }) {
   }, [type]);
 
   return (
-    <VStack w="full" h="full">
+    <VStack w="full" h="80">
       <HStack
         w="full"
         justifyContent="space-between"
@@ -39,10 +39,10 @@ const AppointmentViewList = function ({ type, selectedList }) {
 
       <UnorderedList
         w="full"
-        h="80"
         overflowY="auto"
         listStyleType={'none'}
         spacing={'4'}
+        margin={0}
       >
         {selectedList.map(item => (
           <ListItem w="full" alignItems="flex-start" px="2" key={item.id}>

@@ -110,7 +110,7 @@ const doctorList = [
 
 const Appointment = function () {
   return (
-    <VStack w="full" h="full">
+    <VStack w="full" h="full" justifyContent={'space-between'} gap={'6'}>
       <HStack w="full" gap="6" px="2">
         <Box bg="primary.200" w="full" h="40" borderRadius="10" p="4">
           <Box>
@@ -141,7 +141,7 @@ const Appointment = function () {
         </VStack>
       </HStack>
 
-      <HStack w="full" mt="4">
+      <HStack w="full">
         <AppointmentViewList type="hospital" selectedList={hospitalList} />
         <AppointmentViewList type="doctor" selectedList={doctorList} />
       </HStack>
