@@ -23,10 +23,10 @@ const Step3 = function () {
         <FormControl width="full" isInvalid={errors.bloodType}>
           <FormLabel>혈액형</FormLabel>
           <Select placeholder="혈액형" {...register('bloodType')}>
-            <option value="blood_A">A형</option>
-            <option value="blood_B">B형</option>
-            <option value="blood_O">O형</option>
-            <option value="blood_AB">AB형</option>
+            <option value="A">A형</option>
+            <option value="B">B형</option>
+            <option value="O">O형</option>
+            <option value="AB">AB형</option>
           </Select>
           <FormErrorMessage>{errors.bloodType?.message}</FormErrorMessage>
         </FormControl>
