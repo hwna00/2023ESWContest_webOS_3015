@@ -30,7 +30,7 @@ import {
   useRadio,
 } from '@chakra-ui/react';
 
-import { DoctorList } from '../dataList';
+import { DoctorList, HospitalList } from '../dataList';
 import { setAppointDatetime } from '../../../store';
 import BackButton from '../../../components/BackButton/BackButton';
 
@@ -69,8 +69,8 @@ function RadioCard({ remainingSeats, ...radioProps }) {
 }
 
 const AppointmentDetail = function () {
-  const { id } = useParams();
-  const [doctor, setDoctor] = useState({});
+  const { category, id } = useParams();
+  const [data, setData] = useState({});
   const [appointDate, setAppointDate] = useState(
     dayjs(new Date()).format('YYYY-MM-DD'),
   );
@@ -92,11 +92,11 @@ const AppointmentDetail = function () {
 
   const onToggleBookmarkClick = useCallback(() => {
     // Todo: 추후에 isFavorite 항목을 수정하는 axios patch 함수로 변경해야 함.
-    setDoctor({
-      ...doctor,
-      isFavorite: !doctor.isFavorite,
+    setData({
+      ...data,
+      isFavorite: !data.isFavorite,
     });
-  }, [doctor]);
+  }, [data]);
 
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: 'timeGroup',
@@ -106,9 +106,16 @@ const AppointmentDetail = function () {
   const group = getRootProps();
 
   useEffect(() => {
-    // Todo: 추후에 id를 이용한 axios get 함수로 변경해야 함.
-    const found = DoctorList.find(d => d?.id === id);
-    setDoctor(found);
+    //Todo: 추후에 id를 이용한 axios get 함수로 변경해야 함.
+    //TODO: axios.get(`/${catogory}/${id}`)를 state에 저장하기 -> tanstack으로 감싸기
+    if (category === 'doctors') {
+      const found = DoctorList.find(d => d?.id === id);
+      setData(found);
+    } else if (category === 'hospitals') {
+      const found = HospitalList.find(h => h?.id === id);
+      setData(found);
+    }
+
     setReservationOfDay({
       '09:00': 2,
       '09:30': 1,
@@ -129,7 +136,7 @@ const AppointmentDetail = function () {
       '17:00': 0,
       '17:30': 0,
     });
-  }, [id, appointDate]);
+  }, [category, id, appointDate]);
 
   return (
     <HStack height="full" gap="6">
@@ -137,6 +144,7 @@ const AppointmentDetail = function () {
         <BackButton />
       </VStack>
 
+      {/* //TODO: 조건부 렌더링 */}
       <VStack minW="60" height="full" overflowY="auto">
         <Box
           width="full"
@@ -146,14 +154,10 @@ const AppointmentDetail = function () {
           overflow="hidden"
         >
           <AspectRatio ratio={1}>
-            <Image
-              src={doctor?.profileImg}
-              alt="Doctor Profile"
-              objectFit="cover"
-            />
+            <Image src={data?.profileImg} alt="Profile" objectFit="cover" />
           </AspectRatio>
           <Text position="absolute" top="4" right="4">
-            {doctor.isFavorite ? (
+            {data?.isFavorite ? (
               <Icon
                 as={FaBookmark}
                 boxSize={6}
@@ -174,23 +178,26 @@ const AppointmentDetail = function () {
             <Text color="primary.500" fontWeight="bold">
               영업중
             </Text>
-            <Text fontSize="xl" fontWeight="bold">
-              {doctor.name} 의사
-            </Text>
-            <Text>{doctor.specialty} 전문의</Text>
+            {/* //TODO: 조건부 렌더링 */}
+            <>
+              <Text fontSize="xl" fontWeight="bold">
+                {data?.name} 의사
+              </Text>
+              <Text>{data?.specialty} 전문의</Text>
+            </>
           </Box>
           <HStack gap="2" alignItems="center" fontWeight="bold">
             <Icon as={FaStar} color="yellow.400" />
-            <Text>{doctor.rate}</Text>
+            <Text>{data?.rate}</Text>
           </HStack>
         </HStack>
 
         <Divider bgColor="primary.700" height="1px" />
 
         <VStack width="full" gap="2" alignItems="flex-start">
-          <Text>{doctor.hospital}</Text>
-          <Text>전화번호: {doctor.tel}</Text>
-          <Text>주소: {doctor.address}</Text>
+          <Text>{data?.hospital}</Text>
+          <Text>전화번호: {data?.tel}</Text>
+          <Text>주소: {data?.address}</Text>
         </VStack>
 
         <Divider bgColor="primary.700" height="1px" />
@@ -203,7 +210,7 @@ const AppointmentDetail = function () {
           alignItems="center"
           wrap="wrap"
         >
-          {doctor.fields?.map(field => (
+          {data?.fields?.map(field => (
             <Tag size="md" key={field} variant="outline" colorScheme="gray">
               {field}
             </Tag>
@@ -223,6 +230,7 @@ const AppointmentDetail = function () {
       >
         <TabList>
           <Tab>의사 정보</Tab>
+          {/* //TODO: 조건부 렌더링 */}
           <Tab>예약</Tab>
           <Tab>리뷰</Tab>
         </TabList>
@@ -241,7 +249,7 @@ const AppointmentDetail = function () {
                 bgColor="primary.200"
                 borderRadius="md"
               >
-                <Text>{doctor?.description}</Text>
+                <Text>{data?.description}</Text>
               </Box>
             </Box>
 
@@ -259,38 +267,39 @@ const AppointmentDetail = function () {
               >
                 <UnorderedList styleType="none" ml={0} spacing="2">
                   <ListItem>
-                    <b>월요일</b> {doctor.businessHours?.monday.open} (점심시간{' '}
-                    {doctor.businessHours?.monday.break})
+                    <b>월요일</b> {data?.businessHours?.monday.open} (점심시간{' '}
+                    {data?.businessHours?.monday.break})
                   </ListItem>
                   <ListItem>
-                    <b>화요일</b> {doctor.businessHours?.tuesday.open} (점심시간{' '}
-                    {doctor.businessHours?.tuesday.break})
+                    <b>화요일</b> {data?.businessHours?.tuesday.open} (점심시간{' '}
+                    {data?.businessHours?.tuesday.break})
                   </ListItem>
                   <ListItem>
-                    <b>수요일</b> {doctor.businessHours?.wednesday.open}{' '}
-                    (점심시간 {doctor.businessHours?.wednesday.break})
+                    <b>수요일</b> {data?.businessHours?.wednesday.open}{' '}
+                    (점심시간 {data?.businessHours?.wednesday.break})
                   </ListItem>
                   <ListItem>
-                    <b>목요일</b> {doctor.businessHours?.thursday.open}{' '}
-                    (점심시간 {doctor.businessHours?.thursday.break})
+                    <b>목요일</b> {data?.businessHours?.thursday.open} (점심시간{' '}
+                    {data?.businessHours?.thursday.break})
                   </ListItem>
                   <ListItem>
-                    <b>금요일</b> {doctor.businessHours?.friday.open} (점심시간{' '}
-                    {doctor.businessHours?.friday.break})
+                    <b>금요일</b> {data?.businessHours?.friday.open} (점심시간{' '}
+                    {data?.businessHours?.friday.break})
                   </ListItem>
                   <ListItem>
-                    <b>토요일</b> {doctor.businessHours?.saturday.open}{' '}
-                    (점심시간 {doctor.businessHours?.saturday.break})
+                    <b>토요일</b> {data?.businessHours?.saturday.open} (점심시간{' '}
+                    {data?.businessHours?.saturday.break})
                   </ListItem>
                   <ListItem>
-                    <b>일요일</b> {doctor.businessHours?.sunday.open} (점심시간{' '}
-                    {doctor.businessHours?.sunday.break})
+                    <b>일요일</b> {data?.businessHours?.sunday.open} (점심시간{' '}
+                    {data?.businessHours?.sunday.break})
                   </ListItem>
                 </UnorderedList>
               </Box>
             </Box>
           </TabPanel>
 
+          {/* //TODO: 조건부 렌더링 */}
           <TabPanel
             height="full"
             display="flex"
@@ -356,7 +365,7 @@ const AppointmentDetail = function () {
                   <Text fontWeight="bold">양지웅님 (담당의사: 김재인)</Text>
                   <HStack gap="2" alignItems="center" fontWeight="bold">
                     <Icon as={FaStar} color="yellow.400" />
-                    <Text>{doctor.rate}</Text>
+                    <Text>{data?.rate}</Text>
                   </HStack>
                 </HStack>
                 <Text>의사 선생님이 약간 불친절해요</Text>
@@ -370,7 +379,7 @@ const AppointmentDetail = function () {
                   <Text fontWeight="bold">양지웅님 (담당의사: 김재인)</Text>
                   <HStack gap="2" alignItems="center" fontWeight="bold">
                     <Icon as={FaStar} color="yellow.400" />
-                    <Text>{doctor.rate}</Text>
+                    <Text>{data?.rate}</Text>
                   </HStack>
                 </HStack>
                 <Text>의사 선생님이 약간 불친절해요</Text>
@@ -384,7 +393,7 @@ const AppointmentDetail = function () {
                   <Text fontWeight="bold">양지웅님 (담당의사: 김재인)</Text>
                   <HStack gap="2" alignItems="center" fontWeight="bold">
                     <Icon as={FaStar} color="yellow.400" />
-                    <Text>{doctor.rate}</Text>
+                    <Text>{data?.rate}</Text>
                   </HStack>
                 </HStack>
                 <Text>의사 선생님이 약간 불친절해요</Text>
@@ -398,7 +407,7 @@ const AppointmentDetail = function () {
                   <Text fontWeight="bold">양지웅님 (담당의사: 김재인)</Text>
                   <HStack gap="2" alignItems="center" fontWeight="bold">
                     <Icon as={FaStar} color="yellow.400" />
-                    <Text>{doctor.rate}</Text>
+                    <Text>{data?.rate}</Text>
                   </HStack>
                 </HStack>
                 <Text>의사 선생님이 약간 불친절해요</Text>

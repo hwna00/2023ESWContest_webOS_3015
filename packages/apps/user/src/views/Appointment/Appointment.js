@@ -13,34 +13,34 @@ import AppointmentViewList from '../../components/AppointmentViewList/Appointmen
 
 const favorites = [
   {
-    hospitalKey: 0,
+    id: 0,
     src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsJdMaCS7uZhDHByTc7LbdzAEksv2Cpk4Vc3wWDHDaG5std77hpHokQQm-zcDHBIqMGYk&usqp=CAU',
   },
   {
-    hospitalKey: 1,
+    id: 1,
     src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsJdMaCS7uZhDHByTc7LbdzAEksv2Cpk4Vc3wWDHDaG5std77hpHokQQm-zcDHBIqMGYk&usqp=CAU',
   },
   {
-    hospitalKey: 2,
+    id: 2,
     src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsJdMaCS7uZhDHByTc7LbdzAEksv2Cpk4Vc3wWDHDaG5std77hpHokQQm-zcDHBIqMGYk&usqp=CAU',
   },
   {
-    hospitalKey: 3,
+    id: 3,
     src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsJdMaCS7uZhDHByTc7LbdzAEksv2Cpk4Vc3wWDHDaG5std77hpHokQQm-zcDHBIqMGYk&usqp=CAU',
   },
   {
-    hospitalKey: 4,
+    id: 4,
     src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsJdMaCS7uZhDHByTc7LbdzAEksv2Cpk4Vc3wWDHDaG5std77hpHokQQm-zcDHBIqMGYk&usqp=CAU',
   },
   {
-    hospitalKey: 5,
+    id: 5,
     src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsJdMaCS7uZhDHByTc7LbdzAEksv2Cpk4Vc3wWDHDaG5std77hpHokQQm-zcDHBIqMGYk&usqp=CAU',
   },
 ];
 
 const hospitalList = [
   {
-    hospitalKey: 0,
+    id: 0,
     name: '지웅병원',
     isOpen: true,
     rating: 5.0,
@@ -48,7 +48,7 @@ const hospitalList = [
     specialities: ['이비인후과', '성형외과'],
   },
   {
-    hospitalKey: 1,
+    id: 1,
     name: '철환병원',
     isOpen: false,
     rating: 4.3,
@@ -56,7 +56,7 @@ const hospitalList = [
     specialities: ['이비인후과'],
   },
   {
-    hospitalKey: 2,
+    id: 2,
     name: '진형병원',
     isOpen: true,
     rating: 3.0,
@@ -64,7 +64,7 @@ const hospitalList = [
     specialities: ['피부과', '소아과'],
   },
   {
-    hospitalKey: 3,
+    id: 3,
     name: '재인병원',
     isOpen: false,
     rating: 1.0,
@@ -72,7 +72,7 @@ const hospitalList = [
     specialities: ['마취과', '심장병학과'],
   },
   {
-    hospitalKey: 4,
+    id: 4,
     name: '보경병원',
     isOpen: false,
     rating: 0.5,
@@ -91,7 +91,7 @@ const hospitalList = [
 
 const doctorList = [
   {
-    hospitalKey: 0,
+    id: 0,
     name: '양지웅',
     isOpen: true,
     rating: 5.0,
@@ -99,7 +99,7 @@ const doctorList = [
     specialities: ['이비인후과', '성형외과'],
   },
   {
-    hospitalKey: 1,
+    id: 1,
     name: '하철환',
     isOpen: false,
     rating: 4.3,
@@ -135,7 +135,7 @@ const Appointment = function () {
 
           <HStack justifyContent="flex-start" overflowX="scroll">
             {favorites.map(favorite => (
-              <Image key={favorite.hospitalKey} src={favorite.src} h="full" />
+              <Image key={favorite.id} src={favorite.src} h="full" />
             ))}
           </HStack>
         </VStack>

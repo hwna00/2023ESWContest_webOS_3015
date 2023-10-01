@@ -5,8 +5,9 @@ import {
   HStack,
   VStack,
   Text,
-  Divider,
   Link as ChakraLink,
+  UnorderedList,
+  ListItem,
 } from '@chakra-ui/react';
 
 const AppointmentViewList = function ({ type, selectedList }) {
@@ -36,43 +37,55 @@ const AppointmentViewList = function ({ type, selectedList }) {
         </ChakraLink>
       </HStack>
 
-      <VStack w="full" h="80" overflowY="auto">
+      <UnorderedList
+        w="full"
+        h="80"
+        overflowY="auto"
+        listStyleType={'none'}
+        spacing={'4'}
+      >
         {selectedList.map(item => (
-          <VStack
-            w="full"
-            alignItems="flex-start"
-            px="2"
-            key={item.hospitalKey}
-          >
-            <Divider w="full" h="0.5" bgColor="primary.300" />
-            <VStack pl="2" gap="0" alignItems="flex-start">
-              <Text>{item.name}</Text>
-              <HStack gap="6">
-                {item.isOpen ? (
-                  <Text fontSize="md" color="primary.400">
-                    진료중
+          <ListItem w="full" alignItems="flex-start" px="2" key={item.id}>
+            <ChakraLink
+              as={ReactRouterLink}
+              to={`/appointment/${type}s/${item.id}`}
+              width={'full'}
+            >
+              <VStack
+                pl="2"
+                gap="0"
+                alignItems="flex-start"
+                padding={'2'}
+                borderY="2px"
+                borderColor={'primary.300'}
+              >
+                <Text>{item.name}</Text>
+                <HStack gap="6">
+                  {item.isOpen ? (
+                    <Text fontSize="md" color="primary.400">
+                      진료중
+                    </Text>
+                  ) : (
+                    <Text fontSize="md" color="red">
+                      영업종료
+                    </Text>
+                  )}
+                  <Text>
+                    {item.rating.toFixed(1)}&nbsp;&#40;
+                    {item.numberOfRatings}
+                    &#41;
                   </Text>
-                ) : (
-                  <Text fontSize="md" color="red">
-                    영업종료
-                  </Text>
-                )}
-                <Text>
-                  {item.rating.toFixed(1)}&nbsp;&#40;
-                  {item.numberOfRatings}
-                  &#41;
-                </Text>
-              </HStack>
-              <HStack my="2" flexWrap="wrap" rowGap="0" columnGap="3">
-                {item.specialities.map((speciality, index) => (
-                  <Text key={index}>{speciality}</Text>
-                ))}
-              </HStack>
-            </VStack>
-            <Divider w="full" h="0.5" bgColor="primary.300" />
-          </VStack>
+                </HStack>
+                <HStack my="2" flexWrap="wrap" rowGap="0" columnGap="3">
+                  {item.specialities.map((speciality, index) => (
+                    <Text key={index}>{speciality}</Text>
+                  ))}
+                </HStack>
+              </VStack>
+            </ChakraLink>
+          </ListItem>
         ))}
-      </VStack>
+      </UnorderedList>
     </VStack>
   );
 };
