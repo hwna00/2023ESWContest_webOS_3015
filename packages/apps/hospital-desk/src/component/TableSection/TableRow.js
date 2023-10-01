@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react';
 
 import { useNavigate } from 'react-router-dom';
-import { Box, HStack, Button, useDisclosure } from '@chakra-ui/react';
+import { Box, HStack, Button, useDisclosure, Text } from '@chakra-ui/react';
 
 import PaymentModal from '../PaymentModal/PaymentModal';
 import CancelModal from '../CancelModal/CancelModal';
 
-function TableRow({ data, first, second, third, fourth, fifth }) {
+function TableRow({ data, buttonType }) {
   const navigate = useNavigate();
   const {
     isOpen: isCancelOpen,
@@ -36,7 +36,7 @@ function TableRow({ data, first, second, third, fourth, fifth }) {
   const cancelButton = (
     <>
       <Button h="10" onClick={openCancelModal} colorScheme="red">
-        취소하기
+        거절하기
       </Button>
       <CancelModal isOpen={isCancelOpen} onClose={closeCancelModal} />
     </>
@@ -57,18 +57,18 @@ function TableRow({ data, first, second, third, fourth, fifth }) {
     </HStack>
   );
   const renderButtons = () => {
-    if (fifth === 'payment') {
+    if (buttonType === 'payment') {
       return data.payment ? '결제 완료' : paymentButton;
     }
 
-    if (fifth === 'cancel') {
+    if (buttonType === 'cancel') {
       return cancelButton;
     }
 
-    if (fifth === 'detail') {
+    if (buttonType === 'detail') {
       return detailButtons;
     }
-    if (fifth === 'detailAndCancel') {
+    if (buttonType === 'detailAndCancel') {
       return detailAndCancelButtons;
     }
 
@@ -83,21 +83,29 @@ function TableRow({ data, first, second, third, fourth, fifth }) {
       justifyContent="space-evenly"
       h="14"
     >
-      <Box w="20%" textAlign="center">
-        {first}
+      <Box flex={1} textAlign="center">
+        {data.name}
       </Box>
 
-      <Box w="20%" textAlign="center">
-        {second}
+      <Box flex={1} textAlign="center">
+        {data.phone_number}
       </Box>
 
-      <Box w="20%" textAlign="center">
-        {third}
+      <Box flex={1} textAlign="center">
+        {data.date_time}
       </Box>
-      <Box w="20%" textAlign="center">
-        {fourth}
+      <Box flex={1} textAlign="center">
+        {data.is_NFTF ? <Text>대면</Text> : <Text>비대면</Text>}
       </Box>
-      <Box w="20%" alignContent="center" display="flex" justifyContent="center">
+      <Box flex={1} textAlign="center">
+        {data.doctorName}
+      </Box>
+      <Box
+        flex={1}
+        alignContent="center"
+        display="flex"
+        justifyContent="center"
+      >
         {renderButtons()}
       </Box>
     </HStack>

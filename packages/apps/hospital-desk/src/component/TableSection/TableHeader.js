@@ -7,7 +7,7 @@ function TableHeader({ tableHeaders }) {
     <Box w="100%">
       <HStack mt="7" justifyContent="space-evenly">
         {tableHeaders.map(header => (
-          <Box key={header} w="20%" textAlign="center" fontWeight="bold">
+          <Box key={header} flex={1} textAlign="center" fontWeight="bold">
             {header}
           </Box>
         ))}

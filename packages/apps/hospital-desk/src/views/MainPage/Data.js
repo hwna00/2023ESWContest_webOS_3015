@@ -1,5 +1,6 @@
 export const ConfirmedReservation = [
   {
+    id: 1,
     uid: 1,
     name: '김재인',
     phone_number: '010-1234-5678',
@@ -9,6 +10,7 @@ export const ConfirmedReservation = [
     doctorName: '차은우',
   },
   {
+    id: 2,
     uid: 2,
     name: '양지웅',
     phone_number: '010-1234-5678',
@@ -18,6 +20,7 @@ export const ConfirmedReservation = [
     doctorName: '차은우',
   },
   {
+    id: 3,
     uid: 3,
     name: '송보경',
     phone_number: '010-1234-5678',
@@ -27,6 +30,7 @@ export const ConfirmedReservation = [
     doctorName: '차은우',
   },
   {
+    id: 4,
     uid: 4,
     name: '서진형',
     phone_number: '010-1234-5678',
@@ -36,6 +40,7 @@ export const ConfirmedReservation = [
     doctorName: '차은우',
   },
   {
+    id: 5,
     uid: 5,
     name: '하철환',
     phone_number: '010-1234-5678',
@@ -45,6 +50,7 @@ export const ConfirmedReservation = [
     doctorName: '차은우',
   },
   {
+    id: 6,
     uid: 6,
     name: '오예스',
     phone_number: '010-1234-5678',
@@ -54,6 +60,7 @@ export const ConfirmedReservation = [
     doctorName: '차은우',
   },
   {
+    id: 7,
     uid: 7,
     name: '오잉스',
     phone_number: '010-1234-5678',
@@ -63,6 +70,7 @@ export const ConfirmedReservation = [
     doctorName: '차은우',
   },
   {
+    id: 8,
     uid: 8,
     name: '박아파',
     phone_number: '010-1234-5678',
@@ -72,6 +80,7 @@ export const ConfirmedReservation = [
     doctorName: '차은우',
   },
   {
+    id: 9,
     uid: 9,
     name: '나환자',
     phone_number: '010-1234-5678',
@@ -84,6 +93,7 @@ export const ConfirmedReservation = [
 
 export const CompleteReservation = [
   {
+    id: 10,
     uid: 10,
     name: '김재인',
     phone_number: '010-1234-5678',
@@ -93,6 +103,7 @@ export const CompleteReservation = [
     doctorName: '차은우',
   },
   {
+    id: 11,
     uid: 11,
     name: '양지웅',
     phone_number: '010-1234-5678',
@@ -102,6 +113,7 @@ export const CompleteReservation = [
     doctorName: '차은우',
   },
   {
+    id: 12,
     uid: 12,
     name: '송보경',
     phone_number: '010-1234-5678',
@@ -111,6 +123,7 @@ export const CompleteReservation = [
     doctorName: '차은우',
   },
   {
+    id: 13,
     uid: 13,
     name: '서진형',
     phone_number: '010-1234-5678',
@@ -120,6 +133,7 @@ export const CompleteReservation = [
     doctorName: '차은우',
   },
   {
+    id: 14,
     uid: 14,
     name: '하철환',
     phone_number: '010-1234-5678',
@@ -129,6 +143,7 @@ export const CompleteReservation = [
     doctorName: '차은우',
   },
   {
+    id: 15,
     uid: 15,
     name: '오예스',
     phone_number: '010-1234-5678',

@@ -8,7 +8,6 @@ import {
   Link as ChakraLink,
   VStack,
   Button,
-  Text,
 } from '@chakra-ui/react';
 
 import { ConfirmedReservation } from '../MainPage/Data';
@@ -34,7 +33,14 @@ function ManageAppointment() {
           </ChakraLink>
         </HStack>
         <TableHeader
-          tableHeaders={['이름', '전화번호', '진료시간', '타입', '액션']}
+          tableHeaders={[
+            '이름',
+            '전화번호',
+            '진료시간',
+            '타입',
+            '담당의사',
+            '액션',
+          ]}
         />
 
         <div className={styles.hideScrollBar}>
@@ -43,15 +49,9 @@ function ManageAppointment() {
               reservation => reservation.confirm === true,
             ).map(reservation => (
               <TableRow
-                key={reservation.uid}
+                key={reservation.id}
                 data={reservation}
-                first={reservation.name}
-                second={reservation.phone_number}
-                third={reservation.date_time}
-                fourth={
-                  reservation.is_NFTF ? <Text>대면</Text> : <Text>비대면</Text>
-                }
-                fifth="cancel"
+                buttonType="cancel"
               />
             ))}
           </Box>
@@ -70,6 +70,7 @@ function ManageAppointment() {
             '전화번호',
             '진료시간',
             '타입',
+            '담당의사',
             '상세정보 확인',
           ]}
         />
@@ -81,19 +82,9 @@ function ManageAppointment() {
                 reservation => reservation.confirm === false,
               ).map(reservation => (
                 <TableRow
-                  key={reservation.uid}
+                  key={reservation.id}
                   data={reservation}
-                  first={reservation.name}
-                  second={reservation.phone_number}
-                  third={reservation.date_time}
-                  fourth={
-                    reservation.is_NFTF ? (
-                      <Text>대면</Text>
-                    ) : (
-                      <Text>비대면</Text>
-                    )
-                  }
-                  fifth="detailAndCancel"
+                  buttonType="detailAndCancel"
                 />
               ))}
             </Box>

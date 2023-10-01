@@ -4,7 +4,7 @@ import { AiFillPlusCircle } from 'react-icons/ai';
 import dayjs from 'dayjs';
 import 'react-calendar/dist/Calendar.css';
 import styles from '@housepital/common/css/HideScrollBar.module.css';
-import { Box, Button, HStack, Heading, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, HStack, Heading, VStack } from '@chakra-ui/react';
 
 import { ConfirmedReservation } from '../MainPage/Data';
 import TableRow from '../../component/TableSection/TableRow';
@@ -43,25 +43,22 @@ function ViewAppointment() {
         </Box>
         <VStack w="700px" alignItems="unset">
           <TableHeader
-            tableHeaders={['이름', '예약시간', '타입', '담당의사', '상세정보']}
+            tableHeaders={[
+              '이름',
+              '전화번호',
+              '예약시간',
+              '타입',
+              '담당의사',
+              '상세정보',
+            ]}
           />
           <div className={styles.hideScrollBar}>
             <Box maxH="830px" overflowY="scroll" w="100%">
               {filteredReservations.map(reservation => (
                 <TableRow
-                  key={reservation.uid}
+                  key={reservation.id}
                   data={reservation}
-                  first={reservation.name}
-                  second={reservation.date_time}
-                  third={
-                    reservation.is_NFTF ? (
-                      <Text>대면</Text>
-                    ) : (
-                      <Text>비대면</Text>
-                    )
-                  }
-                  fourth={reservation.doctorName}
-                  fifth="detail"
+                  buttonType="detail"
                 />
               ))}
             </Box>
