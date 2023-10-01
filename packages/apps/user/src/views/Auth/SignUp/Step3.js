@@ -20,6 +20,15 @@ const Step3 = function () {
   return (
     <VStack width="full" gap="4">
       <HStack width="full" gap="4">
+        <FormControl width="full" isInvalid={errors.gender}>
+          <FormLabel>성별</FormLabel>
+          <Select placeholder="성별" {...register('gender')}>
+            <option value="M">남성</option>
+            <option value="F">여성</option>
+          </Select>
+          <FormErrorMessage>{errors.gender?.message}</FormErrorMessage>
+        </FormControl>
+
         <FormControl width="full" isInvalid={errors.bloodType}>
           <FormLabel>혈액형</FormLabel>
           <Select placeholder="혈액형" {...register('bloodType')}>
