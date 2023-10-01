@@ -44,7 +44,7 @@ const createUser = async function (req, res) {
   console.log(data);
   var regex = RegExp(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/);
   if (!regex.test(data.birthDate)) {
-    return res.send({
+    return res.json({
       isSucess: false,
       code: 400,
       message: '날짜 형식을 제대로 입력해주세요.',
@@ -56,21 +56,20 @@ const createUser = async function (req, res) {
     try {
       await createUserQuery(connection, data);
 
-      return res.send({
+      return res.json({
         isSucess: true,
         code: 201,
         message: '유저 생성 성공',
       });
     } catch (err) {
       if (err.errno === 1062) {
-        return res.send({
+        return res.json({
           isSucess: false,
           code: 409,
           message: '이미 가입된 회원입니다.',
         });
       } else {
-        console.log(err);
-        return res.send({
+        return res.json({
           isSuccess: false,
           code: 500,
           message: '서버 오류',
@@ -80,7 +79,7 @@ const createUser = async function (req, res) {
       connection.release();
     }
   } catch (err) {
-    return res.send({
+    return res.json({
       isSucess: false,
       code: 500,
       message: '데이터베이스 연결 실패',
@@ -107,7 +106,7 @@ const readUser = async function (req, res) {
       if (rows.length === 0) {
         throw Error('User not found');
       } else {
-        return res.send({
+        return res.json({
           result: rows,
           isSucess: true,
           code: 200,
@@ -116,13 +115,13 @@ const readUser = async function (req, res) {
       }
     } catch (err) {
       if (err.message === 'User not found') {
-        return res.send({
+        return res.json({
           isSucess: false,
           code: 404,
           message: '유저를 찾을 수 없습니다.',
         });
       } else {
-        return res.send({
+        return res.json({
           isSuccess: false,
           code: 500,
           message: '서버 오류',
@@ -132,7 +131,7 @@ const readUser = async function (req, res) {
       connection.release();
     }
   } catch (err) {
-    return res.send({
+    return res.json({
       isSucess: false,
       code: 500,
       message: '데이터베이스 연결 실패',
