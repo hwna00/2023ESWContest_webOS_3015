@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
-import { FaUserAlt, FaLock } from 'react-icons/fa';
+import { FaUserAlt, FaLock, FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import { AiFillGoogleCircle, AiFillTwitterCircle } from 'react-icons/ai';
 import { useForm } from 'react-hook-form';
 import {
@@ -19,6 +19,7 @@ import {
   Link as ChakraLink,
   FormErrorMessage,
   Icon,
+  VStack,
 } from '@chakra-ui/react';
 
 import NaverLoginButton from '../../../components/NaverLoginButton/NaverLoginButton';
@@ -72,14 +73,15 @@ function LogIn() {
             간편하고 안전한 건강 관리 서비스에 가입해보세요.
           </Heading>
         </Flex>
-        <Stack
-          flexDir="column"
-          mb="2"
+        <VStack
+          padding={'12'}
           justifyContent="center"
           alignItems="center"
+          backgroundColor="white"
+          boxShadow="md"
         >
-          <Box as="form" onSubmit={handleSubmit(onSubmit)}>
-            <Stack spacing={6} p="3rem" backgroundColor="white" boxShadow="md">
+          <Box as="form" onSubmit={handleSubmit(onSubmit)} mb={'4'}>
+            <Stack gap={'4'}>
               <HStack
                 justifyContent="center"
                 alignItems="center"
@@ -104,7 +106,7 @@ function LogIn() {
                     required
                     name="email"
                     type="email"
-                    placeholder="email"
+                    placeholder="이메일"
                     {...register('email', {
                       required: '이 항목은 필수입니다.',
                       pattern: {
@@ -125,7 +127,7 @@ function LogIn() {
                   <Input
                     name="password"
                     type={showPassword ? 'text' : 'password'}
-                    placeholder="Password"
+                    placeholder="비밀번호"
                     required
                     {...register('password', {
                       required: '이 항목은 필수입니다.',
@@ -136,9 +138,12 @@ function LogIn() {
                     })}
                   />
                   <InputRightElement width="4.5rem">
-                    <Button h="1.75rem" size="sm" onClick={handleShowClick}>
-                      {showPassword ? 'Hide' : 'Show'}
-                    </Button>
+                    <Icon
+                      size="sm"
+                      onClick={handleShowClick}
+                      as={showPassword ? FaRegEye : FaRegEyeSlash}
+                      boxSize={6}
+                    />
                   </InputRightElement>
                 </InputGroup>
                 <FormErrorMessage>{errors?.password?.message}</FormErrorMessage>
@@ -150,32 +155,34 @@ function LogIn() {
                 colorScheme="primary"
                 width="full"
               >
-                Login
+                로그인
               </Button>
-              <ChakraLink as={ReactRouterLink} to="/auth/sign-up">
-                <Button
-                  borderRadius={8}
-                  type="button"
-                  variant="outline"
-                  colorScheme="primary"
-                  width="full"
-                >
-                  Sign Up
-                </Button>
-              </ChakraLink>
-              <ChakraLink
-                as={ReactRouterLink}
-                color="primary.500"
-                href="#"
-                textDecoration="underline"
-                textAlign="center"
-                to="/find-pw"
-              >
-                비밀번호를 잊어버리셨나요?
-              </ChakraLink>
             </Stack>
           </Box>
-        </Stack>
+          <VStack width={'full'}>
+            <ChakraLink as={ReactRouterLink} to="/auth/sign-up" width={'full'}>
+              <Button
+                borderRadius={8}
+                type="button"
+                variant="outline"
+                colorScheme="primary"
+                width="full"
+              >
+                회원가입
+              </Button>
+            </ChakraLink>
+            <ChakraLink
+              as={ReactRouterLink}
+              color="primary.500"
+              href="#"
+              textDecoration="underline"
+              textAlign="center"
+              to="/find-pw"
+            >
+              비밀번호를 잊어버리셨나요?
+            </ChakraLink>
+          </VStack>
+        </VStack>
       </HStack>
     </Flex>
   );
