@@ -17,60 +17,33 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: 'http://localhost:8080' }));
 
-const insertUsers = async function (
-  connection,
-  id,
-  name,
-  email,
-  mobile,
-  birthyear,
-  birthday,
-  gender,
-  profile_image,
-) {
-  const createUserQuery = `INSERT INTO Users (user_id, name, email, phone_number, address, address_detail, birthdate, gender, profile_img) VALUES (?, ?, ?, ?, '', '', ?, ?, ?);`;
+const createUserQuery = async function (connection, data) {
+  const Query = `INSERT INTO Users(user_id, name, email, phone_number, address, address_detail, second_phone_number, birthdate, bloodtype, height, weight, gender, regular_medicines, chronic_disease) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
   const Params = [
-    id,
-    name,
-    email,
-    mobile,
-    birthyear + '-' + birthday,
-    gender,
-    profile_image,
+    data.uid,
+    data.username,
+    data.email,
+    data.phoneNumber,
+    data.address,
+    data.addressDetail,
+    data.secondPhoneNumber,
+    data.birthDate,
+    data.bloodType,
+    data.height,
+    data.weight,
+    data.gender,
+    data.regularMedicines,
+    data.chronicDisease,
   ];
 
-  await connection.query(createUserQuery, Params);
+  await connection.query(Query, Params);
 };
 
-const createUsers = async function (req, res) {
-  const {
-    id,
-    name,
-    email,
-    mobile,
-    birthyear,
-    birthday,
-    gender,
-    profile_image,
-  } = req.body;
-
-  if (
-    typeof id !== 'string' ||
-    typeof name !== 'string' ||
-    typeof email !== 'string' ||
-    typeof mobile !== 'string' ||
-    typeof gender !== 'string' ||
-    typeof profile_image !== 'string'
-  ) {
-    return res.send({
-      isSuccess: false,
-      code: 400,
-      message: '문자열을 입력해주세요.',
-    });
-  }
-
+const createUser = async function (req, res) {
+  const { data } = req.body;
+  console.log(data);
   var regex = RegExp(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/);
-  if (!regex.test(birthyear + '-' + birthday)) {
+  if (!regex.test(data.birthDate)) {
     return res.send({
       isSucess: false,
       code: 400,
@@ -81,17 +54,7 @@ const createUsers = async function (req, res) {
   try {
     const connection = await pool.getConnection(async conn => conn);
     try {
-      await insertUsers(
-        connection,
-        id,
-        name,
-        email,
-        mobile,
-        birthyear,
-        birthday,
-        gender,
-        profile_image,
-      );
+      await createUserQuery(connection, data);
 
       return res.send({
         isSucess: true,
@@ -99,7 +62,6 @@ const createUsers = async function (req, res) {
         message: '유저 생성 성공',
       });
     } catch (err) {
-      //이메일 중복이 발생하는 등의 에러
       if (err.errno === 1062) {
         return res.send({
           isSucess: false,
@@ -107,6 +69,7 @@ const createUsers = async function (req, res) {
           message: '이미 가입된 회원입니다.',
         });
       } else {
+        console.log(err);
         return res.send({
           isSuccess: false,
           code: 500,
@@ -125,22 +88,22 @@ const createUsers = async function (req, res) {
   }
 };
 
-const selectUsers = async function (connection, uid) {
-  const selectUserQuery = `SELECT * FROM Users WHERE user_id = ?;`;
+const readUserQuery = async function (connection, uid) {
+  const Query = `SELECT * FROM Users WHERE user_id = ?;`;
   const Params = [uid];
 
-  const rows = await connection.query(selectUserQuery, Params);
+  const rows = await connection.query(Query, Params);
 
   return rows;
 };
 
-const readUsers = async function (req, res) {
+const readUser = async function (req, res) {
   const { uid } = req.query;
 
   try {
     const connection = await pool.getConnection(async conn => conn);
     try {
-      const [rows] = await selectUsers(connection, uid);
+      const [rows] = await readUserQuery(connection, uid);
       if (rows.length === 0) {
         throw Error('User not found');
       } else {
@@ -177,9 +140,9 @@ const readUsers = async function (req, res) {
   }
 };
 
-app.post('/api/create-user', createUsers);
+app.post('/api/create-user', createUser);
 
-app.get('/api/read-user', readUsers);
+app.get('/api/read-user', readUser);
 
 app.get('/api/auth/naver-callback', async (req, res) => {
   const { code, state } = req.query;
