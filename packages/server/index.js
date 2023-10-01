@@ -41,7 +41,7 @@ const createUserQuery = async function (connection, data) {
 
 const createUser = async function (req, res) {
   const { data } = req.body;
-  console.log(data);
+
   var regex = RegExp(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/);
   if (!regex.test(data.birthDate)) {
     return res.json({
@@ -97,7 +97,7 @@ const readUserQuery = async function (connection, uid) {
 };
 
 const readUser = async function (req, res) {
-  const { uid } = req.query;
+  const { uid } = req.params;
 
   try {
     const connection = await pool.getConnection(async conn => conn);
@@ -139,9 +139,62 @@ const readUser = async function (req, res) {
   }
 };
 
-app.post('/api/create-user', createUser);
+const createAppointmentQuery = async function (connection, data) {
+  const datetime = data.date + ' ' + data.time;
+  let isNFTF = 1;
+  if (data.type === 'ftf') {
+    data.nftfId = null;
+    isNFTF = 0;
+  }
 
-app.get('/api/read-user', readUser);
+  const Query = `INSERT INTO Appointments(user_id, doctor_id, NFTF_id, datetime, message, is_NFTF) VALUES (?, ?, ?, ?, ?, ?);`;
+  const Params = [
+    data.uid,
+    data.doctorId,
+    data.nftfId,
+    datetime,
+    data.memo,
+    isNFTF,
+  ];
+
+  await connection.query(Query, Params);
+};
+
+const createAppointment = async function (req, res) {
+  const { data } = req.body;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      await createAppointmentQuery(connection, data);
+
+      return res.json({
+        isSucess: true,
+        code: 201,
+        message: '예약정보 생성 성공',
+      });
+    } catch (err) {
+      console.log(err);
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSucess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
+app.post('/api/appointment', createAppointment);
+app.post('/api/user', createUser);
+app.get('/api/users/:uid', readUser);
 
 app.get('/api/auth/naver-callback', async (req, res) => {
   const { code, state } = req.query;
@@ -179,19 +232,6 @@ app.get('/api/auth/naver-callback', async (req, res) => {
       })
       .catch(err => console.log(err));
   }
-});
-
-app.get('/api/users/me', (req, res) => {
-  console.log('me');
-  //TODO: DB로부터 사용자 정보 검색
-  res.json({
-    name: '하철환',
-    // profileImg: getUserImage(email),
-  });
-});
-
-app.patch('/api/users/me', (req, res) => {
-  console.log(req.body);
 });
 
 app.listen(port, () => {
