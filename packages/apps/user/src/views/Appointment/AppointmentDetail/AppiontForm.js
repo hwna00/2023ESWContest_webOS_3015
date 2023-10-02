@@ -253,7 +253,7 @@ const AppointForm = function ({
                   <Text>초진 대상자인 경우</Text>
                   <Radio
                     colorScheme="primary"
-                    value="nftf1"
+                    value="f1"
                     size={'lg'}
                     {...register('nftfType')}
                   >
@@ -261,7 +261,7 @@ const AppointForm = function ({
                   </Radio>
                   <Radio
                     colorScheme="primary"
-                    value="nftf2"
+                    value="f2"
                     size={'lg'}
                     {...register('nftfType')}
                   >
@@ -269,7 +269,7 @@ const AppointForm = function ({
                   </Radio>
                   <Radio
                     colorScheme="primary"
-                    value="nftf3"
+                    value="f3"
                     size={'lg'}
                     {...register('nftfType')}
                   >
@@ -277,7 +277,7 @@ const AppointForm = function ({
                   </Radio>
                   <Radio
                     colorScheme="primary"
-                    value="nftf4"
+                    value="f4"
                     size={'lg'}
                     {...register('nftfType')}
                   >
@@ -294,7 +294,7 @@ const AppointForm = function ({
                   <Text>재진 대상자인 경우</Text>
                   <Radio
                     colorScheme="primary"
-                    value="nftf5"
+                    value="s1"
                     size={'lg'}
                     {...register('nftfType')}
                   >
@@ -302,7 +302,7 @@ const AppointForm = function ({
                   </Radio>
                   <Radio
                     colorScheme="primary"
-                    value="nftf6"
+                    value="s2"
                     size={'lg'}
                     {...register('nftfType')}
                   >
