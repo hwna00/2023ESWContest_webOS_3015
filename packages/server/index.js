@@ -192,9 +192,71 @@ const createAppointment = async function (req, res) {
   }
 };
 
-app.post('/api/appointment', createAppointment);
+const updateUserQuery = async function (connection, uid, data) {
+  const Query = `UPDATE Users SET name = ifnull(?, name), email = ifnull(?, email),
+    phone_number = ifnull(?, phone_number), address = ifnull(?, address),
+      address_detail = ifnull(?, address_detail), second_phone_number = ifnull(?, second_phone_number),
+        birthdate = ifnull(?, birthdate), bloodtype = ifnull(?, bloodtype), height = ifnull(?, height),
+        weight = ifnull(?, weight), gender = ifnull(?, gender), regular_medicines = ifnull(?, regular_medicines),
+          chronic_disease = ifnull(?, chronic_disease) WHERE user_id = ?;`;
+
+  const Params = [
+    data.username,
+    data.email,
+    data.phoneNumber,
+    data.address,
+    data.addressDetail,
+    data.secondPhoneNumber,
+    data.birthDate,
+    data.bloodType,
+    data.height,
+    data.weight,
+    data.gender,
+    data.regularMedicines,
+    data.chronicDisease,
+    uid,
+  ];
+
+  await connection.query(Query, Params);
+};
+
+const updateUser = async function (req, res) {
+  const { uid } = req.params;
+  const { data } = req.body;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      await updateUserQuery(connection, uid, data);
+
+      return res.json({
+        isSucess: true,
+        code: 204,
+        message: '유저 업데이트 성공',
+      });
+    } catch (err) {
+      console.log(err);
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSucess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
 app.post('/api/user', createUser);
 app.get('/api/users/:uid', readUser);
+app.patch('/api/users/:uid', updateUser);
+app.post('/api/appointment', createAppointment);
 
 app.get('/api/auth/naver-callback', async (req, res) => {
   const { code, state } = req.query;
