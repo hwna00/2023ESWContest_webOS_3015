@@ -322,7 +322,6 @@ const AppointmentDetail = function () {
             </Box>
           </TabPanel>
 
-          {/* //TODO: 조건부 렌더링 */}
           <TabPanel
             height="full"
             display="flex"
@@ -426,63 +425,35 @@ const AppointmentDetail = function () {
           </TabPanel>
 
           <TabPanel>
-            <UnorderedList styleType="none" spacing="6">
-              <ListItem bgColor="primary.200" borderRadius="md" padding="4">
-                <HStack
-                  justifyContent="space-between"
-                  alignItems="center"
-                  mb="4"
-                >
-                  <Text fontWeight="bold">양지웅님 (담당의사: 김재인)</Text>
-                  <HStack gap="2" alignItems="center" fontWeight="bold">
-                    <Icon as={FaStar} color="yellow.400" />
-                    <Text>{data?.rate}</Text>
-                  </HStack>
-                </HStack>
-                <Text>의사 선생님이 약간 불친절해요</Text>
-              </ListItem>
-              <ListItem bgColor="primary.200" borderRadius="md" padding="4">
-                <HStack
-                  justifyContent="space-between"
-                  alignItems="center"
-                  mb="4"
-                >
-                  <Text fontWeight="bold">양지웅님 (담당의사: 김재인)</Text>
-                  <HStack gap="2" alignItems="center" fontWeight="bold">
-                    <Icon as={FaStar} color="yellow.400" />
-                    <Text>{data?.rate}</Text>
-                  </HStack>
-                </HStack>
-                <Text>의사 선생님이 약간 불친절해요</Text>
-              </ListItem>
-              <ListItem bgColor="primary.200" borderRadius="md" padding="4">
-                <HStack
-                  justifyContent="space-between"
-                  alignItems="center"
-                  mb="4"
-                >
-                  <Text fontWeight="bold">양지웅님 (담당의사: 김재인)</Text>
-                  <HStack gap="2" alignItems="center" fontWeight="bold">
-                    <Icon as={FaStar} color="yellow.400" />
-                    <Text>{data?.rate}</Text>
-                  </HStack>
-                </HStack>
-                <Text>의사 선생님이 약간 불친절해요</Text>
-              </ListItem>
-              <ListItem bgColor="primary.200" borderRadius="md" padding="4">
-                <HStack
-                  justifyContent="space-between"
-                  alignItems="center"
-                  mb="4"
-                >
-                  <Text fontWeight="bold">양지웅님 (담당의사: 김재인)</Text>
-                  <HStack gap="2" alignItems="center" fontWeight="bold">
-                    <Icon as={FaStar} color="yellow.400" />
-                    <Text>{data?.rate}</Text>
-                  </HStack>
-                </HStack>
-                <Text>의사 선생님이 약간 불친절해요</Text>
-              </ListItem>
+            <UnorderedList styleType="none" spacing="6" margin={0}>
+              {!data.reviews && (
+                <Text textAlign={'center'}>리뷰가 없습니다.</Text>
+              )}
+              {data?.reviews?.map(review => {
+                return (
+                  <ListItem
+                    key={review.id}
+                    bgColor="primary.200"
+                    borderRadius="md"
+                    padding="4"
+                  >
+                    <HStack
+                      justifyContent="space-between"
+                      alignItems="center"
+                      mb="4"
+                    >
+                      <Text fontWeight="bold">
+                        {review.reviewer} (담당의사: {review.reviewee})
+                      </Text>
+                      <HStack gap="2" alignItems="center" fontWeight="bold">
+                        <Icon as={FaStar} color="yellow.400" />
+                        <Text>{review.rate}</Text>
+                      </HStack>
+                    </HStack>
+                    <Text>{review.content}</Text>
+                  </ListItem>
+                );
+              })}
             </UnorderedList>
           </TabPanel>
         </TabPanels>

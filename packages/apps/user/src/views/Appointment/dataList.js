@@ -59,6 +59,22 @@ export const HospitalList = [
           'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
       },
     ],
+    reviews: [
+      {
+        id: 0,
+        reviewer: '양지웅',
+        reviewee: '김재인',
+        rate: '4.5',
+        content: '의사 선생님이 약간 불친절해요',
+      },
+      {
+        id: 1,
+        reviewer: '송보경',
+        reviewee: '양지웅',
+        rate: '4.5',
+        content: '의사 선생님이 친절해요',
+      },
+    ],
   },
   {
     id: '1',
@@ -410,6 +426,22 @@ export const DoctorList = [
         break: '13:00 ~ 14:00',
       },
     },
+    reviews: [
+      {
+        id: 0,
+        reviewer: '양지웅',
+        reviewee: '김재인',
+        rate: '4.5',
+        content: '의사 선생님이 약간 불친절해요',
+      },
+      {
+        id: 1,
+        reviewer: '송보경',
+        reviewee: '양지웅',
+        rate: '4.5',
+        content: '의사 선생님이 친절해요',
+      },
+    ],
   },
   {
     id: '1',
@@ -802,6 +834,7 @@ export const DoctorList = [
 
 export const FavoriteList = [
   {
+    id: 0,
     name: '이현철',
     specialty: '내과 전문의',
     fields: ['내과', '가정의학과'],
@@ -811,6 +844,7 @@ export const FavoriteList = [
     isFavorite: true,
   },
   {
+    id: 1,
     name: '양지웅',
     specialty: '안과 전문의',
     fields: ['안과'],
@@ -820,6 +854,7 @@ export const FavoriteList = [
     isFavorite: true,
   },
   {
+    id: 2,
     name: '김재인',
     specialty: '내과 전문의',
     fields: ['내과'],
@@ -829,6 +864,7 @@ export const FavoriteList = [
     isFavorite: true,
   },
   {
+    id: 3,
     name: '하철환',
     specialty: '소아과 전문의',
     fields: ['소아과', '내과'],
@@ -838,6 +874,7 @@ export const FavoriteList = [
     isFavorite: true,
   },
   {
+    id: 4,
     name: '서진형',
     specialty: '가정의학과 전문의',
     fields: ['가정의학과'],
@@ -847,6 +884,7 @@ export const FavoriteList = [
     isFavorite: true,
   },
   {
+    id: 5,
     name: '송보경',
     specialty: '이비인후과 전문의',
     fields: ['이비인후과'],
@@ -856,6 +894,7 @@ export const FavoriteList = [
     isFavorite: true,
   },
   {
+    id: 6,
     name: '홍길동',
     specialty: '소아과 전문의',
     fields: ['소아과', '내과'],
@@ -865,19 +904,11 @@ export const FavoriteList = [
     isFavorite: true,
   },
   {
+    id: 7,
     name: '콩쥐',
     specialty: '가정의학과 전문의',
     fields: ['가정의학과'],
     rate: '4.9',
-    profileImg:
-      'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
-    isFavorite: true,
-  },
-  {
-    name: '팥쥐',
-    specialty: '이비인후과 전문의',
-    fields: ['이비인후과'],
-    rate: '4.5',
     profileImg:
       'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
     isFavorite: true,
