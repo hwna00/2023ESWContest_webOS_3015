@@ -41,10 +41,10 @@ const createUserQuery = async function (connection, data) {
 
 const createUser = async function (req, res) {
   const { data } = req.body;
-  console.log(data);
+
   var regex = RegExp(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/);
   if (!regex.test(data.birthDate)) {
-    return res.send({
+    return res.json({
       isSucess: false,
       code: 400,
       message: '날짜 형식을 제대로 입력해주세요.',
@@ -56,21 +56,20 @@ const createUser = async function (req, res) {
     try {
       await createUserQuery(connection, data);
 
-      return res.send({
+      return res.json({
         isSucess: true,
         code: 201,
         message: '유저 생성 성공',
       });
     } catch (err) {
       if (err.errno === 1062) {
-        return res.send({
+        return res.json({
           isSucess: false,
           code: 409,
           message: '이미 가입된 회원입니다.',
         });
       } else {
-        console.log(err);
-        return res.send({
+        return res.json({
           isSuccess: false,
           code: 500,
           message: '서버 오류',
@@ -80,7 +79,7 @@ const createUser = async function (req, res) {
       connection.release();
     }
   } catch (err) {
-    return res.send({
+    return res.json({
       isSucess: false,
       code: 500,
       message: '데이터베이스 연결 실패',
@@ -98,7 +97,7 @@ const readUserQuery = async function (connection, uid) {
 };
 
 const readUser = async function (req, res) {
-  const { uid } = req.query;
+  const { uid } = req.params;
 
   try {
     const connection = await pool.getConnection(async conn => conn);
@@ -107,7 +106,7 @@ const readUser = async function (req, res) {
       if (rows.length === 0) {
         throw Error('User not found');
       } else {
-        return res.send({
+        return res.json({
           result: rows,
           isSucess: true,
           code: 200,
@@ -116,13 +115,13 @@ const readUser = async function (req, res) {
       }
     } catch (err) {
       if (err.message === 'User not found') {
-        return res.send({
+        return res.json({
           isSucess: false,
           code: 404,
           message: '유저를 찾을 수 없습니다.',
         });
       } else {
-        return res.send({
+        return res.json({
           isSuccess: false,
           code: 500,
           message: '서버 오류',
@@ -132,7 +131,7 @@ const readUser = async function (req, res) {
       connection.release();
     }
   } catch (err) {
-    return res.send({
+    return res.json({
       isSucess: false,
       code: 500,
       message: '데이터베이스 연결 실패',
@@ -140,9 +139,299 @@ const readUser = async function (req, res) {
   }
 };
 
-app.post('/api/create-user', createUser);
+const createAppointmentQuery = async function (connection, data) {
+  const datetime = data.date + ' ' + data.time;
+  let isNFTF = 1;
+  if (data.type === 'ftf') {
+    data.nftfId = null;
+    isNFTF = 0;
+  }
 
-app.get('/api/read-user', readUser);
+  const Query = `INSERT INTO Appointments(user_id, doctor_id, NFTF_id, datetime, message, is_NFTF) VALUES (?, ?, ?, ?, ?, ?);`;
+  const Params = [
+    data.uid,
+    data.doctorId,
+    data.nftfId,
+    datetime,
+    data.memo,
+    isNFTF,
+  ];
+
+  await connection.query(Query, Params);
+};
+
+const createAppointment = async function (req, res) {
+  const { data } = req.body;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      await createAppointmentQuery(connection, data);
+
+      return res.json({
+        isSucess: true,
+        code: 201,
+        message: '예약정보 생성 성공',
+      });
+    } catch (err) {
+      console.log(err);
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSucess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
+const updateUserQuery = async function (connection, uid, data) {
+  const Query = `UPDATE Users SET name = ifnull(?, name), email = ifnull(?, email),
+    phone_number = ifnull(?, phone_number), address = ifnull(?, address),
+      address_detail = ifnull(?, address_detail), second_phone_number = ifnull(?, second_phone_number),
+        birthdate = ifnull(?, birthdate), bloodtype = ifnull(?, bloodtype), height = ifnull(?, height),
+        weight = ifnull(?, weight), gender = ifnull(?, gender), regular_medicines = ifnull(?, regular_medicines),
+          chronic_disease = ifnull(?, chronic_disease) WHERE user_id = ?;`;
+
+  const Params = [
+    data.username,
+    data.email,
+    data.phoneNumber,
+    data.address,
+    data.addressDetail,
+    data.secondPhoneNumber,
+    data.birthDate,
+    data.bloodType,
+    data.height,
+    data.weight,
+    data.gender,
+    data.regularMedicines,
+    data.chronicDisease,
+    uid,
+  ];
+
+  await connection.query(Query, Params);
+};
+
+const updateUser = async function (req, res) {
+  const { uid } = req.params;
+  const { data } = req.body;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      await updateUserQuery(connection, uid, data);
+
+      return res.json({
+        isSucess: true,
+        code: 204,
+        message: '유저 업데이트 성공',
+      });
+    } catch (err) {
+      console.log(err);
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSucess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
+const readUserAppointmentQuery = async function (connection, id) {
+  const Query = `SELECT * FROM Housepital.Users join Housepital.Appointments using(user_id) where id = ?;`;
+  const Params = [id];
+
+  const rows = await connection.query(Query, Params);
+
+  return rows;
+};
+
+const readUserAppointment = async function (req, res) {
+  const { id } = req.params;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      const [rows] = await readUserAppointmentQuery(connection, id);
+      if (rows.length === 0) {
+        throw Error('Appointment not found');
+      } else {
+        return res.json({
+          result: rows,
+          isSucess: true,
+          code: 200,
+          message: '유저 예약정보 조회 성공',
+        });
+      }
+    } catch (err) {
+      if (err.message === 'Appointment not found') {
+        return res.json({
+          isSucess: false,
+          code: 404,
+          message: '예약정보를 찾을 수 없습니다.',
+        });
+      } else {
+        return res.json({
+          isSuccess: false,
+          code: 500,
+          message: '서버 오류',
+        });
+      }
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSucess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
+const readAppointmentsQuery = async function (connection, id) {
+  const Query = `SELECT * FROM Housepital.Appointments WHERE doctor_id in (select doctor_id from Housepital.Doctors where hospital_id = ?);`;
+  Params = [id];
+
+  const rows = await connection.query(Query, Params);
+
+  return rows;
+};
+
+const classifyAppointments = function (rows) {
+  const result = { aw: [], ac: [], dc: [], pc: [], ar: [] };
+
+  for (let i = 0; i < rows.length; i++) {
+    switch (rows[i].state_id) {
+      case 'aw':
+        result.aw.push(rows[i]);
+        break;
+      case 'ac':
+        result.ac.push(rows[i]);
+        break;
+      case 'dc':
+        result.dc.push(rows[i]);
+        break;
+      case 'pc':
+        result.pc.push(rows[i]);
+        break;
+      case 'ar':
+        result.ar.push(rows[i]);
+        break;
+    }
+  }
+
+  return result;
+};
+
+const readAppointments = async function (req, res) {
+  const { id } = req.params;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      const [rows] = await readAppointmentsQuery(connection, id);
+      const classifiedRows = classifyAppointments(rows);
+
+      if (rows.length === 0) {
+        throw Error('Appointments not found');
+      } else {
+        return res.json({
+          result: classifiedRows,
+          isSucess: true,
+          code: 200,
+          message: '예약정보 조회 성공',
+        });
+      }
+    } catch (err) {
+      if (err.message === 'Appointments not found') {
+        return res.json({
+          isSucess: false,
+          code: 404,
+          message: '예약정보를 찾을 수 없습니다.',
+        });
+      } else {
+        return res.json({
+          isSuccess: false,
+          code: 500,
+          message: '서버 오류',
+        });
+      }
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSucess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
+const updateAppointmentQuery = async function (connection, id, data) {
+  const Query = `UPDATE Appointments SET state_id = ifnull(?, state_id), rejection_reason = ifnull(?, rejection_reason) WHERE id = ?;`;
+  const Params = [data.stateId, data.rejectionReason, id];
+
+  await connection.query(Query, Params);
+};
+
+const updateAppointment = async function (req, res) {
+  const { id } = req.params;
+  const { data } = req.body;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      await updateAppointmentQuery(connection, id, data);
+
+      return res.json({
+        isSucess: true,
+        code: 204,
+        message: '예약정보 업데이트 성공',
+      });
+    } catch (err) {
+      console.log(err);
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSucess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
+app.post('/api/users', createUser);
+app.get('/api/users/:uid', readUser);
+app.get('/api/appointments/:id', readUserAppointment);
+app.patch('/api/users/:uid', updateUser);
+app.post('/api/appointments', createAppointment);
+app.get('/api/hospitals/:id/appointments', readAppointments);
+app.patch('/api/appointments/:id', updateAppointment);
 
 app.get('/api/auth/naver-callback', async (req, res) => {
   const { code, state } = req.query;
