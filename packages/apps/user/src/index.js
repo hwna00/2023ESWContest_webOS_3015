@@ -6,7 +6,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ChakraProvider } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import theme from '../theme';
+
+import theme from '../../../common/theme';
+
+
 import { store } from './store';
 import router from './routes/index';
 
