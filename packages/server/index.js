@@ -256,9 +256,9 @@ const updateUser = async function (req, res) {
   }
 };
 
-const readUserAppointmentQuery = async function (connection, id) {
+const readUserAppointmentQuery = async function (connection, appointmentId) {
   const Query = `SELECT * FROM Housepital.Users join Housepital.Appointments using(user_id) where id = ?;`;
-  const Params = [id];
+  const Params = [appointmentId];
 
   const rows = await connection.query(Query, Params);
 
@@ -266,12 +266,12 @@ const readUserAppointmentQuery = async function (connection, id) {
 };
 
 const readUserAppointment = async function (req, res) {
-  const { id } = req.params;
+  const { appointmentId } = req.params;
 
   try {
     const connection = await pool.getConnection(async conn => conn);
     try {
-      const [rows] = await readUserAppointmentQuery(connection, id);
+      const [rows] = await readUserAppointmentQuery(connection, appointmentId);
       if (rows.length === 0) {
         throw Error('Appointment not found');
       } else {
@@ -308,9 +308,9 @@ const readUserAppointment = async function (req, res) {
   }
 };
 
-const readAppointmentsQuery = async function (connection, id) {
+const readAppointmentsQuery = async function (connection, hospitalId) {
   const Query = `SELECT * FROM Housepital.Appointments WHERE doctor_id in (select doctor_id from Housepital.Doctors where hospital_id = ?);`;
-  Params = [id];
+  const Params = [hospitalId];
 
   const rows = await connection.query(Query, Params);
 
@@ -344,12 +344,12 @@ const classifyAppointments = function (rows) {
 };
 
 const readAppointments = async function (req, res) {
-  const { id } = req.params;
+  const { hospitalId } = req.params;
 
   try {
     const connection = await pool.getConnection(async conn => conn);
     try {
-      const [rows] = await readAppointmentsQuery(connection, id);
+      const [rows] = await readAppointmentsQuery(connection, hospitalId);
       const classifiedRows = classifyAppointments(rows);
 
       if (rows.length === 0) {
@@ -388,21 +388,25 @@ const readAppointments = async function (req, res) {
   }
 };
 
-const updateAppointmentQuery = async function (connection, id, data) {
+const updateAppointmentQuery = async function (
+  connection,
+  appointmentId,
+  data,
+) {
   const Query = `UPDATE Appointments SET state_id = ifnull(?, state_id), rejection_reason = ifnull(?, rejection_reason) WHERE id = ?;`;
-  const Params = [data.stateId, data.rejectionReason, id];
+  const Params = [data.stateId, data.rejectionReason, appointmentId];
 
   await connection.query(Query, Params);
 };
 
 const updateAppointment = async function (req, res) {
-  const { id } = req.params;
+  const { appointmentId } = req.params;
   const { data } = req.body;
 
   try {
     const connection = await pool.getConnection(async conn => conn);
     try {
-      await updateAppointmentQuery(connection, id, data);
+      await updateAppointmentQuery(connection, appointmentId, data);
 
       return res.json({
         isSucess: true,
@@ -430,11 +434,11 @@ const updateAppointment = async function (req, res) {
 
 app.post('/api/users', createUser);
 app.get('/api/users/:uid', readUser);
-app.get('/api/appointments/:id', readUserAppointment);
+app.get('/api/appointments/:appointmentId', readUserAppointment);
 app.patch('/api/users/:uid', updateUser);
 app.post('/api/appointments', createAppointment);
-app.get('/api/hospitals/:id/appointments', readAppointments);
-app.patch('/api/appointments/:id', updateAppointment);
+app.get('/api/hospitals/:hospitalId/appointments', readAppointments);
+app.patch('/api/appointments/:appointmentId', updateAppointment);
 
 app.get('/api/auth/naver-callback', async (req, res) => {
   const { code, state } = req.query;
