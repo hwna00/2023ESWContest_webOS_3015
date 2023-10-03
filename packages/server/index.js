@@ -385,12 +385,53 @@ const readAppointments = async function (req, res) {
   }
 };
 
+const updateAppointmentQuery = async function (connection, id, data) {
+  const Query = `UPDATE Appointments SET state_id = ifnull(?, state_id), rejection_reason = ifnull(?, rejection_reason) WHERE id = ?;`;
+  const Params = [data.stateId, data.rejectionReason, id];
+
+  await connection.query(Query, Params);
+};
+
+const updateAppointment = async function (req, res) {
+  const { id } = req.params;
+  const { data } = req.body;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      await updateAppointmentQuery(connection, id, data);
+
+      return res.json({
+        isSucess: true,
+        code: 204,
+        message: '예약정보 업데이트 성공',
+      });
+    } catch (err) {
+      console.log(err);
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSucess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
 app.post('/api/users', createUser);
 app.get('/api/users/:uid', readUser);
 app.get('/api/appointments/:id', readUserAppointment);
 app.patch('/api/users/:uid', updateUser);
 app.post('/api/appointments', createAppointment);
 app.get('/api/hospitals/:id/appointments', readAppointments);
+app.patch('/api/appointments/:id', updateAppointment);
 
 app.get('/api/auth/naver-callback', async (req, res) => {
   const { code, state } = req.query;
