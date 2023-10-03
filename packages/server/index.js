@@ -7,6 +7,7 @@ const {
   fbCreateCustomToken,
   getNaverAuthApiUri,
 } = require('./controllers/authController');
+const convertUser = require('./utils/convertUser');
 
 require('dotenv').config();
 
@@ -108,26 +109,8 @@ const readUser = async function (req, res) {
       if (rows.length === 0) {
         throw Error('User not found');
       } else {
-        // TODO: convert 함수로 빼놓을 것
-        const user = {
-          uid: rows[0].user_id,
-          email: rows[0].email,
-          name: rows[0].name,
-          address: rows[0].address,
-          addressDetail: rows[0].address_detail,
-          phoneNumber: rows[0].phone_number,
-          secondPhoneNumber: rows[0].second_phone_number,
-          birthDate: rows[0].birthdate,
-          bloodType: rows[0].bloodtype,
-          height: rows[0].height,
-          weight: rows[0].weight,
-          gender: rows[0].gender,
-          regularMedicines: rows[0].regular_medicines,
-          chronicDisease: rows[0].chronic_disease,
-        };
-
         return res.json({
-          result: user,
+          result: convertUser(rows[0]),
           isSucess: true,
           code: 200,
           message: '유저 조회 성공',
