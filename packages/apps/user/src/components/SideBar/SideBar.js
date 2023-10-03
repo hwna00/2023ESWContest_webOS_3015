@@ -14,6 +14,7 @@ import {
   Flex,
   Icon,
 } from '@chakra-ui/react';
+import { useCallback, useEffect, useState } from 'react';
 
 const CustomTab = function ({ children, to }) {
   return (
@@ -37,7 +38,20 @@ const CustomTab = function ({ children, to }) {
 };
 
 const SideBar = function () {
+  const [tabIdex, setTabIdx] = useState();
   const me = useSelector(state => state.me);
+
+  const onTabIdxChange = useCallback(index => {
+    setTabIdx(index);
+    window.localStorage.setItem('currentTab', index);
+  }, []);
+
+  useEffect(() => {
+    const currentTabIdx = window.localStorage.getItem('currentTab');
+    if (currentTabIdx) {
+      setTabIdx(Number(currentTabIdx));
+    }
+  }, []);
 
   return (
     <Tabs
@@ -55,7 +69,9 @@ const SideBar = function () {
       variant="enclosed-colored"
       size="lg"
       orientation="vertical"
-      defaultIndex={1}
+      defaultIndex={tabIdex}
+      index={tabIdex}
+      onChange={onTabIdxChange}
     >
       <TabList
         width="full"
