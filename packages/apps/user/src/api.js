@@ -20,9 +20,8 @@ export const updateMe = async (uid, data) => {
   return await instance.patch(`/users/${uid}`, { data });
 };
 
-export const createAppointment = data => {
-  //TODO: 예약 객체를 전달하는 axios 요청을 작성해야 함.
-  console.log(data);
+export const createAppointment = async data => {
+  return await instance.post('/appointments', { data });
 };
 
 export const getHospitals = () => {
