@@ -13,9 +13,8 @@ export const updateMe = async data => {
   instance.patch('/users/me', data);
 };
 
-//TODO: email을 uid로 교체해야 한다
-export const getMe = async email => {
-  const { data: me } = await instance.get(`/users/me?email=${email}`);
+export const getMe = async uid => {
+  const { data: me } = await instance.get(`/users/${uid}`);
 
   if (!me) {
     // TODO: 해당 유저가 존재하지 않는 경우에 대한 처리
@@ -33,4 +32,11 @@ export const getMe = async email => {
 export const createAppointment = data => {
   //TODO: 예약 객체를 전달하는 axios 요청을 작성해야 함.
   console.log(data);
+  
+export const getHospitals = () => {
+  return instance.get('/hospitals').then(res => res.data);
+};
+
+export const getDoctors = () => {
+  return instance.get('/doctors').then(res => res.data);
 };
