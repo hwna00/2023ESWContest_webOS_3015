@@ -32,25 +32,25 @@ function ViewAppointment() {
   } = useDisclosure();
   const [value, onChange] = useState(new Date());
   const [day, setDay] = useState(new Date());
-  const [filter, setFilter] = useState('viewAll');
-  const [filterType, setFilterType] = useState('All');
+  const [viewType, setViewType] = useState('viewAll');
+  const [nftType, setNftType] = useState('All');
   const [selectedHour, setSelectedHour] = useState();
   const [selectedMinute, setSelectedMinute] = useState();
   const [selectedDoctor, setSelectedDoctor] = useState();
   const [selectedState, setSelectedState] = useState();
 
-  const { data } = useQuery(['appointments'], getAppointments);
+  const { data, isLoading } = useQuery(['appointments'], getAppointments);
 
   let filteredReservations = [];
   let uniqueDoctors = [];
   let uniqueHours = [];
 
-  if (data) {
-    if (filter === 'viewAll') {
+  if (!isLoading) {
+    if (viewType === 'viewAll') {
       filteredReservations = data.filter(reservation =>
         dayjs(reservation.date_time).isSame(day, 'day'),
       );
-    } else if (filter === 'viewSelection') {
+    } else if (viewType === 'viewSelection') {
       filteredReservations = data.filter(reservation => {
         if (!dayjs(reservation.date_time).isSame(day, 'day')) return false;
 
@@ -70,8 +70,8 @@ function ViewAppointment() {
 
         if (selectedDoctor && reservation.doctor_id !== selectedDoctor)
           return false;
-        if (filterType === 'FTF') return reservation.is_NFTF === false;
-        if (filterType === 'NFTF') return reservation.is_NFTF === true;
+        if (nftType === 'FTF') return reservation.is_NFTF === false;
+        if (nftType === 'NFTF') return reservation.is_NFTF === true;
         return true;
       });
       uniqueDoctors = Array.from(
@@ -123,13 +123,13 @@ function ViewAppointment() {
               value={value}
             />
           </Box>
-          <RadioGroup onChange={setFilter} value={filter}>
+          <RadioGroup onChange={setViewType} value={viewType}>
             <VStack alignItems="initial" p="6" spacing="2">
               <Radio value="viewAll">전체보기</Radio>
               <Radio value="viewSelection">선택보기</Radio>
-              {filter === 'viewSelection' && (
+              {viewType === 'viewSelection' && (
                 <>
-                  <RadioGroup onChange={setFilterType} value={filterType}>
+                  <RadioGroup onChange={setNftType} value={nftType}>
                     <HStack>
                       <Radio value="ALl">모두 보기</Radio>
                       <Radio value="FTF">대면</Radio>
