@@ -305,11 +305,11 @@ const readUserAppointment = async function (req, res) {
   }
 };
 
-app.post('/api/user', createUser);
+app.post('/api/users', createUser);
 app.get('/api/users/:uid', readUser);
-app.get('/api/users/appointments/:id', readUserAppointment);
+app.get('/api/appointments/:id', readUserAppointment);
 app.patch('/api/users/:uid', updateUser);
-app.post('/api/appointment', createAppointment);
+app.post('/api/appointments', createAppointment);
 
 app.get('/api/auth/naver-callback', async (req, res) => {
   const { code, state } = req.query;
