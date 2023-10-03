@@ -41,7 +41,10 @@ const useCamera = () => {
     };
 
     fetchStream();
-  }, [state]);
+    {
+      /* eslint-disable */
+    }
+  }, []);
 
   return state;
 };

@@ -37,6 +37,11 @@ export const getUserImage = email => {
     .catch(() => null);
 };
 
+export const uploadNftfBlob = async (blob, uid) => {
+  const storageRef = ref(storage, `${uid}/nftf.png`);
+  await uploadBytes(storageRef, blob);
+};
+
 export const fbSignUp = async data => {
   const { email, password, ...rest } = data;
   const isUserExist = false; // getMe();
@@ -45,10 +50,13 @@ export const fbSignUp = async data => {
     // TODO: 사용자가 존재한다는 알림 전송
     // TODO: 로그인 페이지로 리디렉트
   } else {
-    createUserWithEmailAndPassword(auth, email, password).then(() => {
-      createUser({ email, ...rest });
-      uploadBlob(rest.profileImgBlob, email);
-    });
+    createUserWithEmailAndPassword(auth, email, password).then(
+      userCredential => {
+        const { uid } = userCredential.user;
+        createUser({ uid, email, ...rest });
+        uploadBlob(rest.profileImgBlob, email);
+      },
+    );
     return createUser({ ...rest, email });
   }
 };

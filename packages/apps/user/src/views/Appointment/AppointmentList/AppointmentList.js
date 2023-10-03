@@ -211,7 +211,7 @@ function AppointmentList() {
       <Box width="full" maxHeight="80vh" overflowY="scroll">
         <SimpleGrid columns={2} gap="8" mt="4" width="full" padding="8">
           {filteredList.map(item => (
-            <ChakraLink as={ReactRouterLink} to={`${item.id}`} key={item.name}>
+            <ChakraLink as={ReactRouterLink} to={`${item.id}`} key={item.id}>
               <AppointmentCard data={item} />
             </ChakraLink>
           ))}
