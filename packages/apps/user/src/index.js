@@ -4,9 +4,9 @@ import ReactDOM from 'react-dom/client';
 import { AnimatePresence } from 'framer-motion';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ChakraProvider } from '@chakra-ui/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import theme from '../theme';
-
 import { store } from './store';
 import router from './routes/index';
 

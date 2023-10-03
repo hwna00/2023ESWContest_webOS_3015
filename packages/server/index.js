@@ -1,13 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
-const pool = require('./config/db');
 
+const convertUser = require('./utils/convertUser');
 const {
   fbCreateCustomToken,
   getNaverAuthApiUri,
 } = require('./controllers/authController');
-const convertUser = require('./utils/convertUser');
+const pool = require('./config/db');
 
 require('dotenv').config();
 
@@ -45,42 +45,32 @@ const createUserQuery = async (connection, data) => {
 const createUser = async (req, res) => {
   const { data } = req.body;
 
-  // var regex = RegExp(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/);
-  // if (!regex.test(data.birthDate)) {
-  //   return res.json({
-  //     isSucess: false,
-  //     code: 400,
-  //     message: '날짜 형식을 제대로 입력해주세요.',
-  //   });
-  // }
-
   try {
     const connection = await pool.getConnection(async conn => conn);
-    try {
-      createUserQuery(connection, data).then(() =>
+    createUserQuery(connection, data)
+      .then(() =>
         res.json({
           isSucess: true,
           code: 201,
           message: '유저 생성 성공',
         }),
-      );
-    } catch (err) {
-      if (err.errno === 1062) {
-        return res.json({
-          isSucess: false,
-          code: 409,
-          message: '이미 가입된 회원입니다.',
-        });
-      } else {
-        return res.json({
-          isSuccess: false,
-          code: 500,
-          message: '서버 오류',
-        });
-      }
-    } finally {
-      connection.release();
-    }
+      )
+      .catch(err => {
+        if (err.errno === 1062) {
+          return res.json({
+            isSucess: false,
+            code: 409,
+            message: '이미 가입된 회원입니다.',
+          });
+        } else {
+          return res.json({
+            isSuccess: false,
+            code: 500,
+            message: '서버 오류',
+          });
+        }
+      })
+      .finally(() => connection.release());
   } catch (err) {
     return res.json({
       isSucess: false,
@@ -91,7 +81,7 @@ const createUser = async (req, res) => {
 };
 
 const readUserQuery = async function (connection, uid) {
-  const Query = `SELECT * FROM Users WHERE user_id = ?;`;
+  const Query = 'SELECT * FROM Users WHERE user_id = ?;';
   const Params = [uid];
 
   const rows = await connection.query(Query, Params);
@@ -143,21 +133,15 @@ const readUser = async function (req, res) {
 };
 
 const createAppointmentQuery = async function (connection, data) {
-  const datetime = data.date + ' ' + data.time;
-  let isNFTF = 1;
-  if (data.type === 'ftf') {
-    data.nftfId = null;
-    isNFTF = 0;
-  }
-
-  const Query = `INSERT INTO Appointments(user_id, doctor_id, NFTF_id, datetime, message, is_NFTF) VALUES (?, ?, ?, ?, ?, ?);`;
+  const Query =
+    'INSERT INTO Appointments(user_id, doctor_id, NFTF_id, datetime, message, is_NFTF) VALUES (?, ?, ?, ?, ?, ?);';
   const Params = [
     data.uid,
     data.doctorId,
-    data.nftfId,
-    datetime,
+    data.type === 'ftf' ? null : data.nftfId,
+    `${data.date} ${data.time}`,
     data.memo,
-    isNFTF,
+    data.type === 'ftf' ? 0 : 1,
   ];
 
   await connection.query(Query, Params);
@@ -309,8 +293,9 @@ const readUserAppointment = async function (req, res) {
 };
 
 const readAppointmentsQuery = async function (connection, id) {
-  const Query = `SELECT * FROM Housepital.Appointments WHERE doctor_id in (select doctor_id from Housepital.Doctors where hospital_id = ?);`;
-  Params = [id];
+  const Query =
+    'SELECT * FROM Housepital.Appointments WHERE doctor_id in (select doctor_id from Housepital.Doctors where hospital_id = ?);';
+  const Params = [id];
 
   const rows = await connection.query(Query, Params);
 
@@ -318,7 +303,13 @@ const readAppointmentsQuery = async function (connection, id) {
 };
 
 const classifyAppointments = function (rows) {
-  const result = { aw: [], ac: [], dc: [], pc: [], ar: [] };
+  const result = {
+    aw: [],
+    ac: [],
+    dc: [],
+    pc: [],
+    ar: [],
+  };
 
   for (let i = 0; i < rows.length; i++) {
     switch (rows[i].state_id) {
@@ -336,6 +327,8 @@ const classifyAppointments = function (rows) {
         break;
       case 'ar':
         result.ar.push(rows[i]);
+        break;
+      default:
         break;
     }
   }
@@ -453,22 +446,22 @@ app.get('/api/auth/naver-callback', async (req, res) => {
     data: { response: user },
   } = await axios.get('https://openapi.naver.com/v1/nid/me', {
     headers: {
-      Authorization: 'Bearer ' + access_token,
+      Authorization: `Bearer ${access_token}`,
     },
   });
 
   try {
-    //TODO: DB에 유저 정보 저장하는 쿼리 실행
-    //TODO: user객체의 정보는 노션 API 명세를 참고할 것
-    //TODO 주소는 일단 아무 값으로나 저장하고 redirect 페이지에서 받는걸로
+    // TODO: DB에 유저 정보 저장하는 쿼리 실행
+    // TODO: user객체의 정보는 노션 API 명세를 참고할 것
+    // TODO 주소는 일단 아무 값으로나 저장하고 redirect 페이지에서 받는걸로
   } catch {
-    //TODO: email 중복이 발생할 경우 DB에 정보를 저장하지 않음
+    // TODO: email 중복이 발생할 경우 DB에 정보를 저장하지 않음
   } finally {
     fbCreateCustomToken(user.id)
       .then(token => {
         res
           .cookie('token', token)
-          .redirect(`http://localhost:8080/auth/callback`);
+          .redirect('http://localhost:8080/auth/callback');
       })
       .catch(err => console.log(err));
   }
