@@ -41,7 +41,7 @@ const MyPage = function () {
 
   const onSubmit = data => {
     updateMe(me.uid, data)
-      .then(res => {
+      .then(() => {
         //TODO: 성공했다고 알림
         console.log('성공');
       })
@@ -119,7 +119,7 @@ const MyPage = function () {
             />
             <FormErrorMessage>{errors.birthDate?.message}</FormErrorMessage>
           </FormControl>
-          //! 주소값이 사라지는 버그 발생
+          {/* //! 주소값이 사라지는 버그 발생 */}
           <FormControl width="full" isRequired isInvalid={errors.address}>
             <FormLabel margin={0}>주소</FormLabel>
             <Input
@@ -187,7 +187,7 @@ const MyPage = function () {
               {errors.secondPhoneNumber?.message}
             </FormErrorMessage>
           </FormControl>
-          // ! 혈액형의 초기값이 마이페이지에 적용되지 않는 에러 발생
+          {/* // ! 혈액형의 초기값이 마이페이지에 적용되지 않는 에러 발생 */}
           <HStack width="full" gap="4">
             <FormControl width="full" isInvalid={errors.bloodType}>
               <FormLabel>혈액형</FormLabel>
