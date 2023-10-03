@@ -305,11 +305,92 @@ const readUserAppointment = async function (req, res) {
   }
 };
 
+const readAppointmentsQuery = async function (connection, id) {
+  const Query = `SELECT * FROM Housepital.Appointments WHERE doctor_id in (select doctor_id from Housepital.Doctors where hospital_id = ?);`;
+  Params = [id];
+
+  const rows = await connection.query(Query, Params);
+
+  return rows;
+};
+
+const classifyAppointments = function (rows) {
+  const result = { aw: [], ac: [], dc: [], pc: [], ar: [] };
+
+  for (let i = 0; i < rows.length; i++) {
+    switch (rows[i].state_id) {
+      case 'aw':
+        result.aw.push(rows[i]);
+        break;
+      case 'ac':
+        result.ac.push(rows[i]);
+        break;
+      case 'dc':
+        result.dc.push(rows[i]);
+        break;
+      case 'pc':
+        result.pc.push(rows[i]);
+        break;
+      case 'ar':
+        result.ar.push(rows[i]);
+        break;
+    }
+  }
+
+  return result;
+};
+
+const readAppointments = async function (req, res) {
+  const { id } = req.params;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      const [rows] = await readAppointmentsQuery(connection, id);
+      const classifiedRows = classifyAppointments(rows);
+
+      if (rows.length === 0) {
+        throw Error('Appointments not found');
+      } else {
+        return res.json({
+          result: classifiedRows,
+          isSucess: true,
+          code: 200,
+          message: '예약정보 조회 성공',
+        });
+      }
+    } catch (err) {
+      if (err.message === 'Appointments not found') {
+        return res.json({
+          isSucess: false,
+          code: 404,
+          message: '예약정보를 찾을 수 없습니다.',
+        });
+      } else {
+        return res.json({
+          isSuccess: false,
+          code: 500,
+          message: '서버 오류',
+        });
+      }
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSucess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
 app.post('/api/users', createUser);
 app.get('/api/users/:uid', readUser);
 app.get('/api/appointments/:id', readUserAppointment);
 app.patch('/api/users/:uid', updateUser);
 app.post('/api/appointments', createAppointment);
+app.get('/api/hospitals/:id/appointments', readAppointments);
 
 app.get('/api/auth/naver-callback', async (req, res) => {
   const { code, state } = req.query;
