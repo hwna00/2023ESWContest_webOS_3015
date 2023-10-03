@@ -253,8 +253,61 @@ const updateUser = async function (req, res) {
   }
 };
 
+const readUserAppointmentQuery = async function (connection, id) {
+  const Query = `SELECT * FROM Housepital.Users join Housepital.Appointments using(user_id) where id = ?;`;
+  const Params = [id];
+
+  const rows = await connection.query(Query, Params);
+
+  return rows;
+};
+
+const readUserAppointment = async function (req, res) {
+  const { id } = req.params;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      const [rows] = await readUserAppointmentQuery(connection, id);
+      if (rows.length === 0) {
+        throw Error('Appointment not found');
+      } else {
+        return res.json({
+          result: rows,
+          isSucess: true,
+          code: 200,
+          message: '유저 예약정보 조회 성공',
+        });
+      }
+    } catch (err) {
+      if (err.message === 'Appointment not found') {
+        return res.json({
+          isSucess: false,
+          code: 404,
+          message: '예약정보를 찾을 수 없습니다.',
+        });
+      } else {
+        return res.json({
+          isSuccess: false,
+          code: 500,
+          message: '서버 오류',
+        });
+      }
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSucess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
 app.post('/api/user', createUser);
 app.get('/api/users/:uid', readUser);
+app.get('/api/users/appointments/:id', readUserAppointment);
 app.patch('/api/users/:uid', updateUser);
 app.post('/api/appointment', createAppointment);
 
