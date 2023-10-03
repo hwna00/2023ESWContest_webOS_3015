@@ -1,3 +1,8 @@
+import { useCallback } from 'react';
+
+import { useOutletContext } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { DaumPostcodeEmbed } from 'react-daum-postcode';
 import {
   FormControl,
   FormErrorMessage,
@@ -11,9 +16,7 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react';
-import { DaumPostcodeEmbed } from 'react-daum-postcode';
-import { useDispatch, useSelector } from 'react-redux';
-import { useOutletContext } from 'react-router-dom';
+
 import { setAddress } from '../../../store';
 
 const Step2 = function () {
@@ -24,13 +27,16 @@ const Step2 = function () {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const errors = useSelector(state => state.signUp.errors);
 
-  const handleComplete = data => {
-    onClose();
-    dispatch(setAddress(data.address));
-  };
+  const handleComplete = useCallback(
+    data => {
+      onClose();
+      dispatch(setAddress(data.address));
+    },
+    [onClose, dispatch],
+  );
 
   return (
-    <VStack width={'full'} gap={'4'}>
+    <VStack width="full" gap="4">
       <FormControl width="full" isRequired isInvalid={errors.birthDate}>
         <FormLabel>생년월일</FormLabel>
         <Input
@@ -54,7 +60,7 @@ const Step2 = function () {
         <Input
           required
           placeholder="주소"
-          mb={'2'}
+          mb="2"
           value={address}
           {...register('address', {
             required: '이 항목은 필수입니다.',

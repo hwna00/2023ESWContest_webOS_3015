@@ -1,3 +1,5 @@
+import { useOutletContext } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import {
   FormControl,
   FormErrorMessage,
@@ -10,28 +12,35 @@ import {
   Textarea,
   Select,
 } from '@chakra-ui/react';
-import { useSelector } from 'react-redux';
-import { useOutletContext } from 'react-router-dom';
 
 const Step3 = function () {
   const { register } = useOutletContext();
   const errors = useSelector(state => state.signUp.errors);
 
   return (
-    <VStack width={'full'} gap={'4'}>
+    <VStack width="full" gap="4">
       <HStack width="full" gap="4">
+        <FormControl width="full" isInvalid={errors.gender}>
+          <FormLabel>성별</FormLabel>
+          <Select placeholder="성별" {...register('gender')}>
+            <option value="M">남성</option>
+            <option value="F">여성</option>
+          </Select>
+          <FormErrorMessage>{errors.gender?.message}</FormErrorMessage>
+        </FormControl>
+
         <FormControl width="full" isInvalid={errors.bloodType}>
           <FormLabel>혈액형</FormLabel>
           <Select placeholder="혈액형" {...register('bloodType')}>
-            <option value="blood_A">A형</option>
-            <option value="blood_B">B형</option>
-            <option value="blood_O">O형</option>
-            <option value="blood_AB">AB형</option>
+            <option value="A">A형</option>
+            <option value="B">B형</option>
+            <option value="O">O형</option>
+            <option value="AB">AB형</option>
           </Select>
           <FormErrorMessage>{errors.bloodType?.message}</FormErrorMessage>
         </FormControl>
 
-        <FormControl width="full" isInvalid={errors.step?.height}>
+        <FormControl width="full" isInvalid={errors.height}>
           <FormLabel>키</FormLabel>
           <InputGroup>
             <Input

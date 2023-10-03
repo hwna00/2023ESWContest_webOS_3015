@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 
+import SettingPage from '../views/SettingPage/SettingPage';
 import NotFound from '../views/NotFound';
 import MyPage from '../views/MyPage/MyPage';
 import MainPage from '../views/MainPage/MainPage';
@@ -30,7 +31,7 @@ const router = createBrowserRouter(
         },
         {
           path: 'settings',
-          element: '',
+          element: <SettingPage />,
         },
         ...appointmentRoutes,
         ...healthHistoryRoutes,

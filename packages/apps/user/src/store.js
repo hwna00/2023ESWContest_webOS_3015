@@ -1,5 +1,23 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 
+const userInitialState = {
+  uid: '',
+  name: '',
+  email: '',
+  phoneNumber: '',
+  secondPhoneNumber: '',
+  address: '',
+  addressDetail: '',
+  birthDate: '',
+  bloodType: '',
+  height: '',
+  weight: '',
+  gender: '',
+  regularMedicines: '',
+  chronicDisease: '',
+  profileImg: '',
+};
+
 const signUpSlice = createSlice({
   name: 'signUp',
   initialState: { errors: {}, blob: '', address: '' },
@@ -16,41 +34,30 @@ const signUpSlice = createSlice({
   },
 });
 
-const userSlice = createSlice({
-  name: 'user',
-  initialState: {},
+const meSlice = createSlice({
+  name: 'me',
+  initialState: userInitialState,
   reducers: {
-    setUser: (state, action) => action.payload,
-  },
-});
-
-const appointmentSlice = createSlice({
-  name: 'appointment',
-  initialState: { date: '', time: '', type: '' },
-  reducers: {
-    setAppointDatetime: (state, action) => {
-      state.date = action.payload.date;
-      state.time = action.payload.time;
+    setMe: (state, action) => {
+      Object.entries(action?.payload).map(
+        ([key, value]) => (state[key] = value),
+      );
     },
+    resetMe: () => userInitialState,
   },
 });
 
 export const store = configureStore({
   reducer: {
     signUp: signUpSlice.reducer,
-    user: userSlice.reducer,
-    appointment: appointmentSlice.reducer,
+    me: meSlice.reducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: ['signUp/setImgBlob'],
-        ignoredPaths: ['signUp.blob'],
-      },
+      serializableCheck: false,
     }),
   devTools: process.env.NODE_ENV !== 'production',
 });
 
 export const { setImgBlob, setErrors, setAddress } = signUpSlice.actions;
-export const { setAppointDatetime } = appointmentSlice.actions;
-export const { setUser } = userSlice.actions;
+export const { setMe, resetMe } = meSlice.actions;
