@@ -6,6 +6,7 @@ const instance = axios.create({
 
 export const createUser = data => {
   //TODO: data를 가지는 사용자를 생성
+  console.log(data);
 };
 
 export const updateMe = async data => {
@@ -20,6 +21,7 @@ export const getMe = async uid => {
   } else {
     // return me;
     return {
+      uid: 'test12',
       name: 'test',
       phoneNumber: '01012341234',
       birthDate: '2000-10-10',
@@ -27,6 +29,10 @@ export const getMe = async uid => {
   }
 };
 
+export const createAppointment = data => {
+  //TODO: 예약 객체를 전달하는 axios 요청을 작성해야 함.
+  console.log(data);
+  
 export const getHospitals = () => {
   return instance.get('/hospitals').then(res => res.data);
 };
