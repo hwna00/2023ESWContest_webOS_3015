@@ -1,12 +1,15 @@
+const http = require('http');
+
+const SocketIO = require('socket.io');
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
-const pool = require('./config/db');
 
 const {
   fbCreateCustomToken,
   getNaverAuthApiUri,
 } = require('./controllers/authController');
+const pool = require('./config/db');
 
 require('dotenv').config();
 
@@ -15,7 +18,20 @@ const port = 3000 || process.env.PORT;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({ origin: 'http://localhost:8080' }));
+app.use(cors());
+
+const httpServer = http.createServer(app);
+const wsServer = SocketIO(httpServer);
+
+wsServer.on('connection', socket => {
+  console.log('connection established');
+  socket.on('enter', (msg, done) => {
+    console.log('enter');
+  });
+  socket.on('leave', () => {
+    console.log('bye');
+  });
+});
 
 const createUserQuery = async function (connection, data) {
   const Query = `INSERT INTO Users(user_id, name, email, phone_number, address, address_detail, second_phone_number, birthdate, bloodtype, height, weight, gender, regular_medicines, chronic_disease) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
@@ -166,17 +182,17 @@ app.get('/api/auth/naver-callback', async (req, res) => {
   });
 
   try {
-    //TODO: DB에 유저 정보 저장하는 쿼리 실행
-    //TODO: user객체의 정보는 노션 API 명세를 참고할 것
-    //TODO 주소는 일단 아무 값으로나 저장하고 redirect 페이지에서 받는걸로
+    // TODO: DB에 유저 정보 저장하는 쿼리 실행
+    // TODO: user객체의 정보는 노션 API 명세를 참고할 것
+    // TODO 주소는 일단 아무 값으로나 저장하고 redirect 페이지에서 받는걸로
   } catch {
-    //TODO: email 중복이 발생할 경우 DB에 정보를 저장하지 않음
+    // TODO: email 중복이 발생할 경우 DB에 정보를 저장하지 않음
   } finally {
     fbCreateCustomToken(user.id)
       .then(token => {
         res
           .cookie('token', token)
-          .redirect(`http://localhost:8080/auth/callback`);
+          .redirect('http://localhost:8080/auth/callback');
       })
       .catch(err => console.log(err));
   }
@@ -184,7 +200,7 @@ app.get('/api/auth/naver-callback', async (req, res) => {
 
 app.get('/api/users/me', (req, res) => {
   console.log('me');
-  //TODO: DB로부터 사용자 정보 검색
+  // TODO: DB로부터 사용자 정보 검색
   res.json({
     name: '하철환',
     // profileImg: getUserImage(email),
@@ -195,6 +211,6 @@ app.patch('/api/users/me', (req, res) => {
   console.log(req.body);
 });
 
-app.listen(port, () => {
+httpServer.listen(port, () => {
   console.log(`Server on port: ${port}`);
 });
