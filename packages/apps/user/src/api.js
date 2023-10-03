@@ -8,16 +8,16 @@ export const createUser = async data => {
   return await instance.post('/users', { data });
 };
 
-export const updateMe = async data => {
-  instance.patch('/users/me', data);
-};
-
 export const getMe = async uid => {
   const {
     data: { result },
   } = await instance.get(`/users/${uid}`);
 
   return result;
+};
+
+export const updateMe = async (uid, data) => {
+  return await instance.patch(`/users/${uid}`, { data });
 };
 
 export const createAppointment = data => {

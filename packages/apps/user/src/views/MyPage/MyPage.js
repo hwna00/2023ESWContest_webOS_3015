@@ -40,9 +40,10 @@ const MyPage = function () {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const onSubmit = data => {
-    updateMe(data)
+    updateMe(me.uid, data)
       .then(res => {
         //TODO: 성공했다고 알림
+        console.log('성공');
       })
       .catch(err => {
         //TODO: 실패했다고 알림
@@ -118,6 +119,7 @@ const MyPage = function () {
             />
             <FormErrorMessage>{errors.birthDate?.message}</FormErrorMessage>
           </FormControl>
+          //! 주소값이 사라지는 버그 발생
           <FormControl width="full" isRequired isInvalid={errors.address}>
             <FormLabel margin={0}>주소</FormLabel>
             <Input

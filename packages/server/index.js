@@ -474,18 +474,6 @@ app.get('/api/auth/naver-callback', async (req, res) => {
   }
 });
 
-app.get('/api/users/:uid', (req, res) => {
-  //TODO: DB로부터 사용자 정보 검색
-  res.json({
-    name: '하철환',
-    // profileImg: getUserImage(email),
-  });
-});
-
-app.patch('/api/users/me', (req, res) => {
-  console.log(req.body);
-});
-
 app.get('/api/hospitals', (req, res) => {
   res.json([
     {
