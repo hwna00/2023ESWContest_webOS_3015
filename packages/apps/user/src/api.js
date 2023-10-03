@@ -24,6 +24,11 @@ export const createAppointment = async data => {
   return await instance.post('/appointments', { data });
 };
 
+export const getAppointments = async uid => {
+  //TODO: 아직 구현되지 않음
+  return await instance.get(`/appointments/${uid}`);
+};
+
 export const getHospitals = () => {
   return instance.get('/hospitals').then(res => res.data);
 };
