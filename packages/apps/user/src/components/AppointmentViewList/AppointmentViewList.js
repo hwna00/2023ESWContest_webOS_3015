@@ -12,7 +12,6 @@ import {
   AspectRatio,
   Image,
   Icon,
-  Box,
 } from '@chakra-ui/react';
 import { FaStar } from 'react-icons/fa';
 

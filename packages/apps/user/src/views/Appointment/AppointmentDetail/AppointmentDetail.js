@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { useParams, Link as ReactRouterLink } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import {
   FaAngleRight,
   FaBookmark,
@@ -27,14 +26,11 @@ import {
   UnorderedList,
   VStack,
   Icon,
-  useRadioGroup,
-  useRadio,
   Link as ChakraLink,
 } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 
 import { DoctorList, HospitalList } from '../dataList';
-import { setAppointDatetime } from '../../../store';
 import BackButton from '../../../components/BackButton/BackButton';
 import { useForm } from 'react-hook-form';
 import { createAppointment } from '../../../api';
@@ -43,12 +39,8 @@ import AppointForm from './AppiontForm';
 const AppointmentDetail = function () {
   const { category, id } = useParams();
   const [data, setData] = useState({});
-  const [appointDate, setAppointDate] = useState(
-    dayjs(new Date()).format('YYYY-MM-DD'),
-  );
   const [appointTime, setAppointTime] = useState();
   const [reservationOfDay, setReservationOfDay] = useState({});
-  const [appointTime, setAppointTime] = useState();
 
   const {
     register,
@@ -70,12 +62,12 @@ const AppointmentDetail = function () {
   }, [data]);
 
   const onSubmit = useCallback(
-    data => {
+    formData => {
       if (!appointTime) {
         //TODO: webOS로 알림 전송하기
         return null;
       }
-      if (data.type === 'nftf' && !data.nftfType) {
+      if (formData.type === 'nftf' && !formData.nftfType) {
         //TODO: webOS로 알림 전송하기
         return null;
       }
@@ -84,7 +76,7 @@ const AppointmentDetail = function () {
         uid,
         doctorId,
         time: appointTime,
-        ...data,
+        ...formData,
       };
 
       createAppointment(appointment);
@@ -123,7 +115,7 @@ const AppointmentDetail = function () {
       '17:00': 0,
       '17:30': 0,
     });
-  }, [category, id, appointDate]);
+  }, [category, id]);
 
   return (
     <HStack height="full" gap="6">
@@ -313,54 +305,12 @@ const AppointmentDetail = function () {
             onSubmit={handleSubmit(onSubmit)}
           >
             {category === 'doctors' && (
-              <>
-                <Input
-                  placeholder="예약하실 날짜를 선택하세요"
-                  size="lg"
-                  type="date"
-                  defaultValue={appointDate}
-                  onChange={onDateChange}
-                />
-                <Box width="full">
-                  <Grid
-                    width="full"
-                    maxH="64"
-                    overflowY="scroll"
-                    bgColor="primary.200"
-                    padding="4"
-                    templateColumns="repeat(4, 1fr)"
-                    placeItems="center"
-                    gap={4}
-                    borderRadius="md"
-                    {...group}
-                  >
-                    {Object.keys(reservationOfDay).map(key => {
-                      const radio = getRadioProps({ value: key });
-                      const remainingSeats = reservationOfDay[key];
-                      return (
-                        <GridItem key={key} width="full" textAlign="center">
-                          <RadioCard remainingSeats={remainingSeats} {...radio}>
-                            {key}
-                          </RadioCard>
-                        </GridItem>
-                      );
-                    })}
-                  </Grid>
-                  <Text mt="2">
-                    병원 상황에 따라 대기 시간이 발생할 수 있습니다.
-                  </Text>
-                </Box>
-
-                <Button
-                  width="full"
-                  colorScheme="primary"
-                  py="4"
-                  size="lg"
-                  onClick={onNextClick}
-                >
-                  다음단계
-                </Button>
-              </>
+              <AppointForm
+                reservationOfDay={reservationOfDay}
+                register={register}
+                errors={errors}
+                setAppointTime={setAppointTime}
+              />
             )}
             {category === 'hospitals' && (
               <UnorderedList listStyleType={'none'} margin={0} spacing={'4'}>

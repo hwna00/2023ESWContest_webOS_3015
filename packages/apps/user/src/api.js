@@ -32,7 +32,8 @@ export const getMe = async uid => {
 export const createAppointment = data => {
   //TODO: 예약 객체를 전달하는 axios 요청을 작성해야 함.
   console.log(data);
-  
+};
+
 export const getHospitals = () => {
   return instance.get('/hospitals').then(res => res.data);
 };
