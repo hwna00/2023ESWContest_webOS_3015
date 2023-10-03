@@ -139,7 +139,6 @@ function LogIn() {
                   />
                   <InputRightElement width="4.5rem">
                     <Icon
-                      size="sm"
                       onClick={handleShowClick}
                       as={showPassword ? FaRegEye : FaRegEyeSlash}
                       boxSize={6}

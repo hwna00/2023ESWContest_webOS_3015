@@ -118,7 +118,6 @@ const MyPage = function () {
             />
             <FormErrorMessage>{errors.birthDate?.message}</FormErrorMessage>
           </FormControl>
-
           <FormControl width="full" isRequired isInvalid={errors.address}>
             <FormLabel margin={0}>주소</FormLabel>
             <Input
@@ -133,7 +132,6 @@ const MyPage = function () {
             />
             <FormErrorMessage>{errors?.address?.message}</FormErrorMessage>
           </FormControl>
-
           <FormControl width="full" isRequired isInvalid={errors.addressDetail}>
             <FormLabel margin={0}>주소 상세</FormLabel>
             <Input
@@ -147,7 +145,6 @@ const MyPage = function () {
               {errors?.addressDetail?.message}
             </FormErrorMessage>
           </FormControl>
-
           <FormControl width="full" isRequired isInvalid={errors.phoneNumber}>
             <FormLabel>전화번호</FormLabel>
             <InputGroup colorScheme="primary">
@@ -188,7 +185,7 @@ const MyPage = function () {
               {errors.secondPhoneNumber?.message}
             </FormErrorMessage>
           </FormControl>
-
+          // ! 혈액형의 초기값이 마이페이지에 적용되지 않는 에러 발생
           <HStack width="full" gap="4">
             <FormControl width="full" isInvalid={errors.bloodType}>
               <FormLabel>혈액형</FormLabel>
@@ -232,7 +229,6 @@ const MyPage = function () {
               <FormErrorMessage>{errors.weight?.message}</FormErrorMessage>
             </FormControl>
           </HStack>
-
           <FormControl width="full" isInvalid={errors.chronicDisease}>
             <FormLabel>질환 정보</FormLabel>
             <Textarea
@@ -244,7 +240,6 @@ const MyPage = function () {
               {errors.chronicDisease?.message}
             </FormErrorMessage>
           </FormControl>
-
           <FormControl width="full" isInvalid={errors.regularMedicines}>
             <FormLabel>복약 정보</FormLabel>
             <Textarea

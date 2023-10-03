@@ -17,8 +17,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-const createUserQuery = async function (connection, data) {
-  const Query = `INSERT INTO Users(user_id, name, email, phone_number, address, address_detail, second_phone_number, birthdate, bloodtype, height, weight, gender, regular_medicines, chronic_disease) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+const createUserQuery = async (connection, data) => {
+  const Query =
+    'INSERT INTO Users(user_id, name, email, phone_number, address, address_detail, second_phone_number, birthdate, bloodtype, height, weight, gender, regular_medicines, chronic_disease) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);';
+
   const Params = [
     data.uid,
     data.username,
@@ -39,28 +41,28 @@ const createUserQuery = async function (connection, data) {
   await connection.query(Query, Params);
 };
 
-const createUser = async function (req, res) {
+const createUser = async (req, res) => {
   const { data } = req.body;
 
-  var regex = RegExp(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/);
-  if (!regex.test(data.birthDate)) {
-    return res.json({
-      isSucess: false,
-      code: 400,
-      message: '날짜 형식을 제대로 입력해주세요.',
-    });
-  }
+  // var regex = RegExp(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/);
+  // if (!regex.test(data.birthDate)) {
+  //   return res.json({
+  //     isSucess: false,
+  //     code: 400,
+  //     message: '날짜 형식을 제대로 입력해주세요.',
+  //   });
+  // }
 
   try {
     const connection = await pool.getConnection(async conn => conn);
     try {
-      await createUserQuery(connection, data);
-
-      return res.json({
-        isSucess: true,
-        code: 201,
-        message: '유저 생성 성공',
-      });
+      createUserQuery(connection, data).then(() =>
+        res.json({
+          isSucess: true,
+          code: 201,
+          message: '유저 생성 성공',
+        }),
+      );
     } catch (err) {
       if (err.errno === 1062) {
         return res.json({
@@ -106,8 +108,26 @@ const readUser = async function (req, res) {
       if (rows.length === 0) {
         throw Error('User not found');
       } else {
+        // TODO: convert 함수로 빼놓을 것
+        const user = {
+          uid: rows[0].user_id,
+          email: rows[0].email,
+          name: rows[0].name,
+          address: rows[0].address,
+          addressDetail: rows[0].address_detail,
+          phoneNumber: rows[0].phone_number,
+          secondPhoneNumber: rows[0].second_phone_number,
+          birthDate: rows[0].birthdate,
+          bloodType: rows[0].bloodtype,
+          height: rows[0].height,
+          weight: rows[0].weight,
+          gender: rows[0].gender,
+          regularMedicines: rows[0].regular_medicines,
+          chronicDisease: rows[0].chronic_disease,
+        };
+
         return res.json({
-          result: rows,
+          result: user,
           isSucess: true,
           code: 200,
           message: '유저 조회 성공',

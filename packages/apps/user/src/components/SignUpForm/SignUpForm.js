@@ -49,7 +49,6 @@ const SignUpForm = function ({
 
   const onSubmit = async data => {
     const user = await fbSignUp({ ...data, profileImgBlob });
-
     if (user) {
       dispatch(setMe(user));
       navigate('/');
