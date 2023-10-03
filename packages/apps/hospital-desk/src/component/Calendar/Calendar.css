@@ -12,9 +12,9 @@
   padding: 1rem;
   background-color: var(--white);
   color: var(--black);
-  border-radius: 0.5rem;
   line-height: 1.125em;
   font-size: 1.25rem;
+  border: 0;
 }
 
 .react-calendar__navigation {

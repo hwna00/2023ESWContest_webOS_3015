@@ -13,7 +13,6 @@ import {
   ModalOverlay,
 } from '@chakra-ui/react';
 
-// eslint-disable-next-line react/prop-types
 function PaymentModal({ isOpen, onClose }) {
   const [payment, setPayment] = useState('');
 
