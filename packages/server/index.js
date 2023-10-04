@@ -54,8 +54,7 @@ const createUser = async (req, res) => {
           isSuccess: true,
           code: 201,
           message: '유저 생성 성공',
-        }),
-      );
+        }));
     } catch (err) {
       if (err.errno === 1062) {
         return res.json({
@@ -160,7 +159,6 @@ const createAppointment = async function (req, res) {
         message: '예약정보 생성 성공',
       });
     } catch (err) {
-      console.log(err);
       return res.json({
         isSuccess: false,
         code: 500,
@@ -221,7 +219,6 @@ const updateUser = async function (req, res) {
         message: '유저 업데이트 성공',
       });
     } catch (err) {
-      console.log(err);
       return res.json({
         isSuccess: false,
         code: 500,
@@ -309,7 +306,7 @@ const classifyAppointments = function (rows) {
     ar: [],
   };
 
-  for (let i = 0; i < rows.length; i++) {
+  for (let i = 0; i < rows.length; i += 1) {
     switch (rows[i].state_id) {
       case 'aw':
         result.aw.push(rows[i]);
@@ -405,7 +402,6 @@ const updateAppointment = async function (req, res) {
         message: '예약정보 업데이트 성공',
       });
     } catch (err) {
-      console.log(err);
       return res.json({
         isSuccess: false,
         code: 500,
@@ -444,8 +440,7 @@ const createHospital = async (req, res) => {
           isSuccess: true,
           code: 201,
           message: '병원 생성 성공',
-        }),
-      );
+        }));
     } catch (err) {
       if (err.errno === 1062) {
         return res.json({
