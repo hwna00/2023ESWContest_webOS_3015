@@ -44,33 +44,32 @@ const createUserQuery = async (connection, data) => {
 
 const createUser = async (req, res) => {
   const { data } = req.body;
-
   try {
     const connection = await pool.getConnection(async conn => conn);
-    createUserQuery(connection, data)
-      .then(() =>
+    try {
+      createUserQuery(connection, data).then(() =>
         res.json({
           isSucess: true,
           code: 201,
           message: '유저 생성 성공',
         }),
-      )
-      .catch(err => {
-        if (err.errno === 1062) {
-          return res.json({
-            isSucess: false,
-            code: 409,
-            message: '이미 가입된 회원입니다.',
-          });
-        } else {
-          return res.json({
-            isSuccess: false,
-            code: 500,
-            message: '서버 오류',
-          });
-        }
-      })
-      .finally(() => connection.release());
+      );
+    } catch (err) {
+      if (err.errno === 1062) {
+        return res.json({
+          isSucess: false,
+          code: 409,
+          message: '이미 가입된 회원입니다.',
+        });
+      }
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
   } catch (err) {
     return res.json({
       isSucess: false,
@@ -91,7 +90,6 @@ const readUserQuery = async function (connection, uid) {
 
 const readUser = async function (req, res) {
   const { uid } = req.params;
-
   try {
     const connection = await pool.getConnection(async conn => conn);
     try {
