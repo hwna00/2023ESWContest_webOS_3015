@@ -15,6 +15,7 @@ import {
   InputGroup,
   InputRightElement,
   Text,
+  Textarea,
   VStack,
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
@@ -29,7 +30,7 @@ const SignUp = function () {
   const [hospital, setHospital] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isFormVisible, setIsFormVisible] = useState(false);
-
+  const [description, setDescription] = useState('');
   const {
     register,
     handleSubmit,
@@ -40,7 +41,7 @@ const SignUp = function () {
   const fetchResults = async () => {
     const { data } = await axios.get(
       // TODO: api 키 이름 변경
-      `${BASE_URL}/getHospBasisList?serviceKey=${process.env.REACT_APP_API_KEY}&numOfRows=999&yadmNm=${hospitalName}`,
+      `${BASE_URL}/getHospBasisList?serviceKey=${process.env.REACT_APP_PUBLIC_DP_API_KEY}&numOfRows=999&yadmNm=${hospitalName}`,
     );
 
     if (data.response?.body.items) {
@@ -69,11 +70,15 @@ const SignUp = function () {
       ykiho: hospital.ykiho,
       hospitalName: hospital.yadmNm,
       email: data.email,
+      description: description,
     }).then(hospital => {
       console.log(hospital);
     });
   };
 
+  const handleDescription = useCallback(e => {
+    setDescription(e.target.value);
+  }, []);
   useEffect(() => {
     const debounce = setTimeout(() => {
       if (hospitalName) {
@@ -193,6 +198,13 @@ const SignUp = function () {
               <FormErrorMessage>
                 {errors.checkPassword?.message}
               </FormErrorMessage>
+            </FormControl>
+            <FormControl>
+              <FormLabel>병원 소개 및 설명</FormLabel>
+              <Textarea
+                placeholder="병원 소개 및 설명을 입력해주세요."
+                onChange={handleDescription}
+              />
             </FormControl>
             <Button colorScheme="primary" w="full" type="submit">
               가입하기
