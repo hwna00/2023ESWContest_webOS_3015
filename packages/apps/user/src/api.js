@@ -5,7 +5,8 @@ const instance = axios.create({
 });
 
 export const createUser = async data => {
-  return await instance.post('/users', { data });
+  const response = await instance.post('/users', { data });
+  return response.data;
 };
 
 export const getMe = async uid => {

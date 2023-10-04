@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Box, Button, ButtonGroup, VStack } from '@chakra-ui/react';
 
-import { setErrors, setMe } from '../../store';
+import { setErrors } from '../../store';
 import { fbSignUp } from '../../../firebase';
 
 const SignUpForm = function ({
@@ -48,13 +48,17 @@ const SignUpForm = function ({
   }, [goToPrevious, activeStep, navigate]);
 
   const onSubmit = async data => {
-    const user = await fbSignUp({ ...data, profileImgBlob });
-    if (user) {
-      dispatch(setMe(user));
-      navigate('/');
-    } else {
-      //TODO: 회원가입 실패 알림 띄우기
-    }
+    fbSignUp({
+      ...data,
+      profileImgBlob,
+    }).then(res => {
+      if (res?.isSuccess) {
+        navigate('/');
+      } else {
+        //TODO: 회원가입 실패 알림 띄우기
+        console.log('message');
+      }
+    });
   };
 
   const location = useLocation();
