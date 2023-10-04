@@ -113,13 +113,12 @@ const readUser = async function (req, res) {
           code: 404,
           message: '유저를 찾을 수 없습니다.',
         });
-      } else {
-        return res.json({
-          isSuccess: false,
-          code: 500,
-          message: '서버 오류',
-        });
       }
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
     } finally {
       connection.release();
     }
@@ -241,7 +240,8 @@ const updateUser = async function (req, res) {
 };
 
 const readUserAppointmentQuery = async function (connection, appointmentId) {
-  const Query = `SELECT * FROM Housepital.Users join Housepital.Appointments using(user_id) where id = ?;`;
+  const Query =
+    'SELECT * FROM Housepital.Users join Housepital.Appointments using(user_id) where id = ?;';
   const Params = [appointmentId];
 
   const rows = await connection.query(Query, Params);
@@ -273,13 +273,12 @@ const readUserAppointment = async function (req, res) {
           code: 404,
           message: '예약정보를 찾을 수 없습니다.',
         });
-      } else {
-        return res.json({
-          isSuccess: false,
-          code: 500,
-          message: '서버 오류',
-        });
       }
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
     } finally {
       connection.release();
     }
@@ -361,13 +360,12 @@ const readAppointments = async function (req, res) {
           code: 404,
           message: '예약정보를 찾을 수 없습니다.',
         });
-      } else {
-        return res.json({
-          isSuccess: false,
-          code: 500,
-          message: '서버 오류',
-        });
       }
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
     } finally {
       connection.release();
     }
@@ -385,7 +383,8 @@ const updateAppointmentQuery = async function (
   appointmentId,
   data,
 ) {
-  const Query = `UPDATE Appointments SET state_id = ifnull(?, state_id), rejection_reason = ifnull(?, rejection_reason) WHERE id = ?;`;
+  const Query =
+    'UPDATE Appointments SET state_id = ifnull(?, state_id), rejection_reason = ifnull(?, rejection_reason) WHERE id = ?;';
   const Params = [data.stateId, data.rejectionReason, appointmentId];
 
   await connection.query(Query, Params);
@@ -424,6 +423,54 @@ const updateAppointment = async function (req, res) {
   }
 };
 
+const createHospitalQuery = async (connection, data) => {
+  const Query =
+    'INSERT INTO Hospitals(hospital_id, name, description, ykiho) VALUES (?, ?, ?, ?);';
+
+  const Params = [data.hospitalId, data.name, data.description, data.ykiho];
+
+  const rows = await connection.query(Query, Params);
+  return rows;
+};
+
+const createHospital = async (req, res) => {
+  const { data } = req.body;
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      createHospitalQuery(connection, data).then(rows =>
+        res.json({
+          hospital: rows[0],
+          isSuccess: true,
+          code: 201,
+          message: '병원 생성 성공',
+        }),
+      );
+    } catch (err) {
+      if (err.errno === 1062) {
+        return res.json({
+          isSuccess: false,
+          code: 409,
+          message: '이미 가입된 회원입니다.',
+        });
+      }
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSuccess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
 app.post('/api/users', createUser);
 app.get('/api/users/:uid', readUser);
 app.get('/api/appointments/:appointmentId', readUserAppointment);
@@ -431,6 +478,7 @@ app.patch('/api/users/:uid', updateUser);
 app.post('/api/appointments', createAppointment);
 app.get('/api/hospitals/:hospitalId/appointments', readAppointments);
 app.patch('/api/appointments/:appointmentId', updateAppointment);
+app.post('/api/hospitals', createHospital);
 
 app.get('/api/auth/naver-callback', async (req, res) => {
   const { code, state } = req.query;
