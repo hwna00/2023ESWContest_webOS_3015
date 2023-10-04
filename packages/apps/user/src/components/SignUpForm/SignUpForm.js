@@ -58,7 +58,7 @@ const SignUpForm = function ({
         navigate('/');
       } else {
         //TODO: 회원가입 실패 알림 띄우기
-        console.log(res.message);
+        console.log(res?.message);
       }
     });
   };
