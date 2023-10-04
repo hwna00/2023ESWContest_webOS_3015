@@ -39,7 +39,8 @@ const createUserQuery = async (connection, data) => {
     data.chronicDisease,
   ];
 
-  await connection.query(Query, Params);
+  const rows = await connection.query(Query, Params);
+  return rows;
 };
 
 const createUser = async (req, res) => {
@@ -47,9 +48,10 @@ const createUser = async (req, res) => {
   try {
     const connection = await pool.getConnection(async conn => conn);
     try {
-      createUserQuery(connection, data).then(() =>
+      createUserQuery(connection, data).then(rows =>
         res.json({
-          isSucess: true,
+          user: rows[0],
+          isSuccess: true,
           code: 201,
           message: '유저 생성 성공',
         }),
@@ -57,7 +59,7 @@ const createUser = async (req, res) => {
     } catch (err) {
       if (err.errno === 1062) {
         return res.json({
-          isSucess: false,
+          isSuccess: false,
           code: 409,
           message: '이미 가입된 회원입니다.',
         });
@@ -72,7 +74,7 @@ const createUser = async (req, res) => {
     }
   } catch (err) {
     return res.json({
-      isSucess: false,
+      isSuccess: false,
       code: 500,
       message: '데이터베이스 연결 실패',
     });

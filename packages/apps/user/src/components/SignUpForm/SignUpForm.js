@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Box, Button, ButtonGroup, VStack } from '@chakra-ui/react';
 
-import { setErrors } from '../../store';
+import { setErrors, setMe } from '../../store';
 import { fbSignUp } from '../../../firebase';
 
 const SignUpForm = function ({
@@ -53,10 +53,12 @@ const SignUpForm = function ({
       profileImgBlob,
     }).then(res => {
       if (res?.isSuccess) {
+        console.log('user', res.user);
+        dispatch(setMe(res.user));
         navigate('/');
       } else {
         //TODO: 회원가입 실패 알림 띄우기
-        console.log('message');
+        console.log(res.message);
       }
     });
   };
