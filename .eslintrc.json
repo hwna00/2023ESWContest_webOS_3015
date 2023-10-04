@@ -22,6 +22,7 @@
   },
   "plugins": ["react", "import"],
   "rules": {
+    "consistent-return": "off",
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
     "react/jsx-filename-extension": "off",
@@ -29,6 +30,8 @@
     "import/no-unresolved": "error",
     "import/no-extraneous-dependencies": "off",
     "func-names": "off",
+
+    "react/jsx-props-no-spreading": "off",
     "import/order": [
       "error",
       {
