@@ -194,6 +194,11 @@ app.patch('/api/users/me', (req, res) => {
   console.log(req.body);
 });
 
+app.get('/kakao-payment/callback', async (req, res) =>{
+  const { pg_token } = req.query
+  console.log(pg_token)
+});
+
 app.get('/api/hospitals', (req, res) => {
   res.json([
     {

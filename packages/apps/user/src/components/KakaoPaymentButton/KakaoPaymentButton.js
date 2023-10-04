@@ -12,7 +12,7 @@ const KakaoPayment = function () {
   const QUANTITY = 1;
   const TOTAL_AMOUNT = 15000;
   const TAX_FREE_AMOUNT = 0;
-  const APPROVAL_URL = 'http://localhost:8080'; // TODO : 성공 url 변경하기
+  const APPROVAL_URL = 'http://localhost:3000/kakao-payment/callback'; // TODO : 성공 url 변경하기
   const CANCEL_URL = 'http://localhost:8080'; // TODO : 취소 url 변경하기
   const FAIL_URL = 'http://localhost:8080'; // TODO : 실패(시간 초과) url 변경하기
 
@@ -41,7 +41,7 @@ const KakaoPayment = function () {
   const onPaymentClick = useCallback(() => {
     axios.post(
       KAKAO_PAYMENT_READY_URL,
-      null, // You can pass request data here if needed
+      null,
       {
         headers: {
           Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_ADMIN_KEY}`,
@@ -50,11 +50,10 @@ const KakaoPayment = function () {
       }
     )
       .then((response) => {
-        // Handle the response here
-        console.log(response.data); // Log the response or update the state, etc.
+        const { next_redirect_pc_url } = response.data;
+        window.location.href = next_redirect_pc_url
       })
       .catch((error) => {
-        // Handle errors here
         console.error(error);
       });
   }, [KAKAO_PAYMENT_READY_URL]);
