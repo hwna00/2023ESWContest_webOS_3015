@@ -5,11 +5,18 @@ import {
   HStack,
   VStack,
   Text,
-  Divider,
   Link as ChakraLink,
+  UnorderedList,
+  ListItem,
+  Tag,
+  AspectRatio,
+  Image,
+  Icon,
 } from '@chakra-ui/react';
+import { FaStar } from 'react-icons/fa';
 
-const AppointmentViewList = function ({ type, selectedList }) {
+const AppointmentViewList = function ({ type, list }) {
+  //TODO: isOpen을 통해 영업 여부를 판단해야 함
   const [nameOfView, setNameOfView] = useState('');
   useEffect(() => {
     if (type === 'hospital') {
@@ -20,7 +27,7 @@ const AppointmentViewList = function ({ type, selectedList }) {
   }, [type]);
 
   return (
-    <VStack w="full" h="full">
+    <VStack w="full" h="80">
       <HStack
         w="full"
         justifyContent="space-between"
@@ -36,43 +43,68 @@ const AppointmentViewList = function ({ type, selectedList }) {
         </ChakraLink>
       </HStack>
 
-      <VStack w="full" h="80" overflowY="auto">
-        {selectedList.map(item => (
-          <VStack
-            w="full"
-            alignItems="flex-start"
-            px="2"
-            key={item.hospitalKey}
-          >
-            <Divider w="full" h="0.5" bgColor="primary.300" />
-            <VStack pl="2" gap="0" alignItems="flex-start">
-              <Text>{item.name}</Text>
-              <HStack gap="6">
-                {item.isOpen ? (
-                  <Text fontSize="md" color="primary.400">
-                    진료중
-                  </Text>
-                ) : (
-                  <Text fontSize="md" color="red">
-                    영업종료
-                  </Text>
-                )}
-                <Text>
-                  {item.rating.toFixed(1)}&nbsp;&#40;
-                  {item.numberOfRatings}
-                  &#41;
-                </Text>
+      <UnorderedList
+        w="full"
+        overflowY="auto"
+        listStyleType={'none'}
+        spacing={'4'}
+        margin={0}
+      >
+        {list?.map(item => (
+          <ListItem w="full" px="2" key={item.id}>
+            <ChakraLink
+              as={ReactRouterLink}
+              to={`/appointment/${type}s/${item.id}`}
+              width={'full'}
+            >
+              <HStack
+                justifyContent={'flex-start'}
+                gap={'6'}
+                padding={'2'}
+                borderY="2px"
+                borderColor={'primary.300'}
+              >
+                <AspectRatio width={'20'} ratio={1}>
+                  <Image src={item.profileImg} borderRadius={'md'} />
+                </AspectRatio>
+                <VStack pl="2" gap="0" alignItems="flex-start">
+                  <HStack gap="4">
+                    <Text>{item.name}</Text>
+                    <HStack gap={'2'}>
+                      <Icon as={FaStar} color="yellow.400" />
+                      <Text>
+                        {item.rate} {item?.numberOfRatings}
+                      </Text>
+                    </HStack>
+                  </HStack>
+                  {item.isOpen ? (
+                    <Text fontSize="md" color="primary.400">
+                      진료중
+                    </Text>
+                  ) : (
+                    <Text fontSize="md" color="red">
+                      영업종료
+                    </Text>
+                  )}
+
+                  <HStack my="2" flexWrap="wrap" rowGap="0" columnGap="3">
+                    {item.fields.map(field => (
+                      <Tag
+                        size="md"
+                        key={field}
+                        variant="outline"
+                        colorScheme="gray"
+                      >
+                        {field}
+                      </Tag>
+                    ))}
+                  </HStack>
+                </VStack>
               </HStack>
-              <HStack my="2" flexWrap="wrap" rowGap="0" columnGap="3">
-                {item.specialities.map((speciality, index) => (
-                  <Text key={index}>{speciality}</Text>
-                ))}
-              </HStack>
-            </VStack>
-            <Divider w="full" h="0.5" bgColor="primary.300" />
-          </VStack>
+            </ChakraLink>
+          </ListItem>
         ))}
-      </VStack>
+      </UnorderedList>
     </VStack>
   );
 };

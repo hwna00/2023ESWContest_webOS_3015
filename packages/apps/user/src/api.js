@@ -1,19 +1,39 @@
 import axios from 'axios';
-import { getUserImage } from '../firebase';
 
 const instance = axios.create({
   baseURL: 'http://localhost:3000/api',
 });
 
-export const getMe = async () => {
-  const { user } = await instance.get(`/users/me`);
-  if (!user) {
-    //TODO: 해당 유저가 존재하지 않는 경우에 대한 처리
-  } else {
-    // return user
-    return {
-      name: '하철환',
-      profileImg: getUserImage(),
-    };
-  }
+export const createUser = async data => {
+  const response = await instance.post('/users', { data });
+  return response.data;
+};
+
+export const getMe = async uid => {
+  const {
+    data: { result },
+  } = await instance.get(`/users/${uid}`);
+
+  return result;
+};
+
+export const updateMe = async (uid, data) => {
+  return await instance.patch(`/users/${uid}`, { data });
+};
+
+export const createAppointment = async data => {
+  return await instance.post('/appointments', { data });
+};
+
+export const getAppointments = async uid => {
+  //TODO: 아직 구현되지 않음
+  return await instance.get(`/appointments/${uid}`);
+};
+
+export const getHospitals = () => {
+  return instance.get('/hospitals').then(res => res.data);
+};
+
+export const getDoctors = () => {
+  return instance.get('/doctors').then(res => res.data);
 };

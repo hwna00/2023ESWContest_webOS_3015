@@ -1,19 +1,25 @@
-import { Outlet, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
-import useUser from '../../hooks/useUser';
-import LoadingPage from '../../../../../common/LoadingPage';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { onAuthStateChanged } from 'firebase/auth';
+import LoadingPage from '@housepital/common/LoadingPage';
+
+import { auth } from '../../../firebase';
 
 const AuthRoot = function () {
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-  const { userLoading, user, isLoggedIn } = useUser();
-  console.log(userLoading, user, isLoggedIn);
 
-  return (
-    // <>{userLoading ? <LoadingPage /> : user ? navigate('/') : <Outlet />}</>
-    <>
-      <Outlet />
-    </>
-  );
+  useEffect(() => {
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        navigate('/');
+      }
+      setIsLoading(false);
+    });
+  });
+
+  return <>{isLoading ? <LoadingPage /> : <Outlet />}</>;
 };
 
 export default AuthRoot;

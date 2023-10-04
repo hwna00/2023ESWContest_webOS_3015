@@ -28,7 +28,7 @@ import { DoctorList, HospitalList, FavoriteList } from '../dataList';
 import BackButton from '../../../components/BackButton/BackButton';
 import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
 
-function CheckCard({ specialty, ...checkboxProps }) {
+function CheckCard({ ...checkboxProps }) {
   const { getInputProps, getCheckboxProps } = useCheckbox(checkboxProps);
 
   const input = getInputProps();
@@ -126,6 +126,7 @@ function AppointmentList() {
     defaultValue: [],
     onChange: setSelectedSpecialties,
   });
+
   return (
     <VStack width="full" height="full" gap="4">
       <Box width="100%">
@@ -210,7 +211,7 @@ function AppointmentList() {
       <Box width="full" maxHeight="80vh" overflowY="scroll">
         <SimpleGrid columns={2} gap="8" mt="4" width="full" padding="8">
           {filteredList.map(item => (
-            <ChakraLink as={ReactRouterLink} to={`${item.id}`} key={item.name}>
+            <ChakraLink as={ReactRouterLink} to={`${item.id}`} key={item.id}>
               <AppointmentCard data={item} />
             </ChakraLink>
           ))}

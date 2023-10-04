@@ -10,6 +10,49 @@
   "parserOptions": {
     "ecmaVersion": "latest"
   },
-  "rules": {},
-  "parser": "babel-eslint"
+  "rules": {
+    "implicit-arrow-linebreak": "off",
+    "arrow-parens": "off",
+    "operator-linebreak": "off",
+    "no-param-reassign": [
+      "error",
+      {
+        "props": true,
+        "ignorePropertyModificationsFor": ["state"]
+      }
+    ],
+    "no-shadow": "off",
+    "import/no-unresolved": "error",
+    "import/no-extraneous-dependencies": "off",
+    "func-names": "off",
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index",
+          "object",
+          "type"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "react",
+            "group": "builtin",
+            "position": "before"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["react"],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "desc",
+          "caseInsensitive": true
+        }
+      }
+    ]
+  },
+  "parser": "@babel/eslint-parser"
 }
