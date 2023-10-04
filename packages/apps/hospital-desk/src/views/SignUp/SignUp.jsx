@@ -76,9 +76,6 @@ const SignUp = function () {
     });
   };
 
-  const handleDescription = useCallback(e => {
-    setDescription(e.target.value);
-  }, []);
   useEffect(() => {
     const debounce = setTimeout(() => {
       if (hospitalName) {
