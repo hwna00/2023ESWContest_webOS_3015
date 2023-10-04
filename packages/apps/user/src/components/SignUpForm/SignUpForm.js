@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Box, Button, ButtonGroup, VStack } from '@chakra-ui/react';
 
-import { setErrors } from '../../store';
+import { setErrors, setMe } from '../../store';
 import { fbSignUp } from '../../../firebase';
 
 const SignUpForm = function ({
@@ -23,7 +23,7 @@ const SignUpForm = function ({
   const profileImgBlob = useSelector(state => state.signUp.blob);
 
   useEffect(() => {
-    const errors = reactHookForm.formState.errors;
+    const { errors } = reactHookForm.formState;
 
     const filteredErrors = {};
     Object.entries(errors).map(([key, value]) => {
@@ -47,12 +47,20 @@ const SignUpForm = function ({
     goToPrevious();
   }, [goToPrevious, activeStep, navigate]);
 
-  const onSubmit = function (data) {
-    const user = fbSignUp({ ...data, profileImgBlob });
-
-    if (user) {
-      //TODO: redux-persist를 이용하여 사용자 정보를 저장
-    }
+  const onSubmit = async data => {
+    fbSignUp({
+      ...data,
+      profileImgBlob,
+    }).then(res => {
+      if (res?.isSuccess) {
+        console.log('user', res.user);
+        dispatch(setMe(res.user));
+        navigate('/');
+      } else {
+        //TODO: 회원가입 실패 알림 띄우기
+        console.log(res?.message);
+      }
+    });
   };
 
   const location = useLocation();
@@ -68,7 +76,7 @@ const SignUpForm = function ({
     >
       <Box
         key={location.pathname}
-        width={'full'}
+        width="full"
         as={motion.div}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
