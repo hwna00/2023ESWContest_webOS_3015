@@ -30,7 +30,7 @@ const SignUp = function () {
   const [hospital, setHospital] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isFormVisible, setIsFormVisible] = useState(false);
-  const [description, setDescription] = useState('');
+
   const {
     register,
     handleSubmit,
@@ -70,7 +70,7 @@ const SignUp = function () {
       ykiho: hospital.ykiho,
       hospitalName: hospital.yadmNm,
       email: data.email,
-      description: description,
+      description: data.description,
     }).then(hospital => {
       console.log(hospital);
     });
@@ -203,7 +203,7 @@ const SignUp = function () {
               <FormLabel>병원 소개 및 설명</FormLabel>
               <Textarea
                 placeholder="병원 소개 및 설명을 입력해주세요."
-                onChange={handleDescription}
+                {...register('description', {})}
               />
             </FormControl>
             <Button colorScheme="primary" w="full" type="submit">
