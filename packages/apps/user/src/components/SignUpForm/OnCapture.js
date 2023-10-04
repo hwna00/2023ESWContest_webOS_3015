@@ -56,12 +56,12 @@ const OnCapture = function () {
     if (error) {
       navigate('/error');
     }
-  }, [error]);
+  }, [error, navigate]);
 
   return (
     <HStack width="full" justifyContent="space-evenly">
       {isLoading ? (
-        <SkeletonCircle size={'80'} />
+        <SkeletonCircle size="80" />
       ) : (
         <AspectRatio width="xs" ratio={1} borderRadius="full" overflow="hidden">
           <video autoPlay ref={videoRef} />

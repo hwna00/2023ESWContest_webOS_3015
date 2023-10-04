@@ -1,13 +1,17 @@
-import { initializeApp } from 'firebase/app';
+import Cookie from 'js-cookie';
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import {
   getAuth,
   signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
   createUserWithEmailAndPassword,
+  signInWithCustomToken,
+  setPersistence,
+  browserLocalPersistence,
+  signOut,
 } from 'firebase/auth';
-import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
-import { getMe, createUser } from './src/api';
+import { initializeApp } from 'firebase/app';
+
+import { createUser, updateMe } from './src/api';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FB_API_KEY,
@@ -19,12 +23,11 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 const storage = getStorage(app);
-const provider = new GoogleAuthProvider();
+export const auth = getAuth(app);
 
-export const uploadBlob = async (blob, email) => {
-  const storageRef = ref(storage, `${email}/profileImg.png`);
+export const uploadBlob = async (blob, uid) => {
+  const storageRef = ref(storage, `${uid}/profileImg.png`);
   await uploadBytes(storageRef, blob);
 };
 
@@ -34,43 +37,52 @@ export const getUserImage = email => {
     .catch(() => null);
 };
 
+export const uploadNftfBlob = async (blob, uid) => {
+  const storageRef = ref(storage, `${uid}/nftf.png`);
+  await uploadBytes(storageRef, blob);
+};
+
 export const fbSignUp = async data => {
   const { email, password, ...rest } = data;
   const isUserExist = false; // getMe();
 
   if (isUserExist) {
-    //TODO: 사용자가 존재한다는 알림 전송
-    //TODO: 로그인 페이지로 리디렉트
+    // TODO: 사용자가 존재한다는 알림 전송
+    // TODO: 로그인 페이지로 리디렉트
   } else {
-    createUserWithEmailAndPassword(auth, email, password).then(() => {
-      createUser({ email, ...rest });
-      uploadBlob(rest.profileImgBlob, email);
-    });
-    return createUser({ ...rest, email });
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(userCredential => {
+        const { uid } = userCredential.user;
+        return createUser({ uid, email, ...rest });
+      })
+      .then(() => uploadBlob(rest.profileImgBlob, email))
+      .catch(err => console.log(err));
   }
 };
 
-export const fbLogIn = async data => {
+export const fbEmailLogIn = async data => {
+  await setPersistence(auth, browserLocalPersistence);
   const { email, password } = data;
-  const isUserExist = true;
 
-  if (!isUserExist) {
-    //TODO: 존재하지 않는 회원입니다 알림 발송
-  } else {
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      email,
-      password,
-    );
-    console.log(userCredential);
-    console.log(userCredential._tokenResponse);
-    //TODO: email을 가지는 user 정보를 DB에서 가져온다.
-
-    //TODO: CASE1. 이미 존재하는 경우 -> 경고알림 or 바로 로그인
-    //TODO: CASE2. 존재하지 않는 경우 -> 회원가입 진행
+  try {
+    const { user } = await signInWithEmailAndPassword(auth, email, password);
+    return user;
+  } catch (error) {
+    return console.log(error);
   }
 };
 
-export const googleLogin = () => {
-  return signInWithPopup(auth, provider);
+export const fbTokenLogIn = async data => {
+  await setPersistence(auth, browserLocalPersistence);
+  const token = Cookie.get('token');
+
+  try {
+    const { user } = await signInWithCustomToken(auth, token);
+    await updateMe({ ...data, uid: user.uid });
+    return user;
+  } catch (error) {
+    return console.log(error);
+  }
 };
+
+export const fbLogOut = async () => signOut(auth);

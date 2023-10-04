@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Box, Icon, Stack } from '@chakra-ui/react';
+
 import { FaStar } from 'react-icons/fa6';
+import { Box, Icon, Stack } from '@chakra-ui/react';
 
 const Rating = React.forwardRef(
   ({ size, scale, fillColor, strokeColor, rating, onRatingChange }, ref) => {
