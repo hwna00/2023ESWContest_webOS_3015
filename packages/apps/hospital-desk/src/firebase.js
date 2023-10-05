@@ -5,8 +5,6 @@ import {
 } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 
-import { createHospital } from './api';
-
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FB_API_KEY,
   authDomain: process.env.REACT_APP_FB_AUTH_DOMAIN,
@@ -19,15 +17,16 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-const fbSignUp = (email, password) => {
+const fbSignUp = (email, password) =>
   createUserWithEmailAndPassword(auth, email, password)
     .then(userCredential => {
       const { uid } = userCredential.user;
       return uid;
     })
-    .catch(() => {});
-};
-
+    .catch(error => {
+      console.error('Error during signing up:', error);
+      throw error;
+    });
 const logIn = async data => {
   const { email, password } = data;
   const isUserExist = true;

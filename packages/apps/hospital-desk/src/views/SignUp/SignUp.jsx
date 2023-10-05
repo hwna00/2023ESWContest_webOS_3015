@@ -62,18 +62,19 @@ const SignUp = function () {
     setHospitalName(hospital.yadmNm);
     setIsFormVisible(true);
   }, []);
-
   const onSubmit = async data => {
-    const hospitalId = await fbSignUp(data.email, data.password);
-    createHospital({
-      hospitalId,
-      ykiho: hospital.ykiho,
-      hospitalName: hospital.yadmNm,
-      email: data.email,
-      description: data.description,
-    }).then(hospital => {
-      console.log(hospital);
-    });
+    try {
+      const hospitalId = await fbSignUp(data.email, data.password);
+      await createHospital({
+        hospitalId,
+        ykiho: hospital.ykiho,
+        hospitalName: hospital.yadmNm,
+        email: data.email,
+        description: data.description,
+      });
+    } catch (error) {
+      console.error('Error during signup or creating a hospital:', error);
+    }
   };
 
   useEffect(() => {
