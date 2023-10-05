@@ -4,12 +4,14 @@ const instance = axios.create({
   baseURL: 'http://localhost:3000/api',
 });
 
-export const postPayment = (id, payment) => {
-  return instance.post(`/appointments/${id}/payment/`, payment);
-};
-export const updatePayment = (id, payment) => {
-  return instance.patch(`/appointments/${id}/payment/`, payment);
-};
+export const createHospital = hospital =>
+  instance.post('hospitals', { data: hospital });
+
+export const postPayment = (id, payment) =>
+  instance.post(`/appointments/${id}/payment/`, { data: payment });
+
+export const updatePayment = (id, payment) =>
+  instance.patch(`/appointments/${id}/payment/`, { data: payment });
 export const getAppointments = () => {
   // const { data: appointments } = instance.get('/appointments');
   if (false) {
@@ -127,12 +129,11 @@ export const getAppointments = () => {
   }
 };
 
-export const updateAppointmentState = (id, newStateId, rejectionReason) => {
-  return instance.patch(`appointments/${id}`, {
+export const updateAppointmentState = (id, newStateId, rejectionReason) =>
+  instance.patch(`appointments/${id}`, {
     state_id: newStateId,
     rejection_reason: rejectionReason,
   });
-};
 
 export const getPatientDetail = uid => {
   const { data: patient } = instance.get(`/users?uid=${uid}`);
