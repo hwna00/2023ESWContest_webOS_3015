@@ -39,8 +39,7 @@ const createUserQuery = async (connection, data) => {
     data.chronicDisease,
   ];
 
-  const rows = await connection.query(Query, Params);
-  return rows;
+  await connection.query(Query, Params);
 };
 
 const createUser = async (req, res) => {
@@ -48,13 +47,14 @@ const createUser = async (req, res) => {
   try {
     const connection = await pool.getConnection(async conn => conn);
     try {
-      createUserQuery(connection, data).then(rows =>
-        res.json({
-          user: rows[0],
-          isSuccess: true,
-          code: 201,
-          message: '유저 생성 성공',
-        }));
+      await createUserQuery(connection, data);
+
+      return res.json({
+        user: data,
+        isSuccess: true,
+        code: 201,
+        message: '유저 생성 성공',
+      });
     } catch (err) {
       if (err.errno === 1062) {
         return res.json({
@@ -425,8 +425,7 @@ const createHospitalQuery = async (connection, data) => {
 
   const Params = [data.hospitalId, data.name, data.description, data.ykiho];
 
-  const rows = await connection.query(Query, Params);
-  return rows;
+  await connection.query(Query, Params);
 };
 
 const createHospital = async (req, res) => {
@@ -434,13 +433,14 @@ const createHospital = async (req, res) => {
   try {
     const connection = await pool.getConnection(async conn => conn);
     try {
-      createHospitalQuery(connection, data).then(rows =>
-        res.json({
-          hospital: rows[0],
-          isSuccess: true,
-          code: 201,
-          message: '병원 생성 성공',
-        }));
+      await createHospitalQuery(connection, data);
+
+      return res.json({
+        hospital: data,
+        isSuccess: true,
+        code: 201,
+        message: '병원 생성 성공',
+      });
     } catch (err) {
       if (err.errno === 1062) {
         return res.json({
