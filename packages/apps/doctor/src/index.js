@@ -1,24 +1,26 @@
-/* global ENACT_PACK_ISOMORPHIC */
-import {createRoot, hydrateRoot} from 'react-dom/client';
+import { RouterProvider } from 'react-router-dom';
+import ReactDOM from 'react-dom/client';
+import { AnimatePresence } from 'framer-motion';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ChakraProvider } from '@chakra-ui/react';
 
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import theme from '../../../common/theme';
 
-const appElement = (<App />);
+import router from './router';
+
+const client = new QueryClient();
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
 
 // In a browser environment, render instead of exporting
 if (typeof window !== 'undefined') {
-	if (ENACT_PACK_ISOMORPHIC) {
-		hydrateRoot(document.getElementById('root'), appElement);
-	} else {
-		createRoot(document.getElementById('root')).render(appElement);
-	}
+  root.render(
+    <QueryClientProvider client={client}>
+      <ChakraProvider theme={theme}>
+        <AnimatePresence>
+          <RouterProvider router={router} />
+        </AnimatePresence>
+      </ChakraProvider>
+    </QueryClientProvider>,
+  );
 }
-
-export default appElement;
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint.
-// Learn more: https://github.com/enactjs/cli/blob/master/docs/measuring-performance.md
-reportWebVitals();
