@@ -468,10 +468,10 @@ const createHospital = async (req, res) => {
 
 const readHospitalsQuery = async function (connection, name) {
   const selectAllHospitalsQuery = 'SELECT * FROM Hospitals;';
-  const selectHospitalByNameQuery = 'SELECT * FROM Hospitals WHERE name = ?;';
+  const selectHospitalsByNameQuery = 'SELECT * FROM Hospitals WHERE name = ?;';
   const Params = [name];
 
-  const Query = !name ? selectAllHospitalsQuery : selectHospitalByNameQuery;
+  const Query = !name ? selectAllHospitalsQuery : selectHospitalsByNameQuery;
 
   const rows = await connection.query(Query, Params);
 
