@@ -7,6 +7,7 @@ import {
   Checkbox,
   CheckboxGroup,
   Container,
+  Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -126,7 +127,6 @@ const SignUp = function () {
         gap={'4'}
         overflowY={'scroll'}
         onSubmit={handleSubmit(onSubmit)}
-        className={styles.hideScrollBar}
       >
         <FormControl isRequired isInvalid={errors.hospital}>
           <FormLabel>소속 병원</FormLabel>
@@ -264,7 +264,7 @@ const SignUp = function () {
           <FormErrorMessage>{errors.specialty?.message}</FormErrorMessage>
         </FormControl>
 
-        <CheckboxGroup colorScheme="primary">
+        <Flex flexWrap={'wrap'}>
           {fields.map(field => (
             <CustomCheckbox
               {...checkboxGroup.getCheckboxProps({ value: field })}
@@ -273,7 +273,7 @@ const SignUp = function () {
               {field}
             </CustomCheckbox>
           ))}
-        </CheckboxGroup>
+        </Flex>
 
         <FormControl>
           <FormLabel>소개글</FormLabel>
