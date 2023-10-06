@@ -8,6 +8,7 @@ const {
   getNaverAuthApiUri,
 } = require('./controllers/authController');
 const pool = require('./config/db');
+const convertHospital = require('./utils/convertHospital');
 
 require('dotenv').config();
 
@@ -100,7 +101,7 @@ const readUser = async function (req, res) {
       } else {
         return res.json({
           result: convertUser(rows[0]),
-          isSucess: true,
+          isSuccess: true,
           code: 200,
           message: '유저 조회 성공',
         });
@@ -108,7 +109,7 @@ const readUser = async function (req, res) {
     } catch (err) {
       if (err.message === 'User not found') {
         return res.json({
-          isSucess: false,
+          isSuccess: false,
           code: 404,
           message: '유저를 찾을 수 없습니다.',
         });
@@ -123,7 +124,7 @@ const readUser = async function (req, res) {
     }
   } catch (err) {
     return res.json({
-      isSucess: false,
+      isSuccess: false,
       code: 500,
       message: '데이터베이스 연결 실패',
     });
@@ -154,7 +155,7 @@ const createAppointment = async function (req, res) {
       await createAppointmentQuery(connection, data);
 
       return res.json({
-        isSucess: true,
+        isSuccess: true,
         code: 201,
         message: '예약정보 생성 성공',
       });
@@ -169,7 +170,7 @@ const createAppointment = async function (req, res) {
     }
   } catch (err) {
     return res.json({
-      isSucess: false,
+      isSuccess: false,
       code: 500,
       message: '데이터베이스 연결 실패',
     });
@@ -214,7 +215,7 @@ const updateUser = async function (req, res) {
       await updateUserQuery(connection, uid, data);
 
       return res.json({
-        isSucess: true,
+        isSuccess: true,
         code: 204,
         message: '유저 업데이트 성공',
       });
@@ -229,7 +230,7 @@ const updateUser = async function (req, res) {
     }
   } catch (err) {
     return res.json({
-      isSucess: false,
+      isSuccess: false,
       code: 500,
       message: '데이터베이스 연결 실패',
     });
@@ -258,7 +259,7 @@ const readUserAppointment = async function (req, res) {
       } else {
         return res.json({
           result: rows,
-          isSucess: true,
+          isSuccess: true,
           code: 200,
           message: '유저 예약정보 조회 성공',
         });
@@ -266,7 +267,7 @@ const readUserAppointment = async function (req, res) {
     } catch (err) {
       if (err.message === 'Appointment not found') {
         return res.json({
-          isSucess: false,
+          isSuccess: false,
           code: 404,
           message: '예약정보를 찾을 수 없습니다.',
         });
@@ -281,7 +282,7 @@ const readUserAppointment = async function (req, res) {
     }
   } catch (err) {
     return res.json({
-      isSucess: false,
+      isSuccess: false,
       code: 500,
       message: '데이터베이스 연결 실패',
     });
@@ -345,7 +346,7 @@ const readAppointments = async function (req, res) {
       } else {
         return res.json({
           result: classifiedRows,
-          isSucess: true,
+          isSuccess: true,
           code: 200,
           message: '예약정보 조회 성공',
         });
@@ -353,7 +354,7 @@ const readAppointments = async function (req, res) {
     } catch (err) {
       if (err.message === 'Appointments not found') {
         return res.json({
-          isSucess: false,
+          isSuccess: false,
           code: 404,
           message: '예약정보를 찾을 수 없습니다.',
         });
@@ -368,7 +369,7 @@ const readAppointments = async function (req, res) {
     }
   } catch (err) {
     return res.json({
-      isSucess: false,
+      isSuccess: false,
       code: 500,
       message: '데이터베이스 연결 실패',
     });
@@ -397,7 +398,7 @@ const updateAppointment = async function (req, res) {
       await updateAppointmentQuery(connection, appointmentId, data);
 
       return res.json({
-        isSucess: true,
+        isSuccess: true,
         code: 204,
         message: '예약정보 업데이트 성공',
       });
@@ -412,7 +413,7 @@ const updateAppointment = async function (req, res) {
     }
   } catch (err) {
     return res.json({
-      isSucess: false,
+      isSuccess: false,
       code: 500,
       message: '데이터베이스 연결 실패',
     });
@@ -488,9 +489,10 @@ const readHospitals = async function (req, res) {
       if (rows.length === 0) {
         throw Error('Hospital not found');
       } else {
+        const hospitals = rows.map(row => convertHospital(row));
         return res.json({
-          Hospitals: rows,
-          isSucess: true,
+          hospitals,
+          isSuccess: true,
           code: 200,
           message: '병원 조회 성공',
         });
@@ -498,7 +500,7 @@ const readHospitals = async function (req, res) {
     } catch (err) {
       if (err.message === 'Hospital not found') {
         return res.json({
-          isSucess: false,
+          isSuccess: false,
           code: 404,
           message: '병원을 찾을 수 없습니다.',
         });
@@ -513,7 +515,7 @@ const readHospitals = async function (req, res) {
     }
   } catch (err) {
     return res.json({
-      isSucess: false,
+      isSuccess: false,
       code: 500,
       message: '데이터베이스 연결 실패',
     });

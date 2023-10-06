@@ -76,13 +76,13 @@ const SignUp = function () {
 
   const onSearchFieldClick = useCallback(async () => {
     const hospitalName = getValues('hospital');
-    if (!hospitalName) {
+    if (hospitalName !== '') {
       const { data } = await getHospitals(hospitalName);
 
-      if (data.length === 0) {
-        // TODO: webOS.notification 전송
+      if (data.isSuccess) {
+        setHospitals(data.hospitals);
       } else {
-        setHospitals(data);
+        // TODO: webOS.notification 전송
       }
     }
   }, [getValues]);
@@ -165,10 +165,9 @@ const SignUp = function () {
             >
               {hospitals.map(hospital => {
                 return (
-                  // TODO: key를 id에서 ykiho로 변경해야 함
                   <HStack
                     as={'li'}
-                    key={hospital.id}
+                    key={hospital.hospitalId}
                     padding={'4'}
                     border={'1px'}
                     borderColor={'primary.200'}
