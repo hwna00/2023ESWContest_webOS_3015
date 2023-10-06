@@ -69,8 +69,7 @@ export const fbTokenLogIn = async data => {
 
   try {
     const { user } = await signInWithCustomToken(auth, token);
-    await updateMe({ ...data, uid: user.uid });
-    return user;
+    return updateMe({ ...data, uid: user.uid });
   } catch (error) {
     return console.log(error);
   }

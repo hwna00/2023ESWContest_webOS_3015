@@ -21,7 +21,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 
-import KakaoForm from '../../../components/KakaoLoginButton/KakaoLoginButton';
+import KakaoLoginButton from '../../../components/KakaoLoginButton/KakaoLoginButton';
 import NaverLoginButton from '../../../components/NaverLoginButton/NaverLoginButton';
 import { fbEmailLogIn } from '../../../../firebase';
 
@@ -88,7 +88,7 @@ function LogIn() {
                 padding="15px"
               >
                 <NaverLoginButton />
-                <KakaoForm />
+                <KakaoLoginButton />
               </HStack>
 
               <FormControl isInvalid={errors.email}>

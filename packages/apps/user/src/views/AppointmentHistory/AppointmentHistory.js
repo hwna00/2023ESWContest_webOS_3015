@@ -27,7 +27,9 @@ const AppointmentHistory = function () {
         </Box>
         <Box width="20" />
       </HStack>
+
       <Divider h="0.5" mb="1" bgColor="black" />
+
       <Box
         display="flex"
         flexDirection="column"
