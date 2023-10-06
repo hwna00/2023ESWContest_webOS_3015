@@ -4,8 +4,6 @@ import {
   Button,
   ButtonGroup,
   Link as ChakraLink,
-  Checkbox,
-  CheckboxGroup,
   Container,
   Flex,
   FormControl,
@@ -30,75 +28,87 @@ import styles from '@housepital/common/css/HideScrollBar.module.css';
 import { fbSignUp } from '../../../firebase';
 import CustomCheckbox from '@housepital/common/CustomCheckox';
 
+const fields = [
+  '내과',
+  '신경과',
+  '정신건강의학과',
+  '외과',
+  '정형외과',
+  '신경외과',
+  '흉부외과',
+  '성형외과',
+  '마취통증의학과',
+  '산부인과',
+  '소아청소년과',
+  '안과',
+  '이비인후과',
+  '피부과',
+  '비뇨의학과',
+  '영상의학과',
+  '방사선종양학과',
+  '병리과',
+  '진단검사의학과',
+  '결핵과',
+  '재활의학과',
+  '예방의학과',
+  '가정의학과',
+  '응급의학과',
+  '핵의학과',
+  '직업환경의학과',
+];
+
 const SignUp = function () {
   const [hospitals, setHospitals] = useState([]);
-  const [selectedHospital, setSelectedHospital] = useState('');
-  const fields = [
-    '내과',
-    '신경과',
-    '정신건강의학과',
-    '외과',
-    '정형외과',
-    '신경외과',
-    '흉부외과',
-    '성형외과',
-    '마취통증의학과',
-    '산부인과',
-    '소아청소년과',
-    '안과',
-    '이비인후과',
-    '피부과',
-    '비뇨의학과',
-    '영상의학과',
-    '방사선종양학과',
-    '병리과',
-    '진단검사의학과',
-    '결핵과',
-    '재활의학과',
-    '예방의학과',
-    '가정의학과',
-    '응급의학과',
-    '핵의학과',
-    '직업환경의학과',
-  ];
+  const [selectedHospitalId, setSelectedHospitalId] = useState('');
+  const [selectedFields, setSelectedFields] = useState([]);
 
   const navigate = useNavigate();
   const {
     register,
     getValues,
+    setValue,
     handleSubmit,
     formState: { errors },
-  } = useForm({ mode: 'all', defaultValues: { ykiho: '' } });
+  } = useForm({ mode: 'onBlur', defaultValues: { ykiho: '' } });
   const checkboxGroup = useCheckboxGroup({
-    onChange: e => console.log(e),
+    onChange: values => setSelectedFields(values),
   });
 
   const onSearchFieldClick = useCallback(async () => {
     const hospitalName = getValues('hospital');
-    const { data } = await getHospitals(hospitalName);
+    if (!hospitalName) {
+      const { data } = await getHospitals(hospitalName);
 
-    if (data.length === 0) {
-      // TODO: webOS.notification 전송
-    } else {
-      setHospitals(data);
+      if (data.length === 0) {
+        // TODO: webOS.notification 전송
+      } else {
+        setHospitals(data);
+      }
     }
   }, [getValues]);
 
   const onHospitalClick = useCallback(
     hospital => {
-      setSelectedHospital(hospital.id); // TODO: id를 ykiho로 변경해야 함
+      setSelectedHospitalId(hospital.id);
+      setValue('hospital', hospital.name);
+      setHospitals([]);
     },
-    [setSelectedHospital],
+    [setSelectedHospitalId, setValue],
   );
 
   const onSubmit = useCallback(
     async data => {
-      if (selectedHospital === '') {
+      if (selectedHospitalId === '') {
         // TODO: 병원이 선택되지 않은 경우
         // TODO: webOS.notification 사용
       }
       const doctorId = await fbSignUp(data);
-      const response = await createDoctor({ doctorId, ...data });
+      const response = await createDoctor({
+        doctorId,
+        hospitalId: selectedHospitalId,
+        fields: selectedFields,
+        ...data,
+      });
 
       if (response.isSucess) {
         navigate('/');
@@ -108,11 +118,11 @@ const SignUp = function () {
         console.log(response.message);
       }
     },
-    [selectedHospital, navigate],
+    [selectedHospitalId, selectedFields, navigate],
   );
 
   return (
-    <Container height={'100vh'} py={'8'} overflowY={'hidden'}>
+    <Container height={'100vh'} py={'8'} overflow={'hidden'}>
       <HStack width="full" justifyContent="start" alignItems="end">
         <Heading as="h1">Housepital 회원가입</Heading>
         <ChakraLink as={ReactRouterLink} to="/auth/log-in">
@@ -126,6 +136,7 @@ const SignUp = function () {
         mt={'8'}
         gap={'4'}
         overflowY={'scroll'}
+        className={styles.hideScrollBar}
         onSubmit={handleSubmit(onSubmit)}
       >
         <FormControl isRequired isInvalid={errors.hospital}>
@@ -249,10 +260,10 @@ const SignUp = function () {
         </FormControl>
 
         <FormControl isRequired isInvalid={errors.specialty}>
-          <FormLabel>specialty</FormLabel>
+          <FormLabel>전공</FormLabel>
           {/* //TODO: 공공데이터포털에서 진료분야를 어떻게 알아올 수 있는 지 확인해야 함 */}
           <Select
-            placeholder="전문 분야를 선택하세요"
+            placeholder="전공 분야를 선택하세요"
             {...register('specialty')}
           >
             {fields.map(field => (
@@ -264,22 +275,24 @@ const SignUp = function () {
           <FormErrorMessage>{errors.specialty?.message}</FormErrorMessage>
         </FormControl>
 
-        <Flex flexWrap={'wrap'}>
-          {fields.map(field => (
-            <CustomCheckbox
-              {...checkboxGroup.getCheckboxProps({ value: field })}
-              key={field}
-            >
-              {field}
-            </CustomCheckbox>
-          ))}
-        </Flex>
+        <FormControl isRequired>
+          <FormLabel>진료 분야</FormLabel>
+          <Flex flexWrap={'wrap'} gap={'4'}>
+            {fields.map(field => (
+              <FormControl key={field} width={'fit-content'}>
+                <CustomCheckbox
+                  {...checkboxGroup.getCheckboxProps({ value: field })}
+                >
+                  {field}
+                </CustomCheckbox>
+              </FormControl>
+            ))}
+          </Flex>
+        </FormControl>
 
         <FormControl>
           <FormLabel>소개글</FormLabel>
           <Textarea
-            required
-            type="password"
             placeholder="소개글을 남겨주세요"
             {...register('description')}
           />
