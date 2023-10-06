@@ -6,11 +6,14 @@ import ViewAppointment from './views/ViewAppointment';
 import ManageAppointment from './views/ManageAppointment';
 import MainPage from './views/MainPage';
 import AppointmentDetail from './views/AppointmentDetail';
+import ErrorPage from './ErrorPage';
+import NotFound from './views/NotFound';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <MainPage />,
+    errorElement: <NotFound />,
     children: [],
   },
   {
@@ -26,6 +29,11 @@ const router = createBrowserRouter([
   {
     path: '/view-appointment/appointment-detail/:id',
     element: <AppointmentDetail />,
+    children: [],
+  },
+  {
+    path: '/error-page',
+    element: <ErrorPage />,
     children: [],
   },
 ]);
