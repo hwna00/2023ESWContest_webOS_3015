@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -14,7 +14,7 @@ import {
 
 import TableRow from '../component/TableSection/TableRow';
 import TableHeader from '../component/TableSection/TableHeader';
-import StatisticCard from '../component/StatisticCard/StatisticCard';
+import StatisticCard from '../component/StatisticCard';
 import { getAppointments } from '../api';
 import LoadingPage from '@housepital/common/LoadingPage';
 
