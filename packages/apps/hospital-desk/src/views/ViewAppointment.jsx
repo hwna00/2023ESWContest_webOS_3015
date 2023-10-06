@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { AiFillPlusCircle } from 'react-icons/ai';
@@ -36,55 +36,76 @@ function ViewAppointment() {
 
   const { data, isLoading } = useQuery(['appointments'], getAppointments);
 
-  let filteredReservations = [];
-  let uniqueDoctors = [];
-  let uniqueHours = [];
+  const [filteredReservations, setFilteredReservations] = useState([]);
+  const [uniqueDoctors, setUniqueDoctors] = useState([]);
+  const [uniqueHours, setUniqueHours] = useState([]);
+  useEffect(() => {
+    if (!isLoading) {
+      if (viewType === 'viewAll') {
+        setFilteredReservations(
+          data.filter(reservation =>
+            dayjs(reservation.date_time).isSame(day, 'day'),
+          ),
+        );
+      } else if (viewType === 'viewSelection') {
+        setFilteredReservations(
+          data.filter(reservation => {
+            if (!dayjs(reservation.date_time).isSame(day, 'day')) return false;
 
-  if (!isLoading) {
-    if (viewType === 'viewAll') {
-      filteredReservations = data.filter(reservation =>
-        dayjs(reservation.date_time).isSame(day, 'day'),
-      );
-    } else if (viewType === 'viewSelection') {
-      filteredReservations = data.filter(reservation => {
-        if (!dayjs(reservation.date_time).isSame(day, 'day')) return false;
+            const reservationDateTime = dayjs(reservation.date_time);
 
-        const reservationDateTime = dayjs(reservation.date_time);
+            if (
+              selectedHour &&
+              reservationDateTime.format('HH') !== selectedHour
+            )
+              return false;
 
-        if (selectedHour && reservationDateTime.format('HH') !== selectedHour)
-          return false;
+            if (
+              selectedMinute &&
+              reservationDateTime.format('mm') !== selectedMinute
+            )
+              return false;
 
-        if (
-          selectedMinute &&
-          reservationDateTime.format('mm') !== selectedMinute
-        )
-          return false;
+            if (selectedState && reservation.state_id !== selectedState)
+              return false;
 
-        if (selectedState && reservation.state_id !== selectedState)
-          return false;
-
-        if (selectedDoctor && reservation.doctor_id !== selectedDoctor)
-          return false;
-        if (nftType === 'FTF') return reservation.is_NFTF === false;
-        if (nftType === 'NFTF') return reservation.is_NFTF === true;
-        return true;
-      });
-      uniqueDoctors = Array.from(
-        data.reduce(
-          (map, reservation) =>
-            map.set(reservation.doctor_id, reservation.doctorName),
-          new Map(),
-        ),
-      ).map(([doctor_id, doctorName]) => ({ doctor_id, doctorName }));
-      uniqueHours = Array.from(
-        data.reduce(
-          (set, reservation) =>
-            set.add(dayjs(reservation.date_time).format('HH')),
-          new Set(),
-        ),
-      );
+            if (selectedDoctor && reservation.doctor_id !== selectedDoctor)
+              return false;
+            if (nftType === 'FTF') return reservation.is_NFTF === false;
+            if (nftType === 'NFTF') return reservation.is_NFTF === true;
+            return true;
+          }),
+        );
+        setUniqueDoctors(
+          Array.from(
+            data.reduce(
+              (map, reservation) =>
+                map.set(reservation.doctor_id, reservation.doctorName),
+              new Map(),
+            ),
+          ),
+        ).map(([doctor_id, doctorName]) => ({ doctor_id, doctorName }));
+        setUniqueHours(
+          Array.from(
+            data.reduce(
+              (set, reservation) =>
+                set.add(dayjs(reservation.date_time).format('HH')),
+              new Set(),
+            ),
+          ),
+        );
+      }
     }
-  }
+  }, [
+    isLoading,
+    viewType,
+    day,
+    selectedHour,
+    selectedMinute,
+    selectedState,
+    selectedDoctor,
+    nftType,
+  ]);
 
   return (
     <VStack p="8" spacing="8" alignItems="initial" w="100%">

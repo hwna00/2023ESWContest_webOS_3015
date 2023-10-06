@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -20,17 +20,19 @@ import { getAppointments } from '../api';
 const MainPage = function () {
   const { data, isLoading } = useQuery(['appointments'], getAppointments);
 
-  let CompleteReservation = [];
-  let ConfirmedReservation = [];
+  const [CompleteReservation, setCompleteReservation] = useState([]);
+  const [ConfirmedReservation, setConfirmedReservation] = useState([]);
 
-  if (!isLoading) {
-    ConfirmedReservation = data.filter(
-      reservation => reservation.state_id === 'ac',
-    );
-    CompleteReservation = data.filter(
-      reservation => reservation.state_id === 'dc',
-    );
-  }
+  useEffect(() => {
+    if (!isLoading) {
+      setConfirmedReservation(
+        data.filter(reservation => reservation.state_id === 'ac'),
+      );
+      setCompleteReservation(
+        data.filter(reservation => reservation.state_id === 'dc'),
+      );
+    }
+  }, [data, isLoading]);
 
   return (
     <VStack p="8" spacing="8" alignItems="initial">

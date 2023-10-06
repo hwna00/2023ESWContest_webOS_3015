@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { useQuery } from '@tanstack/react-query';
@@ -17,18 +19,20 @@ import { getAppointments } from '../api';
 
 function ManageAppointment() {
   const { data, isLoading } = useQuery(['appointments'], getAppointments);
+  const [ConfirmedReservation, setConfirmedReservation] = useState([]);
+  const [NotConfirmedReservation, setNotConfirmedReservation] = useState([]);
 
-  let ConfirmedReservation = [];
-  let NotConfirmedReservation = [];
+  useEffect(() => {
+    if (!isLoading) {
+      setConfirmedReservation(
+        data.filter(reservation => reservation.state_id === 'ac'),
+      );
+      setNotConfirmedReservation(
+        data.filter(reservation => reservation.state_id === 'aw'),
+      );
+    }
+  }, [data, isLoading]);
 
-  if (!isLoading) {
-    ConfirmedReservation = data.filter(
-      reservation => reservation.state_id === 'ac',
-    );
-    NotConfirmedReservation = data.filter(
-      reservation => reservation.state_id === 'aw',
-    );
-  }
   return (
     <VStack p="8" spacing="8" alignItems="initial">
       <HStack justifyContent="space-between">
