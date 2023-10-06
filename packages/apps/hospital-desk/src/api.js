@@ -138,7 +138,7 @@ export const updateAppointmentState = (id, newStateId, rejectionReason) =>
 export const getPatientDetail = uid => {
   const { data: patient } = instance.get(`/users?uid=${uid}`);
 
-  if (!patient) {
+  if (false) {
     // TODO: 해당 유저가 존재하지 않는 경우에 대한 처리
   } else {
     // return patient;
@@ -159,6 +159,8 @@ export const getPatientDetail = uid => {
       message: '안녕하세요',
       is_NFTF: 1,
       is_first_visit: 0,
+      profileImg:
+        'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
     };
   }
 };
