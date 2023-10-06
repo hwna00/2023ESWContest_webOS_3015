@@ -1,9 +1,8 @@
-const router = require('express').Router();
+const convertHospital = require('../../utils/convertHospital');
+const classifyAppointments = require('../../utils/classifyAppointments');
+const pool = require('../../config/db');
 
-const convertHospital = require('../utils/convertHospital');
-const pool = require('../config/db');
-
-const readHospitalsQuery = async function (connection, name) {
+exports.readHospitalsQuery = async function (connection, name) {
   const selectAllHospitalsQuery = 'SELECT * FROM Hospitals;';
   const selectHospitalsByNameQuery = 'SELECT * FROM Hospitals WHERE name = ?;';
   const Params = [name];
@@ -15,13 +14,13 @@ const readHospitalsQuery = async function (connection, name) {
   return rows;
 };
 
-const readHospitals = async function (req, res) {
+exports.readHospitals = async function (req, res) {
   const { name } = req.query;
 
   try {
     const connection = await pool.getConnection(async conn => conn);
     try {
-      const [rows] = await readHospitalsQuery(connection, name);
+      const [rows] = await exports.readHospitalsQuery(connection, name);
       if (rows.length === 0) {
         throw Error('Hospital not found');
       } else {
@@ -58,7 +57,7 @@ const readHospitals = async function (req, res) {
   }
 };
 
-const createHospitalQuery = async (connection, data) => {
+exports.createHospitalQuery = async (connection, data) => {
   const Query =
     'INSERT INTO Hospitals(hospital_id, name, description, ykiho) VALUES (?, ?, ?, ?);';
 
@@ -67,12 +66,12 @@ const createHospitalQuery = async (connection, data) => {
   await connection.query(Query, Params);
 };
 
-const createHospital = async (req, res) => {
+exports.createHospital = async (req, res) => {
   const { data } = req.body;
   try {
     const connection = await pool.getConnection(async conn => conn);
     try {
-      await createHospitalQuery(connection, data);
+      await exports.createHospitalQuery(connection, data);
 
       return res.json({
         hospital: data,
@@ -105,7 +104,7 @@ const createHospital = async (req, res) => {
   }
 };
 
-const readAppointmentsQuery = async function (connection, hospitalId) {
+exports.readAppointmentsQuery = async function (connection, hospitalId) {
   const Query =
     'SELECT * FROM Housepital.Appointments WHERE doctor_id in (select doctor_id from Housepital.Doctors where hospital_id = ?);';
   const Params = [hospitalId];
@@ -114,47 +113,16 @@ const readAppointmentsQuery = async function (connection, hospitalId) {
   return rows;
 };
 
-const classifyAppointments = function (rows) {
-  const result = {
-    aw: [],
-    ac: [],
-    dc: [],
-    pc: [],
-    ar: [],
-  };
-
-  for (let i = 0; i < rows.length; i += 1) {
-    switch (rows[i].state_id) {
-      case 'aw':
-        result.aw.push(rows[i]);
-        break;
-      case 'ac':
-        result.ac.push(rows[i]);
-        break;
-      case 'dc':
-        result.dc.push(rows[i]);
-        break;
-      case 'pc':
-        result.pc.push(rows[i]);
-        break;
-      case 'ar':
-        result.ar.push(rows[i]);
-        break;
-      default:
-        break;
-    }
-  }
-
-  return result;
-};
-
-const readAppointments = async function (req, res) {
+exports.readAppointments = async function (req, res) {
   const { hospitalId } = req.params;
 
   try {
     const connection = await pool.getConnection(async conn => conn);
     try {
-      const [rows] = await readAppointmentsQuery(connection, hospitalId);
+      const [rows] = await exports.readAppointmentsQuery(
+        connection,
+        hospitalId,
+      );
       const classifiedRows = classifyAppointments(rows);
 
       if (rows.length === 0) {
@@ -191,8 +159,3 @@ const readAppointments = async function (req, res) {
     });
   }
 };
-router.post('/hospitals', createHospital);
-router.get('/hospitals', readHospitals);
-router.get('/hospitals/:hospitalId/appointments', readAppointments);
-
-module.exports = router;

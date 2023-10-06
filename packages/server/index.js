@@ -1,10 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 
-const user = require('./routes/user');
-const hospital = require('./routes/hospital');
-const auth = require('./routes/auth');
-const appointment = require('./routes/appointment');
+const user = require('./routes/user/user');
+const hospital = require('./routes/hospital/hospital');
+const auth = require('./routes/auth/auth');
+const appointment = require('./routes/appointment/appointment');
 
 require('dotenv').config();
 

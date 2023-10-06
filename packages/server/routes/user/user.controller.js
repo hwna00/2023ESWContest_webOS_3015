@@ -1,9 +1,7 @@
-const router = require('express').Router();
+const convertUser = require('../../utils/convertUser');
+const pool = require('../../config/db');
 
-const convertUser = require('../utils/convertUser');
-const pool = require('../config/db');
-
-const createUserQuery = async (connection, data) => {
+exports.createUserQuery = async (connection, data) => {
   const Query =
     'INSERT INTO Users(user_id, name, email, phone_number, address, address_detail, second_phone_number, birthdate, bloodtype, height, weight, gender, regular_medicines, chronic_disease) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);';
 
@@ -27,12 +25,12 @@ const createUserQuery = async (connection, data) => {
   await connection.query(Query, Params);
 };
 
-const createUser = async (req, res) => {
+exports.createUser = async (req, res) => {
   const { data } = req.body;
   try {
     const connection = await pool.getConnection(async conn => conn);
     try {
-      await createUserQuery(connection, data);
+      await exports.createUserQuery(connection, data);
 
       return res.json({
         user: data,
@@ -65,7 +63,7 @@ const createUser = async (req, res) => {
   }
 };
 
-const readUserQuery = async function (connection, uid) {
+exports.readUserQuery = async function (connection, uid) {
   const Query = 'SELECT * FROM Users WHERE user_id = ?;';
   const Params = [uid];
 
@@ -74,12 +72,12 @@ const readUserQuery = async function (connection, uid) {
   return rows;
 };
 
-const readUser = async function (req, res) {
+exports.readUser = async function (req, res) {
   const { uid } = req.params;
   try {
     const connection = await pool.getConnection(async conn => conn);
     try {
-      const [rows] = await readUserQuery(connection, uid);
+      const [rows] = await exports.readUserQuery(connection, uid);
       if (rows.length === 0) {
         throw Error('User not found');
       } else {
@@ -115,13 +113,13 @@ const readUser = async function (req, res) {
   }
 };
 
-const updateUserQuery = async function (connection, uid, data) {
+exports.updateUserQuery = async function (connection, uid, data) {
   const Query = `UPDATE Users SET name = ifnull(?, name), email = ifnull(?, email),
-      phone_number = ifnull(?, phone_number), address = ifnull(?, address),
-        address_detail = ifnull(?, address_detail), second_phone_number = ifnull(?, second_phone_number),
-          birthdate = ifnull(?, birthdate), bloodtype = ifnull(?, bloodtype), height = ifnull(?, height),
-          weight = ifnull(?, weight), gender = ifnull(?, gender), regular_medicines = ifnull(?, regular_medicines),
-            chronic_disease = ifnull(?, chronic_disease) WHERE user_id = ?;`;
+        phone_number = ifnull(?, phone_number), address = ifnull(?, address),
+          address_detail = ifnull(?, address_detail), second_phone_number = ifnull(?, second_phone_number),
+            birthdate = ifnull(?, birthdate), bloodtype = ifnull(?, bloodtype), height = ifnull(?, height),
+            weight = ifnull(?, weight), gender = ifnull(?, gender), regular_medicines = ifnull(?, regular_medicines),
+              chronic_disease = ifnull(?, chronic_disease) WHERE user_id = ?;`;
 
   const Params = [
     data.username,
@@ -143,14 +141,14 @@ const updateUserQuery = async function (connection, uid, data) {
   await connection.query(Query, Params);
 };
 
-const updateUser = async function (req, res) {
+exports.updateUser = async function (req, res) {
   const { uid } = req.params;
   const { data } = req.body;
 
   try {
     const connection = await pool.getConnection(async conn => conn);
     try {
-      await updateUserQuery(connection, uid, data);
+      await exports.updateUserQuery(connection, uid, data);
 
       return res.json({
         isSuccess: true,
@@ -174,9 +172,3 @@ const updateUser = async function (req, res) {
     });
   }
 };
-
-router.post('/users', createUser);
-router.get('/users/:uid', readUser);
-router.patch('/users/:uid', updateUser);
-
-module.exports = router;

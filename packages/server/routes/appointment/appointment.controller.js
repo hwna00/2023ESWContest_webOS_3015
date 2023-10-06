@@ -1,8 +1,6 @@
-const router = require('express').Router();
+const pool = require('../../config/db');
 
-const pool = require('../config/db');
-
-const createAppointmentQuery = async function (connection, data) {
+exports.createAppointmentQuery = async function (connection, data) {
   const Query =
     'INSERT INTO Appointments(user_id, doctor_id, NFTF_id, datetime, message, is_NFTF) VALUES (?, ?, ?, ?, ?, ?);';
   const Params = [
@@ -17,13 +15,13 @@ const createAppointmentQuery = async function (connection, data) {
   await connection.query(Query, Params);
 };
 
-const createAppointment = async function (req, res) {
+exports.createAppointment = async function (req, res) {
   const { data } = req.body;
 
   try {
     const connection = await pool.getConnection(async conn => conn);
     try {
-      await createAppointmentQuery(connection, data);
+      await exports.createAppointmentQuery(connection, data);
 
       return res.json({
         isSuccess: true,
@@ -48,7 +46,7 @@ const createAppointment = async function (req, res) {
   }
 };
 
-const updateAppointmentQuery = async function (
+exports.updateAppointmentQuery = async function (
   connection,
   appointmentId,
   data,
@@ -60,14 +58,14 @@ const updateAppointmentQuery = async function (
   await connection.query(Query, Params);
 };
 
-const updateAppointment = async function (req, res) {
+exports.updateAppointment = async function (req, res) {
   const { appointmentId } = req.params;
   const { data } = req.body;
 
   try {
     const connection = await pool.getConnection(async conn => conn);
     try {
-      await updateAppointmentQuery(connection, appointmentId, data);
+      await exports.updateAppointmentQuery(connection, appointmentId, data);
 
       return res.json({
         isSuccess: true,
@@ -92,7 +90,7 @@ const updateAppointment = async function (req, res) {
   }
 };
 
-const readUserAppointmentQuery = async function (connection, appointmentId) {
+exports.readUserAppointmentQuery = async function (connection, appointmentId) {
   const Query =
     'SELECT * FROM Housepital.Users join Housepital.Appointments using(user_id) where id = ?;';
   const Params = [appointmentId];
@@ -102,13 +100,16 @@ const readUserAppointmentQuery = async function (connection, appointmentId) {
   return rows;
 };
 
-const readUserAppointment = async function (req, res) {
+exports.readUserAppointment = async function (req, res) {
   const { appointmentId } = req.params;
 
   try {
     const connection = await pool.getConnection(async conn => conn);
     try {
-      const [rows] = await readUserAppointmentQuery(connection, appointmentId);
+      const [rows] = await exports.readUserAppointmentQuery(
+        connection,
+        appointmentId,
+      );
       if (rows.length === 0) {
         throw Error('Appointment not found');
       } else {
@@ -143,9 +144,3 @@ const readUserAppointment = async function (req, res) {
     });
   }
 };
-
-router.post('/appointments', createAppointment);
-router.patch('/appointments/:appointmentId', updateAppointment);
-router.get('/appointments/:appointmentId', readUserAppointment);
-
-module.exports = router;

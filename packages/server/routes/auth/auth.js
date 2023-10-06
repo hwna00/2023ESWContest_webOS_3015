@@ -4,7 +4,7 @@ const axios = require('axios');
 const {
   fbCreateCustomToken,
   getNaverAuthApiUri,
-} = require('../controllers/authController');
+} = require('./auth.controller');
 
 router.get('/auth/naver-callback', async (req, res) => {
   const { code, state } = req.query;
