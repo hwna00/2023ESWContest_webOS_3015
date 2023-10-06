@@ -11,7 +11,7 @@ import {
 } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 
-import { createUser, updateMe } from './src/api';
+import { updateMe } from './src/api';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FB_API_KEY,
@@ -43,21 +43,12 @@ export const uploadNftfBlob = async (blob, uid) => {
 };
 
 export const fbSignUp = async data => {
-  const { email, password, ...rest } = data;
-  const isUserExist = false; // getMe();
+  const { email, password, profileImgBlob } = data;
 
-  if (isUserExist) {
-    // TODO: 사용자가 존재한다는 알림 전송
-    // TODO: 로그인 페이지로 리디렉트
-  } else {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(userCredential => {
-        const { uid } = userCredential.user;
-        return createUser({ uid, email, ...rest });
-      })
-      .then(() => uploadBlob(rest.profileImgBlob, email))
-      .catch(err => console.log(err));
-  }
+  const { user } = await createUserWithEmailAndPassword(auth, email, password);
+  await uploadBlob(profileImgBlob, user.uid);
+
+  return user.uid;
 };
 
 export const fbEmailLogIn = async data => {

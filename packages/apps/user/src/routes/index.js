@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createHashRouter } from 'react-router-dom';
 
 import SettingPage from '../views/SettingPage/SettingPage';
 import NotFound from '../views/NotFound';
@@ -10,7 +10,7 @@ import healthHistoryRoutes from './healthHistoryRoutes';
 import authRoutes from './authRoutes';
 import appointmentRoutes from './appointmentRoutes';
 
-const router = createBrowserRouter(
+const router = createHashRouter(
   [
     {
       path: '/',

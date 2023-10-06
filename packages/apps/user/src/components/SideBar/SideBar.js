@@ -105,7 +105,7 @@ const SideBar = function () {
             >
               <Avatar src={me.profileImg} size="xl" />
               <Text fontSize="xl" fontWeight="bold" textAlign="center">
-                {me.name}
+                {me.username}
               </Text>
             </ChakraLink>
           ) : (

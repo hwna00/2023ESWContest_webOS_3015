@@ -74,16 +74,16 @@ const MyPage = function () {
         >
           <Avatar src={me.profileImg} size={'2xl'} />
           <VStack width={'sm'}>
-            <FormControl width="full" isRequired isInvalid={errors.name}>
+            <FormControl width="full" isRequired isInvalid={errors.username}>
               <FormLabel>이름</FormLabel>
               <Input
                 required
                 placeholder="성함을 입력해주세요."
-                {...register('name', {
+                {...register('username', {
                   required: '이 항목은 필수입니다.',
                 })}
               />
-              <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
+              <FormErrorMessage>{errors.username?.message}</FormErrorMessage>
             </FormControl>
 
             <FormControl width="full" isRequired isInvalid={errors.email}>
