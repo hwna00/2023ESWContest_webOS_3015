@@ -4,6 +4,8 @@ import {
   Button,
   ButtonGroup,
   Link as ChakraLink,
+  Checkbox,
+  CheckboxGroup,
   Container,
   FormControl,
   FormErrorMessage,
@@ -12,19 +14,52 @@ import {
   Heading,
   Icon,
   Input,
+  Select,
   Text,
+  Textarea,
   UnorderedList,
   VStack,
+  useCheckboxGroup,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { FaSearch } from 'react-icons/fa';
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import { useCallback, useState } from 'react';
+import styles from '@housepital/common/css/HideScrollBar.module.css';
 import { fbSignUp } from '../../../firebase';
+import CustomCheckbox from '@housepital/common/CustomCheckox';
 
 const SignUp = function () {
   const [hospitals, setHospitals] = useState([]);
   const [selectedHospital, setSelectedHospital] = useState('');
+  const fields = [
+    '내과',
+    '신경과',
+    '정신건강의학과',
+    '외과',
+    '정형외과',
+    '신경외과',
+    '흉부외과',
+    '성형외과',
+    '마취통증의학과',
+    '산부인과',
+    '소아청소년과',
+    '안과',
+    '이비인후과',
+    '피부과',
+    '비뇨의학과',
+    '영상의학과',
+    '방사선종양학과',
+    '병리과',
+    '진단검사의학과',
+    '결핵과',
+    '재활의학과',
+    '예방의학과',
+    '가정의학과',
+    '응급의학과',
+    '핵의학과',
+    '직업환경의학과',
+  ];
 
   const navigate = useNavigate();
   const {
@@ -33,6 +68,9 @@ const SignUp = function () {
     handleSubmit,
     formState: { errors },
   } = useForm({ mode: 'all', defaultValues: { ykiho: '' } });
+  const checkboxGroup = useCheckboxGroup({
+    onChange: e => console.log(e),
+  });
 
   const onSearchFieldClick = useCallback(async () => {
     const hospitalName = getValues('hospital');
@@ -88,6 +126,7 @@ const SignUp = function () {
         gap={'4'}
         overflowY={'scroll'}
         onSubmit={handleSubmit(onSubmit)}
+        className={styles.hideScrollBar}
       >
         <FormControl isRequired isInvalid={errors.hospital}>
           <FormLabel>소속 병원</FormLabel>
@@ -207,6 +246,43 @@ const SignUp = function () {
             })}
           />
           <FormErrorMessage>{errors.checkPassword?.message}</FormErrorMessage>
+        </FormControl>
+
+        <FormControl isRequired isInvalid={errors.specialty}>
+          <FormLabel>specialty</FormLabel>
+          {/* //TODO: 공공데이터포털에서 진료분야를 어떻게 알아올 수 있는 지 확인해야 함 */}
+          <Select
+            placeholder="전문 분야를 선택하세요"
+            {...register('specialty')}
+          >
+            {fields.map(field => (
+              <option key={field} value={field}>
+                {field}
+              </option>
+            ))}
+          </Select>
+          <FormErrorMessage>{errors.specialty?.message}</FormErrorMessage>
+        </FormControl>
+
+        <CheckboxGroup colorScheme="primary">
+          {fields.map(field => (
+            <CustomCheckbox
+              {...checkboxGroup.getCheckboxProps({ value: field })}
+              key={field}
+            >
+              {field}
+            </CustomCheckbox>
+          ))}
+        </CheckboxGroup>
+
+        <FormControl>
+          <FormLabel>소개글</FormLabel>
+          <Textarea
+            required
+            type="password"
+            placeholder="소개글을 남겨주세요"
+            {...register('description')}
+          />
         </FormControl>
 
         <ButtonGroup>
