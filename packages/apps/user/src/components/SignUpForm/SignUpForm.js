@@ -9,6 +9,7 @@ import { Box, Button, ButtonGroup, VStack } from '@chakra-ui/react';
 
 import { setErrors, setMe } from '../../store';
 import { fbSignUp } from '../../../firebase';
+import { createUser } from '../../api';
 
 const SignUpForm = function ({
   activeStep,
@@ -48,19 +49,22 @@ const SignUpForm = function ({
   }, [goToPrevious, activeStep, navigate]);
 
   const onSubmit = async data => {
-    fbSignUp({
-      ...data,
+    delete data.checkPassword;
+    const { email, password, ...rest } = data;
+    const uid = await fbSignUp({
+      email,
+      password,
       profileImgBlob,
-    }).then(res => {
-      if (res?.isSuccess) {
-        console.log('user', res.user);
-        dispatch(setMe(res.user));
-        navigate('/');
-      } else {
-        //TODO: 회원가입 실패 알림 띄우기
-        console.log(res?.message);
-      }
     });
+    const response = await createUser({ uid, email, ...rest });
+
+    if (response.isSuccess) {
+      dispatch(setMe({ uid, email, ...rest }));
+      navigate('/');
+    } else {
+      //TODO: 회원가입 실패 알림 띄우기
+      console.log(response);
+    }
   };
 
   const location = useLocation();

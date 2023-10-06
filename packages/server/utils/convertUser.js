@@ -2,7 +2,7 @@ module.exports = userFromDB => {
   const user = {
     uid: userFromDB.user_id,
     email: userFromDB.email,
-    name: userFromDB.name,
+    username: userFromDB.name,
     address: userFromDB.address,
     addressDetail: userFromDB.address_detail,
     phoneNumber: userFromDB.phone_number,

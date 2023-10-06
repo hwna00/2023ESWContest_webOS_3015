@@ -2,7 +2,7 @@ import { configureStore, createSlice } from '@reduxjs/toolkit';
 
 const userInitialState = {
   uid: '',
-  name: '',
+  username: '',
   email: '',
   phoneNumber: '',
   secondPhoneNumber: '',
@@ -34,6 +34,8 @@ const signUpSlice = createSlice({
   },
 });
 
+let cnt = 0;
+
 const meSlice = createSlice({
   name: 'me',
   initialState: userInitialState,
@@ -43,6 +45,7 @@ const meSlice = createSlice({
         Object.entries(action.payload).map(
           ([key, value]) => (state[key] = value),
         );
+        return state;
       }
     },
     resetMe: () => userInitialState,

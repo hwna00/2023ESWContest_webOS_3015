@@ -4,17 +4,15 @@ const instance = axios.create({
   baseURL: 'http://localhost:3000/api',
 });
 
-export const createUser = async data => {
-  const response = await instance.post('/users', { data });
-  return response.data;
+export const createUser = async user => {
+  // TODO: checkPassword 제거하기
+  const { data } = await instance.post('/users', { data: user });
+  return data;
 };
 
 export const getMe = async uid => {
-  const {
-    data: { result },
-  } = await instance.get(`/users/${uid}`);
-
-  return result;
+  const { data } = await instance.get(`/users/${uid}`);
+  return data;
 };
 
 export const updateMe = async (uid, data) => {
