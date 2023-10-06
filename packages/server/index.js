@@ -7,6 +7,7 @@ const {
   fbCreateCustomToken,
   getNaverAuthApiUri,
 } = require('./controllers/authController');
+const { color } = require('framer-motion');
 
 require('dotenv').config();
 
@@ -194,9 +195,39 @@ app.patch('/api/users/me', (req, res) => {
   console.log(req.body);
 });
 
+let kakaoTid; // TODO : 깔끔하게 고치기
+let partner_order_id;
+let partner_user_id;
+
+app.post('/api/payment/kakao-tid', (req, res) =>{
+  const { tid, PARTNER_ORDER_ID, PARTNER_USER_ID } = req.body;
+  kakaoTid = tid;
+  partner_order_id = PARTNER_ORDER_ID;
+  partner_user_id = PARTNER_USER_ID;
+});
+
 app.get('/kakao-payment/callback', async (req, res) =>{
-  const { pg_token } = req.query
-  console.log(pg_token)
+  const { pg_token } = req.query;
+
+  const API_URI = 'https://kapi.kakao.com/v1/payment/approve?cid=' +
+  process.env.KAKAO_PAYMENT_CID +
+  '&tid=' +
+  kakaoTid +
+  '&partner_order_id=' +
+  partner_order_id +
+  '&partner_user_id=' +
+  partner_user_id +
+  '&pg_token=' +
+  pg_token;
+
+  const payment_agree = await axios.post(API_URI, null,{
+    headers: {
+      "Authorization": `KakaoAK ${process.env.KAKAO_ADMIN_KEY}`,
+      "Content-type": "application/x-www-form-urlencoded;charset=utf-8"
+    },
+  });
+
+  console.log(payment_agree)
 });
 
 app.get('/api/hospitals', (req, res) => {

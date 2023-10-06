@@ -7,7 +7,7 @@ const KakaoPayment = function () {
   const BASE_URL = 'https://kapi.kakao.com/v1/payment/ready';
   // TODO : 아래 있는 값 실시간으로 받아오게 만들기
   const PARTNER_ORDER_ID = '12345678'; // TODO : unique한 값 생성하도록 변경하기
-  const PARTNER_USER_ID = 'slfjsdf';
+  const PARTNER_USER_ID = 'slfjfsdfff';
   const ITEM_NAME = '진료비';
   const QUANTITY = 1;
   const TOTAL_AMOUNT = 15000;
@@ -50,6 +50,10 @@ const KakaoPayment = function () {
       }
     )
       .then((response) => {
+        axios.post("http://localhost:3000/api/payment/kakao-tid", {PARTNER_ORDER_ID, PARTNER_USER_ID, ...response.data})
+        .then((listen) => console.log(listen.data))
+        .catch(e => console.error(e));
+
         const { next_redirect_pc_url } = response.data;
         window.location.href = next_redirect_pc_url
       })
