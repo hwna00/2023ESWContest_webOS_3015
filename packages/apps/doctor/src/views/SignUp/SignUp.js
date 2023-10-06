@@ -69,7 +69,7 @@ const SignUp = function () {
     setValue,
     handleSubmit,
     formState: { errors },
-  } = useForm({ mode: 'onBlur', defaultValues: { ykiho: '' } });
+  } = useForm({ mode: 'onBlur' });
   const checkboxGroup = useCheckboxGroup({
     onChange: values => setSelectedFields(values),
   });
@@ -102,11 +102,17 @@ const SignUp = function () {
         // TODO: 병원이 선택되지 않은 경우
         // TODO: webOS.notification 사용
       }
+      delete data.hospital;
+
       const doctorId = await fbSignUp(data);
+
+      delete data.password;
+      delete data.checkPassword;
+
       const response = await createDoctor({
         doctorId,
         hospitalId: selectedHospitalId,
-        fields: selectedFields,
+        fields: JSON.stringify(selectedFields),
         ...data,
       });
 
