@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import { Link as ReactRouterLink } from 'react-router-dom';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import dayjs from 'dayjs';
 import 'react-calendar/dist/Calendar.css';
@@ -16,20 +17,21 @@ import {
   SimpleGrid,
   VStack,
   useDisclosure,
+  Link as ChakraLink,
 } from '@chakra-ui/react';
 
 import TableRow from '../../component/TableSection/TableRow';
 import TableHeader from '../../component/TableSection/TableHeader';
 import Calendar from '../../component/Calendar/Calendar';
-import AddAppointmentModal from '../../component/AddAppointmentModal/AddAppointmentModal';
+// import AddAppointmentModal from '../../component/AddAppointmentModal/AddAppointmentModal';
 import { getAppointments } from '../../api';
 
 function ViewAppointment() {
-  const {
-    isOpen: isAddModalOpen,
-    onOpen: openAddAppointmentModal,
-    onClose: closeAddAppointmentModal,
-  } = useDisclosure();
+  // const {
+  //   isOpen: isAddModalOpen,
+  //   onOpen: openAddAppointmentModal,
+  //   onClose: closeAddAppointmentModal,
+  // } = useDisclosure();
   const [value, onChange] = useState(new Date());
   const [day, setDay] = useState(new Date());
   const [viewType, setViewType] = useState('viewAll');
@@ -100,14 +102,14 @@ function ViewAppointment() {
         <Button
           colorScheme="primary"
           leftIcon={<AiFillPlusCircle />}
-          onClick={openAddAppointmentModal}
+          // onClick={openAddAppointmentModal}
         >
           예약추가
         </Button>
-        <AddAppointmentModal
+        {/* <AddAppointmentModal
           isOpen={isAddModalOpen}
           onClose={closeAddAppointmentModal}
-        />
+        /> */}
       </HStack>
       <HStack
         justifyItems="initial"
@@ -209,11 +211,17 @@ function ViewAppointment() {
           <div className={styles.hideScrollBar}>
             <Box maxH="830px" overflowY="scroll" w="100%">
               {filteredReservations.map(reservation => (
-                <TableRow
+                <ChakraLink
+                  as={ReactRouterLink}
+                  to={`appointment-detail/${reservation.id}`}
                   key={reservation.id}
-                  data={reservation}
-                  buttonType="detail"
-                />
+                >
+                  <TableRow
+                    key={reservation.id}
+                    data={reservation}
+                    buttonType="detail"
+                  />
+                </ChakraLink>
               ))}
             </Box>
           </div>

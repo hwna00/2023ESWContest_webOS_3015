@@ -24,8 +24,12 @@ const MainPage = function () {
   let ConfirmedReservation = [];
 
   if (!isLoading) {
-    ConfirmedReservation = data.filter(reservation => reservation.state_id === 'ac');
-    CompleteReservation = data.filter(reservation => reservation.state_id === 'dc');
+    ConfirmedReservation = data.filter(
+      reservation => reservation.state_id === 'ac',
+    );
+    CompleteReservation = data.filter(
+      reservation => reservation.state_id === 'dc',
+    );
   }
 
   return (
@@ -43,7 +47,7 @@ const MainPage = function () {
       <Box>
         <HStack justifyContent="space-between">
           <Heading fontSize="25px">다음 예약</Heading>
-          <ChakraLink as={ReactRouterLink} to="ManageAppointment">
+          <ChakraLink as={ReactRouterLink} to="manage-appointment">
             + 전체보기
           </ChakraLink>
         </HStack>
@@ -75,7 +79,7 @@ const MainPage = function () {
       <Box>
         <HStack justifyContent="space-between">
           <Heading fontSize="25px">완료 대기</Heading>
-          <ChakraLink as={ReactRouterLink} to="/ManageAppointment">
+          <ChakraLink as={ReactRouterLink} to="/manage-appointment">
             + 전체보기
           </ChakraLink>
         </HStack>

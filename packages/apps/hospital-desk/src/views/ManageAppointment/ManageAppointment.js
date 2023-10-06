@@ -42,7 +42,7 @@ function ManageAppointment() {
       <Box>
         <HStack justifyContent="space-between">
           <Heading fontSize="25px">확정된 예약(최신순)</Heading>
-          <ChakraLink as={ReactRouterLink} to="/viewAppointment">
+          <ChakraLink as={ReactRouterLink} to="/view-appointment">
             + 전체보기
           </ChakraLink>
         </HStack>
