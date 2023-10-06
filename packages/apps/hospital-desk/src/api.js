@@ -136,7 +136,8 @@ export const updateAppointmentState = (id, newStateId, rejectionReason) =>
   });
 
 export const getPatientDetail = uid => {
-  const { data: patient } = instance.get(`/users?uid=${uid}`);
+  // const { data: patient } = instance.get(`/users?uid=${uid}`);
+  console.log(uid);
 
   if (false) {
     // TODO: 해당 유저가 존재하지 않는 경우에 대한 처리

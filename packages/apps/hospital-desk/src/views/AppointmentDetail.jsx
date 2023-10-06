@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
+import LoadingPage from '@housepital/common/LoadingPage';
 import {
   AspectRatio,
   Box,
@@ -35,9 +36,9 @@ function AppointmentDetail() {
   const { data, isLoading, error } = useQuery([patientUid], () =>
     getPatientDetail(patientUid),
   );
-  if (isLoading) return 'Loading...';
-  if (error) return <ErrorPage />;
+  if (isLoading) return <LoadingPage />;
 
+  if (error) return <ErrorPage />;
   const handleFirstCheck = event => {
     if (event.target.checked) {
       setFirstNFTF([...firstNFTF, event.target.value]);
