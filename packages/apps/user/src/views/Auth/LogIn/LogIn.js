@@ -1,8 +1,7 @@
 import { useCallback, useState } from 'react';
 
-import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate, Link as ReactRouterLink } from 'react-router-dom';
 import { FaUserAlt, FaLock, FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
-import { AiFillGoogleCircle, AiFillTwitterCircle } from 'react-icons/ai';
 import { useForm } from 'react-hook-form';
 import {
   Box,
@@ -22,6 +21,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 
+import KakaoForm from '../../../components/KakaoLoginButton/KakaoLoginButton';
 import NaverLoginButton from '../../../components/NaverLoginButton/NaverLoginButton';
 import { fbEmailLogIn } from '../../../../firebase';
 
@@ -88,13 +88,7 @@ function LogIn() {
                 padding="15px"
               >
                 <NaverLoginButton />
-
-                <Button bgColor="white">
-                  <Icon as={AiFillGoogleCircle} boxSize="30px" />
-                </Button>
-                <Button bgColor="white">
-                  <Icon as={AiFillTwitterCircle} boxSize="30px" />
-                </Button>
+                <KakaoForm />
               </HStack>
 
               <FormControl isInvalid={errors.email}>
