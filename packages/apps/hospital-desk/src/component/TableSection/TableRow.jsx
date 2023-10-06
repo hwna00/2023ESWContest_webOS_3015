@@ -3,8 +3,8 @@ import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, HStack, Button, useDisclosure, Text } from '@chakra-ui/react';
 
-import PaymentModal from '../PaymentModal/PaymentModal';
-import CancelModal from '../CancelModal/CancelModal';
+import PaymentModal from '../PaymentModal';
+import CancelModal from '../CancelModal';
 
 function TableRow({ data, buttonType }) {
   const navigate = useNavigate();
@@ -21,8 +21,8 @@ function TableRow({ data, buttonType }) {
   } = useDisclosure();
 
   const moveToDetail = useCallback(() => {
-    navigate('/detail');
-  }, []);
+    navigate('/view-appointment/appointment-detail/:id');
+  }, [navigate]);
 
   const paymentButton = (
     <>

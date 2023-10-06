@@ -22,7 +22,7 @@ function CancelModal({ isOpen, onClose }) {
 
   const handleConfirm = useCallback(() => {
     onClose();
-  }, [onClose, setCancelReason]);
+  }, [onClose]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered="true">

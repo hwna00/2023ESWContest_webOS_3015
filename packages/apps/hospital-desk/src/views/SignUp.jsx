@@ -20,8 +20,8 @@ import {
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 
-import { fbSignUp } from '../../firebase';
-import { createHospital } from '../../api';
+import { fbSignUp } from '../firebase';
+import { createHospital } from '../api';
 
 const BASE_URL = `https://apis.data.go.kr/B551182/hospInfoServicev2`;
 
