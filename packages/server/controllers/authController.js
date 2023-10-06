@@ -1,5 +1,9 @@
 const fbAdmin = require('../config/fbAdmin');
 
+const getKakaoAuthapiuri = (code, state) => {
+
+};
+
 const getNaverAuthApiUri = (code, state) => {
   const REDIRECT_URI = 'http://localhost:3000/api/auth/naver-callback';
 
