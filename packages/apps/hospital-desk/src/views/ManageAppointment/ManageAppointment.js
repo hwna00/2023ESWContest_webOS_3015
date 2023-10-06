@@ -1,5 +1,6 @@
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { AiFillPlusCircle } from 'react-icons/ai';
+import { useQuery } from '@tanstack/react-query';
 import styles from '@housepital/common/css/HideScrollBar.module.css';
 import {
   Box,
@@ -10,11 +11,24 @@ import {
   Button,
 } from '@chakra-ui/react';
 
-import { ConfirmedReservation } from '../MainPage/Data';
 import TableRow from '../../component/TableSection/TableRow';
 import TableHeader from '../../component/TableSection/TableHeader';
+import { getAppointments } from '../../api';
 
 function ManageAppointment() {
+  const { data, isLoading } = useQuery(['appointments'], getAppointments);
+
+  let ConfirmedReservation = [];
+  let NotConfirmedReservation = [];
+
+  if (!isLoading) {
+    ConfirmedReservation = data.filter(
+      reservation => reservation.state_id === 'ac',
+    );
+    NotConfirmedReservation = data.filter(
+      reservation => reservation.state_id === 'aw',
+    );
+  }
   return (
     <VStack p="8" spacing="8" alignItems="initial">
       <HStack justifyContent="space-between">
@@ -28,7 +42,7 @@ function ManageAppointment() {
       <Box>
         <HStack justifyContent="space-between">
           <Heading fontSize="25px">확정된 예약(최신순)</Heading>
-          <ChakraLink as={ReactRouterLink} to="/">
+          <ChakraLink as={ReactRouterLink} to="/viewAppointment">
             + 전체보기
           </ChakraLink>
         </HStack>
@@ -78,9 +92,7 @@ function ManageAppointment() {
         <div className={styles.hideScrollBar}>
           <Box maxH="250px" overflowY="scroll">
             <Box maxH="250px" overflowY="scroll">
-              {ConfirmedReservation.filter(
-                reservation => reservation.confirm === false,
-              ).map(reservation => (
+              {NotConfirmedReservation.map(reservation => (
                 <TableRow
                   key={reservation.id}
                   data={reservation}
