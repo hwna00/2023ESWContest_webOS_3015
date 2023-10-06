@@ -38,7 +38,7 @@ router.get('/auth/naver-callback', async (req, res) => {
       .then(token => {
         res
           .cookie('token', token)
-          .redirect('http://localhost:8080/auth/callback');
+          .redirect('http://localhost:8080/#/auth/callback');
       })
       .catch(err => console.log(err));
   }
@@ -46,7 +46,7 @@ router.get('/auth/naver-callback', async (req, res) => {
 
 router.get('/auth/login/kakao-callback', async (req, res) => {
   const { code } = req.query;
-  const REDIRECT_URI = 'http://localhost:3000/auth/login/kakao-callback';
+  const REDIRECT_URI = 'http://localhost:3000/api/auth/login/kakao-callback';
 
   const API_URI =
     'https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=' +
@@ -77,7 +77,7 @@ router.get('/auth/login/kakao-callback', async (req, res) => {
     .then(token => {
       res
         .cookie('token', token)
-        .redirect('http://localhost:8080/auth/callback');
+        .redirect('http://localhost:8080/#/auth/callback');
     })
     .catch(error => {
       console.log(error);
