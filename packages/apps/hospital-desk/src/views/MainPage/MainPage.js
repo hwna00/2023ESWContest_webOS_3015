@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Link as ReactRouterLink } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import styles from '@housepital/common/css/HideScrollBar.module.css';
 import {
   Box,
@@ -14,10 +15,19 @@ import {
 import TableRow from '../../component/TableSection/TableRow';
 import TableHeader from '../../component/TableSection/TableHeader';
 import StatisticCard from '../../component/StatisticCard/StatisticCard';
-
-import { CompleteReservation, ConfirmedReservation } from './Data';
+import { getAppointments } from '../../api';
 
 const MainPage = function () {
+  const { data, isLoading } = useQuery(['appointments'], getAppointments);
+
+  let CompleteReservation = [];
+  let ConfirmedReservation = [];
+
+  if (!isLoading) {
+    ConfirmedReservation = data.filter(reservation => reservation.state_id === 'ac');
+    CompleteReservation = data.filter(reservation => reservation.state_id === 'dc');
+  }
+
   return (
     <VStack p="8" spacing="8" alignItems="initial">
       <Heading textAlign="left" p="4" fontSize="30px">
