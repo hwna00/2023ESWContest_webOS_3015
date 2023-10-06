@@ -19,6 +19,7 @@ import {
   Link as ChakraLink,
 } from '@chakra-ui/react';
 
+import ErrorPage from '../ErrorPage';
 import TableRow from '../component/TableSection/TableRow';
 import TableHeader from '../component/TableSection/TableHeader';
 import Calendar from '../component/Calendar/Calendar';
@@ -34,7 +35,11 @@ function ViewAppointment() {
   const [selectedDoctor, setSelectedDoctor] = useState();
   const [selectedState, setSelectedState] = useState();
 
-  const { data, isLoading } = useQuery(['appointments'], getAppointments);
+  const { data, isLoading, error } = useQuery(
+    ['appointments'],
+    getAppointments,
+  );
+  if (error) return <ErrorPage />;
 
   const [filteredReservations, setFilteredReservations] = useState([]);
   const [uniqueDoctors, setUniqueDoctors] = useState([]);

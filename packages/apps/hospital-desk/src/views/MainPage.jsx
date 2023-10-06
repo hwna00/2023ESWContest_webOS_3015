@@ -12,14 +12,19 @@ import {
   Link as ChakraLink,
 } from '@chakra-ui/react';
 
+import ErrorPage from '../ErrorPage';
 import TableRow from '../component/TableSection/TableRow';
 import TableHeader from '../component/TableSection/TableHeader';
 import StatisticCard from '../component/StatisticCard/StatisticCard';
 import { getAppointments } from '../api';
 
 const MainPage = function () {
-  const { data, isLoading } = useQuery(['appointments'], getAppointments);
+  const { data, isLoading, error } = useQuery(
+    ['appointments'],
+    getAppointments,
+  );
 
+  if (error) return <ErrorPage />;
   const [CompleteReservation, setCompleteReservation] = useState([]);
   const [ConfirmedReservation, setConfirmedReservation] = useState([]);
 

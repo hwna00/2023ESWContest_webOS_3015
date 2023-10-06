@@ -13,12 +13,17 @@ import {
   Button,
 } from '@chakra-ui/react';
 
+import ErrorPage from '../ErrorPage';
 import TableRow from '../component/TableSection/TableRow';
 import TableHeader from '../component/TableSection/TableHeader';
 import { getAppointments } from '../api';
 
 function ManageAppointment() {
-  const { data, isLoading } = useQuery(['appointments'], getAppointments);
+  const { data, isLoading, error } = useQuery(
+    ['appointments'],
+    getAppointments,
+  );
+  if (error) return <ErrorPage />;
   const [ConfirmedReservation, setConfirmedReservation] = useState([]);
   const [NotConfirmedReservation, setNotConfirmedReservation] = useState([]);
 

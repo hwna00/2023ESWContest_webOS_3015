@@ -19,6 +19,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 
+import ErrorPage from '../ErrorPage';
 import CancelModal from '../component/CancelModal/CancelModal';
 import { getPatientDetail } from '../api';
 
@@ -35,8 +36,8 @@ function AppointmentDetail() {
     getPatientDetail(patientUid),
   );
   if (isLoading) return 'Loading...';
+  if (error) return <ErrorPage />;
 
-  if (error) return error.message;
   const handleFirstCheck = event => {
     if (event.target.checked) {
       setFirstNFTF([...firstNFTF, event.target.value]);
