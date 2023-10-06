@@ -3,12 +3,12 @@ const cors = require('cors');
 const axios = require('axios');
 
 const convertUser = require('./utils/convertUser');
+const convertHospital = require('./utils/convertHospital');
 const {
   fbCreateCustomToken,
   getNaverAuthApiUri,
 } = require('./controllers/authController');
 const pool = require('./config/db');
-const convertHospital = require('./utils/convertHospital');
 
 require('dotenv').config();
 
@@ -64,6 +64,7 @@ const createUser = async (req, res) => {
           message: '이미 가입된 회원입니다.',
         });
       }
+      console.log(err);
       return res.json({
         isSuccess: false,
         code: 500,

@@ -21,14 +21,13 @@ const Root = function () {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    onAuthStateChanged(auth, user => {
+    onAuthStateChanged(auth, async user => {
       setIsLoading(false);
       if (user) {
         setIsLoggedIn(true);
         if (me.uid === '') {
-          getMe(user.uid).then(res => {
-            dispatch(setMe(res));
-          });
+          const response = await getMe(user.uid);
+          dispatch(setMe(response.result));
         }
       } else {
         setIsLoggedIn(false);
