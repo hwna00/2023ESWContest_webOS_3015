@@ -466,6 +466,60 @@ const createHospital = async (req, res) => {
   }
 };
 
+const readHospitalsQuery = async function (connection, name) {
+  const selectAllHospitalsQuery = 'SELECT * FROM Hospitals;';
+  const selectHospitalByNameQuery = 'SELECT * FROM Hospitals WHERE name = ?;';
+  const Params = [name];
+
+  const Query = !name ? selectAllHospitalsQuery : selectHospitalByNameQuery;
+
+  const rows = await connection.query(Query, Params);
+
+  return rows;
+};
+
+const readHospitals = async function (req, res) {
+  const { name } = req.query;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      const [rows] = await readHospitalsQuery(connection, name);
+      if (rows.length === 0) {
+        throw Error('Hospital not found');
+      } else {
+        return res.json({
+          Hospitals: rows,
+          isSucess: true,
+          code: 200,
+          message: '병원 조회 성공',
+        });
+      }
+    } catch (err) {
+      if (err.message === 'Hospital not found') {
+        return res.json({
+          isSucess: false,
+          code: 404,
+          message: '병원을 찾을 수 없습니다.',
+        });
+      }
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSucess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
 app.post('/api/users', createUser);
 app.get('/api/users/:uid', readUser);
 app.get('/api/appointments/:appointmentId', readUserAppointment);
@@ -474,6 +528,7 @@ app.post('/api/appointments', createAppointment);
 app.get('/api/hospitals/:hospitalId/appointments', readAppointments);
 app.patch('/api/appointments/:appointmentId', updateAppointment);
 app.post('/api/hospitals', createHospital);
+app.get('/api/hospitals', readHospitals);
 
 app.get('/api/auth/naver-callback', async (req, res) => {
   const { code, state } = req.query;
@@ -511,393 +566,6 @@ app.get('/api/auth/naver-callback', async (req, res) => {
       })
       .catch(err => console.log(err));
   }
-});
-
-app.get('/api/hospitals', (req, res) => {
-  res.json([
-    {
-      id: '0',
-      isFavorite: true,
-      name: '연세 새로운 내과',
-      fields: ['내과', '가정의학과'],
-      rate: '4.8',
-      profileImg: 'https://cdn-icons-png.flaticon.com/512/6743/6743757.png',
-      distance: '1.2km',
-      tel: '031-123-1234',
-      address: '서울시 어쩌구 이러면',
-      businessHours: {
-        monday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        tuesday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        wednesday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        thursday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        friday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        saturday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        sunday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-      },
-      doctors: [
-        {
-          id: '0',
-          name: '이현철',
-          specialty: '내과 전문의',
-          fields: ['내과', '가정의학과'],
-          rate: '4.4',
-          profileImg:
-            'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
-        },
-        {
-          id: '1',
-          name: '이현철',
-          specialty: '내과 전문의',
-          fields: ['내과', '가정의학과'],
-          rate: '4.4',
-          profileImg:
-            'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
-        },
-      ],
-      reviews: [
-        {
-          id: 0,
-          reviewer: '양지웅',
-          reviewee: '김재인',
-          rate: '4.5',
-          content: '의사 선생님이 약간 불친절해요',
-        },
-        {
-          id: 1,
-          reviewer: '송보경',
-          reviewee: '양지웅',
-          rate: '4.5',
-          content: '의사 선생님이 친절해요',
-        },
-      ],
-    },
-    {
-      id: '1',
-      name: '정형 튼튼 정형외과',
-      isFavorite: true,
-      fields: ['정형외과'],
-      rate: '4.6',
-      profileImg: 'https://cdn-icons-png.flaticon.com/512/6743/6743757.png',
-      distance: '1.7km',
-      tel: '031-123-1234',
-      address: '서울시 어쩌구 이러면',
-      businessHours: {
-        monday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        tuesday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        wednesday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        thursday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        friday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        saturday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        sunday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-      },
-      doctors: [
-        {
-          id: '0',
-          name: '이현철',
-          specialty: '내과 전문의',
-          fields: ['내과', '가정의학과'],
-          rate: '4.4',
-          profileImg:
-            'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
-        },
-        {
-          id: '1',
-          name: '이현철',
-          specialty: '내과 전문의',
-          fields: ['내과', '가정의학과'],
-          rate: '4.4',
-          profileImg:
-            'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
-        },
-      ],
-    },
-    {
-      id: '2',
-      name: '신촌 깔끔 이비인후과',
-      isFavorite: true,
-      fields: ['이비인후과', '내과'],
-      rate: '4.5',
-      profileImg: 'https://cdn-icons-png.flaticon.com/512/6743/6743757.png',
-      distance: '2.1km',
-      tel: '031-123-1234',
-      address: '서울시 어쩌구 이러면',
-      businessHours: {
-        monday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        tuesday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        wednesday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        thursday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        friday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        saturday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        sunday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-      },
-      doctors: [
-        {
-          id: '0',
-          name: '이현철',
-          specialty: '내과 전문의',
-          fields: ['내과', '가정의학과'],
-          rate: '4.4',
-          profileImg:
-            'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
-        },
-        {
-          id: '1',
-          name: '이현철',
-          specialty: '내과 전문의',
-          fields: ['내과', '가정의학과'],
-          rate: '4.4',
-          profileImg:
-            'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
-        },
-      ],
-    },
-    {
-      id: '3',
-      name: '잠실 재활의학과',
-      isFavorite: true,
-      fields: ['재활의학과', '정형외과'],
-      rate: '4.5',
-      profileImg: 'https://cdn-icons-png.flaticon.com/512/6743/6743757.png',
-      distance: '0.7km',
-      tel: '031-123-1234',
-      address: '서울시 어쩌구 이러면',
-      businessHours: {
-        monday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        tuesday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        wednesday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        thursday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        friday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        saturday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        sunday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-      },
-      doctors: [
-        {
-          id: '0',
-          name: '이현철',
-          specialty: '내과 전문의',
-          fields: ['내과', '가정의학과'],
-          rate: '4.4',
-          profileImg:
-            'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
-        },
-        {
-          id: '1',
-          name: '이현철',
-          specialty: '내과 전문의',
-          fields: ['내과', '가정의학과'],
-          rate: '4.4',
-          profileImg:
-            'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
-        },
-      ],
-    },
-    {
-      id: '4',
-      name: '합정 우리 의원',
-      isFavorite: true,
-      fields: ['가정의학과', '내과'],
-      rate: '4.9',
-      profileImg: 'https://cdn-icons-png.flaticon.com/512/6743/6743757.png',
-      distance: '1.2km',
-      tel: '031-123-1234',
-      address: '서울시 어쩌구 이러면',
-      businessHours: {
-        monday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        tuesday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        wednesday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        thursday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        friday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        saturday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        sunday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-      },
-      doctors: [
-        {
-          id: '0',
-          name: '이현철',
-          specialty: '내과 전문의',
-          fields: ['내과', '가정의학과'],
-          rate: '4.4',
-          profileImg:
-            'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
-        },
-        {
-          id: '1',
-          name: '이현철',
-          specialty: '내과 전문의',
-          fields: ['내과', '가정의학과'],
-          rate: '4.4',
-          profileImg:
-            'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
-        },
-      ],
-    },
-    {
-      id: '5',
-      name: '강남 신소재 성형외과',
-      isFavorite: true,
-      fields: ['성형외과'],
-      rate: '4.9',
-      profileImg: 'https://cdn-icons-png.flaticon.com/512/6743/6743757.png',
-      distance: '3.7km',
-      tel: '031-123-1234',
-      address: '서울시 어쩌구 이러면',
-      businessHours: {
-        monday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        tuesday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        wednesday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        thursday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        friday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        saturday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-        sunday: {
-          open: '09:00 ~ 18:00',
-          break: '13:00 ~ 14:00',
-        },
-      },
-      doctors: [
-        {
-          id: '0',
-          name: '이현철',
-          specialty: '내과 전문의',
-          fields: ['내과', '가정의학과'],
-          rate: '4.4',
-          profileImg:
-            'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
-        },
-        {
-          id: '1',
-          name: '이현철',
-          specialty: '내과 전문의',
-          fields: ['내과', '가정의학과'],
-          rate: '4.4',
-          profileImg:
-            'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
-        },
-      ],
-    },
-  ]);
 });
 
 app.get('/api/doctors', (req, res) => {
