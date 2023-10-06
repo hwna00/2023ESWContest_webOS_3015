@@ -34,17 +34,7 @@ app.post('/api/payment/kakao-tid', (req, res) => {
 app.get('/kakao-payment/callback', async (req, res) => {
   const { pg_token } = req.query;
 
-  const API_URI =
-    'https://kapi.kakao.com/v1/payment/approve?cid=' +
-    process.env.KAKAO_PAYMENT_CID +
-    '&tid=' +
-    kakaoTid +
-    '&partner_order_id=' +
-    partner_order_id +
-    '&partner_user_id=' +
-    partner_user_id +
-    '&pg_token=' +
-    pg_token;
+  const API_URI = `https://kapi.kakao.com/v1/payment/approve?cid=${process.env.KAKAO_PAYMENT_CID}&tid=${kakaoTid}&partner_order_id=${partner_order_id}&partner_user_id=${partner_user_id}&pg_token=${pg_token}`;
 
   const payment_agree = await axios.post(API_URI, null, {
     headers: {
