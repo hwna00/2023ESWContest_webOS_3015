@@ -1,5 +1,11 @@
 import { Link as ReactRouterLink } from 'react-router-dom';
-import { Link as ChakraLink , Flex, Heading, Stack, Button } from '@chakra-ui/react';
+import {
+  Link as ChakraLink,
+  Flex,
+  Heading,
+  Stack,
+  Button,
+} from '@chakra-ui/react';
 
 function ErrorPage() {
   return (
@@ -19,10 +25,10 @@ function ErrorPage() {
 
       <Stack direction="row" spacing={4} align="center">
         <ChakraLink as={ReactRouterLink} onClick={() => window.history.back()}>
-          <Button colorScheme="blue">이전 페이지로</Button>
+          <Button colorScheme="primary">이전 페이지로</Button>
         </ChakraLink>
         <ChakraLink as={ReactRouterLink} to="/">
-          <Button colorScheme="blue">메인 페이지로</Button>
+          <Button colorScheme="primary">메인 페이지로</Button>
         </ChakraLink>
       </Stack>
     </Flex>

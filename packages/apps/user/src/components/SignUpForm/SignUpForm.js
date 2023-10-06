@@ -48,14 +48,19 @@ const SignUpForm = function ({
   }, [goToPrevious, activeStep, navigate]);
 
   const onSubmit = async data => {
-    const user = await fbSignUp({ ...data, profileImgBlob });
-
-    if (user) {
-      dispatch(setMe(user));
-      navigate('/');
-    } else {
-      //TODO: 회원가입 실패 알림 띄우기
-    }
+    fbSignUp({
+      ...data,
+      profileImgBlob,
+    }).then(res => {
+      if (res?.isSuccess) {
+        console.log('user', res.user);
+        dispatch(setMe(res.user));
+        navigate('/');
+      } else {
+        //TODO: 회원가입 실패 알림 띄우기
+        console.log(res?.message);
+      }
+    });
   };
 
   const location = useLocation();

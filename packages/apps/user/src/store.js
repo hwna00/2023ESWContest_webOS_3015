@@ -39,9 +39,11 @@ const meSlice = createSlice({
   initialState: userInitialState,
   reducers: {
     setMe: (state, action) => {
-      Object.entries(action.payload).map(
-        ([key, value]) => (state[key] = value),
-      );
+      if (action.payload !== undefined) {
+        Object.entries(action.payload).map(
+          ([key, value]) => (state[key] = value),
+        );
+      }
     },
     resetMe: () => userInitialState,
   },

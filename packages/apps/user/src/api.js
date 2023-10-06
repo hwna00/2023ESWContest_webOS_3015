@@ -4,34 +4,30 @@ const instance = axios.create({
   baseURL: 'http://localhost:3000/api',
 });
 
-export const createUser = data => {
-  //TODO: data를 가지는 사용자를 생성
-  console.log(data);
-};
-
-export const updateMe = async data => {
-  instance.patch('/users/me', data);
+export const createUser = async data => {
+  const response = await instance.post('/users', { data });
+  return response.data;
 };
 
 export const getMe = async uid => {
-  const { data: me } = await instance.get(`/users/${uid}`);
+  const {
+    data: { result },
+  } = await instance.get(`/users/${uid}`);
 
-  if (!me) {
-    // TODO: 해당 유저가 존재하지 않는 경우에 대한 처리
-  } else {
-    // return me;
-    return {
-      uid: 'test12',
-      name: 'test',
-      phoneNumber: '01012341234',
-      birthDate: '2000-10-10',
-    };
-  }
+  return result;
 };
 
-export const createAppointment = data => {
-  //TODO: 예약 객체를 전달하는 axios 요청을 작성해야 함.
-  console.log(data);
+export const updateMe = async (uid, data) => {
+  return await instance.patch(`/users/${uid}`, { data });
+};
+
+export const createAppointment = async data => {
+  return await instance.post('/appointments', { data });
+};
+
+export const getAppointments = async uid => {
+  //TODO: 아직 구현되지 않음
+  return await instance.get(`/appointments/${uid}`);
 };
 
 export const getHospitals = () => {

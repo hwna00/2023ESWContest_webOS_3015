@@ -50,7 +50,6 @@ const AppointmentDetail = function () {
     mode: 'all',
     defaultValues: { date: dayjs(new Date()).format('YYYY-MM-DD') },
   });
-  const { id: doctorId } = useParams();
   const uid = useSelector(state => state.me.uid);
 
   const onToggleBookmarkClick = useCallback(() => {
@@ -74,14 +73,16 @@ const AppointmentDetail = function () {
 
       const appointment = {
         uid,
-        doctorId,
+        doctorId: 'hsw123', //TODO: 실제 doctor id로 변경해야 함
         time: appointTime,
         ...formData,
       };
 
-      createAppointment(appointment);
+      createAppointment(appointment)
+        .then(() => console.log('success'))
+        .catch(err => console.log(err));
     },
-    [appointTime, uid, doctorId],
+    [appointTime, uid],
   );
 
   useEffect(() => {
