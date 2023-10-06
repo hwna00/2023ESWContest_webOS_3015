@@ -2,10 +2,10 @@ import React from 'react';
 
 import { createBrowserRouter } from 'react-router-dom';
 
-import ViewAppointment from './views/ViewAppointment/ViewAppointment';
-import ManageAppointment from './views/ManageAppointment/ManageAppointment';
-import MainPage from './views/MainPage/MainPage';
-import AppointmentDetail from './views/AppointmentDetail/AppointmentDetail';
+import ViewAppointment from './views/ViewAppointment';
+import ManageAppointment from './views/ManageAppointment';
+import MainPage from './views/MainPage';
+import AppointmentDetail from './views/AppointmentDetail';
 
 const router = createBrowserRouter([
   {

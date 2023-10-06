@@ -19,8 +19,8 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 
-import CancelModal from '../../component/CancelModal/CancelModal';
-import { getPatientDetail } from '../../api';
+import CancelModal from '../component/CancelModal/CancelModal';
+import { getPatientDetail } from '../api';
 
 function AppointmentDetail() {
   const {

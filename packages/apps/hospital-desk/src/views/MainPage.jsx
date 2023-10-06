@@ -12,10 +12,10 @@ import {
   Link as ChakraLink,
 } from '@chakra-ui/react';
 
-import TableRow from '../../component/TableSection/TableRow';
-import TableHeader from '../../component/TableSection/TableHeader';
-import StatisticCard from '../../component/StatisticCard/StatisticCard';
-import { getAppointments } from '../../api';
+import TableRow from '../component/TableSection/TableRow';
+import TableHeader from '../component/TableSection/TableHeader';
+import StatisticCard from '../component/StatisticCard/StatisticCard';
+import { getAppointments } from '../api';
 
 const MainPage = function () {
   const { data, isLoading } = useQuery(['appointments'], getAppointments);

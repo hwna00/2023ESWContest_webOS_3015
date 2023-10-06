@@ -16,22 +16,15 @@ import {
   Select,
   SimpleGrid,
   VStack,
-  useDisclosure,
   Link as ChakraLink,
 } from '@chakra-ui/react';
 
-import TableRow from '../../component/TableSection/TableRow';
-import TableHeader from '../../component/TableSection/TableHeader';
-import Calendar from '../../component/Calendar/Calendar';
-// import AddAppointmentModal from '../../component/AddAppointmentModal/AddAppointmentModal';
-import { getAppointments } from '../../api';
+import TableRow from '../component/TableSection/TableRow';
+import TableHeader from '../component/TableSection/TableHeader';
+import Calendar from '../component/Calendar/Calendar';
+import { getAppointments } from '../api';
 
 function ViewAppointment() {
-  // const {
-  //   isOpen: isAddModalOpen,
-  //   onOpen: openAddAppointmentModal,
-  //   onClose: closeAddAppointmentModal,
-  // } = useDisclosure();
   const [value, onChange] = useState(new Date());
   const [day, setDay] = useState(new Date());
   const [viewType, setViewType] = useState('viewAll');
@@ -99,17 +92,9 @@ function ViewAppointment() {
         <Heading textAlign="left" p="4" fontSize="30px">
           예약 전체보기
         </Heading>
-        <Button
-          colorScheme="primary"
-          leftIcon={<AiFillPlusCircle />}
-          // onClick={openAddAppointmentModal}
-        >
+        <Button colorScheme="primary" leftIcon={<AiFillPlusCircle />}>
           예약추가
         </Button>
-        {/* <AddAppointmentModal
-          isOpen={isAddModalOpen}
-          onClose={closeAddAppointmentModal}
-        /> */}
       </HStack>
       <HStack
         justifyItems="initial"

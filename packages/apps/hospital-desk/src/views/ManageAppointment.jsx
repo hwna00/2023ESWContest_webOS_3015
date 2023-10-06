@@ -11,9 +11,9 @@ import {
   Button,
 } from '@chakra-ui/react';
 
-import TableRow from '../../component/TableSection/TableRow';
-import TableHeader from '../../component/TableSection/TableHeader';
-import { getAppointments } from '../../api';
+import TableRow from '../component/TableSection/TableRow';
+import TableHeader from '../component/TableSection/TableHeader';
+import { getAppointments } from '../api';
 
 function ManageAppointment() {
   const { data, isLoading } = useQuery(['appointments'], getAppointments);
