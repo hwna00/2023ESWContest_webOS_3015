@@ -56,8 +56,9 @@ const Appointment = function () {
       </HStack>
 
       <HStack w="full">
-        <AppointmentViewList type="hospital" list={hospitals} />
-        <AppointmentViewList type="doctor" list={doctors} />
+        {/* // TODO: doctors api 연결 필요 */}
+        {/* <AppointmentViewList type="doctor" list={doctors} /> */}
+        <AppointmentViewList type="hospital" list={hospitals?.hospitals} />
       </HStack>
     </VStack>
   );

@@ -1,7 +1,7 @@
 module.exports = hospitalFromDB => {
   const { hospital_id, ...rest } = hospitalFromDB;
   const hospital = {
-    hospitalId: hospital_id,
+    id: hospital_id,
     ...rest,
   };
 

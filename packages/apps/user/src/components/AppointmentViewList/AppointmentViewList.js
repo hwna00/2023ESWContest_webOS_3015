@@ -88,16 +88,17 @@ const AppointmentViewList = function ({ type, list }) {
                   )}
 
                   <HStack my="2" flexWrap="wrap" rowGap="0" columnGap="3">
-                    {item.fields.map(field => (
-                      <Tag
-                        size="md"
-                        key={field}
-                        variant="outline"
-                        colorScheme="gray"
-                      >
-                        {field}
-                      </Tag>
-                    ))}
+                    {item &&
+                      item.fields?.map(field => (
+                        <Tag
+                          size="md"
+                          key={field}
+                          variant="outline"
+                          colorScheme="gray"
+                        >
+                          {field}
+                        </Tag>
+                      ))}
                   </HStack>
                 </VStack>
               </HStack>
