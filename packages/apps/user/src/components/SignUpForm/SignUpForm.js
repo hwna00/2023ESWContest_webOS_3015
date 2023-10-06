@@ -4,18 +4,11 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import PropTypes from 'prop-types';
-import { ref, uploadBytes } from 'firebase/storage';
 import { motion } from 'framer-motion';
-import {
-  browserLocalPersistence,
-  setPersistence,
-  updateProfile,
-} from 'firebase/auth';
 import { Box, Button, ButtonGroup, VStack } from '@chakra-ui/react';
 
-import { auth, signIn } from '../../../firebase';
-import { storage } from '../../../firebase';
-import { setErrors } from '../../store';
+import { setErrors, setMe } from '../../store';
+import { fbSignUp } from '../../../firebase';
 
 const SignUpForm = function ({
   activeStep,
@@ -30,7 +23,7 @@ const SignUpForm = function ({
   const profileImgBlob = useSelector(state => state.signUp.blob);
 
   useEffect(() => {
-    const errors = reactHookForm.formState.errors;
+    const { errors } = reactHookForm.formState;
 
     const filteredErrors = {};
     Object.entries(errors).map(([key, value]) => {
@@ -54,33 +47,20 @@ const SignUpForm = function ({
     goToPrevious();
   }, [goToPrevious, activeStep, navigate]);
 
-  const uploadBlob = blob => {
-    const storageRef = ref(storage, 'images/' + new Date().getTime() + '.png');
-
-    uploadBytes(storageRef, blob).catch(() => {
-      navigate('/error');
+  const onSubmit = async data => {
+    fbSignUp({
+      ...data,
+      profileImgBlob,
+    }).then(res => {
+      if (res?.isSuccess) {
+        console.log('user', res.user);
+        dispatch(setMe(res.user));
+        navigate('/');
+      } else {
+        //TODO: 회원가입 실패 알림 띄우기
+        console.log(res?.message);
+      }
     });
-  };
-
-  const onSubmit = function (data) {
-    uploadBlob(profileImgBlob);
-    navigate('/');
-
-    //Todo: firebase로부터 받아온 토큰을 DB에 저장하기
-    // setPersistence(auth, browserLocalPersistence)
-    //   .then(() => {
-    //     signIn(email, password)
-    //       .then(userCredential => {
-    //         updateProfile(userCredential.user, {
-    //           displayName: username,
-    //         }).then(() => navigate('/'));
-    //       })
-    //       .catch(error => {
-    //         console.log(error);
-    //         navigate('/error');
-    //       });
-    //   })
-    //   .catch(() => navigate('/error'));
   };
 
   const location = useLocation();
@@ -96,7 +76,7 @@ const SignUpForm = function ({
     >
       <Box
         key={location.pathname}
-        width={'full'}
+        width="full"
         as={motion.div}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

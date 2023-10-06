@@ -14,7 +14,7 @@ const appointmentRoutes = [
     element: <AppointmentList />,
   },
   {
-    path: 'appointment/:catetory/:id',
+    path: 'appointment/:category/:id',
     element: <AppointmentDetail />,
   },
   {
