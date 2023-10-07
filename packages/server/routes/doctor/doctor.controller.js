@@ -9,7 +9,7 @@ exports.createDoctorQuery = async (connection, data) => {
     data.hospitalId,
     data.username,
     data.email,
-    data.fields,
+    JSON.stringify(data.fields),
     data.specialty,
     data.description,
   ];
