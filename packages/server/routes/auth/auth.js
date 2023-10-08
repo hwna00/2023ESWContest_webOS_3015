@@ -7,7 +7,8 @@ const {
 } = require('./auth.controller');
 
 router.get('/auth/naver-callback', async (req, res) => {
-  const { code, state } = req.query;
+  const { code, state, from } = req.query;
+  console.log('from', from);
   const API_URI = getNaverAuthApiUri(code, state);
 
   const {
@@ -36,9 +37,7 @@ router.get('/auth/naver-callback', async (req, res) => {
   } finally {
     fbCreateCustomToken(user.id)
       .then(token => {
-        res
-          .cookie('token', token)
-          .redirect('http://localhost:8080/#/auth/callback');
+        res.cookie('token', token).redirect(`${from}#/auth/callback`);
       })
       .catch(err => console.log(err));
   }
