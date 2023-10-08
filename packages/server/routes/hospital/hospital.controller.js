@@ -25,7 +25,7 @@ const readHospitalsQuery = async function (connection, name) {
 
 const readHospitalQuery = async function (connection, hospitalId) {
   const Query = `SELECT
-  H.hospital_id,
+  hospital_id,
   H.name,
   H.ykiho,
   H.description,
@@ -38,7 +38,7 @@ const readHospitalQuery = async function (connection, hospitalId) {
           'rate', ifnull((SELECT rate FROM DoctorRate WHERE doctor_id = D.doctor_id), 0)
       ), null)) AS doctors
   FROM (SELECT * FROM Hospitals WHERE hospital_id = ?) H
-  LEFT OUTER JOIN Doctors D ON D.hospital_id = H.hospital_id;`;
+  LEFT OUTER JOIN Doctors D USING(hospital_id);`;
 
   const Params = [hospitalId];
 

@@ -17,7 +17,8 @@ const createAppointmentQuery = async function (connection, data) {
 
 const readUserAppointmentQuery = async function (connection, appointmentId) {
   const Query =
-    'SELECT * FROM Housepital.Users join Housepital.Appointments using(user_id) where id = ?;';
+    'SELECT * FROM Users U JOIN Appointments A ON A.id = ? AND U.user_id = A.user_id;';
+
   const Params = [appointmentId];
 
   const rows = await connection.query(Query, Params);
@@ -79,7 +80,7 @@ exports.readUserAppointment = async function (req, res) {
         throw Error('Appointment not found');
       } else {
         return res.json({
-          result: rows,
+          result: rows[0],
           isSuccess: true,
           code: 200,
           message: '유저 예약정보 조회 성공',
