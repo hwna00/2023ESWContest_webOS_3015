@@ -39,8 +39,8 @@ const updateUserQuery = async function (connection, uid, data) {
         phone_number = ifnull(?, phone_number), address = ifnull(?, address),
           address_detail = ifnull(?, address_detail), second_phone_number = ifnull(?, second_phone_number),
             birthdate = ifnull(?, birthdate), bloodtype = ifnull(?, bloodtype), height = ifnull(?, height),
-            weight = ifnull(?, weight), gender = ifnull(?, gender), regular_medicines = ifnull(?, regular_medicines),
-              chronic_disease = ifnull(?, chronic_disease) WHERE user_id = ?;`;
+              weight = ifnull(?, weight), gender = ifnull(?, gender), regular_medicines = ifnull(?, regular_medicines),
+                chronic_disease = ifnull(?, chronic_disease) WHERE user_id = ?;`;
 
   const Params = [
     data.username,
