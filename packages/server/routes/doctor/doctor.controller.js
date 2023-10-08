@@ -25,7 +25,7 @@ exports.createDoctor = async (req, res) => {
       await exports.createDoctorQuery(connection, data);
 
       return res.json({
-        hospital: data,
+        doctor: data,
         isSuccess: true,
         code: 201,
         message: '의사 생성 성공',
