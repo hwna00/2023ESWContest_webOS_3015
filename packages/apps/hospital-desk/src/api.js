@@ -166,12 +166,13 @@ export const getPatientDetail = uid => {
   }
 };
 
-export const getHospital = async hospital_id => {
-  const {
-    data: { result },
-  } = await instance.get(`/hospitals/${hospital_id}`);
+export const getHospital = hospital_id => {
+  // const {
+  //   data: { result },
+  // } = instance.get(`/hospitals/${hospital_id}`);
+  console.log(hospital_id);
   if (false) {
-    return result;
+    //return result;
   } else
     return {
       hospital_id: 'zvvdsvsa',

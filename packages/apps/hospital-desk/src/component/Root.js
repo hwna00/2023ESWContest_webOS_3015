@@ -17,14 +17,13 @@ function Root() {
   const hospital = useSelector(state => state.hospital);
 
   useEffect(() => {
-    onAuthStateChanged(auth, user => {
+    onAuthStateChanged(auth, async user => {
       setIsLoading(false);
       if (user) {
         setIsLoggedIn(true);
-        if (hospital.uid === '') {
-          getHospital(user.uid).then(res => {
-            dispatch(setHospital(res.data));
-          });
+        if (hospital.hospital_id === '') {
+          const res = await getHospital(user.hospital_id);
+          dispatch(setHospital(res));
         }
       } else {
         setIsLoggedIn(false);
