@@ -7,6 +7,7 @@ import LoadingPage from '@housepital/common/LoadingPage';
 import { Box } from '@chakra-ui/react';
 
 import { setDoctor } from '../store';
+import SideBar from '../components/SideBar';
 import { getDoctor } from '../api';
 import { auth } from '../../firebase';
 
@@ -23,15 +24,28 @@ const Root = function () {
       }
       // TODO: doctor_id를 id로 변경해야 함
       if (!doctor.doctor_id) {
-        const doctor = await getDoctor(user.uid);
-        dispatch(setDoctor(doctor));
+        try {
+          const doctor = await getDoctor(user.uid);
+          dispatch(setDoctor(doctor));
+        } catch {
+          navigate('/#/auth/log-in');
+        }
       }
       setIsLoadding(false);
     });
   }, []);
   return (
-    <Box width="100vw" height="100vh" padding="4">
-      {isLoading ? <LoadingPage /> : <Outlet />}
+    <Box width="100vw" height="100vh">
+      {isLoading ? (
+        <LoadingPage />
+      ) : (
+        <>
+          <SideBar />
+          <Box width="full" height="full" ml="40" padding="4">
+            <Outlet />
+          </Box>
+        </>
+      )}
     </Box>
   );
 };
