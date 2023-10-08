@@ -106,7 +106,7 @@ exports.createHospital = async (req, res) => {
 
 exports.readAppointmentsQuery = async function (connection, hospitalId) {
   const Query =
-    'SELECT * FROM Housepital.Appointments WHERE doctor_id in (select doctor_id from Housepital.Doctors where hospital_id = ?);';
+    'SELECT * FROM Housepital.Appointments WHERE doctor_id in (SELECT doctor_id FROM Housepital.Doctors WHERE hospital_id = ?);';
   const Params = [hospitalId];
   const rows = await connection.query(Query, Params);
 
