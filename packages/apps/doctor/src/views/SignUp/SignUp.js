@@ -89,7 +89,7 @@ const SignUp = function () {
 
   const onHospitalClick = useCallback(
     hospital => {
-      setSelectedHospitalId(hospital.id);
+      setSelectedHospitalId(hospital.hospitalId);
       setValue('hospital', hospital.name);
       setHospitals([]);
     },
@@ -109,19 +109,19 @@ const SignUp = function () {
       delete data.password;
       delete data.checkPassword;
 
-      const response = await createDoctor({
+      const doctor = await createDoctor({
         doctorId,
         hospitalId: selectedHospitalId,
         fields: JSON.stringify(selectedFields),
         ...data,
       });
 
-      if (response.isSucess) {
+      if (doctor.isSuccess) {
         navigate('/');
       } else {
         //TODO: 가입 실패
         // TODO: webOS.notification 사용
-        console.log(response.message);
+        console.log(doctor.message);
       }
     },
     [selectedHospitalId, selectedFields, navigate],
