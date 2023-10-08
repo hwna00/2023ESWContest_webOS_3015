@@ -34,8 +34,6 @@ const signUpSlice = createSlice({
   },
 });
 
-let cnt = 0;
-
 const meSlice = createSlice({
   name: 'me',
   initialState: userInitialState,
