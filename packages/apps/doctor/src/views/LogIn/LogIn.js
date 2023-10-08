@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 
 import { useNavigate, Link as ReactRouterLink } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { FaUserAlt, FaLock, FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import { useForm } from 'react-hook-form';
 import {
@@ -19,6 +20,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 
+import { setDoctor } from '../../store';
 import { getDoctor } from '../../api';
 import { fbEmailLogIn } from '../../../firebase';
 
@@ -29,7 +31,7 @@ function LogIn() {
   }, [showPassword]);
 
   const navigate = useNavigate();
-  console.log(navigate);
+  const dispatch = useDispatch();
 
   const {
     register,
@@ -38,8 +40,14 @@ function LogIn() {
   } = useForm();
 
   const onSubmit = async function (data) {
-    const doctorId = await fbEmailLogIn(data);
-    await getDoctor(doctorId);
+    try {
+      const doctorId = await fbEmailLogIn(data);
+      const doctor = await getDoctor(doctorId);
+      dispatch(setDoctor(doctor));
+      navigate('/');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

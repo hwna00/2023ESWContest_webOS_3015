@@ -14,5 +14,9 @@ export const createDoctor = async doctor => {
 
 export const getDoctor = async doctorId => {
   const { data } = await instance.get(`/doctors/${doctorId}`);
-  console.log(data);
+
+  if (data.isSuccess) {
+    return data.result;
+  }
+  throw new Error(data.message);
 };

@@ -50,8 +50,13 @@ export const fbSignUp = async data => {
 export const fbEmailLogIn = async data => {
   await setPersistence(auth, browserLocalPersistence);
   const { email, password } = data;
-  const { user } = await signInWithEmailAndPassword(auth, email, password);
-  return user.uid;
+
+  try {
+    const { user } = await signInWithEmailAndPassword(auth, email, password);
+    return user.uid;
+  } catch (error) {
+    return error;
+  }
 };
 
 export const fbLogOut = async () => signOut(auth);
