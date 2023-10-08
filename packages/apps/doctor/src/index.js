@@ -2,9 +2,8 @@ import { RouterProvider } from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
 import { AnimatePresence } from 'framer-motion';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import theme from '@housepital/common/theme';
 import { ChakraProvider } from '@chakra-ui/react';
-
-import theme from '../../../common/theme';
 
 import router from './router';
 

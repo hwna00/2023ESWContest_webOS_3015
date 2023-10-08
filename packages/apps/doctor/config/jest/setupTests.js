@@ -1,6 +1,7 @@
 /* eslint-env jest */
-const fs = require('fs');
 const path = require('path');
+const fs = require('fs');
+
 const {packageRoot} = require('@enact/dev-utils');
 
 const filters = [
@@ -19,7 +20,7 @@ const filters = [
 	'for a string attribute `is`. If this is expected, cast',
 	'Invalid DOM property'
 ];
-const filterExp = new RegExp('(' + filters.join('|') + ')');
+const filterExp = new RegExp(`(${  filters.join('|')  })`);
 
 // Configure proptype & react error checking on the console.
 
@@ -75,12 +76,15 @@ class ILibXHR extends XHR {
 			return super.open(...arguments);
 		}
 	}
+
 	get readyState() {
 		return typeof this.fileStatus !== 'undefined' ? XHR.DONE : super.readyState;
 	}
+
 	get status() {
 		return typeof this.fileStatus !== 'undefined' ? this.fileStatus : super.status;
 	}
+
 	get responseText() {
 		return typeof this.fileText !== 'undefined' ? this.fileText : super.responseText;
 	}

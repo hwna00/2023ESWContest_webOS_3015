@@ -1,4 +1,10 @@
-import { createDoctor, getHospitals } from '../../api';
+import { useCallback, useState } from 'react';
+
+import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
+import { FaSearch } from 'react-icons/fa';
+import { useForm } from 'react-hook-form';
+import CustomCheckbox from '@housepital/common/CustomCheckox';
+import styles from '@housepital/common/css/HideScrollBar.module.css';
 import {
   Box,
   Button,
@@ -20,13 +26,9 @@ import {
   VStack,
   useCheckboxGroup,
 } from '@chakra-ui/react';
-import { useForm } from 'react-hook-form';
-import { FaSearch } from 'react-icons/fa';
-import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
-import { useCallback, useState } from 'react';
-import styles from '@housepital/common/css/HideScrollBar.module.css';
+
+import { createDoctor, getHospitals } from '../../api';
 import { fbSignUp } from '../../../firebase';
-import CustomCheckbox from '@housepital/common/CustomCheckox';
 
 const fields = [
   '내과',
@@ -102,12 +104,12 @@ const SignUp = function () {
         // TODO: 병원이 선택되지 않은 경우
         // TODO: webOS.notification 사용
       }
-      delete data.hospital;
+      delete data.hospital; // eslint-disable-line
 
       const doctorId = await fbSignUp(data);
 
-      delete data.password;
-      delete data.checkPassword;
+      delete data.password; // eslint-disable-line
+      delete data.checkPassword; // eslint-disable-line
 
       const doctor = await createDoctor({
         doctorId,
@@ -119,7 +121,7 @@ const SignUp = function () {
       if (doctor.isSuccess) {
         navigate('/');
       } else {
-        //TODO: 가입 실패
+        // TODO: 가입 실패
         // TODO: webOS.notification 사용
         console.log(doctor.message);
       }
@@ -128,7 +130,7 @@ const SignUp = function () {
   );
 
   return (
-    <Container height={'100vh'} py={'8'} overflow={'hidden'}>
+    <Container height="100vh" py="8" overflow="hidden">
       <HStack width="full" justifyContent="start" alignItems="end">
         <Heading as="h1">Housepital 회원가입</Heading>
         <ChakraLink as={ReactRouterLink} to="/auth/log-in">
@@ -137,21 +139,17 @@ const SignUp = function () {
       </HStack>
 
       <VStack
-        as={'form'}
+        as="form"
         height={{ sm: 'sm', lg: 'md', xl: 'full' }}
-        mt={'8'}
-        gap={'4'}
-        overflowY={'scroll'}
+        mt="8"
+        gap="4"
+        overflowY="scroll"
         className={styles.hideScrollBar}
         onSubmit={handleSubmit(onSubmit)}
       >
         <FormControl isRequired isInvalid={errors.hospital}>
           <FormLabel>소속 병원</FormLabel>
-          <HStack
-            justifyContent={'space-between'}
-            alignItems={'center'}
-            gap="4"
-          >
+          <HStack justifyContent="space-between" alignItems="center" gap="4">
             <Input
               placeholder="소속 병원을 검색하세요"
               {...register('hospital', {
@@ -162,40 +160,38 @@ const SignUp = function () {
           </HStack>
           {hospitals.length !== 0 && (
             <UnorderedList
-              listStyleType={'none'}
+              listStyleType="none"
               margin={0}
-              mt={'4'}
-              spacing={'4'}
-              maxHeight={'64'}
-              overflowY={'scroll'}
+              mt="4"
+              spacing="4"
+              maxHeight="64"
+              overflowY="scroll"
             >
-              {hospitals.map(hospital => {
-                return (
-                  <HStack
-                    as={'li'}
-                    key={hospital.hospitalId}
-                    padding={'4'}
-                    border={'1px'}
-                    borderColor={'primary.200'}
-                    borderRadius={'md'}
-                    justifyContent={'space-between'}
+              {hospitals.map(hospital => (
+                <HStack
+                  as="li"
+                  key={hospital.hospitalId}
+                  padding="4"
+                  border="1px"
+                  borderColor="primary.200"
+                  borderRadius="md"
+                  justifyContent="space-between"
+                >
+                  <Box>
+                    <Text fontSize="xl" fontWeight="bold">
+                      {hospital.name}
+                    </Text>
+                    <Text>{hospital.address}</Text>
+                  </Box>
+                  <Button
+                    colorScheme="primary"
+                    size="lg"
+                    onClick={() => onHospitalClick(hospital)}
                   >
-                    <Box>
-                      <Text fontSize={'xl'} fontWeight={'bold'}>
-                        {hospital.name}
-                      </Text>
-                      <Text>{hospital.address}</Text>
-                    </Box>
-                    <Button
-                      colorScheme="primary"
-                      size={'lg'}
-                      onClick={() => onHospitalClick(hospital)}
-                    >
-                      선택
-                    </Button>
-                  </HStack>
-                );
-              })}
+                    선택
+                  </Button>
+                </HStack>
+              ))}
             </UnorderedList>
           )}
         </FormControl>
@@ -282,9 +278,9 @@ const SignUp = function () {
 
         <FormControl isRequired>
           <FormLabel>진료 분야</FormLabel>
-          <Flex flexWrap={'wrap'} gap={'4'}>
+          <Flex flexWrap="wrap" gap="4">
             {fields.map(field => (
-              <FormControl key={field} width={'fit-content'}>
+              <FormControl key={field} width="fit-content">
                 <CustomCheckbox
                   {...checkboxGroup.getCheckboxProps({ value: field })}
                 >
@@ -304,7 +300,7 @@ const SignUp = function () {
         </FormControl>
 
         <ButtonGroup>
-          <Button type="submit" colorScheme="primary" size={'lg'}>
+          <Button type="submit" colorScheme="primary" size="lg">
             가입하기
           </Button>
         </ButtonGroup>

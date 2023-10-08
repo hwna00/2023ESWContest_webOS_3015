@@ -1,8 +1,9 @@
 /* eslint-env node, es6 */
-const cp = require('child_process');
 const path = require('path');
-const glob = require('glob');
+const cp = require('child_process');
+
 const minimist = require('minimist');
+const glob = require('glob');
 
 const globOpts = {
 	ignore: ['**/node_modules/**', 'build/**', '**/dist/**', 'coverage/**', 'tests/**'],
@@ -10,7 +11,7 @@ const globOpts = {
 };
 
 function displayHelp() {
-	let e = 'node ' + path.relative(process.cwd(), __filename);
+	let e = `node ${  path.relative(process.cwd(), __filename)}`;
 	if (require.main !== module) e = 'enact lint';
 
 	console.log('  Usage');

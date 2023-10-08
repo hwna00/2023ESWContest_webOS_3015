@@ -1,4 +1,5 @@
 import { Outlet, createHashRouter } from 'react-router-dom';
+
 import SignUp from './views/SignUp/SignUp';
 import LogIn from './views/LogIn/LogIn';
 

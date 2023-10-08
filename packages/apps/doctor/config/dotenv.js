@@ -1,14 +1,15 @@
 /* eslint-env node, es6 */
 
-const fs = require('fs');
 const path = require('path');
-const dotenv = require('dotenv');
+const fs = require('fs');
+
 const {expand} = require('dotenv-expand');
+const dotenv = require('dotenv');
 
 // Loads all required .env files in correct order, for a given mode.
 // See https://github.com/bkeepers/dotenv#what-other-env-files-can-i-use
 module.exports = {
-	load: function (context) {
+	load (context) {
 		const mode = process.env.NODE_ENV || 'development';
 		[
 			`.env.${mode}.local`,
