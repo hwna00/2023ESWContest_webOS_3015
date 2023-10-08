@@ -86,7 +86,7 @@ function LogIn() {
                 alignItems="center"
                 padding="15px"
               ></HStack>
-
+              <Heading fontSize="22px">LogIn for Hospital</Heading>
               <FormControl isInvalid={errors.email}>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none">
