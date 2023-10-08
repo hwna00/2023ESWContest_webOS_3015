@@ -1,6 +1,6 @@
 const pool = require('../../config/db');
 
-exports.createAppointmentQuery = async function (connection, data) {
+const createAppointmentQuery = async function (connection, data) {
   const Query =
     'INSERT INTO Appointments(user_id, doctor_id, NFTF_id, datetime, message, is_NFTF) VALUES (?, ?, ?, ?, ?, ?);';
   const Params = [
@@ -15,13 +15,36 @@ exports.createAppointmentQuery = async function (connection, data) {
   await connection.query(Query, Params);
 };
 
+const readUserAppointmentQuery = async function (connection, appointmentId) {
+  const Query =
+    'SELECT * FROM Users U JOIN Appointments A ON A.id = ? AND U.user_id = A.user_id;';
+
+  const Params = [appointmentId];
+
+  const rows = await connection.query(Query, Params);
+
+  return rows;
+};
+
+const updateAppointmentQuery = async function (
+  connection,
+  appointmentId,
+  data,
+) {
+  const Query =
+    'UPDATE Appointments SET state_id = ifnull(?, state_id), rejection_reason = ifnull(?, rejection_reason) WHERE id = ?;';
+  const Params = [data.stateId, data.rejectionReason, appointmentId];
+
+  await connection.query(Query, Params);
+};
+
 exports.createAppointment = async function (req, res) {
   const { data } = req.body;
 
   try {
     const connection = await pool.getConnection(async conn => conn);
     try {
-      await exports.createAppointmentQuery(connection, data);
+      await createAppointmentQuery(connection, data);
 
       return res.json({
         isSuccess: true,
@@ -46,33 +69,31 @@ exports.createAppointment = async function (req, res) {
   }
 };
 
-exports.updateAppointmentQuery = async function (
-  connection,
-  appointmentId,
-  data,
-) {
-  const Query =
-    'UPDATE Appointments SET state_id = ifnull(?, state_id), rejection_reason = ifnull(?, rejection_reason) WHERE id = ?;';
-  const Params = [data.stateId, data.rejectionReason, appointmentId];
-
-  await connection.query(Query, Params);
-};
-
-exports.updateAppointment = async function (req, res) {
+exports.readUserAppointment = async function (req, res) {
   const { appointmentId } = req.params;
-  const { data } = req.body;
 
   try {
     const connection = await pool.getConnection(async conn => conn);
     try {
-      await exports.updateAppointmentQuery(connection, appointmentId, data);
-
-      return res.json({
-        isSuccess: true,
-        code: 204,
-        message: '예약정보 업데이트 성공',
-      });
+      const [rows] = await readUserAppointmentQuery(connection, appointmentId);
+      if (rows.length === 0) {
+        throw Error('Appointment not found');
+      } else {
+        return res.json({
+          result: rows[0],
+          isSuccess: true,
+          code: 200,
+          message: '유저 예약정보 조회 성공',
+        });
+      }
     } catch (err) {
+      if (err.message === 'Appointment not found') {
+        return res.json({
+          isSuccess: false,
+          code: 404,
+          message: '예약정보를 찾을 수 없습니다.',
+        });
+      }
       return res.json({
         isSuccess: false,
         code: 500,
@@ -90,44 +111,21 @@ exports.updateAppointment = async function (req, res) {
   }
 };
 
-exports.readUserAppointmentQuery = async function (connection, appointmentId) {
-  const Query =
-    'SELECT * FROM Housepital.Users join Housepital.Appointments using(user_id) where id = ?;';
-  const Params = [appointmentId];
-
-  const rows = await connection.query(Query, Params);
-
-  return rows;
-};
-
-exports.readUserAppointment = async function (req, res) {
+exports.updateAppointment = async function (req, res) {
   const { appointmentId } = req.params;
+  const { data } = req.body;
 
   try {
     const connection = await pool.getConnection(async conn => conn);
     try {
-      const [rows] = await exports.readUserAppointmentQuery(
-        connection,
-        appointmentId,
-      );
-      if (rows.length === 0) {
-        throw Error('Appointment not found');
-      } else {
-        return res.json({
-          result: rows,
-          isSuccess: true,
-          code: 200,
-          message: '유저 예약정보 조회 성공',
-        });
-      }
+      await updateAppointmentQuery(connection, appointmentId, data);
+
+      return res.json({
+        isSuccess: true,
+        code: 204,
+        message: '예약정보 업데이트 성공',
+      });
     } catch (err) {
-      if (err.message === 'Appointment not found') {
-        return res.json({
-          isSuccess: false,
-          code: 404,
-          message: '예약정보를 찾을 수 없습니다.',
-        });
-      }
       return res.json({
         isSuccess: false,
         code: 500,
