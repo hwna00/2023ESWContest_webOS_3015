@@ -3,6 +3,7 @@ const cors = require('cors');
 
 const user = require('./routes/user/user');
 const hospital = require('./routes/hospital/hospital');
+const doctor = require('./routes/doctor/doctor');
 const auth = require('./routes/auth/auth');
 const appointment = require('./routes/appointment/appointment');
 
@@ -19,6 +20,7 @@ app.use('/api', auth);
 app.use('/api', user);
 app.use('/api', hospital);
 app.use('/api', appointment);
+app.use('/api', doctor);
 
 let kakaoTid; // TODO : 깔끔하게 고치기
 let partner_order_id;
