@@ -117,7 +117,7 @@ const SideBar = function () {
               alignItems="center"
               gap="4"
               as={ReactRouterLink}
-              to="login"
+              to="auth/log-in"
             >
               <SkeletonCircle size="24" />
               <SkeletonText skeletonHeight="6" width="16" noOfLines={1} />

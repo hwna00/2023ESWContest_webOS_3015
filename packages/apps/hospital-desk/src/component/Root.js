@@ -19,7 +19,7 @@ function Root() {
   useEffect(() => {
     onAuthStateChanged(auth, user => {
       setIsLoading(false);
-      if (true) {
+      if (user) {
         setIsLoggedIn(true);
         if (hospital.uid === '') {
           getHospital(user.uid).then(res => {

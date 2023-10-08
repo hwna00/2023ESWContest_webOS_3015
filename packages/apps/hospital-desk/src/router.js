@@ -9,6 +9,8 @@ import AppointmentDetail from './views/AppointmentDetail';
 import ErrorPage from './ErrorPage';
 import NotFound from './views/NotFound';
 import Root from './component/Root';
+import SignUp from './views/SignUp';
+import LogIn from './views/LogIn';
 
 const router = createBrowserRouter([
   {
@@ -36,6 +38,20 @@ const router = createBrowserRouter([
         path: '/error-page',
         element: <ErrorPage />,
         children: [],
+      },
+    ],
+  },
+  {
+    path: '/auth',
+    errorElement: <NotFound />,
+    children: [
+      {
+        path: 'sign-up',
+        element: <SignUp />,
+      },
+      {
+        path: 'log-in',
+        element: <LogIn />,
       },
     ],
   },
