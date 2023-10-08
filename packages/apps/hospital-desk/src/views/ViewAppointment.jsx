@@ -38,13 +38,15 @@ function ViewAppointment() {
   const [uniqueDoctors, setUniqueDoctors] = useState([]);
   const [uniqueHours, setUniqueHours] = useState([]);
 
-  const { data, isLoading, error } = useQuery(
-    ['appointments'],
-    getAppointments,
-  );
+  const {
+    data = [],
+    isLoading,
+    error,
+  } = useQuery(['appointments'], getAppointments);
+
   const navigate = useNavigate();
   useEffect(() => {
-    if (!isLoading) {
+    if (data) {
       if (viewType === 'viewAll') {
         setFilteredReservations(
           data.filter(reservation =>
@@ -82,13 +84,16 @@ function ViewAppointment() {
         );
         setUniqueDoctors(
           Array.from(
-            data.reduce(
-              (map, reservation) =>
-                map.set(reservation.doctor_id, reservation.doctorName),
-              new Map(),
-            ),
-          ),
-        ).map(([doctor_id, doctorName]) => ({ doctor_id, doctorName }));
+            data
+              .reduce(
+                (map, reservation) =>
+                  map.set(reservation.doctor_id, reservation.doctorName),
+                new Map(),
+              )
+              .entries(),
+          ).map(([doctor_id, doctorName]) => ({ doctor_id, doctorName })),
+        );
+
         setUniqueHours(
           Array.from(
             data.reduce(
@@ -134,7 +139,7 @@ function ViewAppointment() {
             alignItems="unset"
             justifyContent="space-between"
           >
-            <Box w="480px" h="870px" border="1px" borderColor="black">
+            <Box w="480px" h="750px" border="1px" borderColor="black">
               <Box w="full" h="500px" border="0" borderColor="transparent">
                 <Calendar
                   selectedDay={day}

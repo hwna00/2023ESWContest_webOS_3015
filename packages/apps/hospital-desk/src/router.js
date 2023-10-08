@@ -8,33 +8,36 @@ import MainPage from './views/MainPage';
 import AppointmentDetail from './views/AppointmentDetail';
 import ErrorPage from './ErrorPage';
 import NotFound from './views/NotFound';
+import Root from './component/Root';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <MainPage />,
+    element: <Root />,
     errorElement: <NotFound />,
-    children: [],
-  },
-  {
-    path: '/manage-appointment',
-    element: <ManageAppointment />,
-    children: [],
-  },
-  {
-    path: '/view-appointment',
-    element: <ViewAppointment />,
-    children: [],
-  },
-  {
-    path: '/view-appointment/appointment-detail/:id',
-    element: <AppointmentDetail />,
-    children: [],
-  },
-  {
-    path: '/error-page',
-    element: <ErrorPage />,
-    children: [],
+    children: [
+      { path: '', element: <MainPage /> },
+      {
+        path: '/manage-appointment',
+        element: <ManageAppointment />,
+        children: [],
+      },
+      {
+        path: '/view-appointment',
+        element: <ViewAppointment />,
+        children: [],
+      },
+      {
+        path: '/view-appointment/appointment-detail/:id',
+        element: <AppointmentDetail />,
+        children: [],
+      },
+      {
+        path: '/error-page',
+        element: <ErrorPage />,
+        children: [],
+      },
+    ],
   },
 ]);
 

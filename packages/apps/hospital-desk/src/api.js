@@ -165,3 +165,19 @@ export const getPatientDetail = uid => {
     };
   }
 };
+
+export const getHospital = async hospital_id => {
+  const {
+    data: { result },
+  } = await instance.get(`/hospitals/${hospital_id}`);
+  if (false) {
+    return result;
+  } else
+    return {
+      hospital_id: 'zvvdsvsa',
+      name: '블라병원',
+      address: '서울시 성북구 정릉로 ',
+      addressDetail: '321',
+      profileImg: '',
+    };
+};
