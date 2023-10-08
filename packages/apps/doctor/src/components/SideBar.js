@@ -2,8 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 
 import {
   Link as ReactRouterLink,
-  // useNavigate,
-  // useNavigation,
+  useNavigate,
+  useNavigation,
 } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { FaCog } from 'react-icons/fa';
@@ -44,9 +44,9 @@ const CustomTab = function ({ children, to }) {
 
 const SideBar = function () {
   const [tabIdex, setTabIdx] = useState();
+  const navigate = useNavigate();
+  const location = useNavigation();
   const doctor = useSelector(state => state.doctor);
-  // const navigate = useNavigate();
-  // const location = useNavigation();
 
   const onTabIdxChange = useCallback(index => {
     setTabIdx(index);
@@ -54,12 +54,20 @@ const SideBar = function () {
   }, []);
 
   useEffect(() => {
+    const arr = [
+      'mypage',
+      '',
+      'appointments',
+      'appointments-history',
+      'settings',
+    ];
     const currentTabIdx = window.localStorage.getItem('currentTab');
     if (currentTabIdx) {
       setTabIdx(Number(currentTabIdx));
-      // if (location.pathname !== currentTabIdx) {
-      //   navigate(`${currentTabIdx}`);
-      // }
+      const pathname = arr[Number(currentTabIdx)];
+      if (location.pathname !== pathname) {
+        navigate(pathname);
+      }
     }
   }, []);
 
