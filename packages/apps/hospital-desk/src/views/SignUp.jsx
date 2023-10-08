@@ -22,6 +22,7 @@ import { SearchIcon } from '@chakra-ui/icons';
 
 import { fbSignUp } from '../firebase';
 import { createHospital } from '../api';
+import { useNavigate } from 'react-router-dom';
 
 const BASE_URL = `https://apis.data.go.kr/B551182/hospInfoServicev2`;
 
@@ -30,7 +31,7 @@ const SignUp = function () {
   const [hospital, setHospital] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isFormVisible, setIsFormVisible] = useState(false);
-
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -75,6 +76,7 @@ const SignUp = function () {
     } catch (error) {
       console.error('Error during signup or creating a hospital:', error);
     }
+    navigate('/auth/log-in');
   };
 
   useEffect(() => {

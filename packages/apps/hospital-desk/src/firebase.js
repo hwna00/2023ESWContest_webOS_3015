@@ -27,7 +27,7 @@ const fbSignUp = (email, password) =>
       console.error('Error during signing up:', error);
       throw error;
     });
-const logIn = async data => {
+const fbLogIn = async data => {
   const { email, password } = data;
   const isUserExist = true;
 
@@ -48,4 +48,4 @@ const logIn = async data => {
   }
 };
 
-export { auth, fbSignUp, logIn };
+export { auth, fbSignUp, fbLogIn };
