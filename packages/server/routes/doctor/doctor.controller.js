@@ -25,7 +25,7 @@ exports.createDoctor = async (req, res) => {
       await exports.createDoctorQuery(connection, data);
 
       return res.json({
-        hospital: data,
+        doctor: data,
         isSuccess: true,
         code: 201,
         message: '의사 생성 성공',
@@ -44,7 +44,7 @@ exports.createDoctor = async (req, res) => {
           response = res.json({
             isSuccess: false,
             code: 400,
-            message: '가입되지 않은 병원입니다.병원을 먼저 가입해주세요',
+            message: '가입되지 않은 병원입니다.병원을 먼저 가입해주세요.',
           });
           break;
         default:
