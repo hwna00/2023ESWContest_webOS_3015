@@ -1,6 +1,6 @@
 const pool = require('../../config/db');
 
-exports.createDoctorQuery = async (connection, data) => {
+const createDoctorQuery = async (connection, data) => {
   const Query =
     'INSERT INTO Doctors(doctor_id, hospital_id, name, email, fields, specialty, description) VALUES (?, ?, ?, ?, ?, ?, ?);';
 
@@ -17,12 +17,42 @@ exports.createDoctorQuery = async (connection, data) => {
   await connection.query(Query, Params);
 };
 
+const readDoctorQuery = async function (connection, doctorId) {
+  const Query = `SELECT
+  D.doctor_id,
+  D.name,
+  H.ykiho,
+  D.fields,
+  D.specialty,
+  D.description,
+  AVG(R.rate) AS rate,
+  JSON_ARRAYAGG(
+      JSON_OBJECT(
+          'review_id', R.id,
+          'reviewer', U.name,
+          'reviewee', D.name,
+          'rate', R.rate,
+          'content', R.content
+      )
+  ) AS reviews
+FROM Doctors D
+JOIN Reviews R ON D.doctor_id = ? AND D.doctor_id = R.doctor_id
+JOIN Users U USING(user_id)
+JOIN Hospitals H USING(hospital_id)`;
+
+  const Params = [doctorId];
+
+  const rows = await connection.query(Query, Params);
+
+  return rows;
+};
+
 exports.createDoctor = async (req, res) => {
   const { data } = req.body;
   try {
     const connection = await pool.getConnection(async conn => conn);
     try {
-      await exports.createDoctorQuery(connection, data);
+      await createDoctorQuery(connection, data);
 
       return res.json({
         doctor: data,
@@ -67,42 +97,12 @@ exports.createDoctor = async (req, res) => {
   }
 };
 
-exports.readDoctorQuery = async function (connection, doctorId) {
-  const Query = `SELECT
-  D.doctor_id,
-  D.name,
-  H.ykiho,
-  D.fields,
-  D.specialty,
-  D.description,
-  AVG(R.rate) AS rate,
-  JSON_ARRAYAGG(
-      JSON_OBJECT(
-          'review_id', R.id,
-          'reviewer', U.name,
-          'reviewee', D.name,
-          'rate', R.rate,
-          'content', R.content
-      )
-  ) AS reviews
-FROM Doctors D
-JOIN Reviews R ON D.doctor_id = ? AND D.doctor_id = R.doctor_id
-JOIN Users U USING(user_id)
-JOIN Hospitals H USING(hospital_id)`;
-
-  const Params = [doctorId];
-
-  const rows = await connection.query(Query, Params);
-
-  return rows;
-};
-
 exports.readDoctor = async function (req, res) {
   const { doctorId } = req.params;
   try {
     const connection = await pool.getConnection(async conn => conn);
     try {
-      const [rows] = await exports.readDoctorQuery(connection, doctorId);
+      const [rows] = await readDoctorQuery(connection, doctorId);
       if (rows.length === 0) {
         throw Error('Doctor not found');
       } else {
