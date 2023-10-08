@@ -82,7 +82,7 @@ exports.readUser = async function (req, res) {
         throw Error('User not found');
       } else {
         return res.json({
-          result: convertUser(rows[0]),
+          result: convertUser.convertFromDB(rows[0]),
           isSuccess: true,
           code: 200,
           message: '유저 조회 성공',
