@@ -44,7 +44,7 @@ exports.createDoctor = async (req, res) => {
           response = res.json({
             isSuccess: false,
             code: 400,
-            message: '가입되지 않은 병원입니다.병원을 먼저 가입해주세요',
+            message: '가입되지 않은 병원입니다.병원을 먼저 가입해주세요.',
           });
           break;
         default:
