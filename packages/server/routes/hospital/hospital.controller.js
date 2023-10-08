@@ -30,17 +30,15 @@ const readHospitalQuery = async function (connection, hospitalId) {
   H.ykiho,
   H.description,
   JSON_ARRAYAGG(
-      JSON_OBJECT(
+      if(doctor_id is not null, JSON_OBJECT(
           'id', D.doctor_id,
           'name', D.name,
           'specialty', D.specialty,
           'fields', D.fields,
-          'rate', ifnull((SELECT rate FROM DoctorRate WHERE doctor_id = D.doctor_id),0)
-      )
-  ) AS doctors
-FROM Hospitals H
-JOIN Doctors D ON H.hospital_id = ? AND D.hospital_id = H.hospital_id
-`;
+          'rate', ifnull((SELECT rate FROM DoctorRate WHERE doctor_id = D.doctor_id), 0)
+      ), null)) AS doctors
+  FROM (SELECT * FROM Hospitals WHERE hospital_id = ?) H
+  LEFT OUTER JOIN Doctors D ON D.hospital_id = H.hospital_id;`;
 
   const Params = [hospitalId];
 
@@ -145,9 +143,12 @@ exports.readHospital = async function (req, res) {
     const connection = await pool.getConnection(async conn => conn);
     try {
       const [rows] = await readHospitalQuery(connection, hospitalId);
-      if (rows.length === 0) {
+      if (rows[0].hospital_id == null) {
         throw Error('Hospital not found');
       } else {
+        if (rows[0].doctors[0] == null) {
+          rows[0].doctors = [];
+        }
         return res.json({
           result: rows[0],
           isSuccess: true,
