@@ -41,7 +41,7 @@ const Root = function () {
       ) : (
         <>
           <SideBar />
-          <Box width="full" height="full" ml="40" padding="4">
+          <Box height="full" ml="40" padding="6">
             <Outlet />
           </Box>
         </>
