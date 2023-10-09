@@ -1,13 +1,15 @@
+const convertAppointment = require('../../utils/convertAppointment');
 const pool = require('../../config/db');
 
 const createAppointmentQuery = async function (connection, data) {
   const Query =
-    'INSERT INTO Appointments(user_id, doctor_id, NFTF_id, datetime, message, is_NFTF) VALUES (?, ?, ?, ?, ?, ?);';
+    'INSERT INTO Appointments(user_id, doctor_id, NFTF_id, date, time, message, is_NFTF) VALUES (?, ?, ?, ?, ?, ?, ?);';
   const Params = [
     data.uid,
     data.doctorId,
     data.type === 'ftf' ? null : data.nftfId,
-    `${data.date} ${data.time}`,
+    data.date,
+    data.time,
     data.memo,
     data.type === 'ftf' ? 0 : 1,
   ];
@@ -47,6 +49,7 @@ exports.createAppointment = async function (req, res) {
       await createAppointmentQuery(connection, data);
 
       return res.json({
+        result: data,
         isSuccess: true,
         code: 201,
         message: '예약정보 생성 성공',
@@ -80,7 +83,7 @@ exports.readUserAppointment = async function (req, res) {
         throw Error('Appointment not found');
       } else {
         return res.json({
-          result: rows[0],
+          result: convertAppointment.convertByUser(rows[0]),
           isSuccess: true,
           code: 200,
           message: '유저 예약정보 조회 성공',

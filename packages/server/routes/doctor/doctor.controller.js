@@ -19,7 +19,7 @@ const createDoctorQuery = async (connection, data) => {
 
 const readDoctorQuery = async function (connection, doctorId) {
   const Query = `SELECT
-  doctor_id,
+  doctor_id AS id,
   D.name,
   H.ykiho,
   D.fields,
@@ -28,7 +28,7 @@ const readDoctorQuery = async function (connection, doctorId) {
   ifnull(AVG(R.rate), 0) AS rate,
   JSON_ARRAYAGG(
       if(R.id is not null, JSON_OBJECT(
-          'review_id', R.id,
+          'reviewId', R.id,
           'reviewer', R.reviewer,
           'reviewee', R.reviewee,
           'rate', R.rate,
@@ -53,7 +53,7 @@ exports.createDoctor = async (req, res) => {
       await createDoctorQuery(connection, data);
 
       return res.json({
-        doctor: data,
+        result: data,
         isSuccess: true,
         code: 201,
         message: '의사 생성 성공',
@@ -101,7 +101,7 @@ exports.readDoctor = async function (req, res) {
     const connection = await pool.getConnection(async conn => conn);
     try {
       const [rows] = await readDoctorQuery(connection, doctorId);
-      if (rows[0].doctor_id == null) {
+      if (rows[0].id == null) {
         throw Error('Doctor not found');
       } else {
         if (rows[0].reviews[0] == null) {

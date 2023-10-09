@@ -1,4 +1,5 @@
 const convertHospital = require('../../utils/convertHospital');
+const convertAppointment = require('../../utils/convertAppointment');
 const classifyAppointments = require('../../utils/classifyAppointments');
 const pool = require('../../config/db');
 
@@ -12,8 +13,10 @@ const createHospitalsQuery = async (connection, data) => {
 };
 
 const readHospitalsQuery = async function (connection, name) {
-  const selectAllHospitalsQuery = 'SELECT * FROM Hospitals;';
-  const selectHospitalsByNameQuery = 'SELECT * FROM Hospitals WHERE name = ?;';
+  const selectAllHospitalsQuery =
+    'SELECT hospital_id AS id, name, description, ykiho, created_at AS createdAt FROM Hospitals;';
+  const selectHospitalsByNameQuery =
+    'SELECT hospital_id AS id, name, description, ykiho, created_at AS createdAt FROM Hospitals WHERE name = ?;';
   const Params = [name];
 
   const Query = !name ? selectAllHospitalsQuery : selectHospitalsByNameQuery;
@@ -25,7 +28,7 @@ const readHospitalsQuery = async function (connection, name) {
 
 const readHospitalQuery = async function (connection, hospitalId) {
   const Query = `SELECT
-  hospital_id,
+  hospital_id AS id,
   H.name,
   H.ykiho,
   H.description,
@@ -49,7 +52,7 @@ const readHospitalQuery = async function (connection, hospitalId) {
 
 const readAppointmentsQuery = async function (connection, hospitalId) {
   const Query =
-    'SELECT * FROM Housepital.Appointments WHERE doctor_id in (SELECT doctor_id FROM Housepital.Doctors WHERE hospital_id = ?);';
+    'SELECT * FROM Appointments WHERE doctor_id in (SELECT doctor_id FROM Doctors WHERE hospital_id = ?);';
   const Params = [hospitalId];
   const rows = await connection.query(Query, Params);
 
@@ -64,7 +67,7 @@ exports.createHospital = async (req, res) => {
       await createHospitalsQuery(connection, data);
 
       return res.json({
-        hospital: data,
+        result: data,
         isSuccess: true,
         code: 201,
         message: '병원 생성 성공',
@@ -106,7 +109,7 @@ exports.readHospitals = async function (req, res) {
       } else {
         const hospitals = rows.map(row => convertHospital(row));
         return res.json({
-          hospitals,
+          result: hospitals,
           isSuccess: true,
           code: 200,
           message: '병원 조회 성공',
@@ -143,7 +146,7 @@ exports.readHospital = async function (req, res) {
     const connection = await pool.getConnection(async conn => conn);
     try {
       const [rows] = await readHospitalQuery(connection, hospitalId);
-      if (rows[0].hospital_id == null) {
+      if (rows[0].id == null) {
         throw Error('Hospital not found');
       } else {
         if (rows[0].doctors[0] == null) {
@@ -188,11 +191,13 @@ exports.readAppointments = async function (req, res) {
     const connection = await pool.getConnection(async conn => conn);
     try {
       const [rows] = await readAppointmentsQuery(connection, hospitalId);
-      const classifiedRows = classifyAppointments(rows);
 
       if (rows.length === 0) {
         throw Error('Appointments not found');
       } else {
+        const classifiedRows = classifyAppointments(
+          convertAppointment.convertByHospital(rows),
+        );
         return res.json({
           result: classifiedRows,
           isSuccess: true,

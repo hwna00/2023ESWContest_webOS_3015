@@ -8,7 +8,7 @@ module.exports = appointmentRows => {
   };
 
   for (let i = 0; i < appointmentRows.length; i += 1) {
-    switch (appointmentRows[i].state_id) {
+    switch (appointmentRows[i].stateId) {
       case 'aw':
         result.aw.push(appointmentRows[i]);
         break;
