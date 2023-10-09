@@ -22,7 +22,7 @@ function CompletedDiagnosis() {
       setCompletedDiagnosis(
         data.filter(
           appointment =>
-            appointment.state_id === 'dc' || appointment.state_id === 'pc',
+            appointment.stateId === 'dc' || appointment.stateId === 'pc',
         ),
       );
     }

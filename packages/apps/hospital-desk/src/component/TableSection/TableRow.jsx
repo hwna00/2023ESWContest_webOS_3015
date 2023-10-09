@@ -96,10 +96,10 @@ function TableRow({ data, buttonType }) {
       </Box>
 
       <Box flex={1} textAlign="center">
-        {data.date_time}
+        {data.date} {data.time}
       </Box>
       <Box flex={1} textAlign="center">
-        {data.is_NFTF ? <Text>대면</Text> : <Text>비대면</Text>}
+        {data.isNFTF ? <Text>대면</Text> : <Text>비대면</Text>}
       </Box>
       <Box flex={1} textAlign="center">
         {data.doctorName}
