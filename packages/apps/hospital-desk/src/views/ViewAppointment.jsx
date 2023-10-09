@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import dayjs from 'dayjs';
 import 'react-calendar/dist/Calendar.css';
@@ -16,7 +16,6 @@ import {
   Select,
   SimpleGrid,
   VStack,
-  Link as ChakraLink,
 } from '@chakra-ui/react';
 
 import TableRow from '../component/TableSection/TableRow';
@@ -237,17 +236,11 @@ function ViewAppointment() {
               <div className={styles.hideScrollBar}>
                 <Box maxH="830px" overflowY="scroll" w="100%">
                   {filteredReservations.map(reservation => (
-                    <ChakraLink
-                      as={ReactRouterLink}
-                      to={`appointment-detail/${reservation.id}`}
+                    <TableRow
                       key={reservation.id}
-                    >
-                      <TableRow
-                        key={reservation.id}
-                        data={reservation}
-                        buttonType="detail"
-                      />
-                    </ChakraLink>
+                      data={reservation}
+                      buttonType="detail"
+                    />
                   ))}
                 </Box>
               </div>
