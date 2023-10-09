@@ -28,6 +28,15 @@ export const getAppointments = async uid => {
   return await instance.get(`/appointments/${uid}`);
 };
 
+export const getFavorites = async () => {
+  try {
+    const { data } = await instance.get('/favorites');
+    return data.result;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 export const getHospitals = async () => {
   try {
     const { data } = await instance.get('/hospitals');
