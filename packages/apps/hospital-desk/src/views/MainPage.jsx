@@ -29,10 +29,10 @@ const MainPage = function () {
   useEffect(() => {
     if (data) {
       setConfirmedReservation(
-        data.filter(reservation => reservation.state_id === 'ac'),
+        data.filter(reservation => reservation.stateId === 'ac'),
       );
       setCompleteReservation(
-        data.filter(reservation => reservation.state_id === 'dc'),
+        data.filter(reservation => reservation.stateId === 'dc'),
       );
     }
 
