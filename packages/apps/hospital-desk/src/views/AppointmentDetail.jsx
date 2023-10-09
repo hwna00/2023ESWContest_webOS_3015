@@ -94,7 +94,7 @@ function AppointmentDetail() {
             <CancelModal isOpen={isCancelOpen} onClose={closeCancelModal} />
           </HStack>
 
-          {data.is_NFTF === 1 ? (
+          {data.isNFTF === 1 ? (
             <Grid
               h="200px"
               templateAreas={`

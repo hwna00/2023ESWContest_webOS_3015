@@ -127,8 +127,7 @@ const SideBar = function () {
         <VStack width="full" justifyContent="center" gap="0">
           <CustomTab to="">메인화면</CustomTab>
           <CustomTab to="manage-appointment">예약관리</CustomTab>
-          <CustomTab to="">환자관리</CustomTab>
-          <CustomTab to="view-appointment">완료된 진료</CustomTab>
+          <CustomTab to="completed-diagnosis">완료된 진료</CustomTab>
         </VStack>
         <CustomTab to="settings">
           <Flex

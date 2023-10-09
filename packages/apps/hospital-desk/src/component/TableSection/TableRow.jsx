@@ -21,8 +21,8 @@ function TableRow({ data, buttonType }) {
   } = useDisclosure();
 
   const moveToDetail = useCallback(() => {
-    navigate('/view-appointment/appointment-detail/:id');
-  }, [navigate]);
+    navigate(`/view-appointment/appointment-detail/${data.id}`);
+  }, [navigate, data.id]);
 
   const paymentButton = (
     <>
@@ -38,7 +38,11 @@ function TableRow({ data, buttonType }) {
       <Button h="10" onClick={openCancelModal} colorScheme="red">
         거절하기
       </Button>
-      <CancelModal isOpen={isCancelOpen} onClose={closeCancelModal} />
+      <CancelModal
+        isOpen={isCancelOpen}
+        onClose={closeCancelModal}
+        id={data.id}
+      />
     </>
   );
 
@@ -92,10 +96,10 @@ function TableRow({ data, buttonType }) {
       </Box>
 
       <Box flex={1} textAlign="center">
-        {data.date_time}
+        {data.date} {data.time}
       </Box>
       <Box flex={1} textAlign="center">
-        {data.is_NFTF ? <Text>대면</Text> : <Text>비대면</Text>}
+        {data.isNFTF ? <Text>대면</Text> : <Text>비대면</Text>}
       </Box>
       <Box flex={1} textAlign="center">
         {data.doctorName}

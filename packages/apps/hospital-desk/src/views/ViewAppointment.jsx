@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import dayjs from 'dayjs';
 import 'react-calendar/dist/Calendar.css';
@@ -16,7 +16,6 @@ import {
   Select,
   SimpleGrid,
   VStack,
-  Link as ChakraLink,
 } from '@chakra-ui/react';
 
 import TableRow from '../component/TableSection/TableRow';
@@ -50,35 +49,34 @@ function ViewAppointment() {
       if (viewType === 'viewAll') {
         setFilteredReservations(
           data.filter(reservation =>
-            dayjs(reservation.date_time).isSame(day, 'day'),
+            dayjs(`${reservation.date} ${reservation.time}`).isSame(day, 'day'),
           ),
         );
       } else if (viewType === 'viewSelection') {
         setFilteredReservations(
           data.filter(reservation => {
-            if (!dayjs(reservation.date_time).isSame(day, 'day')) return false;
-
-            const reservationDateTime = dayjs(reservation.date_time);
-
             if (
-              selectedHour &&
-              reservationDateTime.format('HH') !== selectedHour
+              !dayjs(`${reservation.date} ${reservation.time}`).isSame(
+                day,
+                'day',
+              )
             )
               return false;
 
-            if (
-              selectedMinute &&
-              reservationDateTime.format('mm') !== selectedMinute
-            )
+            const reservationHour = reservation.time.split(':')[0];
+            const reservationMinute = reservation.time.split(':')[1];
+
+            if (selectedHour && reservationHour !== selectedHour) return false;
+
+            if (selectedMinute && reservationMinute !== selectedMinute)
+              return false;
+            if (selectedState && reservation.stateId !== selectedState)
               return false;
 
-            if (selectedState && reservation.state_id !== selectedState)
+            if (selectedDoctor && reservation.doctorId !== selectedDoctor)
               return false;
-
-            if (selectedDoctor && reservation.doctor_id !== selectedDoctor)
-              return false;
-            if (nftType === 'FTF') return reservation.is_NFTF === false;
-            if (nftType === 'NFTF') return reservation.is_NFTF === true;
+            if (nftType === 'FTF') return reservation.isNFTF === false;
+            if (nftType === 'NFTF') return reservation.isNFTF === true;
             return true;
           }),
         );
@@ -87,20 +85,19 @@ function ViewAppointment() {
             data
               .reduce(
                 (map, reservation) =>
-                  map.set(reservation.doctor_id, reservation.doctorName),
+                  map.set(reservation.doctorId, reservation.doctorName),
                 new Map(),
               )
               .entries(),
-          ).map(([doctor_id, doctorName]) => ({ doctor_id, doctorName })),
+          ).map(([doctorId, doctorName]) => ({ doctorId, doctorName })),
         );
 
         setUniqueHours(
           Array.from(
-            data.reduce(
-              (set, reservation) =>
-                set.add(dayjs(reservation.date_time).format('HH')),
-              new Set(),
-            ),
+            data.reduce((set, reservation) => {
+              const hour = reservation.time.split(':')[0];
+              return set.add(hour);
+            }, new Set()),
           ),
         );
       }
@@ -206,12 +203,14 @@ function ViewAppointment() {
                         <Select
                           placeholder="담당 의사"
                           value={selectedDoctor}
-                          onChange={e => setSelectedDoctor(e.target.value)}
+                          onChange={e =>
+                            setSelectedDoctor(Number(e.target.value))
+                          }
                         >
                           {uniqueDoctors.map(doctor => (
                             <option
-                              key={doctor.doctor_id}
-                              value={doctor.doctor_id}
+                              key={doctor.doctorId}
+                              value={doctor.doctorId}
                             >
                               {doctor.doctorName}
                             </option>
@@ -237,17 +236,11 @@ function ViewAppointment() {
               <div className={styles.hideScrollBar}>
                 <Box maxH="830px" overflowY="scroll" w="100%">
                   {filteredReservations.map(reservation => (
-                    <ChakraLink
-                      as={ReactRouterLink}
-                      to={`appointment-detail/${reservation.id}`}
+                    <TableRow
                       key={reservation.id}
-                    >
-                      <TableRow
-                        key={reservation.id}
-                        data={reservation}
-                        buttonType="detail"
-                      />
-                    </ChakraLink>
+                      data={reservation}
+                      buttonType="detail"
+                    />
                   ))}
                 </Box>
               </div>

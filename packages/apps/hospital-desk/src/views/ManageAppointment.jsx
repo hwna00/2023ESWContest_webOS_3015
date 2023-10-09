@@ -29,10 +29,10 @@ function ManageAppointment() {
   useEffect(() => {
     if (!isLoading) {
       setConfirmedReservation(
-        data.filter(reservation => reservation.state_id === 'ac'),
+        data.filter(reservation => reservation.stateId === 'ac'),
       );
       setNotConfirmedReservation(
-        data.filter(reservation => reservation.state_id === 'aw'),
+        data.filter(reservation => reservation.stateId === 'aw'),
       );
     }
     if (error) {
