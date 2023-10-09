@@ -1,3 +1,4 @@
+import { Link as ReactRouterLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -7,6 +8,8 @@ import {
   Text,
   UnorderedList,
   VStack,
+  Link as ChakraLink,
+  ListItem,
 } from '@chakra-ui/react';
 
 import { getAppointments } from '../../api';
@@ -33,32 +36,39 @@ function CustomHeader() {
   );
 }
 
-function CustomListItem() {
-  const appointment = {
-    patientName: '하철환',
-    phoneNumber: '12',
-    date: '12',
-    time: '12',
-    isNFTF: '0',
-  };
+function CustomListItem({ appointment }) {
   return (
-    <HStack as="li" width="full" py="4" bgColor="primary.100" borderRadius="md">
-      <Text textAlign="center" flex={1}>
-        {appointment.patientName}
-      </Text>
-      <Text textAlign="center" flex={1}>
-        {appointment.phoneNumber}
-      </Text>
-      <Text textAlign="center" flex={1}>
-        {appointment.date}
-      </Text>
-      <Text textAlign="center" flex={1}>
-        {appointment.time}
-      </Text>
-      <Text textAlign="center" flex={1}>
-        {appointment.isNFTF === '0' ? '대면' : '비대면'}
-      </Text>
-    </HStack>
+    <ListItem cursor="pointer">
+      <ChakraLink
+        as={ReactRouterLink}
+        to={`/appointments/${appointment.id}`}
+        textDecoration="none !important"
+      >
+        <HStack
+          as="li"
+          width="full"
+          py="4"
+          bgColor="primary.100"
+          borderRadius="md"
+        >
+          <Text textAlign="center" flex={1}>
+            {appointment.patientName}
+          </Text>
+          <Text textAlign="center" flex={1}>
+            {appointment.phoneNumber}
+          </Text>
+          <Text textAlign="center" flex={1}>
+            {appointment.date}
+          </Text>
+          <Text textAlign="center" flex={1}>
+            {appointment.time}
+          </Text>
+          <Text textAlign="center" flex={1}>
+            {appointment.isNFTF === '0' ? '대면' : '비대면'}
+          </Text>
+        </HStack>
+      </ChakraLink>
+    </ListItem>
   );
 }
 
