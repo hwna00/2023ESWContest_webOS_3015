@@ -1,4 +1,5 @@
 const convertUser = require('../../utils/convertUser');
+const classifyAppointments = require('../../utils/classifyAppointments');
 const pool = require('../../config/db');
 
 const createUserQuery = async (connection, data) => {
@@ -154,6 +155,53 @@ exports.updateUser = async function (req, res) {
         isSuccess: true,
         code: 204,
         message: '유저 업데이트 성공',
+      });
+    } catch (err) {
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSuccess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
+const readUserAppointmentsQuery = async function (connection, uid) {
+  const Query = `SELECT id, H.doctor_id AS doctorId, H.doctor_name AS doctorName, H.hospital_id AS hospitalId, 
+      H.hospital_name AS hospitalName, A.state_id AS stateId, A.NFTF_id AS NFTFId, A.date AS date, 
+        A.time time, A.message AS message, A.is_NFTF AS isNFTF, A.rejection_reason AS rejectionReason 
+    FROM Appointments A JOIN HospitalAffiliations H USING(doctor_id) 
+    WHERE A.user_id = ? AND A.state_id IN ("aw","ac","ar");`;
+  const Params = [uid, uid];
+
+  const rows = await connection.query(Query, Params);
+
+  return rows;
+};
+
+exports.readUserAppointments = async function (req, res) {
+  const { uid } = req.params;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      const [rows] = await readUserAppointmentsQuery(connection, uid);
+
+      const classifiedRows = classifyAppointments(rows);
+      const { aw, ac, ar } = classifiedRows;
+      return res.json({
+        result: { aw, ac, ar },
+        isSuccess: true,
+        code: 200,
+        message: '유저 예약정보 조회 성공',
       });
     } catch (err) {
       return res.json({

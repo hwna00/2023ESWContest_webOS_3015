@@ -48,7 +48,7 @@ const readHospitalQuery = async function (connection, hospitalId) {
           'rate', R.rate,
           'content', R.content
       ))
-  FROM (SELECT doctor_id, name FROM HospitalAffiliations WHERE hospital_id = ?) D JOIN ReviewRelationship R USING(doctor_id)), JSON_ARRAY()) AS reviews
+  FROM (SELECT doctor_id FROM HospitalAffiliations WHERE hospital_id = ?) D JOIN ReviewRelationship R USING(doctor_id)), JSON_ARRAY()) AS reviews
   FROM (SELECT * FROM Hospitals WHERE hospital_id = ?) H
   LEFT OUTER JOIN Doctors D USING(hospital_id);`;
 
