@@ -7,6 +7,7 @@ import MainPage from './views/MainPage';
 import LogIn from './views/LogIn';
 import AppointmentsHistory from './views/AppointmentsHistory';
 import Appointments from './views/Appointments';
+import AppointmentDetail from './views/AppointmentDetail';
 import Root from './layout/Root';
 
 const router = createHashRouter([
@@ -21,6 +22,10 @@ const router = createHashRouter([
       {
         path: '/appointments',
         element: <Appointments />,
+      },
+      {
+        path: '/appointments/:id',
+        element: <AppointmentDetail />,
       },
       {
         path: '/appointments-history',
