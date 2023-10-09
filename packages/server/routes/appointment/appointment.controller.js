@@ -1,3 +1,4 @@
+const convertAppointment = require('../../utils/convertAppointment');
 const pool = require('../../config/db');
 
 const createAppointmentQuery = async function (connection, data) {
@@ -82,7 +83,7 @@ exports.readUserAppointment = async function (req, res) {
         throw Error('Appointment not found');
       } else {
         return res.json({
-          result: rows[0],
+          result: convertAppointment.convertFromDB(rows[0]),
           isSuccess: true,
           code: 200,
           message: '유저 예약정보 조회 성공',
