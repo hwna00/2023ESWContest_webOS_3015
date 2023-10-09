@@ -52,7 +52,7 @@ const readHospitalQuery = async function (connection, hospitalId) {
 
 const readAppointmentsQuery = async function (connection, hospitalId) {
   const Query =
-    'SELECT * FROM Appointments WHERE doctor_id in (SELECT doctor_id FROM Doctors WHERE hospital_id = ?);';
+    'SELECT * FROM Appointments JOIN UserName USING(user_id) JOIN DoctorName USING(doctor_id) WHERE doctor_id in (SELECT doctor_id FROM Doctors WHERE hospital_id = ?);';
   const Params = [hospitalId];
   const rows = await connection.query(Query, Params);
 

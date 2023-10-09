@@ -34,7 +34,9 @@ module.exports = {
     const appointments = appointmentsFromDB.map(appointment => ({
       id: appointment.id,
       uid: appointment.user_id,
+      patientName: appointment.user_name,
       doctorId: appointment.doctor_id,
+      doctorName: appointment.doctor_name,
       stateId: appointment.state_id,
       NFTFId: appointment.NFTF_id,
       date: appointment.date,
