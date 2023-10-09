@@ -17,14 +17,17 @@ import TableHeader from '../component/TableSection/TableHeader';
 import StatisticCard from '../component/StatisticCard';
 import { getAppointments } from '../api';
 import LoadingPage from '@housepital/common/LoadingPage';
+import { useSelector } from 'react-redux';
 
 const MainPage = function () {
+  const hospital = useSelector(state => state.hospital);
   const [completeReservation, setCompleteReservation] = useState([]);
   const [ConfirmedReservation, setConfirmedReservation] = useState([]);
   const { data, isLoading, error } = useQuery(
-    ['appointments'],
+    ['appointments', hospital.hospitalId],
     getAppointments,
   );
+
   const navigate = useNavigate();
   useEffect(() => {
     if (data) {
@@ -46,7 +49,7 @@ const MainPage = function () {
       {!isLoading ? (
         <VStack p="8" spacing="8" alignItems="initial">
           <Heading textAlign="left" p="4" fontSize="30px">
-            병원이름
+            {hospital.name}
           </Heading>
           <Box>
             <SimpleGrid w="full" spacing="8" placeItems="center" columns={3}>
