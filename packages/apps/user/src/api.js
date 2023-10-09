@@ -28,10 +28,41 @@ export const getAppointments = async uid => {
   return await instance.get(`/appointments/${uid}`);
 };
 
-export const getHospitals = () => {
-  return instance.get('/hospitals').then(res => res.data);
+export const getHospitals = async () => {
+  try {
+    const { data } = await instance.get('/hospitals');
+    return data.result;
+  } catch (error) {
+    throw new Error(error);
+  }
 };
 
-export const getDoctors = () => {
-  return instance.get('/doctors').then(res => res.data);
+export const getDoctors = async () => {
+  try {
+    const { data } = await instance.get('/doctors');
+    return data.result;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const getHospital = async hospitalId => {
+  const { data } = await instance.get(`/hospitals/${hospitalId}`);
+  console.log(data);
+  return data;
+};
+
+export const getHospitalDtl = async ykiho => {
+  const { data } = await axios.get(
+    `http://apis.data.go.kr/B551182/MadmDtlInfoService2/getDtlInfo2`,
+    {
+      params: {
+        serviceKey: process.env.REACT_APP_DATA_API_KEY,
+        ykiho,
+        type: 'json',
+      },
+    },
+  );
+  console.log(data);
+  return data;
 };
