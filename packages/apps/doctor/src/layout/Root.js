@@ -15,15 +15,14 @@ const Root = function () {
   const [isLoading, setIsLoadding] = useState(true);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const doctor = useSelector(state => state.doctor);
+  const doctorId = useSelector(state => state.doctor.id);
 
   useEffect(() => {
     onAuthStateChanged(auth, async user => {
       if (!user) {
         navigate('/auth/log-in');
       }
-      // TODO: doctor_id를 id로 변경해야 함
-      if (!doctor.doctor_id) {
+      if (!doctorId) {
         try {
           const doctor = await getDoctor(user.uid);
           dispatch(setDoctor(doctor));

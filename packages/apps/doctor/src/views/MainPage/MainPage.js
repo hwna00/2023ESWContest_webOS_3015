@@ -17,12 +17,11 @@ import { getAppointments } from '../../api';
 
 const MainPage = function () {
   const me = useSelector(state => state.doctor);
-  // TODO: doctor_id를 id로 변경해야 함
   const {
     isLoading,
     data: appointments,
     isError,
-  } = useQuery(['appointments'], getAppointments(me.doctor_id));
+  } = useQuery(['appointments'], getAppointments(me.id));
 
   return (
     <HStack justifyContent="center" gap="12" height="full" overflowY="hidden">
