@@ -38,7 +38,11 @@ function TableRow({ data, buttonType }) {
       <Button h="10" onClick={openCancelModal} colorScheme="red">
         거절하기
       </Button>
-      <CancelModal isOpen={isCancelOpen} onClose={closeCancelModal} />
+      <CancelModal
+        isOpen={isCancelOpen}
+        onClose={closeCancelModal}
+        id={data.id}
+      />
     </>
   );
 
