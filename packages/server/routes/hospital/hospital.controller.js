@@ -13,8 +13,10 @@ const createHospitalsQuery = async (connection, data) => {
 };
 
 const readHospitalsQuery = async function (connection, name) {
-  const selectAllHospitalsQuery = 'SELECT * FROM Hospitals;';
-  const selectHospitalsByNameQuery = 'SELECT * FROM Hospitals WHERE name = ?;';
+  const selectAllHospitalsQuery =
+    'SELECT hospital_id AS id, name, description, ykiho, created_at AS createdAt FROM Hospitals;';
+  const selectHospitalsByNameQuery =
+    'SELECT hospital_id AS id, name, description, ykiho, created_at AS createdAt FROM Hospitals WHERE name = ?;';
   const Params = [name];
 
   const Query = !name ? selectAllHospitalsQuery : selectHospitalsByNameQuery;
@@ -26,7 +28,7 @@ const readHospitalsQuery = async function (connection, name) {
 
 const readHospitalQuery = async function (connection, hospitalId) {
   const Query = `SELECT
-  hospital_id,
+  hospital_id AS id,
   H.name,
   H.ykiho,
   H.description,
@@ -144,7 +146,7 @@ exports.readHospital = async function (req, res) {
     const connection = await pool.getConnection(async conn => conn);
     try {
       const [rows] = await readHospitalQuery(connection, hospitalId);
-      if (rows[0].hospital_id == null) {
+      if (rows[0].id == null) {
         throw Error('Hospital not found');
       } else {
         if (rows[0].doctors[0] == null) {
