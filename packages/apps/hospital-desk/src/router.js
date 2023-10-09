@@ -12,6 +12,7 @@ import Root from './component/Root';
 import SignUp from './views/SignUp';
 import LogIn from './views/LogIn';
 import CompletedDiagnosis from './views/CompletedDiagnosis';
+import Setting from './views/Setting';
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,11 @@ const router = createBrowserRouter([
       {
         path: '/completed-diagnosis',
         element: <CompletedDiagnosis />,
+        children: [],
+      },
+      {
+        path: '/settings',
+        element: <Setting />,
         children: [],
       },
     ],
