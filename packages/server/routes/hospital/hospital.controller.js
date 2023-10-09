@@ -39,11 +39,20 @@ const readHospitalQuery = async function (connection, hospitalId) {
           'specialty', D.specialty,
           'fields', D.fields,
           'rate', ifnull((SELECT rate FROM DoctorRate WHERE doctor_id = D.doctor_id), 0)
-      ), null)) AS doctors
+      ), null)) AS doctors,
+  ifnull((SELECT JSON_ARRAYAGG(
+      JSON_OBJECT(
+          'id', R.id,
+          'reviewer', R.reviewer,
+          'reviewee', R.reviewee,
+          'rate', R.rate,
+          'content', R.content
+      ))
+  FROM (SELECT doctor_id, name FROM HospitalAffiliations WHERE hospital_id = ?) D JOIN ReviewRelationship R USING(doctor_id)), JSON_ARRAY()) AS reviews
   FROM (SELECT * FROM Hospitals WHERE hospital_id = ?) H
   LEFT OUTER JOIN Doctors D USING(hospital_id);`;
 
-  const Params = [hospitalId];
+  const Params = [hospitalId, hospitalId];
 
   const rows = await connection.query(Query, Params);
 
@@ -52,7 +61,7 @@ const readHospitalQuery = async function (connection, hospitalId) {
 
 const readAppointmentsQuery = async function (connection, hospitalId) {
   const Query =
-    'SELECT * FROM Appointments WHERE doctor_id in (SELECT doctor_id FROM Doctors WHERE hospital_id = ?);';
+    'SELECT * FROM Appointments JOIN UserName USING(user_id) JOIN DoctorName USING(doctor_id) WHERE doctor_id in (SELECT doctor_id FROM Doctors WHERE hospital_id = ?);';
   const Params = [hospitalId];
   const rows = await connection.query(Query, Params);
 
