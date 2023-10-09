@@ -10,6 +10,7 @@ import {
   VStack,
   Link as ChakraLink,
   ListItem,
+  Skeleton,
 } from '@chakra-ui/react';
 
 import { getAppointments } from '../../api';
@@ -75,10 +76,11 @@ function CustomListItem({ appointment }) {
 const Appointments = function () {
   // TODO: doctor_id를 id로 변경해야 함
   const doctorId = useSelector(state => state.doctor.doctor_id);
-  const { data: appointments = [] } = useQuery(
-    ['appointments'],
-    getAppointments(doctorId),
-  );
+  const {
+    isLoading,
+    data: appointments = [],
+    isError,
+  } = useQuery(['appointments'], getAppointments(doctorId));
   return (
     <Box height="full" overflow="hidden">
       <Heading as="h1">예약된 진료</Heading>
@@ -92,9 +94,26 @@ const Appointments = function () {
           height="sm"
           overflowY="scroll"
         >
-          {appointments.map(appointment => (
-            <CustomListItem key={appointment.id} appointment={appointment} />
-          ))}
+          {isLoading ? (
+            <>
+              <Skeleton height="16" borderRadius="md" />
+              <Skeleton height="16" borderRadius="md" />
+              <Skeleton height="16" borderRadius="md" />
+              <Skeleton height="16" borderRadius="md" />
+            </>
+          ) : (
+            <>
+              {appointments.map(appointment => (
+                <CustomListItem
+                  key={appointment.id}
+                  appointment={appointment}
+                />
+              ))}
+              {isError && (
+                <Text textAlign="center">예약을 불러올 수 없습니다.</Text>
+              )}
+            </>
+          )}
         </UnorderedList>
       </VStack>
     </Box>
