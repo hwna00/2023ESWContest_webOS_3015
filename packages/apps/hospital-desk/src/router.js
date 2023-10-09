@@ -11,6 +11,7 @@ import NotFound from './views/NotFound';
 import Root from './component/Root';
 import SignUp from './views/SignUp';
 import LogIn from './views/LogIn';
+import CompletedDiagnosis from './views/CompletedDiagnosis';
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,11 @@ const router = createBrowserRouter([
       {
         path: '/error-page',
         element: <ErrorPage />,
+        children: [],
+      },
+      {
+        path: '/completed-diagnosis',
+        element: <CompletedDiagnosis />,
         children: [],
       },
     ],
