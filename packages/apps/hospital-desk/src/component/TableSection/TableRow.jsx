@@ -21,8 +21,8 @@ function TableRow({ data, buttonType }) {
   } = useDisclosure();
 
   const moveToDetail = useCallback(() => {
-    navigate('/view-appointment/appointment-detail/:id');
-  }, [navigate]);
+    navigate(`/view-appointment/appointment-detail/${data.id}`);
+  }, [navigate, data.id]);
 
   const paymentButton = (
     <>
