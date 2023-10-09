@@ -66,18 +66,21 @@ const SignUp = function () {
   const onSubmit = async data => {
     try {
       const hospitalId = await fbSignUp(data.email, data.password);
-      await createHospital({
+      const hospitalData = await createHospital({
         hospitalId,
         ykiho: hospital.ykiho,
-        hospitalName: hospital.yadmNm,
-        email: data.email,
+        name: hospital.yadmNm,
         description: data.description,
       });
-      console.log(hospitalId);
+      if (hospitalData.isSuccess) {
+        navigate('/');
+      } else {
+        navigate('/auth/log-in');
+      }
     } catch (error) {
       console.error('Error during signup or creating a hospital:', error);
+      // navigate('/auth/log-in');
     }
-    navigate('/auth/log-in');
   };
 
   useEffect(() => {
