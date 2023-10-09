@@ -82,7 +82,7 @@ const SignUp = function () {
       const { data } = await getHospitals(hospitalName);
 
       if (data.isSuccess) {
-        setHospitals(data.hospitals);
+        setHospitals(data.result);
       } else {
         // TODO: webOS.notification 전송
       }
@@ -91,7 +91,7 @@ const SignUp = function () {
 
   const onHospitalClick = useCallback(
     hospital => {
-      setSelectedHospitalId(hospital.hospitalId);
+      setSelectedHospitalId(hospital.id);
       setValue('hospital', hospital.name);
       setHospitals([]);
     },
@@ -170,7 +170,7 @@ const SignUp = function () {
               {hospitals.map(hospital => (
                 <HStack
                   as="li"
-                  key={hospital.hospitalId}
+                  key={hospital.id}
                   padding="4"
                   border="1px"
                   borderColor="primary.200"

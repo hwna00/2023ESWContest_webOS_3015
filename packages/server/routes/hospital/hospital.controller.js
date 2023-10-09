@@ -16,8 +16,8 @@ const readHospitalsQuery = async function (connection, name) {
   const selectAllHospitalsQuery =
     'SELECT hospital_id AS id, name, description, ykiho, created_at AS createdAt FROM Hospitals;';
   const selectHospitalsByNameQuery =
-    'SELECT hospital_id AS id, name, description, ykiho, created_at AS createdAt FROM Hospitals WHERE name = ?;';
-  const Params = [name];
+    'SELECT hospital_id AS id, name, description, ykiho, created_at AS createdAt FROM Hospitals WHERE name LIKE ?;';
+  const Params = [`%${name}%`];
 
   const Query = !name ? selectAllHospitalsQuery : selectHospitalsByNameQuery;
 
