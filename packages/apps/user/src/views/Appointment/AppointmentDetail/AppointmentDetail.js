@@ -33,16 +33,17 @@ import { useSelector } from 'react-redux';
 import { DoctorList, HospitalList } from '../dataList';
 import BackButton from '../../../components/BackButton/BackButton';
 import { useForm } from 'react-hook-form';
-import { createAppointment } from '../../../api';
+import { createAppointment, getHospital, getHospitalDtl } from '../../../api';
 import AppointForm from './AppiontForm';
 import ReviewList from '@housepital/common/ReviewList';
+import { useQuery } from '@tanstack/react-query';
 
 const AppointmentDetail = function () {
-  const { category, id } = useParams();
   const [data, setData] = useState({});
   const [appointTime, setAppointTime] = useState();
   const [reservationOfDay, setReservationOfDay] = useState({});
 
+  const { category, id } = useParams();
   const {
     register,
     handleSubmit,
@@ -52,6 +53,12 @@ const AppointmentDetail = function () {
     defaultValues: { date: dayjs(new Date()).format('YYYY-MM-DD') },
   });
   const uid = useSelector(state => state.me.uid);
+
+  const { data: hospital } = useQuery(['hospital', id], getHospital(id));
+  const { data: hospitalDtl } = useQuery(
+    ['hospitalDetail', id],
+    getHospitalDtl(hospital?.ykiho),
+  );
 
   const onToggleBookmarkClick = useCallback(() => {
     // Todo: 추후에 isFavorite 항목을 수정하는 axios patch 함수로 변경해야 함.
