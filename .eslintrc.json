@@ -31,7 +31,6 @@
         "ignorePropertyModificationsFor": ["state"]
       }
     ],
-    "react/jsx-props-no-spreading": "off",
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
     "react/jsx-filename-extension": "off",

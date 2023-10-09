@@ -4,9 +4,7 @@ const doctorSlice = createSlice({
   name: 'doctor',
   initialState: {},
   reducers: {
-    setDoctor: (_, action) => {
-      return action.payload;
-    },
+    setDoctor: (_, action) => action.payload,
   },
 });
 

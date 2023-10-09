@@ -1,17 +1,18 @@
 /* eslint-env node, es6 */
 const path = require('path');
-const chalk = require('chalk');
-const filesize = require('filesize');
-const fs = require('fs-extra');
-const minimist = require('minimist');
-const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
-const printBuildError = require('react-dev-utils/printBuildError');
-const stripAnsi = require('strip-ansi');
+
 const webpack = require('webpack');
+const stripAnsi = require('strip-ansi');
+const printBuildError = require('react-dev-utils/printBuildError');
+const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
+const minimist = require('minimist');
+const fs = require('fs-extra');
+const filesize = require('filesize');
+const chalk = require('chalk');
 const {optionParser: app, mixins, configHelper: helper} = require('@enact/dev-utils');
 
 function displayHelp() {
-	let e = 'node ' + path.relative(process.cwd(), __filename);
+	let e = `node ${  path.relative(process.cwd(), __filename)}`;
 	if (require.main !== module) e = 'enact pack';
 
 	console.log('  Usage');
@@ -61,7 +62,7 @@ function details(err, stats, output) {
 
 		// Add additional information for postcss errors
 		if (Object.prototype.hasOwnProperty.call(err, 'postcssNode')) {
-			msg += '\nCompileError: Begins at CSS selector ' + err['postcssNode'].selector;
+			msg += `\nCompileError: Begins at CSS selector ${  err.postcssNode.selector}`;
 		}
 
 		// Generate pretty/formatted warnins/errors
@@ -84,7 +85,7 @@ function details(err, stats, output) {
 
 	if (messages.errors.length) {
 		return new Error(messages.errors.join('\n\n'));
-	} else if (
+	} if (
 		typeof process.env.CI === 'string' &&
 		process.env.CI.toLowerCase() !== 'false' &&
 		messages.warnings.length
@@ -104,7 +105,7 @@ function details(err, stats, output) {
 		copyPublicFolder(output);
 		if (messages.warnings.length) {
 			console.log(chalk.yellow('Compiled with warnings:\n'));
-			console.log(messages.warnings.join('\n\n') + '\n');
+			console.log(`${messages.warnings.join('\n\n')  }\n`);
 		} else {
 			console.log(chalk.green('Compiled successfully.'));
 		}
@@ -138,11 +139,11 @@ function printFileSizes(stats, output) {
 		.toJson({all: false, assets: true, cachedAssets: true})
 		.assets.filter(asset => /\.(js|css|bin)$/.test(asset.name))
 		.map(asset => {
-			const size = fs.statSync(path.join(output, asset.name)).size;
+			const {size} = fs.statSync(path.join(output, asset.name));
 			return {
 				folder: path.relative(app.context, path.join(output, path.dirname(asset.name))),
 				name: path.basename(asset.name),
-				size: size,
+				size,
 				sizeLabel: filesize(size)
 			};
 		});
@@ -152,13 +153,13 @@ function printFileSizes(stats, output) {
 		assets.map(a => stripAnsi(a.sizeLabel).length)
 	);
 	assets.forEach(asset => {
-		let sizeLabel = asset.sizeLabel;
+		let {sizeLabel} = asset;
 		const sizeLength = stripAnsi(sizeLabel).length;
 		if (sizeLength < longestSizeLabelLength) {
 			const rightPadding = ' '.repeat(longestSizeLabelLength - sizeLength);
 			sizeLabel += rightPadding;
 		}
-		console.log('	' + sizeLabel + '	' + chalk.dim(asset.folder + path.sep) + chalk.cyan(asset.name));
+		console.log(`	${  sizeLabel  }	${  chalk.dim(asset.folder + path.sep)  }${chalk.cyan(asset.name)}`);
 	});
 }
 
@@ -221,12 +222,12 @@ function watch(config) {
 
 function api(opts = {}) {
 	if (opts.meta) {
-		let meta = opts.meta;
+		let {meta} = opts;
 		if (typeof meta === 'string') {
 			try {
 				meta = JSON.parse(opts.meta);
 			} catch (e) {
-				throw new Error('Invalid metadata; must be a valid JSON string.\n' + e.message);
+				throw new Error(`Invalid metadata; must be a valid JSON string.\n${  e.message}`);
 			}
 		}
 		app.applyEnactMeta(meta);

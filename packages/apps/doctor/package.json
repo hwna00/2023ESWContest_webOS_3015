@@ -24,9 +24,6 @@
   "enact": {
     "theme": "sandstone"
   },
-  "eslintConfig": {
-    "extends": "enact"
-  },
   "eslintIgnore": [
     "node_modules/*",
     "build/*",

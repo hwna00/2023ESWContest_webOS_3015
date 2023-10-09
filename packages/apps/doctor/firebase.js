@@ -1,4 +1,3 @@
-import dotenv from 'dotenv';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import {
   getAuth,
@@ -9,6 +8,7 @@ import {
   signOut,
 } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -45,6 +45,18 @@ export const fbSignUp = async data => {
   }
 
   return user.uid;
+};
+
+export const fbEmailLogIn = async data => {
+  await setPersistence(auth, browserLocalPersistence);
+  const { email, password } = data;
+
+  try {
+    const { user } = await signInWithEmailAndPassword(auth, email, password);
+    return user.uid;
+  } catch (error) {
+    return error;
+  }
 };
 
 export const fbLogOut = async () => signOut(auth);

@@ -1,23 +1,24 @@
 /* eslint-env node, es6 */
 
-const fs = require('fs');
 const path = require('path');
-const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const fs = require('fs');
+
+const { DefinePlugin, EnvironmentPlugin } = require('webpack');
+const TerserPlugin = require('terser-webpack-plugin');
+const resolve = require('resolve');
+const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
+const getPublicUrlOrPath = require('react-dev-utils/getPublicUrlOrPath');
+const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const ForkTsCheckerWebpackPlugin =
   process.env.TSC_COMPILE_ON_ERROR === 'true'
     ? require('react-dev-utils/ForkTsCheckerWarningWebpackPlugin')
     : require('react-dev-utils/ForkTsCheckerWebpackPlugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
-const getPublicUrlOrPath = require('react-dev-utils/getPublicUrlOrPath');
-const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
-const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
-const resolve = require('resolve');
-const TerserPlugin = require('terser-webpack-plugin');
-const { DefinePlugin, EnvironmentPlugin } = require('webpack');
 const {
   optionParser: app,
   cssModuleIdent: getSimpleCSSModuleLocalIdent,
@@ -25,6 +26,7 @@ const {
   ILibPlugin,
   WebOSMetaPlugin,
 } = require('@enact/dev-utils');
+
 const createEnvironmentHash = require('./createEnvironmentHash');
 
 // This is the production and development configuration.
@@ -103,11 +105,10 @@ module.exports = function (
         : MiniCssExtractPlugin.loader,
       {
         loader: require.resolve('css-loader'),
-        options: Object.assign(
-          { sourceMap: shouldUseSourceMap },
-          cssLoaderOptions,
-          {
-            url: {
+        options: {
+          sourceMap: shouldUseSourceMap,
+          ...cssLoaderOptions,
+          url: {
               filter: url => {
                 // Don't handle absolute path urls
                 if (url.startsWith('/')) {
@@ -117,8 +118,7 @@ module.exports = function (
                 return true;
               },
             },
-          },
-        ),
+        },
       },
       {
         // Options for PostCSS as we reference these options twice
@@ -174,7 +174,7 @@ module.exports = function (
       loader: require.resolve('less-loader'),
       options: {
         lessOptions: {
-          modifyVars: Object.assign({ __DEV__: !isEnvProduction }, app.accent),
+          modifyVars: {__DEV__: !isEnvProduction, ...app.accent},
         },
         sourceMap: shouldUseSourceMap,
       },
@@ -237,10 +237,10 @@ module.exports = function (
           // output absolute-path mapped LESS sourcemaps, unaffected by this
           // function, while both css-loader and style-loader pseudo modules
           // will get their own sourcemaps. Good to differentiate.
-          return file + '?' + loader[0];
-        } else {
+          return `${file  }?${  loader[0]}`;
+        } 
           return file;
-        }
+        
       },
     },
     cache: {
@@ -282,8 +282,8 @@ module.exports = function (
       alias: fs.existsSync(
         path.join(app.context, 'node_modules', '@enact', 'i18n', 'ilib'),
       )
-        ? Object.assign({ ilib: '@enact/i18n/ilib' }, app.alias)
-        : Object.assign({ '@enact/i18n/ilib': 'ilib' }, app.alias),
+        ? ({ilib: '@enact/i18n/ilib', ...app.alias})
+        : ({'@enact/i18n/ilib': 'ilib', ...app.alias}),
       // Optional configuration for redirecting module requests.
       fallback: app.resolveFallback,
     },

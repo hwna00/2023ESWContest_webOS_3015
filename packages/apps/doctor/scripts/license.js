@@ -1,15 +1,16 @@
 /* eslint-env node, es6 */
 const path = require('path');
-const chalk = require('chalk');
-const checker = require('license-checker');
+
 const minimist = require('minimist');
+const checker = require('license-checker');
+const chalk = require('chalk');
 
 // The following modules reside in `@enact/cli` but end up in production builds of apps
-const pkgPathResolve = m => path.dirname(require.resolve(m + '/package.json'));
+const pkgPathResolve = m => path.dirname(require.resolve(`${m  }/package.json`));
 const enactCLIProdModules = ['@babel/core', 'core-js'].map(pkgPathResolve);
 
 function displayHelp() {
-	let e = 'node ' + path.relative(process.cwd(), __filename);
+	let e = `node ${  path.relative(process.cwd(), __filename)}`;
 	if (require.main !== module) e = 'enact license';
 
 	console.log('  Usage');
@@ -32,8 +33,7 @@ function api({modules = []} = {}) {
 	}
 
 	return Promise.all(
-		modules.map(m => {
-			return new Promise((resolve, reject) => {
+		modules.map(m => new Promise((resolve, reject) => {
 				checker.init({start: m}, (err, json) => {
 					if (err) {
 						reject(new Error(`Unable to process licenses for ${m}.\n${err.message}`));
@@ -41,8 +41,7 @@ function api({modules = []} = {}) {
 						resolve(json || {});
 					}
 				});
-			});
-		})
+			}))
 	).then(values => values.reduce((a, b) => Object.assign(a, b)));
 }
 

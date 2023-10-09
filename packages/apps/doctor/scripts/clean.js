@@ -1,9 +1,10 @@
 /* eslint-env node, es6 */
 const path = require('path');
-const chalk = require('chalk');
-const fs = require('fs-extra');
+
 const minimist = require('minimist');
-const packageRoot = require('@enact/dev-utils').packageRoot;
+const fs = require('fs-extra');
+const chalk = require('chalk');
+const {packageRoot} = require('@enact/dev-utils');
 
 const build = 'build';
 const dist = 'dist';
@@ -13,7 +14,7 @@ const ssTests = path.join('tests', 'screenshot');
 const uiTests = path.join('tests', 'ui');
 
 function displayHelp() {
-	let e = 'node ' + path.relative(process.cwd(), __filename);
+	let e = `node ${  path.relative(process.cwd(), __filename)}`;
 	if (require.main !== module) e = 'enact clean';
 
 	console.log('  Usage');
@@ -58,7 +59,7 @@ function cli(args) {
 
 	process.chdir(packageRoot().path);
 	api({paths: opts._, all: opts.all}).catch(err => {
-		console.error(chalk.red('ERROR: ') + 'Failed to clean project.\n' + err.message);
+		console.error(`${chalk.red('ERROR: ')  }Failed to clean project.\n${  err.message}`);
 		process.exit(1);
 	});
 }

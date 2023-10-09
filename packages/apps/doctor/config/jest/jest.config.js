@@ -8,24 +8,25 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-const fs = require('fs');
 const path = require('path');
+const fs = require('fs');
+
 const {optionParser: app} = require('@enact/dev-utils');
 
 const rbConst = name =>
-	'ILIB_' +
+	`ILIB_${ 
 	path
 		.basename(name)
 		.replace(/[-_\s]/g, '_')
-		.toUpperCase() +
-	'_PATH';
+		.toUpperCase() 
+	}_PATH`;
 
 const iLibDirs = ['node_modules/@enact/i18n/ilib', 'node_modules/ilib', 'ilib'];
 const globals = {
 	__DEV__: true,
 	ILIB_BASE_PATH: iLibDirs.find(f => fs.existsSync(path.join(app.context, f))) || iLibDirs[1],
 	ILIB_RESOURCES_PATH: 'resources',
-	ILIB_CACHE_ID: new Date().getTime() + '',
+	ILIB_CACHE_ID: `${new Date().getTime()  }`,
 	[rbConst(app.name)]: 'resources'
 };
 
@@ -57,7 +58,7 @@ require('../dotenv').load(app.context);
 
 // Find any applicable user test setup file
 const userSetupFile = ['mjs', 'js', 'jsx', 'ts', 'tsx']
-	.map(ext => path.join(app.context, 'src', 'setupTests.' + ext))
+	.map(ext => path.join(app.context, 'src', `setupTests.${  ext}`))
 	.find(file => fs.existsSync(file));
 
 module.exports = {

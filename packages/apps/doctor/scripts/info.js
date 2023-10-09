@@ -1,13 +1,14 @@
 /* eslint-env node, es6 */
 const path = require('path');
 const fs = require('fs');
-const chalk = require('chalk');
-const spawn = require('cross-spawn');
+
 const minimist = require('minimist');
+const spawn = require('cross-spawn');
+const chalk = require('chalk');
 const resolveSync = require('resolve').sync;
 
 function displayHelp() {
-	let e = 'node ' + path.relative(process.cwd(), __filename);
+	let e = `node ${  path.relative(process.cwd(), __filename)}`;
 	if (require.main !== module) e = 'enact info';
 
 	console.log('  Usage');
@@ -24,19 +25,19 @@ function displayHelp() {
 
 function logVersion(pkg, rel = __dirname) {
 	try {
-		const jsonPath = resolveSync(pkg + '/package.json', {basedir: rel});
+		const jsonPath = resolveSync(`${pkg  }/package.json`, {basedir: rel});
 		const meta = require(jsonPath);
 		const dir = path.dirname(jsonPath);
 		if (fs.lstatSync(dir).isSymbolicLink()) {
 			const realDir = fs.realpathSync(dir);
 			const git = gitInfo(realDir);
-			console.log(meta.name + ': ' + (git || meta.version));
+			console.log(`${meta.name  }: ${  git || meta.version}`);
 			console.log(chalk.cyan('\tSymlinked from'), realDir);
 		} else {
-			console.log(meta.name + ': ' + meta.version);
+			console.log(`${meta.name  }: ${  meta.version}`);
 		}
 	} catch (e) {
-		console.log(pkg + ': ' + chalk.red('<unknown>'));
+		console.log(`${pkg  }: ${  chalk.red('<unknown>')}`);
 	}
 }
 
@@ -52,11 +53,11 @@ function gitInfo(dir) {
 	const tag = git(['describe', '--tags', '--exact-match']);
 	if (tag) {
 		return chalk.green(`${tag} (git)`);
-	} else {
+	} 
 		const branch = git(['symbolic-ref', '-q', '--short', 'HEAD']) || 'HEAD';
 		const commit = git(['rev-parse', '--short', 'HEAD']);
 		if (commit) return chalk.green(`${branch} @ ${commit} (git)`);
-	}
+	
 }
 
 function globalModules() {
@@ -67,11 +68,11 @@ function globalModules() {
 		});
 		if (result.error || result.status !== 0 || !(result.stdout = result.stdout.trim())) {
 			return require('global-modules');
-		} else if (process.platform === 'win32' || ['msys', 'cygwin'].includes(process.env.OSTYPE)) {
+		} if (process.platform === 'win32' || ['msys', 'cygwin'].includes(process.env.OSTYPE)) {
 			return path.resolve(result.stdout, 'node_modules');
-		} else {
+		} 
 			return path.resolve(result.stdout, 'lib/node_modules');
-		}
+		
 	} catch (e) {
 		return require('global-modules');
 	}
@@ -168,7 +169,7 @@ function cli(args) {
 	if (opts.help) displayHelp();
 
 	api({cliInfo: opts.cli, dev: opts.dev}).catch(err => {
-		console.error(chalk.red('ERROR: ') + 'Failed to display info.\n' + err.message);
+		console.error(`${chalk.red('ERROR: ')  }Failed to display info.\n${  err.message}`);
 		process.exit(1);
 	});
 }
