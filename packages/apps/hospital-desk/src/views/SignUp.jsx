@@ -39,7 +39,7 @@ const SignUp = function () {
     formState: { errors },
   } = useForm();
 
-  const fetchResults = async () => {
+  const fetchResults = useCallback(async () => {
     const { data } = await axios.get(
       // TODO: api 키 이름 변경
       `${BASE_URL}/getHospBasisList?serviceKey=${process.env.REACT_APP_PUBLIC_DP_API_KEY}&numOfRows=999&yadmNm=${hospitalName}`,
@@ -51,7 +51,7 @@ const SignUp = function () {
     } else {
       setSearchResults([]);
     }
-  };
+  }, [hospitalName]);
 
   const onChange = useCallback(e => {
     const valueWithoutSpaces = e.target.value.replace(/\s/g, '');
@@ -73,6 +73,7 @@ const SignUp = function () {
         email: data.email,
         description: data.description,
       });
+      console.log(hospitalId);
     } catch (error) {
       console.error('Error during signup or creating a hospital:', error);
     }
@@ -87,7 +88,7 @@ const SignUp = function () {
     }, 100);
 
     return () => clearTimeout(debounce);
-  }, [hospitalName]);
+  }, [hospitalName, fetchResults]);
 
   return (
     <Container>
