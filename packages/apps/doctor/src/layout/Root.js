@@ -7,7 +7,7 @@ import LoadingPage from '@housepital/common/LoadingPage';
 import { Box } from '@chakra-ui/react';
 
 import { setDoctor } from '../store';
-import SideBar from '../components/SideBar';
+import SideBar from '../components/SidBar';
 import { getDoctor } from '../api';
 import { auth } from '../../firebase';
 

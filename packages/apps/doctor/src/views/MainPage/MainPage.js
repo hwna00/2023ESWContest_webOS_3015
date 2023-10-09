@@ -6,13 +6,13 @@ import {
   HStack,
   Heading,
   ListItem,
-  Skeleton,
   Tag,
   Text,
   UnorderedList,
   VStack,
 } from '@chakra-ui/react';
 
+import ListSkeletion from '../../components/ListSkeleton/ListSkeleton';
 import { getAppointments } from '../../api';
 
 const MainPage = function () {
@@ -38,12 +38,7 @@ const MainPage = function () {
           overflowY="scroll"
         >
           {isLoading ? (
-            <>
-              <Skeleton height="16" borderRadius="md" />
-              <Skeleton height="16" borderRadius="md" />
-              <Skeleton height="16" borderRadius="md" />
-              <Skeleton height="16" borderRadius="md" />
-            </>
+            <ListSkeletion />
           ) : (
             <>
               {isError && (
