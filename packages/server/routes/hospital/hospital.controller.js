@@ -64,7 +64,7 @@ exports.createHospital = async (req, res) => {
       await createHospitalsQuery(connection, data);
 
       return res.json({
-        hospital: data,
+        result: data,
         isSuccess: true,
         code: 201,
         message: '병원 생성 성공',
@@ -106,7 +106,7 @@ exports.readHospitals = async function (req, res) {
       } else {
         const hospitals = rows.map(row => convertHospital(row));
         return res.json({
-          hospitals,
+          result: hospitals,
           isSuccess: true,
           code: 200,
           message: '병원 조회 성공',

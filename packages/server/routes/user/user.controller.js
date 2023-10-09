@@ -70,7 +70,7 @@ exports.createUser = async (req, res) => {
       await createUserQuery(connection, data);
 
       return res.json({
-        user: data,
+        result: data,
         isSuccess: true,
         code: 201,
         message: '유저 생성 성공',
