@@ -15,6 +15,8 @@ import {
 } from '@chakra-ui/react';
 import { FaStar } from 'react-icons/fa';
 import { useQuery } from '@tanstack/react-query';
+import ListSkeleton from '@housepital/common/ListSkeleton';
+
 import { getDoctors, getHospitals } from '../../api';
 
 const AppointmentViewList = function ({ type }) {
@@ -58,7 +60,7 @@ const AppointmentViewList = function ({ type }) {
         margin={0}
       >
         {isLoading ? (
-          'loading...'
+          <ListSkeleton />
         ) : (
           <>
             {isError && (
