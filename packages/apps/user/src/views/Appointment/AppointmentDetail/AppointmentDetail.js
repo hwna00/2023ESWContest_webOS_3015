@@ -35,6 +35,7 @@ import BackButton from '../../../components/BackButton/BackButton';
 import { useForm } from 'react-hook-form';
 import { createAppointment } from '../../../api';
 import AppointForm from './AppiontForm';
+import ReviewList from '@housepital/common/ReviewList';
 
 const AppointmentDetail = function () {
   const { category, id } = useParams();
@@ -360,36 +361,7 @@ const AppointmentDetail = function () {
           </TabPanel>
 
           <TabPanel>
-            <UnorderedList styleType="none" spacing="6" margin={0}>
-              {!data.reviews && (
-                <Text textAlign={'center'}>리뷰가 없습니다.</Text>
-              )}
-              {data?.reviews?.map(review => {
-                return (
-                  <ListItem
-                    key={review.id}
-                    bgColor="primary.200"
-                    borderRadius="md"
-                    padding="4"
-                  >
-                    <HStack
-                      justifyContent="space-between"
-                      alignItems="center"
-                      mb="4"
-                    >
-                      <Text fontWeight="bold">
-                        {review.reviewer} (담당의사: {review.reviewee})
-                      </Text>
-                      <HStack gap="2" alignItems="center" fontWeight="bold">
-                        <Icon as={FaStar} color="yellow.400" />
-                        <Text>{review.rate}</Text>
-                      </HStack>
-                    </HStack>
-                    <Text>{review.content}</Text>
-                  </ListItem>
-                );
-              })}
-            </UnorderedList>
+            <ReviewList reviews={data?.reviews} />
           </TabPanel>
         </TabPanels>
       </Tabs>
