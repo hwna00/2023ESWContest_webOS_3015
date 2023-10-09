@@ -28,7 +28,7 @@ import BackButton from '../../../components/BackButton/BackButton';
 import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
 import CustomCheckbox from '@housepital/common/CustomCheckox';
 import { useQuery } from '@tanstack/react-query';
-import getByCategory from '../../../utils/getByCategory';
+import { getAllByCategory } from '../../../utils/getByCategory';
 
 function AppointmentList() {
   const [filteredList, setFilteredList] = useState([]);
@@ -41,7 +41,7 @@ function AppointmentList() {
     isLoading,
     data = [],
     isError,
-  } = useQuery([category], getByCategory(category));
+  } = useQuery([category], getAllByCategory(category));
 
   useEffect(() => {
     if (category === 'doctors') {

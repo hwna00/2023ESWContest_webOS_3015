@@ -1,6 +1,12 @@
-import { getHospitals, getDoctors, getFavorites } from '../api';
+import {
+  getHospitals,
+  getDoctors,
+  getFavorites,
+  getHospital,
+  getDoctor,
+} from '../api';
 
-const getByCategory = category => {
+export const getAllByCategory = category => {
   switch (category) {
     case 'hospitals':
       return getHospitals;
@@ -13,4 +19,13 @@ const getByCategory = category => {
   }
 };
 
-export default getByCategory;
+export const getDetailByCategory = (category, id) => {
+  switch (category) {
+    case 'hospitals':
+      return getHospital(id);
+    case 'doctors':
+      return getDoctor(id);
+    default:
+      throw new Error();
+  }
+};
