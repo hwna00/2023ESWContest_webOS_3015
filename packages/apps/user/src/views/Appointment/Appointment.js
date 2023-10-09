@@ -11,13 +11,8 @@ import {
 
 import AppointmentViewList from '../../components/AppointmentViewList/AppointmentViewList';
 import { FavoriteList } from './dataList';
-import { getDoctors, getHospitals } from '../../api';
-import { useQuery } from '@tanstack/react-query';
 
 const Appointment = function () {
-  const { data: hospitals } = useQuery(['hospitals'], getHospitals);
-  const { data: doctors } = useQuery(['doctors'], getDoctors);
-
   return (
     <VStack w="full" h="full" justifyContent={'space-between'} gap={'6'}>
       <HStack w="full" gap="6" px="2">
@@ -56,8 +51,8 @@ const Appointment = function () {
       </HStack>
 
       <HStack w="full">
-        <AppointmentViewList type="hospital" list={hospitals} />
-        <AppointmentViewList type="doctor" list={doctors} />
+        <AppointmentViewList type="hospitals" />
+        <AppointmentViewList type="doctors" />
       </HStack>
     </VStack>
   );

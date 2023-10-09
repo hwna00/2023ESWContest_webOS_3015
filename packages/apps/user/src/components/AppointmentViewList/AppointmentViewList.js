@@ -14,14 +14,21 @@ import {
   Icon,
 } from '@chakra-ui/react';
 import { FaStar } from 'react-icons/fa';
+import { useQuery } from '@tanstack/react-query';
+import { getDoctors, getHospitals } from '../../api';
 
-const AppointmentViewList = function ({ type, list }) {
-  //TODO: isOpen을 통해 영업 여부를 판단해야 함
+const AppointmentViewList = function ({ type }) {
+  // TODO: isOpen을 통해 영업 여부를 판단해야 함
+  // TODO: fields의 값은 백엔드로부터 가져오지 않고 ykiho를 통해 가져와야 한다.
   const [nameOfView, setNameOfView] = useState('');
+  const { isLoading, data, isError } = useQuery(
+    [type],
+    type === 'hospitals' ? getHospitals : getDoctors,
+  );
   useEffect(() => {
-    if (type === 'hospital') {
+    if (type === 'hospitals') {
       setNameOfView('병원별 보기');
-    } else if (type === 'doctor') {
+    } else if (type === 'doctors') {
       setNameOfView('의사별 보기');
     }
   }, [type]);
@@ -50,60 +57,69 @@ const AppointmentViewList = function ({ type, list }) {
         spacing={'4'}
         margin={0}
       >
-        {list?.map(item => (
-          <ListItem w="full" px="2" key={item.id}>
-            <ChakraLink
-              as={ReactRouterLink}
-              to={`/appointment/${type}s/${item.id}`}
-              width={'full'}
-            >
-              <HStack
-                justifyContent={'flex-start'}
-                gap={'6'}
-                padding={'2'}
-                borderY="2px"
-                borderColor={'primary.300'}
-              >
-                <AspectRatio width={'20'} ratio={1}>
-                  <Image src={item.profileImg} borderRadius={'md'} />
-                </AspectRatio>
-                <VStack pl="2" gap="0" alignItems="flex-start">
-                  <HStack gap="4">
-                    <Text>{item.name}</Text>
-                    <HStack gap={'2'}>
-                      <Icon as={FaStar} color="yellow.400" />
-                      <Text>
-                        {item.rate} {item?.numberOfRatings}
-                      </Text>
-                    </HStack>
-                  </HStack>
-                  {item.isOpen ? (
-                    <Text fontSize="md" color="primary.400">
-                      진료중
-                    </Text>
-                  ) : (
-                    <Text fontSize="md" color="red">
-                      영업종료
-                    </Text>
-                  )}
+        {isLoading ? (
+          'loading...'
+        ) : (
+          <>
+            {isError && (
+              <Text textAlign="center">데이터를 불러올 수 없습니다.</Text>
+            )}
+            {data?.map(item => (
+              <ListItem w="full" px="2" key={item.id}>
+                <ChakraLink
+                  as={ReactRouterLink}
+                  to={`/appointment/${type}s/${item.id}`}
+                  width={'full'}
+                >
+                  <HStack
+                    justifyContent={'flex-start'}
+                    gap={'6'}
+                    padding={'2'}
+                    borderY="2px"
+                    borderColor={'primary.300'}
+                  >
+                    <AspectRatio width={'20'} ratio={1}>
+                      <Image src={item.profileImg} borderRadius={'md'} />
+                    </AspectRatio>
+                    <VStack pl="2" gap="0" alignItems="flex-start">
+                      <HStack gap="4">
+                        <Text>{item.name}</Text>
+                        <HStack gap={'2'}>
+                          <Icon as={FaStar} color="yellow.400" />
+                          <Text>
+                            {item.rate} {item?.numberOfRatings}
+                          </Text>
+                        </HStack>
+                      </HStack>
+                      {item.isOpen ? (
+                        <Text fontSize="md" color="primary.400">
+                          진료중
+                        </Text>
+                      ) : (
+                        <Text fontSize="md" color="red">
+                          영업종료
+                        </Text>
+                      )}
 
-                  <HStack my="2" flexWrap="wrap" rowGap="0" columnGap="3">
-                    {item.fields.map(field => (
-                      <Tag
-                        size="md"
-                        key={field}
-                        variant="outline"
-                        colorScheme="gray"
-                      >
-                        {field}
-                      </Tag>
-                    ))}
+                      <HStack my="2" flexWrap="wrap" rowGap="0" columnGap="3">
+                        {item.fields?.map(field => (
+                          <Tag
+                            size="md"
+                            key={field}
+                            variant="outline"
+                            colorScheme="gray"
+                          >
+                            {field}
+                          </Tag>
+                        ))}
+                      </HStack>
+                    </VStack>
                   </HStack>
-                </VStack>
-              </HStack>
-            </ChakraLink>
-          </ListItem>
-        ))}
+                </ChakraLink>
+              </ListItem>
+            ))}
+          </>
+        )}
       </UnorderedList>
     </VStack>
   );
