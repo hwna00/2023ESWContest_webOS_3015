@@ -1,5 +1,5 @@
 module.exports = {
-  convertFromDB: appointmentFromDB => {
+  convertByUser: appointmentFromDB => {
     const appointment = {
       uid: appointmentFromDB.user_id,
       name: appointmentFromDB.name,
@@ -29,5 +29,22 @@ module.exports = {
     };
 
     return appointment;
+  },
+  convertByHospital: appointmentsFromDB => {
+    const appointments = appointmentsFromDB.map(appointment => ({
+      id: appointment.id,
+      uid: appointment.user_id,
+      doctorId: appointment.doctor_id,
+      stateId: appointment.state_id,
+      NFTFId: appointment.NFTF_id,
+      date: appointment.date,
+      time: appointment.time,
+      message: appointment.message,
+      isNFTF: appointment.is_NFTF,
+      updatedAt: appointment.updated_at,
+      rejectionReason: appointment.rejection_reason,
+    }));
+
+    return appointments;
   },
 };

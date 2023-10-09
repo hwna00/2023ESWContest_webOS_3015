@@ -1,4 +1,5 @@
 const convertHospital = require('../../utils/convertHospital');
+const convertAppointment = require('../../utils/convertAppointment');
 const classifyAppointments = require('../../utils/classifyAppointments');
 const pool = require('../../config/db');
 
@@ -49,7 +50,7 @@ const readHospitalQuery = async function (connection, hospitalId) {
 
 const readAppointmentsQuery = async function (connection, hospitalId) {
   const Query =
-    'SELECT * FROM Housepital.Appointments WHERE doctor_id in (SELECT doctor_id FROM Housepital.Doctors WHERE hospital_id = ?);';
+    'SELECT * FROM Appointments WHERE doctor_id in (SELECT doctor_id FROM Doctors WHERE hospital_id = ?);';
   const Params = [hospitalId];
   const rows = await connection.query(Query, Params);
 
@@ -188,11 +189,13 @@ exports.readAppointments = async function (req, res) {
     const connection = await pool.getConnection(async conn => conn);
     try {
       const [rows] = await readAppointmentsQuery(connection, hospitalId);
-      const classifiedRows = classifyAppointments(rows);
 
       if (rows.length === 0) {
         throw Error('Appointments not found');
       } else {
+        const classifiedRows = classifyAppointments(
+          convertAppointment.convertByHospital(rows),
+        );
         return res.json({
           result: classifiedRows,
           isSuccess: true,
