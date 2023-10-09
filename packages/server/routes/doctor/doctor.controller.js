@@ -19,7 +19,7 @@ const createDoctorQuery = async (connection, data) => {
 
 const readDoctorQuery = async function (connection, doctorId) {
   const Query = `SELECT
-  doctor_id id,
+  doctor_id AS id,
   D.name,
   H.ykiho,
   D.fields,
@@ -101,7 +101,7 @@ exports.readDoctor = async function (req, res) {
     const connection = await pool.getConnection(async conn => conn);
     try {
       const [rows] = await readDoctorQuery(connection, doctorId);
-      if (rows[0].doctor_id == null) {
+      if (rows[0].id == null) {
         throw Error('Doctor not found');
       } else {
         if (rows[0].reviews[0] == null) {
