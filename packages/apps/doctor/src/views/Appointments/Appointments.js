@@ -8,8 +8,7 @@ import AppointmentListHeader from '../../components/AppointmentListHeader/Appoin
 import { getAppointments } from '../../api';
 
 const Appointments = function () {
-  // TODO: doctor_id를 id로 변경해야 함
-  const doctorId = useSelector(state => state.doctor.doctor_id);
+  const doctorId = useSelector(state => state.doctor.id);
   const {
     isLoading,
     data: appointments = [],
