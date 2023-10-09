@@ -19,9 +19,7 @@ const Root = function () {
 
   useEffect(() => {
     onAuthStateChanged(auth, async user => {
-      console.log(user);
       if (!user) {
-        console.log('user logged out');
         navigate('/auth/log-in');
       }
       // TODO: doctor_id를 id로 변경해야 함
