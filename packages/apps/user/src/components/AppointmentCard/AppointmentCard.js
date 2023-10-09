@@ -10,6 +10,7 @@ import {
   Icon,
   HStack,
   AspectRatio,
+  Avatar,
 } from '@chakra-ui/react';
 import { StarIcon } from '@chakra-ui/icons';
 
@@ -30,12 +31,7 @@ function AppointmentCard({ data }) {
       gap="6"
     >
       <AspectRatio ratio={1} width="100%" maxW="32">
-        <Image
-          src={data.profileImg}
-          alt={data.name}
-          objectFit="cover"
-          borderRadius="full"
-        />
+        <Avatar src={data.profileImg} alt={data.name} borderRadius="full" />
       </AspectRatio>
 
       <Box width="100%">

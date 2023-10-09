@@ -47,7 +47,7 @@ const AppointmentViewList = function ({ type }) {
         <Text fontSize="xl" fontWeight="bold">
           {nameOfView}
         </Text>
-        <ChakraLink as={ReactRouterLink} to={`/appointment/${type}s`}>
+        <ChakraLink as={ReactRouterLink} to={`/appointment/${type}`}>
           +더보기
         </ChakraLink>
       </HStack>
@@ -70,7 +70,7 @@ const AppointmentViewList = function ({ type }) {
               <ListItem w="full" px="2" key={item.id}>
                 <ChakraLink
                   as={ReactRouterLink}
-                  to={`/appointment/${type}s/${item.id}`}
+                  to={`/appointment/${type}/${item.id}`}
                   width={'full'}
                 >
                   <HStack
