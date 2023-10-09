@@ -22,6 +22,9 @@ import {
 } from '@chakra-ui/react';
 
 import { fbLogIn } from '../firebase';
+import { useDispatch } from 'react-redux';
+import { getHospital } from '../api';
+import { setHospital } from '../store';
 
 function LogIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -30,21 +33,23 @@ function LogIn() {
   }, [showPassword]);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = function (data) {
-    fbLogIn(data).then(user => {
-      if (user) {
-        navigate('/');
-      } else {
-        //TODO: 상황에 맞는 알림 전송하기 ex. 존재하지 않는 사용자입니다.
-        navigate('/');
-      }
-    });
+  const onSubmit = async function (data) {
+    try {
+      const hospitalId = await fbLogIn(data);
+      const hospital = await getHospital(hospitalId);
+      dispatch(setHospital(hospital));
+      navigate('/');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

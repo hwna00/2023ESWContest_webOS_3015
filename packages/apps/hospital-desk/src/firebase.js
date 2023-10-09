@@ -1,7 +1,10 @@
 import {
+  browserLocalPersistence,
   createUserWithEmailAndPassword,
   getAuth,
+  setPersistence,
   signInWithEmailAndPassword,
+  signOut,
 } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 
@@ -27,25 +30,23 @@ const fbSignUp = (email, password) =>
       console.error('Error during signing up:', error);
       throw error;
     });
-const fbLogIn = async data => {
-  const { email, password } = data;
-  const isUserExist = true;
 
-  if (!isUserExist) {
-    // TODO: 존재하지 않는 회원입니다 알림 발송
-  } else {
+const fbLogIn = async data => {
+  await setPersistence(auth, browserLocalPersistence);
+  const { email, password } = data;
+  try {
     const userCredential = await signInWithEmailAndPassword(
       auth,
       email,
       password,
     );
-    console.log(userCredential);
-    // console.log(userCredential._tokenResponse);
-    // TODO: email을 가지는 user 정보를 DB에서 가져온다.
-
-    // TODO: CASE1. 이미 존재하는 경우 -> 경고알림 or 바로 로그인
-    // TODO: CASE2. 존재하지 않는 경우 -> 회원가입 진행
+    console.log(userCredential.uid);
+    return userCredential.uid;
+  } catch (error) {
+    return error;
   }
 };
 
-export { auth, fbSignUp, fbLogIn };
+const fbLogOut = async () => signOut(auth);
+
+export { auth, fbSignUp, fbLogIn, fbLogOut };
