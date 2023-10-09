@@ -6,7 +6,6 @@ import {
   Flex,
   Heading,
   Text,
-  Image,
   Icon,
   HStack,
   AspectRatio,

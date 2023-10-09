@@ -56,9 +56,21 @@ export const getDoctors = async () => {
 };
 
 export const getHospital = async hospitalId => {
-  const { data } = await instance.get(`/hospitals/${hospitalId}`);
-  console.log(data);
-  return data;
+  try {
+    const { data } = await instance.get(`/hospitals/${hospitalId}`);
+    return data.result;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const getDoctor = async doctorId => {
+  try {
+    const { data } = await instance.get(`/doctors/${doctorId}`);
+    return { ...data.result, fields: JSON.parse(data?.result?.fields) };
+  } catch (error) {
+    throw new Error(error);
+  }
 };
 
 export const getHospitalDtl = async ykiho => {
