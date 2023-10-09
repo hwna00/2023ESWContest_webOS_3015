@@ -29,14 +29,14 @@ import {
   Avatar,
 } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
+import { useForm } from 'react-hook-form';
+import { useQuery } from '@tanstack/react-query';
+import ReviewList from '@housepital/common/ReviewList';
 
 import BackButton from '../../../components/BackButton/BackButton';
-import { useForm } from 'react-hook-form';
-import { createAppointment, getHospitalDtl } from '../../../api';
-import AppointForm from './AppiontForm';
-import ReviewList from '@housepital/common/ReviewList';
-import { useQuery } from '@tanstack/react-query';
 import { getDetailByCategory } from '../../../utils/getByCategory';
+import { createAppointment, getHospital, getHospitalDtl } from '../../../api';
+import AppointForm from './AppiontForm';
 
 const AppointmentDetail = function () {
   const [appointTime, setAppointTime] = useState();
@@ -62,6 +62,12 @@ const AppointmentDetail = function () {
     data: hospitalDtl,
     isError: isDtlError,
   } = useQuery([id], getHospitalDtl(data?.ykiho));
+
+  const { data: hospital } = useQuery(['hospital', id], getHospital(id));
+  const { data: hospitalDtl } = useQuery(
+    ['hospitalDetail', id],
+    getHospitalDtl(hospital?.ykiho),
+  );
 
   const onToggleBookmarkClick = useCallback(() => {
     // Todo: 추후에 isFavorite 항목을 수정하는 axios patch 함수로 변경해야 함.
