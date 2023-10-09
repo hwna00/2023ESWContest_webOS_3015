@@ -28,7 +28,7 @@ const readDoctorQuery = async function (connection, doctorId) {
   ifnull(AVG(R.rate), 0) AS rate,
   JSON_ARRAYAGG(
       if(R.id is not null, JSON_OBJECT(
-          'reviewId', R.id,
+          'id', R.id,
           'reviewer', R.reviewer,
           'reviewee', R.reviewee,
           'rate', R.rate,
