@@ -20,7 +20,7 @@ const Root = function () {
   useEffect(() => {
     onAuthStateChanged(auth, async user => {
       if (!user) {
-        navigate('/#/auth/log-in');
+        navigate('/auth/log-in');
       }
       // TODO: doctor_id를 id로 변경해야 함
       if (!doctor.doctor_id) {
@@ -28,7 +28,7 @@ const Root = function () {
           const doctor = await getDoctor(user.uid);
           dispatch(setDoctor(doctor));
         } catch {
-          navigate('/#/auth/log-in');
+          navigate('/auth/log-in');
         }
       }
       setIsLoadding(false);
