@@ -11,30 +11,30 @@ import { auth } from '../firebase';
 
 function Root() {
   const [isLoading, setIsLoading] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const hospital = useSelector(state => state.hospital);
+  const hospitalId = useSelector(state => state.hospital.id);
 
   useEffect(() => {
     onAuthStateChanged(auth, async user => {
-      setIsLoading(false);
-      if (user) {
-        setIsLoggedIn(true);
-        if (hospital.hospital_id === '') {
-          const res = await getHospital(user.hospital_id);
-          dispatch(setHospital(res));
-        }
-      } else {
-        setIsLoggedIn(false);
-        dispatch(resetHospital());
+      if (!user) {
+        dispatch(resetHospital);
         navigate('/auth/log-in');
       }
+      if (!hospitalId) {
+        try {
+          const doctor = await getHospital(user.uid);
+          dispatch(setHospital(doctor));
+        } catch {
+          navigate('/auth/log-in');
+        }
+      }
+      setIsLoading(false);
     });
-  }, [navigate, dispatch, hospital]);
+  }, [navigate, dispatch, hospitalId]);
   return (
     <>
-      {!isLoading && isLoggedIn ? (
+      {!isLoading ? (
         <>
           <SideBar />
           <Box ml="60" p="6" height="100vh">

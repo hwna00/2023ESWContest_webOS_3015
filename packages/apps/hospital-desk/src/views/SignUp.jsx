@@ -41,7 +41,6 @@ const SignUp = function () {
 
   const fetchResults = useCallback(async () => {
     const { data } = await axios.get(
-      // TODO: api 키 이름 변경
       `${BASE_URL}/getHospBasisList?serviceKey=${process.env.REACT_APP_PUBLIC_DP_API_KEY}&numOfRows=999&yadmNm=${hospitalName}`,
     );
 
@@ -66,18 +65,24 @@ const SignUp = function () {
   const onSubmit = async data => {
     try {
       const hospitalId = await fbSignUp(data.email, data.password);
-      await createHospital({
+      const hospitalData = await createHospital({
         hospitalId,
         ykiho: hospital.ykiho,
-        hospitalName: hospital.yadmNm,
-        email: data.email,
+        name: hospital.yadmNm,
         description: data.description,
+        adress: hospital.addr,
+        tel: hospital.telno,
       });
-      console.log(hospitalId);
+
+      if (hospitalData.isSuccess) {
+        navigate('/');
+      } else {
+        navigate('/auth/log-in');
+      }
     } catch (error) {
       console.error('Error during signup or creating a hospital:', error);
+      // navigate('/auth/log-in');
     }
-    navigate('/auth/log-in');
   };
 
   useEffect(() => {

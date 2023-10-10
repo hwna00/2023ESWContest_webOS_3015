@@ -42,6 +42,7 @@ const Appointment = function () {
     fetchAppointments();
   }, [fetchAppointments]);
 
+const Appointment = function () {
   return (
     <VStack w="full" h="full" justifyContent={'space-between'} gap={'6'}>
       <HStack w="full" gap="6" px="2">

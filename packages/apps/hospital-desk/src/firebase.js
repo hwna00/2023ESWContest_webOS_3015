@@ -35,13 +35,8 @@ const fbLogIn = async data => {
   await setPersistence(auth, browserLocalPersistence);
   const { email, password } = data;
   try {
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      email,
-      password,
-    );
-    console.log(userCredential.uid);
-    return userCredential.uid;
+    const user = await signInWithEmailAndPassword(auth, email, password);
+    return user.uid;
   } catch (error) {
     return error;
   }

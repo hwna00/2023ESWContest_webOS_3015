@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-
+import dayjs from 'dayjs';
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import styles from '@housepital/common/css/HideScrollBar.module.css';
@@ -17,12 +17,14 @@ import TableHeader from '../component/TableSection/TableHeader';
 import StatisticCard from '../component/StatisticCard';
 import { getAppointments } from '../api';
 import LoadingPage from '@housepital/common/LoadingPage';
+import { useSelector } from 'react-redux';
 
 const MainPage = function () {
+  const hospital = useSelector(state => state.hospital);
   const [completeReservation, setCompleteReservation] = useState([]);
   const [ConfirmedReservation, setConfirmedReservation] = useState([]);
   const { data, isLoading, error } = useQuery(
-    ['appointments'],
+    ['appointments', hospital.hospitalId],
     getAppointments,
   );
   const navigate = useNavigate();
@@ -40,19 +42,35 @@ const MainPage = function () {
       navigate('/error-page');
     }
   }, [data, error, navigate]);
+  const now = dayjs().format('YYYY-MM-DD');
 
   return (
     <>
       {!isLoading ? (
         <VStack p="8" spacing="8" alignItems="initial">
           <Heading textAlign="left" p="4" fontSize="30px">
-            병원이름
+            {hospital.name}
           </Heading>
           <Box>
             <SimpleGrid w="full" spacing="8" placeItems="center" columns={3}>
-              <StatisticCard title="오늘 예정된 예약" count={13} />
-              <StatisticCard title="완료 대기" count={4} />
-              <StatisticCard title="전체 환자" count={17} />
+              <StatisticCard
+                title="오늘 예정된 예약"
+                count={
+                  data.filter(reservation =>
+                    dayjs(reservation.date).isSame(now),
+                  ).length
+                }
+              />
+              <StatisticCard
+                title="완료 대기"
+                count={
+                  data.filter(
+                    reservation =>
+                      dayjs(reservation.date).isSame(now).stateId === 'dc',
+                  ).length
+                }
+              />
+              <StatisticCard title="전체 환자" count={data.length} />
             </SimpleGrid>
           </Box>
           <Box>
