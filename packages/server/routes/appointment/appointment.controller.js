@@ -1,7 +1,7 @@
 const convertAppointment = require('../../utils/convertAppointment');
 const pool = require('../../config/db');
 
-const createAppointmentQuery = async function (connection, data) {
+const createAppointmentQuery = async (connection, data) => {
   const Query =
     'INSERT INTO Appointments(user_id, doctor_id, NFTF_id, date, time, message, is_NFTF) VALUES (?, ?, ?, ?, ?, ?, ?);';
   const Params = [
@@ -17,7 +17,7 @@ const createAppointmentQuery = async function (connection, data) {
   await connection.query(Query, Params);
 };
 
-const readAppointmentQuery = async function (connection, appointmentId) {
+const readAppointmentQuery = async (connection, appointmentId) => {
   const Query =
     'SELECT * FROM Users U JOIN Appointments A ON A.id = ? AND U.user_id = A.user_id;';
 
@@ -28,11 +28,7 @@ const readAppointmentQuery = async function (connection, appointmentId) {
   return rows;
 };
 
-const updateAppointmentQuery = async function (
-  connection,
-  appointmentId,
-  data,
-) {
+const updateAppointmentQuery = async (connection, appointmentId, data) => {
   const Query =
     'UPDATE Appointments SET state_id = ifnull(?, state_id), rejection_reason = ifnull(?, rejection_reason) WHERE id = ?;';
   const Params = [data.stateId, data.rejectionReason, appointmentId];
@@ -40,7 +36,7 @@ const updateAppointmentQuery = async function (
   await connection.query(Query, Params);
 };
 
-exports.createAppointment = async function (req, res) {
+exports.createAppointment = async (req, res) => {
   const { data } = req.body;
 
   try {
@@ -72,7 +68,7 @@ exports.createAppointment = async function (req, res) {
   }
 };
 
-exports.readAppointment = async function (req, res) {
+exports.readAppointment = async (req, res) => {
   const { appointmentId } = req.params;
 
   try {
@@ -114,7 +110,7 @@ exports.readAppointment = async function (req, res) {
   }
 };
 
-exports.updateAppointment = async function (req, res) {
+exports.updateAppointment = async (req, res) => {
   const { appointmentId } = req.params;
   const { data } = req.body;
 

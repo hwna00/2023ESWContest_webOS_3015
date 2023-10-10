@@ -17,7 +17,7 @@ const createDoctorQuery = async (connection, data) => {
   await connection.query(Query, Params);
 };
 
-const readDoctorQuery = async function (connection, doctorId) {
+const readDoctorQuery = async (connection, doctorId) => {
   const Query = `SELECT
   doctor_id AS id,
   D.name,
@@ -40,6 +40,17 @@ const readDoctorQuery = async function (connection, doctorId) {
 
   const Params = [doctorId];
 
+  const rows = await connection.query(Query, Params);
+
+  return rows;
+};
+
+const readDoctorAppointmentsQuery = async (connection, doctorId) => {
+  const Query = `SELECT A.id, user_id AS uid, U.user_name AS patientName, A.date, A.time, A.state_id AS stateId, A.NFTF_id AS NFTFId, A.message, 
+      A.is_NFTF AS isNFTF, A.updated_at AS updatedAt, A.rejection_reason AS rejectionReason  
+    FROM Appointments A JOIN UserName U USING(user_id) 
+    WHERE A.doctor_id = ? AND A.state_id = 'ac';`;
+  const Params = [doctorId];
   const rows = await connection.query(Query, Params);
 
   return rows;
@@ -95,7 +106,7 @@ exports.createDoctor = async (req, res) => {
   }
 };
 
-exports.readDoctor = async function (req, res) {
+exports.readDoctor = async (req, res) => {
   const { doctorId } = req.params;
   try {
     const connection = await pool.getConnection(async conn => conn);
@@ -120,6 +131,50 @@ exports.readDoctor = async function (req, res) {
           isSuccess: false,
           code: 404,
           message: '의사를 찾을 수 없습니다.',
+        });
+      }
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSuccess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
+exports.readDoctorAppointments = async (req, res) => {
+  const { doctorId } = req.params;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      const [rows] = await readDoctorAppointmentsQuery(connection, doctorId);
+
+      // [TODO] 의사는있지만 'ac'인 예약이 없는 지, 의사id가 잘못됐는지에 대한 처리 필요
+      if (rows.length === 0) {
+        throw Error('Appointments not found');
+      } else {
+        return res.json({
+          result: rows,
+          isSuccess: true,
+          code: 200,
+          message: '예약정보 조회 성공',
+        });
+      }
+    } catch (err) {
+      if (err.message === 'Appointments not found') {
+        return res.json({
+          isSuccess: false,
+          code: 404,
+          message: '예약정보를 찾을 수 없습니다.',
         });
       }
       return res.json({

@@ -12,7 +12,7 @@ const createHospitalsQuery = async (connection, data) => {
   await connection.query(Query, Params);
 };
 
-const readHospitalsQuery = async function (connection, name) {
+const readHospitalsQuery = async (connection, name) => {
   const selectAllHospitalsQuery =
     'SELECT hospital_id AS id, name, description, ykiho, created_at AS createdAt FROM Hospitals;';
   const selectHospitalsByNameQuery =
@@ -26,7 +26,7 @@ const readHospitalsQuery = async function (connection, name) {
   return rows;
 };
 
-const readHospitalQuery = async function (connection, hospitalId) {
+const readHospitalQuery = async (connection, hospitalId) => {
   const Query = `SELECT
   hospital_id AS id,
   H.name,
@@ -59,7 +59,7 @@ const readHospitalQuery = async function (connection, hospitalId) {
   return rows;
 };
 
-const readHospitalAppointmentsQuery = async function (connection, hospitalId) {
+const readHospitalAppointmentsQuery = async (connection, hospitalId) => {
   const Query =
     'SELECT * FROM Appointments JOIN UserName USING(user_id) JOIN DoctorName USING(doctor_id) WHERE doctor_id in (SELECT doctor_id FROM Doctors WHERE hospital_id = ?);';
   const Params = [hospitalId];
@@ -106,7 +106,7 @@ exports.createHospital = async (req, res) => {
   }
 };
 
-exports.readHospitals = async function (req, res) {
+exports.readHospitals = async (req, res) => {
   const { name } = req.query;
 
   try {
@@ -149,7 +149,7 @@ exports.readHospitals = async function (req, res) {
   }
 };
 
-exports.readHospital = async function (req, res) {
+exports.readHospital = async (req, res) => {
   const { hospitalId } = req.params;
   try {
     const connection = await pool.getConnection(async conn => conn);
@@ -193,7 +193,7 @@ exports.readHospital = async function (req, res) {
   }
 };
 
-exports.readHospitalAppointments = async function (req, res) {
+exports.readHospitalAppointments = async (req, res) => {
   const { hospitalId } = req.params;
 
   try {
