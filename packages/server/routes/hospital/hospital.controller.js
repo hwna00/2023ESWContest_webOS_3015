@@ -46,7 +46,7 @@ const readHospitalQuery = async (connection, hospitalId) => {
           'name', D.name,
           'specialty', D.specialty,
           'fields', D.fields,
-          'rate', ifnull((SELECT rate FROM DoctorRate WHERE doctor_id = D.doctor_id), 0)
+          'rate', (SELECT rate FROM DoctorRate WHERE doctor_id = D.doctor_id)
       ), null)) AS doctors,
   ifnull((SELECT JSON_ARRAYAGG(
       JSON_OBJECT(
