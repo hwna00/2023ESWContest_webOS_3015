@@ -13,6 +13,7 @@ import SignUp from './views/SignUp';
 import LogIn from './views/LogIn';
 import CompletedDiagnosis from './views/CompletedDiagnosis';
 import Setting from './views/Setting';
+import MyPage from './views/MyPage';
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,11 @@ const router = createBrowserRouter([
         element: <Setting />,
         children: [],
       },
+      {
+        path: '/mypage',
+        element: <MyPage />,
+        children: [],
+      },
     ],
   },
   {
@@ -64,6 +70,10 @@ const router = createBrowserRouter([
       {
         path: 'log-in',
         element: <LogIn />,
+      },
+      {
+        path: 'mypage',
+        element: <MyPage />,
       },
     ],
   },

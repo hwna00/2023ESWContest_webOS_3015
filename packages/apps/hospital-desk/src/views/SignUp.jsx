@@ -41,7 +41,6 @@ const SignUp = function () {
 
   const fetchResults = useCallback(async () => {
     const { data } = await axios.get(
-      // TODO: api 키 이름 변경
       `${BASE_URL}/getHospBasisList?serviceKey=${process.env.REACT_APP_PUBLIC_DP_API_KEY}&numOfRows=999&yadmNm=${hospitalName}`,
     );
 
