@@ -1,5 +1,5 @@
-module.exports = appointmentRows => {
-  const result = {
+module.exports = appointmentsFromDB => {
+  const appointments = {
     aw: [],
     ac: [],
     dc: [],
@@ -7,27 +7,27 @@ module.exports = appointmentRows => {
     ar: [],
   };
 
-  for (let i = 0; i < appointmentRows.length; i += 1) {
-    switch (appointmentRows[i].stateId) {
+  for (let i = 0; i < appointmentsFromDB.length; i += 1) {
+    switch (appointmentsFromDB[i].stateId) {
       case 'aw':
-        result.aw.push(appointmentRows[i]);
+        appointments.aw.push(appointmentsFromDB[i]);
         break;
       case 'ac':
-        result.ac.push(appointmentRows[i]);
+        appointments.ac.push(appointmentsFromDB[i]);
         break;
       case 'dc':
-        result.dc.push(appointmentRows[i]);
+        appointments.dc.push(appointmentsFromDB[i]);
         break;
       case 'pc':
-        result.pc.push(appointmentRows[i]);
+        appointments.pc.push(appointmentsFromDB[i]);
         break;
       case 'ar':
-        result.ar.push(appointmentRows[i]);
+        appointments.ar.push(appointmentsFromDB[i]);
         break;
       default:
         break;
     }
   }
 
-  return result;
+  return appointments;
 };
