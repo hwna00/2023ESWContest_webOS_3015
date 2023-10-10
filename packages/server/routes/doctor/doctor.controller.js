@@ -17,7 +17,7 @@ const createDoctorQuery = async (connection, data) => {
   await connection.query(Query, Params);
 };
 
-const readDoctorQuery = async function (connection, doctorId) {
+const readDoctorQuery = async (connection, doctorId) => {
   const Query = `SELECT
   doctor_id AS id,
   D.name,
@@ -95,7 +95,7 @@ exports.createDoctor = async (req, res) => {
   }
 };
 
-exports.readDoctor = async function (req, res) {
+exports.readDoctor = async (req, res) => {
   const { doctorId } = req.params;
   try {
     const connection = await pool.getConnection(async conn => conn);

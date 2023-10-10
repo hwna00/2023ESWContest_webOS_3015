@@ -26,7 +26,7 @@ const createUserQuery = async (connection, data) => {
   await connection.query(Query, Params);
 };
 
-const readUserQuery = async function (connection, uid) {
+const readUserQuery = async (connection, uid) => {
   const Query = 'SELECT * FROM Users WHERE user_id = ?;';
   const Params = [uid];
 
@@ -35,7 +35,7 @@ const readUserQuery = async function (connection, uid) {
   return rows;
 };
 
-const updateUserQuery = async function (connection, uid, data) {
+const updateUserQuery = async (connection, uid, data) => {
   const Query = `UPDATE Users SET name = ifnull(?, name), email = ifnull(?, email),
         phone_number = ifnull(?, phone_number), address = ifnull(?, address),
           address_detail = ifnull(?, address_detail), second_phone_number = ifnull(?, second_phone_number),
@@ -61,6 +61,19 @@ const updateUserQuery = async function (connection, uid, data) {
   ];
 
   await connection.query(Query, Params);
+};
+
+const readUserAppointmentsQuery = async (connection, uid) => {
+  const Query = `SELECT id, H.doctor_id AS doctorId, H.doctor_name AS doctorName, H.hospital_id AS hospitalId, 
+      H.hospital_name AS hospitalName, A.state_id AS stateId, A.NFTF_id AS NFTFId, A.date AS date, 
+        A.time time, A.message AS message, A.is_NFTF AS isNFTF, A.rejection_reason AS rejectionReason 
+    FROM Appointments A JOIN HospitalAffiliations H USING(doctor_id) 
+    WHERE A.user_id = ? AND A.state_id IN ("aw","ac","ar");`;
+  const Params = [uid, uid];
+
+  const rows = await connection.query(Query, Params);
+
+  return rows;
 };
 
 exports.createUser = async (req, res) => {
@@ -101,7 +114,7 @@ exports.createUser = async (req, res) => {
   }
 };
 
-exports.readUser = async function (req, res) {
+exports.readUser = async (req, res) => {
   const { uid } = req.params;
   try {
     const connection = await pool.getConnection(async conn => conn);
@@ -142,7 +155,7 @@ exports.readUser = async function (req, res) {
   }
 };
 
-exports.updateUser = async function (req, res) {
+exports.updateUser = async (req, res) => {
   const { uid } = req.params;
   const { data } = req.body;
 
@@ -174,20 +187,7 @@ exports.updateUser = async function (req, res) {
   }
 };
 
-const readUserAppointmentsQuery = async function (connection, uid) {
-  const Query = `SELECT id, H.doctor_id AS doctorId, H.doctor_name AS doctorName, H.hospital_id AS hospitalId, 
-      H.hospital_name AS hospitalName, A.state_id AS stateId, A.NFTF_id AS NFTFId, A.date AS date, 
-        A.time time, A.message AS message, A.is_NFTF AS isNFTF, A.rejection_reason AS rejectionReason 
-    FROM Appointments A JOIN HospitalAffiliations H USING(doctor_id) 
-    WHERE A.user_id = ? AND A.state_id IN ("aw","ac","ar");`;
-  const Params = [uid, uid];
-
-  const rows = await connection.query(Query, Params);
-
-  return rows;
-};
-
-exports.readUserAppointments = async function (req, res) {
+exports.readUserAppointments = async (req, res) => {
   const { uid } = req.params;
 
   try {
