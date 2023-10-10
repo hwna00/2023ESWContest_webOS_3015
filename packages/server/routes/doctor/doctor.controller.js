@@ -21,6 +21,8 @@ const readDoctorQuery = async (connection, doctorId) => {
   const Query = `SELECT
   doctor_id AS id,
   D.name,
+  H.tel,
+  H.address,
   H.ykiho,
   D.fields,
   D.specialty,
