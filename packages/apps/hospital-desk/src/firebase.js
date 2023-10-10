@@ -36,7 +36,6 @@ const fbLogIn = async data => {
   const { email, password } = data;
   try {
     const user = await signInWithEmailAndPassword(auth, email, password);
-    console.log(user.uid);
     return user.uid;
   } catch (error) {
     return error;

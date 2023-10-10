@@ -6,9 +6,7 @@ const instance = axios.create({
 });
 
 export const createHospital = async hospital => {
-  console.log(hospital);
   const { data } = await instance.post('hospitals', { data: hospital });
-  console.log(data);
   return data;
 };
 
