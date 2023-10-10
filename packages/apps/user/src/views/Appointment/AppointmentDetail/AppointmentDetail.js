@@ -57,10 +57,11 @@ const AppointmentDetail = function () {
     getDetailByCategory(category, id),
   );
 
-  const { data: hospitalDtl } = useQuery(
-    ['hospitalDetail', id],
-    getHospitalDtl(data?.ykiho),
-  );
+  const {
+    isLoading: isDtlLoading,
+    data: hospitalDtl,
+    isError: isDtlError,
+  } = useQuery([id], getHospitalDtl(data?.ykiho));
 
   const onToggleBookmarkClick = useCallback(() => {
     // Todo: 추후에 isFavorite 항목을 수정하는 axios patch 함수로 변경해야 함.
@@ -116,6 +117,7 @@ const AppointmentDetail = function () {
 
   return (
     <HStack height="full" gap="6">
+      {isDtlError && <Text>{isDtlError.message}</Text>}
       <VStack height="full" justifyContent="flex-start" alignItems="center">
         <BackButton />
       </VStack>
