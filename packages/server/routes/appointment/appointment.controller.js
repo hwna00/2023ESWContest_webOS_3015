@@ -36,6 +36,15 @@ const updateAppointmentQuery = async (connection, appointmentId, data) => {
   await connection.query(Query, Params);
 };
 
+const deleteAppointmentQuery = async (connection, appointmentId) => {
+  const Query = 'DELETE FROM Appointments WHERE id = ?;';
+  const Params = [appointmentId];
+
+  const deleteData = await connection.query(Query, Params);
+
+  return deleteData;
+};
+
 exports.createAppointment = async (req, res) => {
   const { data } = req.body;
 
@@ -125,6 +134,50 @@ exports.updateAppointment = async (req, res) => {
         message: '예약정보 업데이트 성공',
       });
     } catch (err) {
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSuccess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
+exports.deleteAppointment = async (req, res) => {
+  const { appointmentId } = req.params;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      const [deleteData] = await deleteAppointmentQuery(
+        connection,
+        appointmentId,
+      );
+      if (deleteData.affectedRows === 0) {
+        throw Error('Appointment not found');
+      } else {
+        return res.json({
+          isSuccess: true,
+          code: 204,
+          message: '예약 정보 삭제 완료',
+        });
+      }
+    } catch (err) {
+      if (err.message === 'Appointment not found') {
+        return res.json({
+          isSuccess: false,
+          code: 404,
+          message: '예약 정보를 찾을 수 없습니다.',
+        });
+      }
       return res.json({
         isSuccess: false,
         code: 500,
