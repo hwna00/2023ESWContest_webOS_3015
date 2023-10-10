@@ -104,7 +104,7 @@ const AppointmentViewList = function ({ type }) {
                       )}
 
                       <HStack my="2" flexWrap="wrap" rowGap="0" columnGap="3">
-                        {item.fields?.map(field => (
+                        {/* {item?.fields?.map(field => (
                           <Tag
                             size="md"
                             key={field}
@@ -113,7 +113,7 @@ const AppointmentViewList = function ({ type }) {
                           >
                             {field}
                           </Tag>
-                        ))}
+                        ))} */}
                       </HStack>
                     </VStack>
                   </HStack>

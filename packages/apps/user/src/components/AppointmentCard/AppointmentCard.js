@@ -65,7 +65,7 @@ function AppointmentCard({ data }) {
           {data.specialty && <span>{data.specialty}</span>}
         </Text>
         <Text fontSize="sm" mb="2" noOfLines="1">
-          {data.fields && <span>{data.fields.join(', ')}</span>}
+          {/* {data.fields && <span>{data.fields.join(', ')}</span>} */}
         </Text>
         <Text fontSize="sm" mb="1">
           {data.distance && <span>{data.distance}</span>}
