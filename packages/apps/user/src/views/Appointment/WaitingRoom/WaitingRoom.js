@@ -1,48 +1,43 @@
-import { useState, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-import { Flex, Box, VStack, HStack, Divider } from '@chakra-ui/react';
+import { Flex, Box, HStack, Text, UnorderedList } from '@chakra-ui/react';
 
 import WaitingItem from '../../../components/WaitingItem/WaitingItem';
 import BackButton from '../../../components/BackButton/BackButton';
+import { getAppointments } from '../../../api';
+import { useSelector } from 'react-redux';
+import ListSkeletion from '@housepital/common/ListSkeleton';
 
 function WaitingRoom() {
-  const [AppointmentList, setAppointmentList] = useState([
-    {
-      date: '7월 28일 금요일 16:30',
-      name: '양지웅',
-      hospital: '밝은안과',
-    },
-    {
-      date: '7월 30일 일요일 16:30',
-      name: '김종석',
-      hospital: '연세안새로운내과',
-    },
-    {
-      date: '8월 27일 일요일 10:30',
-      name: '서진형',
-      hospital: '튼튼치과',
-    },
-    {
-      date: '8월30일 일요일16시30분',
-      name: '김재인',
-      hospital: '이비인후과',
-    },
-    {
-      date: '9월1일 월요일13시30분',
-      name: '송보경',
-      hospital: '손발척척정형외과',
-    },
-    {
-      date: '10월3일 일요일18시30분',
-      name: '하철환',
-      hospital: '연피부과',
-    },
-  ]);
+  const uid = useSelector(state => state.me.uid);
+  const [appointments, setAppointments] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
-  const cancelAppointment = useCallback(index => {
-    setAppointmentList(prevAppointments =>
-      prevAppointments.filter((appointment, i) => i !== index),
-    );
+  const fetchAppointments = useCallback(async () => {
+    if (!uid) {
+      setAppointments([]);
+      setIsLoading(true);
+      return;
+    }
+    try {
+      const response = await getAppointments(uid);
+      setAppointments(response);
+      setIsError(false);
+    } catch {
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [uid]);
+
+  useEffect(() => {
+    fetchAppointments();
+  }, [fetchAppointments]);
+
+  const cancelAppointment = useCallback(appointmentId => {
+    // TODO: appointment id 기반으로 예약 취소하기
+    console.log(appointmentId);
   }, []);
 
   return (
@@ -50,37 +45,52 @@ function WaitingRoom() {
       <Flex>
         <BackButton title="대기실" />
       </Flex>
-      <VStack mx="5" align="stretch">
-        <HStack mt="7" mb="-2" justifyContent="space-evenly">
-          <Box width="25%" textAlign="center" fontWeight="bold">
-            예약 일시
-          </Box>
-          <Box width="25%" textAlign="center" fontWeight="bold">
-            병원
-          </Box>
-          <Box width="25%" textAlign="center" fontWeight="bold">
-            의사
-          </Box>
-          <Box width="25%" />
-        </HStack>
-        <Divider h="0.5" mb="1" bgColor="black" />
-        <Box
-          display="flex"
-          flexDirection="column"
-          gap="3"
-          h="80vh"
-          overflowY="scroll"
-        >
-          {AppointmentList.map((appointment, index) => (
-            <WaitingItem
-              key={index}
-              waiting={appointment}
-              index={index}
-              cancelAppointment={cancelAppointment}
-            />
-          ))}
+
+      <HStack
+        width="full"
+        justifyContent="space-evenly"
+        fontSize="lg"
+        fontWeight="bold"
+        mt="8"
+      >
+        <Box flex={1} textAlign="center" fontWeight="bold">
+          예약 일시
         </Box>
-      </VStack>
+        <Box flex={1} textAlign="center" fontWeight="bold">
+          병원
+        </Box>
+        <Box flex={1} textAlign="center" fontWeight="bold">
+          의사
+        </Box>
+        <Box flex={1} />
+      </HStack>
+
+      <UnorderedList
+        listStyleType="none"
+        width="full"
+        h="80vh"
+        overflowY="scroll"
+        marginX={0}
+        mt="4"
+        spacing="4"
+      >
+        {isLoading ? (
+          <ListSkeletion />
+        ) : (
+          <>
+            {isError && (
+              <Text textAlign="center">데이터를 불러올 수 없습니다.</Text>
+            )}
+            {appointments?.map(appointment => (
+              <WaitingItem
+                key={appointment.id}
+                appointment={appointment}
+                cancelAppointment={cancelAppointment}
+              />
+            ))}
+          </>
+        )}
+      </UnorderedList>
     </Box>
   );
 }
