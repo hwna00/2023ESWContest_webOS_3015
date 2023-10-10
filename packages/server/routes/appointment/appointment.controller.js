@@ -79,7 +79,7 @@ exports.readAppointment = async (req, res) => {
         throw Error('Appointment not found');
       } else {
         return res.json({
-          result: convertAppointment.convertByUser(rows[0]),
+          result: convertAppointment.convert(rows[0]),
           isSuccess: true,
           code: 200,
           message: '유저 예약정보 조회 성공',

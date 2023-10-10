@@ -1,5 +1,4 @@
 const convertHospital = require('../../utils/convertHospital');
-const convertAppointment = require('../../utils/convertAppointment');
 const classifyAppointments = require('../../utils/classifyAppointments');
 const pool = require('../../config/db');
 
@@ -47,7 +46,7 @@ const readHospitalQuery = async (connection, hospitalId) => {
           'name', D.name,
           'specialty', D.specialty,
           'fields', D.fields,
-          'rate', ifnull((SELECT rate FROM DoctorRate WHERE doctor_id = D.doctor_id), 0)
+          'rate', (SELECT rate FROM DoctorRate WHERE doctor_id = D.doctor_id)
       ), null)) AS doctors,
   ifnull((SELECT JSON_ARRAYAGG(
       JSON_OBJECT(
@@ -125,7 +124,7 @@ exports.readHospitals = async (req, res) => {
       if (rows.length === 0) {
         throw Error('Hospital not found');
       } else {
-        const hospitals = rows.map(row => convertHospital(row));
+        const hospitals = rows.map(row => convertHospital.convert(row));
         return res.json({
           result: hospitals,
           isSuccess: true,
@@ -217,7 +216,7 @@ exports.readHospitalAppointments = async (req, res) => {
         throw Error('Appointments not found');
       } else {
         const classifiedRows = classifyAppointments(
-          convertAppointment.convertByHospital(rows),
+          convertHospital.convertAppointments(rows),
         );
         return res.json({
           result: classifiedRows,
