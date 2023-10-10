@@ -24,8 +24,14 @@ export const createAppointment = async data => {
 };
 
 export const getAppointments = async uid => {
-  //TODO: 아직 구현되지 않음
-  return await instance.get(`/appointments/${uid}`);
+  try {
+    const { data } = await instance.get(`users/${uid}/appointments`);
+    const { aw, ac } = await data.result;
+
+    return [...aw, ...ac];
+  } catch (error) {
+    throw new Error(error);
+  }
 };
 
 export const getFavorites = async () => {

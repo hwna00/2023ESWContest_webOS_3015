@@ -11,6 +11,36 @@ import {
 
 import AppointmentViewList from '../../components/AppointmentViewList/AppointmentViewList';
 import { FavoriteList } from './dataList';
+import { useCallback, useEffect, useState } from 'react';
+import { getAppointments } from '../../api';
+import { useSelector } from 'react-redux';
+
+const Appointment = function () {
+  const uid = useSelector(state => state.me.uid);
+  const [appointments, setAppointments] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
+
+  const fetchAppointments = useCallback(async () => {
+    if (!uid) {
+      setAppointments();
+      setIsLoading(true);
+      return;
+    }
+    try {
+      const response = await getAppointments(uid);
+      setAppointments(response.length);
+      setIsError(false);
+    } catch {
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [uid]);
+
+  useEffect(() => {
+    fetchAppointments();
+  }, [fetchAppointments]);
 
 const Appointment = function () {
   return (
@@ -23,7 +53,28 @@ const Appointment = function () {
             </Text>
           </Box>
           <Flex h="75%" alignItems="center" justifyContent="center">
-            <Text opacity="0.5">예약 내역이 없습니다.</Text>
+            {isLoading ? (
+              '예약을 불러오는 중입니다.'
+            ) : (
+              <>
+                {isError && <Text opacity="0.5">예약 내역이 없습니다.</Text>}
+                {
+                  <ChakraLink
+                    as={ReactRouterLink}
+                    to="waiting-room"
+                    textDecoration="none !important"
+                  >
+                    <Text
+                      textAlign="center"
+                      textDecoration="underline"
+                      fontSize="lg"
+                    >
+                      {appointments}건의 예약이 있습니다.
+                    </Text>
+                  </ChakraLink>
+                }
+              </>
+            )}
           </Flex>
         </Box>
 
