@@ -5,9 +5,16 @@ const pool = require('../../config/db');
 
 const createHospitalsQuery = async (connection, data) => {
   const Query =
-    'INSERT INTO Hospitals(hospital_id, name, description, ykiho) VALUES (?, ?, ?, ?);';
+    'INSERT INTO Hospitals(hospital_id, name, tel, address, description, ykiho) VALUES (?, ?, ?, ?, ?, ?);';
 
-  const Params = [data.hospitalId, data.name, data.description, data.ykiho];
+  const Params = [
+    data.hospitalId,
+    data.name,
+    data.tel,
+    data.address,
+    data.description,
+    data.ykiho,
+  ];
 
   await connection.query(Query, Params);
 };
