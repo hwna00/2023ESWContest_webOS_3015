@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-
+import dayjs from 'dayjs';
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import styles from '@housepital/common/css/HideScrollBar.module.css';
@@ -27,7 +27,6 @@ const MainPage = function () {
     ['appointments', hospital.hospitalId],
     getAppointments,
   );
-
   const navigate = useNavigate();
   useEffect(() => {
     if (data) {
@@ -43,6 +42,7 @@ const MainPage = function () {
       navigate('/error-page');
     }
   }, [data, error, navigate]);
+  const now = dayjs().format('YYYY-MM-DD');
 
   return (
     <>
@@ -53,9 +53,24 @@ const MainPage = function () {
           </Heading>
           <Box>
             <SimpleGrid w="full" spacing="8" placeItems="center" columns={3}>
-              <StatisticCard title="오늘 예정된 예약" count={13} />
-              <StatisticCard title="완료 대기" count={4} />
-              <StatisticCard title="전체 환자" count={17} />
+              <StatisticCard
+                title="오늘 예정된 예약"
+                count={
+                  data.filter(reservation =>
+                    dayjs(reservation.date).isSame(now),
+                  ).length
+                }
+              />
+              <StatisticCard
+                title="완료 대기"
+                count={
+                  data.filter(
+                    reservation =>
+                      dayjs(reservation.date).isSame(now).stateId === 'dc',
+                  ).length
+                }
+              />
+              <StatisticCard title="전체 환자" count={data.length} />
             </SimpleGrid>
           </Box>
           <Box>
