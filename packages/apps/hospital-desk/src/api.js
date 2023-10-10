@@ -1,21 +1,32 @@
 import axios from 'axios';
+import { Error } from 'mongoose';
 
 const instance = axios.create({
   baseURL: 'http://localhost:3000/api',
 });
 
-export const createHospital = hospital =>
-  instance.post('hospitals', { data: hospital });
+export const createHospital = async hospital => {
+  const { data } = await instance.post('hospitals', { data: hospital });
+  return data;
+};
 
 export const postPayment = (id, payment) =>
   instance.post(`/appointments/${id}/payment/`, { data: payment });
 
 export const updatePayment = (id, payment) =>
   instance.patch(`/appointments/${id}/payment/`, { data: payment });
-export const getAppointments = () => {
-  // const { data: appointments } = instance.get('/appointments');
+
+export const getAppointments = async hospitalId => {
+  // const { data: appointments } = await instance.get(
+  //   `/hospitals/${hospitalId}/appointments`,
+  // );
   if (false) {
-    // TODO: 해당 리스트가 존재하지 않는 경우에 대한 처리
+    try {
+      // console.log(appointments);
+      // return appointments;
+    } catch (error) {
+      console.log('getAppointment error: ', error);
+    }
   } else {
     return [
       {
@@ -144,12 +155,11 @@ export const updateAppointmentState = (id, newStateId, rejectionReason) =>
     rejection_reason: rejectionReason,
   });
 
-export const getPatientDetail = uid => {
-  // const { data: patient } = instance.get(`/users?uid=${uid}`);
-  console.log(uid);
+export const getPatientDetail = appointmentId => {
+  const { data: patient } = instance.get(`/appointments/${appointmentId}?`);
 
-  if (false) {
-    // TODO: 해당 유저가 존재하지 않는 경우에 대한 처리
+  if (patient) {
+    return patient;
   } else {
     // return patient;
     return {
@@ -174,19 +184,15 @@ export const getPatientDetail = uid => {
   }
 };
 
-export const getHospital = hospital_id => {
-  // const {
-  //   data: { result },
-  // } = instance.get(`/hospitals/${hospital_id}`);
+export const getHospital = async hospitalId => {
+  try {
+    const { data } = await instance.get(`/hospitals/${hospitalId}`);
+    return data.result;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
-  if (false) {
-    // return result;
-  } else
-    return {
-      hospital_id: 'zvvdsvsa',
-      name: '블라병원',
-      address: '서울시 성북구 정릉로 ',
-      addressDetail: '321',
-      profileImg: '',
-    };
+export const updateHospital = (hospitalId, data) => {
+  return instance.patch(`/hospitals/${hospitalId}`);
 };

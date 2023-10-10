@@ -1,11 +1,12 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 
 const hospitalInitialState = {
-  hospital_id: '',
+  hospitalId: '',
+  ykiho: '',
   name: '',
   address: '',
-  addressDetail: '',
   profileImg: '',
+  tel: '',
 };
 
 const signUpSlice = createSlice({
