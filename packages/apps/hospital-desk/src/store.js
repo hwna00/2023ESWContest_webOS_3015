@@ -5,7 +5,6 @@ const hospitalInitialState = {
   ykiho: '',
   name: '',
   address: '',
-  addressDetail: '',
   profileImg: '',
   phoneNumber: '',
 };
