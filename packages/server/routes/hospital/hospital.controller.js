@@ -21,9 +21,9 @@ const createHospitalsQuery = async (connection, data) => {
 
 const readHospitalsQuery = async (connection, name) => {
   const selectAllHospitalsQuery =
-    'SELECT hospital_id AS id, name, description, ykiho, created_at AS createdAt FROM Hospitals;';
+    'SELECT hospital_id AS id, name, tel, address, description, ykiho, created_at AS createdAt FROM Hospitals;';
   const selectHospitalsByNameQuery =
-    'SELECT hospital_id AS id, name, description, ykiho, created_at AS createdAt FROM Hospitals WHERE name LIKE ?;';
+    'SELECT hospital_id AS id, name, tel, address, description, ykiho, created_at AS createdAt FROM Hospitals WHERE name LIKE ?;';
   const Params = [`%${name}%`];
 
   const Query = !name ? selectAllHospitalsQuery : selectHospitalsByNameQuery;
@@ -37,6 +37,8 @@ const readHospitalQuery = async (connection, hospitalId) => {
   const Query = `SELECT
   hospital_id AS id,
   H.name,
+  H.tel,
+  H.address,
   H.ykiho,
   H.description,
   JSON_ARRAYAGG(
