@@ -6,7 +6,7 @@ const hospitalInitialState = {
   name: '',
   address: '',
   profileImg: '',
-  phoneNumber: '',
+  tel: '',
 };
 
 const signUpSlice = createSlice({

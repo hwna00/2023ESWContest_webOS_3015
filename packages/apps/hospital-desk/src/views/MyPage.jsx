@@ -95,12 +95,12 @@ function MyPage() {
             <Input {...register('address', {})} readOnly />
             <FormErrorMessage>{errors?.address?.message}</FormErrorMessage>
           </FormControl>
-          <FormControl width="full" isRequired isInvalid={errors.phoneNumber}>
+          <FormControl width="full" isRequired isInvalid={errors.tel}>
             <FormLabel>전화번호</FormLabel>
             <InputGroup colorScheme="primary">
               <Input
                 type="tel"
-                {...register('phoneNumber', {
+                {...register('tel', {
                   pattern: {
                     value: /^[0-9]{9, 11}$/i,
                   },
@@ -108,7 +108,7 @@ function MyPage() {
                 readOnly
               />
             </InputGroup>
-            <FormErrorMessage>{errors.phoneNumber?.message}</FormErrorMessage>
+            <FormErrorMessage>{errors.tel?.message}</FormErrorMessage>
           </FormControl>
           <FormControl width="full" isInvalid={errors.description}>
             <FormLabel>상세정보 및 소개글</FormLabel>
