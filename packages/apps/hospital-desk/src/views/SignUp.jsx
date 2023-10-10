@@ -70,7 +70,10 @@ const SignUp = function () {
         ykiho: hospital.ykiho,
         name: hospital.yadmNm,
         description: data.description,
+        adress: hospital.addr,
+        phoneNumber: hospital.telno,
       });
+
       if (hospitalData.isSuccess) {
         navigate('/');
       } else {

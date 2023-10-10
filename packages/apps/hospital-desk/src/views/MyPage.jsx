@@ -9,6 +9,7 @@ import {
   HStack,
   Input,
   InputGroup,
+  Textarea,
   VStack,
 } from '@chakra-ui/react';
 import { useCallback, useEffect, useState } from 'react';
@@ -16,15 +17,15 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateHospital } from '../api';
 import axios from 'axios';
-import { setHospital } from '../store';
 
 const BASE_URL = ` http://apis.data.go.kr/B551182/MadmDtlInfoService2`;
 
 function MyPage() {
   const hospital = useSelector(state => state.hospital);
   const ykiho = hospital.ykiho;
+
   const dispatch = useDispatch();
-  const [item, setItem] = useState({ addr: '', telno: '' });
+  const [item, setItem] = useState({});
   const {
     register,
     handleSubmit,
@@ -33,7 +34,7 @@ function MyPage() {
     formState: { errors },
   } = useForm({ mode: 'all', defaultValues: hospital });
 
-  const fetchResults = useCallback(async () => {
+  const fetchResultsInfo = useCallback(async () => {
     const { data } = await axios.get(
       `${BASE_URL}/getEqpInfo2?serviceKey=${process.env.REACT_APP_PUBLIC_DP_API_KEY}&ykiho=${ykiho}`,
     );
@@ -42,20 +43,13 @@ function MyPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchResults();
+      const data = await fetchResultsInfo();
       setItem(data.response.body.items.item);
-      dispatch(
-        setHospital({
-          address: data.response.body.items.item.addr,
-          phoneNumber: data.response.body.items.item.telno,
-        }),
-      );
     };
 
     fetchData();
-  }, [fetchResults, setValue, dispatch]);
+  }, [fetchResultsInfo, setValue, dispatch]);
 
-  console.log(item);
   const onSubmit = data => {
     updateHospital(hospital.hospitalId, data)
       .then(() => {
@@ -88,6 +82,7 @@ function MyPage() {
               <Input
                 {...register('username', {})}
                 defaultValue={hospital.name}
+                readOnly
               />
               <FormErrorMessage>{errors.username?.message}</FormErrorMessage>
             </FormControl>
@@ -97,15 +92,8 @@ function MyPage() {
         <VStack>
           <FormControl width="full" isRequired isInvalid={errors.address}>
             <FormLabel margin={0}>주소</FormLabel>
-            <Input {...register('address', {})} />
+            <Input {...register('address', {})} readOnly />
             <FormErrorMessage>{errors?.address?.message}</FormErrorMessage>
-          </FormControl>
-          <FormControl width="full" isRequired isInvalid={errors.addressDetail}>
-            <FormLabel margin={0}>주소 상세</FormLabel>
-            <Input {...register('addressDetail', {})} />
-            <FormErrorMessage>
-              {errors?.addressDetail?.message}
-            </FormErrorMessage>
           </FormControl>
           <FormControl width="full" isRequired isInvalid={errors.phoneNumber}>
             <FormLabel>전화번호</FormLabel>
@@ -117,6 +105,7 @@ function MyPage() {
                     value: /^[0-9]{9, 11}$/i,
                   },
                 })}
+                readOnly
               />
             </InputGroup>
             <FormErrorMessage>{errors.phoneNumber?.message}</FormErrorMessage>
@@ -124,14 +113,24 @@ function MyPage() {
           <FormControl width="full" isInvalid={errors.description}>
             <FormLabel>상세정보 및 소개글</FormLabel>
             <InputGroup colorScheme="primary">
-              <Input
+              <Textarea
                 {...register('description')}
                 defaultValue={hospital.description}
               />
             </InputGroup>
             <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
           </FormControl>
-          {/* 병원 운영시간  */}
+
+          <FormControl width="full" isInvalid={errors.runningtime}>
+            <FormLabel>병원 영업시간</FormLabel>
+            <InputGroup colorScheme="primary">
+              <Textarea
+                {...register('runningtime')}
+                defaultValue={hospital.runningtime}
+              />
+            </InputGroup>
+            <FormErrorMessage>{errors.runningtime?.message}</FormErrorMessage>
+          </FormControl>
         </VStack>
         <ButtonGroup
           display={'flex'}
