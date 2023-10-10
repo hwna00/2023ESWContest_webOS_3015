@@ -5,6 +5,14 @@ const instance = axios.create({
   baseURL: 'http://localhost:3000/api',
 });
 
+export const fetchResultsTime = async ykiho => {
+  const BASE_URL = ` http://apis.data.go.kr/B551182/MadmDtlInfoService2`;
+  const { data } = await axios.get(
+    `${BASE_URL}/getDtlInfo2?serviceKey=${process.env.REACT_APP_PUBLIC_DP_API_KEY}&ykiho=${ykiho}&_type=json`,
+  );
+  return data;
+};
+
 export const createHospital = async hospital => {
   const { data } = await instance.post('hospitals', { data: hospital });
   return data;
@@ -194,5 +202,5 @@ export const getHospital = async hospitalId => {
 };
 
 export const updateHospital = (hospitalId, data) => {
-  return instance.patch(`/hospitals/${hospitalId}`);
+  return instance.patch(`/hospitals/${hospitalId}`, data);
 };
