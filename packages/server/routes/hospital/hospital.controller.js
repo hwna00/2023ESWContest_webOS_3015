@@ -48,7 +48,7 @@ const readHospitalQuery = async function (connection, hospitalId) {
           'rate', R.rate,
           'content', R.content
       ))
-  FROM (SELECT doctor_id, name FROM HospitalAffiliations WHERE hospital_id = ?) D JOIN ReviewRelationship R USING(doctor_id)), JSON_ARRAY()) AS reviews
+  FROM (SELECT doctor_id FROM HospitalAffiliations WHERE hospital_id = ?) D JOIN ReviewRelationship R USING(doctor_id)), JSON_ARRAY()) AS reviews
   FROM (SELECT * FROM Hospitals WHERE hospital_id = ?) H
   LEFT OUTER JOIN Doctors D USING(hospital_id);`;
 
@@ -59,7 +59,7 @@ const readHospitalQuery = async function (connection, hospitalId) {
   return rows;
 };
 
-const readAppointmentsQuery = async function (connection, hospitalId) {
+const readHospitalAppointmentsQuery = async function (connection, hospitalId) {
   const Query =
     'SELECT * FROM Appointments JOIN UserName USING(user_id) JOIN DoctorName USING(doctor_id) WHERE doctor_id in (SELECT doctor_id FROM Doctors WHERE hospital_id = ?);';
   const Params = [hospitalId];
@@ -193,13 +193,16 @@ exports.readHospital = async function (req, res) {
   }
 };
 
-exports.readAppointments = async function (req, res) {
+exports.readHospitalAppointments = async function (req, res) {
   const { hospitalId } = req.params;
 
   try {
     const connection = await pool.getConnection(async conn => conn);
     try {
-      const [rows] = await readAppointmentsQuery(connection, hospitalId);
+      const [rows] = await readHospitalAppointmentsQuery(
+        connection,
+        hospitalId,
+      );
 
       if (rows.length === 0) {
         throw Error('Appointments not found');

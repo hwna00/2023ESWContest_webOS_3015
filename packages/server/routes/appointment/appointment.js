@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 const appointmentMid = require('./appointment.controller');
 
-router.get('/appointments/:appointmentId', appointmentMid.readUserAppointment);
+router.get('/appointments/:appointmentId', appointmentMid.readAppointment);
 router.post('/appointments', appointmentMid.createAppointment);
 router.patch('/appointments/:appointmentId', appointmentMid.updateAppointment);
 

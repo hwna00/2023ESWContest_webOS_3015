@@ -17,7 +17,7 @@ const createAppointmentQuery = async function (connection, data) {
   await connection.query(Query, Params);
 };
 
-const readUserAppointmentQuery = async function (connection, appointmentId) {
+const readAppointmentQuery = async function (connection, appointmentId) {
   const Query =
     'SELECT * FROM Users U JOIN Appointments A ON A.id = ? AND U.user_id = A.user_id;';
 
@@ -72,13 +72,13 @@ exports.createAppointment = async function (req, res) {
   }
 };
 
-exports.readUserAppointment = async function (req, res) {
+exports.readAppointment = async function (req, res) {
   const { appointmentId } = req.params;
 
   try {
     const connection = await pool.getConnection(async conn => conn);
     try {
-      const [rows] = await readUserAppointmentQuery(connection, appointmentId);
+      const [rows] = await readAppointmentQuery(connection, appointmentId);
       if (rows.length === 0) {
         throw Error('Appointment not found');
       } else {
