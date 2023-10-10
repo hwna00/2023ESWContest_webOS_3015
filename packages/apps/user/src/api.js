@@ -28,10 +28,81 @@ export const getAppointments = async uid => {
   return await instance.get(`/appointments/${uid}`);
 };
 
-export const getHospitals = () => {
-  return instance.get('/hospitals').then(res => res.data);
+export const getFavorites = async () => {
+  try {
+    const { data } = await instance.get('/favorites');
+    return data.result;
+  } catch (error) {
+    throw new Error(error);
+  }
 };
 
-export const getDoctors = () => {
-  return instance.get('/doctors').then(res => res.data);
+export const getHospitals = async () => {
+  try {
+    const { data } = await instance.get('/hospitals');
+    return data.result;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const getDoctors = async () => {
+  try {
+    const { data } = await instance.get('/doctors');
+    return data.result;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const getHospital = async hospitalId => {
+  try {
+    const { data } = await instance.get(`/hospitals/${hospitalId}`);
+    return data.result;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const getDoctor = async doctorId => {
+  try {
+    const { data } = await instance.get(`/doctors/${doctorId}`);
+    return { ...data.result, fields: JSON.parse(data?.result?.fields) };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const getHospitalDtl = async ykiho => {
+  if (ykiho === '') {
+    return {};
+  }
+  const base = 'https://apis.data.go.kr/B551182/MadmDtlInfoService2';
+  try {
+    const { data: dtl } = await axios.get(`${base}/getDtlInfo2`, {
+      params: {
+        serviceKey: process.env.REACT_APP_DATA_DECODING_API_KEY,
+        // ykiho,
+        ykiho:
+          'JDQ4MTYyMiM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQzIyQ3OSQyNjE4MzIjNDEjJDEjJDgjJDgz',
+        type: 'json',
+      },
+    });
+
+    // TODO: 병원의 진료과목을 가져오는 api 함수 분리하기
+    const { data: dgsbjt } = await axios.get(`${base}/getDgsbjtInfo2`, {
+      params: {
+        serviceKey: process.env.REACT_APP_DATA_DECODING_API_KEY,
+        // ykiho,
+        ykiho:
+          'JDQ4MTYyMiM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQzIyQ3OSQyNjE4MzIjNDEjJDEjJDgjJDgz',
+        type: 'json',
+      },
+    });
+    console.log(dtl.response.body.items.item);
+    console.log(dgsbjt.response.body.items.item.map(field => field.dgsbjtCdNm));
+    // return data;
+  } catch (error) {
+    throw new Error(error);
+  }
 };

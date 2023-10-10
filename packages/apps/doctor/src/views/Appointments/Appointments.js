@@ -1,8 +1,8 @@
 import { useSelector } from 'react-redux';
 import { useQuery } from '@tanstack/react-query';
+import ListSkeletion from '@housepital/common/ListSkeleton';
 import { Box, Heading, Text, UnorderedList, VStack } from '@chakra-ui/react';
 
-import ListSkeletion from '../../components/ListSkeleton/ListSkeleton';
 import AppointmentListItem from '../../components/AppointmentListItem/AppointmentListItem';
 import AppointmentListHeader from '../../components/AppointmentListHeader/AppointmentListHeader';
 import { getAppointments } from '../../api';

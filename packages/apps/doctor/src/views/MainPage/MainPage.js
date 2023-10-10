@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux';
 import { useQuery } from '@tanstack/react-query';
 import ReviewList from '@housepital/common/ReviewList/ReviewList';
+import ListSkeletion from '@housepital/common/ListSkeleton';
 import {
   Box,
   HStack,
@@ -12,7 +13,6 @@ import {
   VStack,
 } from '@chakra-ui/react';
 
-import ListSkeletion from '../../components/ListSkeleton/ListSkeleton';
 import { getAppointments } from '../../api';
 
 const MainPage = function () {
