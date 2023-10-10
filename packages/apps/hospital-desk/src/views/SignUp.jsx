@@ -71,7 +71,7 @@ const SignUp = function () {
         name: hospital.yadmNm,
         description: data.description,
         adress: hospital.addr,
-        phoneNumber: hospital.telno,
+        tel: hospital.telno,
       });
 
       if (hospitalData.isSuccess) {
