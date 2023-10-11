@@ -14,7 +14,6 @@ export const fetchResultsTime = async ykiho => {
 };
 
 export const createHospital = async hospital => {
-  console.log(hospital);
   const { data } = await instance.post('hospitals', { data: hospital });
   console.log(data);
   return data;
@@ -26,144 +25,30 @@ export const postPayment = (id, payment) =>
 export const updatePayment = (id, payment) =>
   instance.patch(`/appointments/${id}/payment/`, { data: payment });
 
-export const getAppointments = async hospitalId => {
-  // const { data: appointments } = await instance.get(
-  //   `/hospitals/${hospitalId}/appointments`,
-  // );
-  if (false) {
-    try {
-      // console.log(appointments);
-      // return appointments;
-    } catch (error) {
-      console.log('getAppointment error: ', error);
-    }
-  } else {
-    return [
-      {
-        id: 1,
-        uid: 1,
-        name: '김재인',
-        phone_number: '010-1234-5678',
-        date: '2023-10-03',
-        time: '09:00',
-        isNFTF: true,
-        confirm: true,
-        stateId: 'ac',
-        doctorId: 1,
-        doctorName: '차은우',
-      },
-      {
-        id: 2,
-        uid: 2,
-        name: '양지웅',
-        phone_number: '010-1234-5678',
-        date: '2023-10-03',
-        time: '09:30',
-        isNFTF: false,
-        confirm: false,
-        stateId: 'pc',
-        doctorId: 1,
-        doctorName: '차은우',
-      },
-      {
-        id: 3,
-        uid: 3,
-        name: '송보경',
-        phone_number: '010-1234-5678',
-        date: '2023-10-03',
-        time: '10:30',
-        isNFTF: true,
-        confirm: true,
-        stateId: 'aw',
-        doctorId: 3,
-        doctorName: '차은후',
-      },
-      {
-        id: 4,
-        uid: 4,
-        name: '서진형',
-        phone_number: '010-1234-5678',
-        date: '2023-10-04',
-        time: '10:00',
-        isNFTF: false,
-        confirm: false,
-        stateId: 'aw',
-        doctorId: 4,
-        doctorName: '최은우',
-      },
-      {
-        id: 5,
-        uid: 5,
-        name: '하철환',
-        phone_number: '010-1234-5678',
-        date: '2023-10-04',
-        time: '11:00',
-        isNFTF: false,
-        confirm: true,
-        stateId: 'pc',
-        doctorId: 3,
-        doctorName: '차은후',
-      },
-      {
-        id: 6,
-        uid: 6,
-        name: '오예스',
-        phone_number: '010-1234-5678',
-        date: '2023-10-04',
-        time: '13:00',
-        isNFTF: true,
-        confirm: true,
-        stateId: 'ac',
-        doctorId: 1,
-        doctorName: '차은우',
-      },
-      {
-        id: 7,
-        uid: 7,
-        name: '오잉스',
-        phone_number: '010-1234-5678',
-        date: '2023-10-05',
-        time: '15:30',
-        isNFTF: true,
-        confirm: false,
-        stateId: 'ar',
-        doctorId: 2,
-        doctorName: '차은수',
-      },
-      {
-        id: 8,
-        uid: 8,
-        name: '박아파',
-        phone_number: '010-1234-5678',
-        date: '2023-10-05',
-        time: '16:00',
-        isNFTF: true,
-        stateId: 'dc',
-        doctorId: 2,
-        doctorName: '차은수',
-      },
-      {
-        id: 9,
-        uid: 9,
-        name: '나환자',
-        phone_number: '010-1234-5678',
-        date: '2023-10-05',
-        time: '16:30',
-        isNFTF: true,
-        confirm: false,
-        stateId: 'dc',
-        doctorId: 2,
-        doctorName: '차은수',
-      },
-    ];
+export const getAppointments = async ({ queryKey }) => {
+  const hospitalId = queryKey[0];
+
+  const { data: appointments } = await instance.get(
+    `/hospitals/${hospitalId}/appointments`,
+  );
+  if (!appointments.isSuccess && appointments.code === 404) {
+    return [];
   }
+  return appointments.result;
 };
 
-export const updateAppointmentState = (id, newStateId, rejectionReason) =>
-  instance.patch(`appointments/${id}`, {
-    stateId: newStateId,
-    rejection_reason: rejectionReason,
+export const updateAppointmentState = async (
+  id,
+  newStateId,
+  rejectionReason,
+) => {
+  return await instance.patch(`appointments/${id}`, {
+    data: {
+      stateId: newStateId,
+      rejectionReason: rejectionReason,
+    },
   });
+};
 
 export const getPatientDetail = appointmentId => {
   const { data: patient } = instance.get(`/appointments/${appointmentId}?`);

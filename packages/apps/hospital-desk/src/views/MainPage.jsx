@@ -23,25 +23,23 @@ const MainPage = function () {
   const hospital = useSelector(state => state.hospital);
   const [completeReservation, setCompleteReservation] = useState([]);
   const [ConfirmedReservation, setConfirmedReservation] = useState([]);
-  const { data, isLoading, error } = useQuery(
-    ['appointments', hospital.hospitalId],
-    getAppointments,
-  );
+  const { data, isLoading, error } = useQuery([hospital.id], getAppointments);
   const navigate = useNavigate();
+
   useEffect(() => {
-    if (data) {
+    if (data && !error) {
       setConfirmedReservation(
-        data.filter(reservation => reservation.stateId === 'ac'),
+        data?.aw?.filter(reservation => reservation.stateId === 'aw') || [],
       );
       setCompleteReservation(
-        data.filter(reservation => reservation.stateId === 'dc'),
+        data?.dc?.filter(reservation => reservation.stateId === 'dc') || [],
       );
     }
-
     if (error) {
       navigate('/error-page');
     }
   }, [data, error, navigate]);
+
   const now = dayjs().format('YYYY-MM-DD');
 
   return (
@@ -56,7 +54,7 @@ const MainPage = function () {
               <StatisticCard
                 title="오늘 예정된 예약"
                 count={
-                  data.filter(reservation =>
+                  data.aw.filter(reservation =>
                     dayjs(reservation.date).isSame(now),
                   ).length
                 }
@@ -64,13 +62,30 @@ const MainPage = function () {
               <StatisticCard
                 title="완료 대기"
                 count={
-                  data.filter(
-                    reservation =>
-                      dayjs(reservation.date).isSame(now).stateId === 'dc',
+                  data.dc.filter(reservation =>
+                    dayjs(reservation.date).isSame(now),
                   ).length
                 }
               />
-              <StatisticCard title="전체 환자" count={data.length} />
+              <StatisticCard
+                title="전체 환자"
+                count={
+                  [
+                    ...data.aw.filter(reservation =>
+                      dayjs(reservation.date).isSame(now),
+                    ),
+                    ...data.ac.filter(reservation =>
+                      dayjs(reservation.date).isSame(now),
+                    ),
+                    ...data.dc.filter(reservation =>
+                      dayjs(reservation.date).isSame(now),
+                    ),
+                    ...data.pc.filter(reservation =>
+                      dayjs(reservation.date).isSame(now),
+                    ),
+                  ].length
+                }
+              />
             </SimpleGrid>
           </Box>
           <Box>
@@ -93,9 +108,7 @@ const MainPage = function () {
 
             <div className={styles.hideScrollBar}>
               <Box maxH="135px" overflowY="scroll">
-                {ConfirmedReservation.filter(
-                  reservation => reservation.confirm === true,
-                ).map(reservation => (
+                {ConfirmedReservation.map(reservation => (
                   <TableRow
                     key={reservation.id}
                     data={reservation}

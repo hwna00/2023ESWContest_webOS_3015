@@ -1,7 +1,7 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 
 const hospitalInitialState = {
-  hospitalId: '',
+  id: '',
   ykiho: '',
   name: '',
   address: '',
