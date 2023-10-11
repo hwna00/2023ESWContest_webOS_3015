@@ -45,8 +45,10 @@ export const updateAppointmentState = async (
   rejectionReason,
 ) => {
   return await instance.patch(`appointments/${id}`, {
-    stateId: newStateId,
-    rejection_reason: rejectionReason,
+    data: {
+      stateId: newStateId,
+      rejectionReason: rejectionReason,
+    },
   });
 };
 
