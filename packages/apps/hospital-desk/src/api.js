@@ -34,7 +34,6 @@ export const getAppointments = async ({ queryKey }) => {
   if (!appointments.isSuccess && appointments.code === 404) {
     return [];
   }
-  console.log('data: ', appointments.result);
   return appointments.result;
 };
 

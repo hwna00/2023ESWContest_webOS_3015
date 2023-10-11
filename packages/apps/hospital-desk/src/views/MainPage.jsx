@@ -49,28 +49,45 @@ const MainPage = function () {
           <Heading textAlign="left" p="4" fontSize="30px">
             {hospital.name}
           </Heading>
-          {/* <Box>
+          <Box>
             <SimpleGrid w="full" spacing="8" placeItems="center" columns={3}>
               <StatisticCard
                 title="오늘 예정된 예약"
                 count={
-                  data.filter(reservation =>
-                    dayjs(reservation.ac.date).isSame(now),
+                  data.aw.filter(reservation =>
+                    dayjs(reservation.date).isSame(now),
                   ).length
                 }
               />
               <StatisticCard
                 title="완료 대기"
                 count={
-                  data.filter(
-                    reservation =>
-                      dayjs(reservation.date).isSame(now).stateId === 'dc',
+                  data.dc.filter(reservation =>
+                    dayjs(reservation.date).isSame(now),
                   ).length
                 }
               />
-              <StatisticCard title="전체 환자" count={data.length} />
+              <StatisticCard
+                title="전체 환자"
+                count={
+                  [
+                    ...data.aw.filter(reservation =>
+                      dayjs(reservation.date).isSame(now),
+                    ),
+                    ...data.ac.filter(reservation =>
+                      dayjs(reservation.date).isSame(now),
+                    ),
+                    ...data.dc.filter(reservation =>
+                      dayjs(reservation.date).isSame(now),
+                    ),
+                    ...data.pc.filter(reservation =>
+                      dayjs(reservation.date).isSame(now),
+                    ),
+                  ].length
+                }
+              />
             </SimpleGrid>
-          </Box> */}
+          </Box>
           <Box>
             <HStack justifyContent="space-between">
               <Heading fontSize="25px">다음 예약</Heading>

@@ -18,7 +18,6 @@ import {
 import { updateAppointmentState } from '../api';
 
 function CancelModal({ isOpen, onClose, id }) {
-  console.log('예약id: ', id);
   const [rejectionReason, setRejectionReason] = useState('');
   const [otherReason, setOtherReason] = useState('');
 
