@@ -23,25 +23,23 @@ const MainPage = function () {
   const hospital = useSelector(state => state.hospital);
   const [completeReservation, setCompleteReservation] = useState([]);
   const [ConfirmedReservation, setConfirmedReservation] = useState([]);
-  const { data, isLoading, error } = useQuery(
-    ['appointments', hospital.hospitalId],
-    getAppointments,
-  );
+  const { data, isLoading, error } = useQuery([hospital.id], getAppointments);
   const navigate = useNavigate();
+
   useEffect(() => {
-    if (data) {
+    if (data && !error) {
       setConfirmedReservation(
-        data.filter(reservation => reservation.stateId === 'ac'),
+        data?.aw?.filter(reservation => reservation.stateId === 'aw') || [],
       );
       setCompleteReservation(
-        data.filter(reservation => reservation.stateId === 'dc'),
+        data?.dc?.filter(reservation => reservation.stateId === 'dc') || [],
       );
     }
-
     if (error) {
       navigate('/error-page');
     }
   }, [data, error, navigate]);
+
   const now = dayjs().format('YYYY-MM-DD');
 
   return (
@@ -51,13 +49,13 @@ const MainPage = function () {
           <Heading textAlign="left" p="4" fontSize="30px">
             {hospital.name}
           </Heading>
-          <Box>
+          {/* <Box>
             <SimpleGrid w="full" spacing="8" placeItems="center" columns={3}>
               <StatisticCard
                 title="오늘 예정된 예약"
                 count={
                   data.filter(reservation =>
-                    dayjs(reservation.date).isSame(now),
+                    dayjs(reservation.ac.date).isSame(now),
                   ).length
                 }
               />
@@ -72,7 +70,7 @@ const MainPage = function () {
               />
               <StatisticCard title="전체 환자" count={data.length} />
             </SimpleGrid>
-          </Box>
+          </Box> */}
           <Box>
             <HStack justifyContent="space-between">
               <Heading fontSize="25px">다음 예약</Heading>
@@ -93,9 +91,7 @@ const MainPage = function () {
 
             <div className={styles.hideScrollBar}>
               <Box maxH="135px" overflowY="scroll">
-                {ConfirmedReservation.filter(
-                  reservation => reservation.confirm === true,
-                ).map(reservation => (
+                {ConfirmedReservation.map(reservation => (
                   <TableRow
                     key={reservation.id}
                     data={reservation}
