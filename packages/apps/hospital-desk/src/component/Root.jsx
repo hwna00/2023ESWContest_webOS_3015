@@ -18,7 +18,7 @@ function Root() {
   useEffect(() => {
     onAuthStateChanged(auth, async user => {
       if (!user) {
-        dispatch(resetHospital);
+        dispatch(resetHospital());
         navigate('/auth/log-in');
       }
       if (!hospitalId) {

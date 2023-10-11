@@ -70,7 +70,7 @@ const SignUp = function () {
         ykiho: hospital.ykiho,
         name: hospital.yadmNm,
         description: data.description,
-        adress: hospital.addr,
+        address: hospital.addr,
         tel: hospital.telno,
       });
 
