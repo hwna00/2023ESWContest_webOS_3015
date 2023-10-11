@@ -25,6 +25,7 @@ const readDoctorsQuery = async connection => {
 
   return rows;
 };
+
 const readDoctorQuery = async (connection, doctorId) => {
   const Query = `SELECT
   doctor_id AS id,
