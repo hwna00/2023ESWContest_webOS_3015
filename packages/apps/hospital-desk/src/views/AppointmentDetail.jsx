@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
 import LoadingPage from '@housepital/common/LoadingPage';
@@ -22,9 +22,12 @@ import {
 
 import CancelModal from '../component/CancelModal';
 import { getPatientDetail } from '../api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function AppointmentDetail() {
+  const { id } = useParams();
+  const AppointmentId = id;
+
   const {
     isOpen: isCancelOpen,
     onOpen: openCancelModal,
@@ -32,12 +35,17 @@ function AppointmentDetail() {
   } = useDisclosure();
   const [firstNFTF, setFirstNFTF] = useState([]);
   const [notFirstNFTF, setNotFirstNFTF] = useState([]);
-  const patientUid = 'ghdtpdnjs123124215215';
-  const { data, isLoading, error } = useQuery([patientUid], () =>
-    getPatientDetail(patientUid),
+  const { data, isLoading, isError } = useQuery(
+    [AppointmentId],
+    getPatientDetail,
   );
+
   const navigate = useNavigate();
-  if (error) navigate('/error-page');
+
+  useEffect(() => {
+    if (isError) navigate('/error-page');
+  }, [isError]);
+
   const handleFirstCheck = event => {
     if (event.target.checked) {
       setFirstNFTF([...firstNFTF, event.target.value]);
@@ -54,7 +62,11 @@ function AppointmentDetail() {
   };
   return (
     <>
-      {!isLoading ? (
+      {isLoading ? (
+        <LoadingPage />
+      ) : isError ? (
+        <div>Error occurred</div>
+      ) : (
         <VStack p="8" alignItems="initial" w="100%">
           <Heading textAlign="left" p="4" fontSize="30px">
             예약 상세 보기
@@ -67,24 +79,20 @@ function AppointmentDetail() {
           >
             <HStack spacing="6" alignItems="start" w="-webkit-fill-available">
               <AspectRatio ratio={1} width="100%" maxW="60">
-                <Image
-                  src={data.profileImg}
-                  alt={data.name}
-                  objectFit="cover"
-                />
+                <Image alt={data.name} objectFit="cover" />
               </AspectRatio>
               <VStack alignItems="left">
                 <Text fontSize="28px" fontWeight="bold">
-                  환자 이름 : {data.name}
+                  환자 이름 : {data?.result?.name}
                 </Text>
                 <Text fontSize="28px" fontWeight="bold">
-                  전화 번호 : {data.phoneNumber}
+                  전화 번호 : {data?.result?.phoneNumber}
                 </Text>
                 <Text fontSize="28px" fontWeight="bold">
-                  생년월일 :{data.birthDate}
+                  생년월일 :{data?.result?.birthDate}
                 </Text>
                 <Text fontSize="28px" fontWeight="bold">
-                  주소 : {data.address}
+                  주소 : {data?.result?.address}
                 </Text>
               </VStack>
             </HStack>
@@ -166,7 +174,7 @@ function AppointmentDetail() {
                     환자 전달 사항
                   </FormLabel>
                   <Textarea
-                    defaultValue={data.message}
+                    defaultValue={data?.result?.message}
                     borderRadius="8"
                     bgColor="primary.200"
                   />
@@ -180,7 +188,7 @@ function AppointmentDetail() {
                   환자 전달 사항
                 </FormLabel>
                 <Textarea
-                  defaultValue={data.message}
+                  defaultValue={data?.result?.message}
                   borderRadius="8"
                   bgColor="primary.200"
                   w="full"
@@ -192,8 +200,6 @@ function AppointmentDetail() {
             </Box>
           )}
         </VStack>
-      ) : (
-        <LoadingPage />
       )}
     </>
   );

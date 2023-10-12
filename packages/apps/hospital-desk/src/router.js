@@ -33,6 +33,10 @@ const router = createBrowserRouter([
         children: [],
       },
       {
+        path: '/completed-diagnosis',
+        element: <CompletedDiagnosis />,
+      },
+      {
         path: '/view-appointment/appointment-detail/:id',
         element: <AppointmentDetail />,
         children: [],
@@ -42,11 +46,7 @@ const router = createBrowserRouter([
         element: <ErrorPage />,
         children: [],
       },
-      {
-        path: '/completed-diagnosis',
-        element: <CompletedDiagnosis />,
-        children: [],
-      },
+
       {
         path: '/settings',
         element: <Setting />,

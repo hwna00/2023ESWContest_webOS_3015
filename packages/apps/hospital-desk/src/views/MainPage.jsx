@@ -29,7 +29,7 @@ const MainPage = function () {
   useEffect(() => {
     if (data && !error) {
       setConfirmedReservation(
-        data?.aw?.filter(reservation => reservation.stateId === 'aw') || [],
+        data?.ac?.filter(reservation => reservation.stateId === 'ac') || [],
       );
       setCompleteReservation(
         data?.dc?.filter(reservation => reservation.stateId === 'dc') || [],
