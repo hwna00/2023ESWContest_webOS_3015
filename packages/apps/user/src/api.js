@@ -20,6 +20,7 @@ export const updateMe = async (uid, data) => {
 };
 
 export const createAppointment = async data => {
+  console.log('data', data);
   return await instance.post('/appointments', { data });
 };
 

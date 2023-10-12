@@ -20,7 +20,7 @@ const AppointmentListItem = function ({ appointment }) {
             {appointment.time}
           </Text>
           <Text textAlign="center" flex={1}>
-            {appointment.isNFTF === '0' ? '대면' : '비대면'}
+            {appointment.isNFTF === 0 ? '대면' : '비대면'}
           </Text>
         </HStack>
       </ChakraLink>

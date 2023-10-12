@@ -32,3 +32,15 @@ export const getAppointments = async doctorId => {
     return error;
   }
 };
+
+export const getAppointment = async appointmentId => {
+  try {
+    const { data } = await instance.get(`appointments/${appointmentId}`);
+    if (data.isSuccess) {
+      return data.result;
+    }
+    throw new Error(data.message);
+  } catch (error) {
+    return error;
+  }
+};
