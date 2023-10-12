@@ -17,22 +17,23 @@ import TableRow from '../component/TableSection/TableRow';
 import TableHeader from '../component/TableSection/TableHeader';
 import { getAppointments } from '../api';
 import LoadingPage from '@housepital/common/LoadingPage';
+import { useSelector } from 'react-redux';
 
 function ManageAppointment() {
+  const hospital = useSelector(state => state.hospital);
   const [ConfirmedReservation, setConfirmedReservation] = useState([]);
   const [NotConfirmedReservation, setNotConfirmedReservation] = useState([]);
-  const { data, isLoading, error } = useQuery(
-    ['appointments'],
-    getAppointments,
-  );
+  const { data, isLoading, error } = useQuery([hospital.id], getAppointments);
+
   const navigate = useNavigate();
+
   useEffect(() => {
     if (!isLoading) {
       setConfirmedReservation(
-        data.filter(reservation => reservation.stateId === 'ac'),
+        data?.ac?.filter(reservation => reservation.stateId === 'ac') || [],
       );
       setNotConfirmedReservation(
-        data.filter(reservation => reservation.stateId === 'aw'),
+        data?.aw?.filter(reservation => reservation.stateId === 'aw') || [],
       );
     }
     if (error) {

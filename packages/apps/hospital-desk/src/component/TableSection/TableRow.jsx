@@ -88,11 +88,11 @@ function TableRow({ data, buttonType }) {
       h="14"
     >
       <Box flex={1} textAlign="center">
-        {data.name}
+        {data.patientName}
       </Box>
-
+      {/* TODO : 전화번호 뺼지 말지 정해야 함 */}
       <Box flex={1} textAlign="center">
-        {data.phone_number}
+        {data.phoneNumber}
       </Box>
 
       <Box flex={1} textAlign="center">

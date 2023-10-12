@@ -34,6 +34,7 @@ export const getAppointments = async ({ queryKey }) => {
   if (!appointments.isSuccess && appointments.code === 404) {
     return [];
   }
+
   return appointments.result;
 };
 
@@ -49,33 +50,14 @@ export const updateAppointmentState = async (
     },
   });
 };
+export const getPatientDetail = async queryKey => {
+  const appointmentId = parseInt(queryKey.queryKey[0]);
 
-export const getPatientDetail = appointmentId => {
-  const { data: patient } = instance.get(`/appointments/${appointmentId}?`);
-
-  if (patient) {
-    return patient;
+  const response = await instance.get(`/appointments/${appointmentId}?`);
+  if (response.data) {
+    return response.data;
   } else {
-    // return patient;
-    return {
-      name: 'test',
-      phoneNumber: '01012341234',
-      birthDate: '2000-10-10',
-      uid: 'ghdtpdnjs123124215215',
-      address: '서울 강남구 논현로123길 4-1', // 아직 입력되지 않았으면 ""
-      bloodType: 'AB',
-      chronicDisease: '123123',
-      height: '123',
-      regularMedicines: 'sfdsfsdf',
-      secondPhoneNumber: '12121212',
-      weight: '123',
-      gender: 'M',
-      datetime: '2023-09-30 09:10',
-      message: '안녕하세요',
-      isNFTF: 1,
-      profileImg:
-        'https://i.namu.wiki/i/AzUH8U5TcGdNJDN9Fl5zyEsLdL72N-PBsR0OjvAtmHRAwSDIcDwRAfYS5m_X_i0KFlZdmGNkwb5f8D_eC3vTuQ.webp',
-    };
+    return {};
   }
 };
 
