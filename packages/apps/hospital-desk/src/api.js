@@ -15,7 +15,7 @@ export const fetchResultsTime = async ykiho => {
 
 export const createHospital = async hospital => {
   const { data } = await instance.post('hospitals', { data: hospital });
-  console.log(data);
+
   return data;
 };
 

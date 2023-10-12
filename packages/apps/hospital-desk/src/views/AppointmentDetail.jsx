@@ -27,7 +27,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 function AppointmentDetail() {
   const { id } = useParams();
   const AppointmentId = id;
-  console.log(AppointmentId);
+
   const {
     isOpen: isCancelOpen,
     onOpen: openCancelModal,
@@ -39,7 +39,7 @@ function AppointmentDetail() {
     [AppointmentId],
     getPatientDetail,
   );
-  console.log('환자의 상세 정보 : ', data);
+
   const navigate = useNavigate();
 
   useEffect(() => {
