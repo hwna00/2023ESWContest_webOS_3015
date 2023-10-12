@@ -8,12 +8,13 @@ import AppointmentListHeader from '../../components/AppointmentListHeader/Appoin
 import { getAppointments } from '../../api';
 
 const Appointments = function () {
-  const doctorId = useSelector(state => state.doctor.id);
+  const me = useSelector(state => state.doctor);
   const {
     isLoading,
-    data: appointments = [],
+    data: appointments,
     isError,
-  } = useQuery(['appointments'], getAppointments(doctorId));
+  } = useQuery(['appointments'], () => getAppointments(me.id));
+
   return (
     <Box height="full" overflow="hidden">
       <Heading as="h1">예약된 진료</Heading>
@@ -31,7 +32,7 @@ const Appointments = function () {
             <ListSkeletion />
           ) : (
             <>
-              {appointments.map(appointment => (
+              {appointments?.map(appointment => (
                 <AppointmentListItem
                   key={appointment.id}
                   appointment={appointment}
