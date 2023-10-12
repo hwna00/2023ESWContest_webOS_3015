@@ -9,6 +9,7 @@ import Root from '../components/Root/Root';
 import healthHistoryRoutes from './healthHistoryRoutes';
 import authRoutes from './authRoutes';
 import appointmentRoutes from './appointmentRoutes';
+import VideoCall from '../views/VideoCall/VideoCall';
 
 const router = createHashRouter(
   [
@@ -19,6 +20,10 @@ const router = createHashRouter(
       children: [
         {
           path: '',
+          element: <VideoCall />,
+        },
+        {
+          path: 'temp',
           element: <MainPage />,
         },
         {
