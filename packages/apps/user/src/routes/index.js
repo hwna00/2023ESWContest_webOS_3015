@@ -20,11 +20,11 @@ const router = createHashRouter(
       children: [
         {
           path: '',
-          element: <VideoCall />,
+          element: <MainPage />,
         },
         {
-          path: 'temp',
-          element: <MainPage />,
+          path: 'treatment',
+          element: <VideoCall />,
         },
         {
           path: 'mypage',

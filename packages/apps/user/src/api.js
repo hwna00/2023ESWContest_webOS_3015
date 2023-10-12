@@ -20,7 +20,6 @@ export const updateMe = async (uid, data) => {
 };
 
 export const createAppointment = async data => {
-  console.log('data', data);
   return await instance.post('/appointments', { data });
 };
 
@@ -33,6 +32,11 @@ export const getAppointments = async uid => {
   } catch (error) {
     throw new Error(error);
   }
+};
+
+export const deleteAppointment = async appointmentId => {
+  const { data } = await instance.delete(`/appointments/${appointmentId}`);
+  return data;
 };
 
 export const getFavorites = async () => {
@@ -74,7 +78,6 @@ export const getHospital = async hospitalId => {
 export const getDoctor = async doctorId => {
   try {
     const { data } = await instance.get(`/doctors/${doctorId}`);
-    console.log(data);
     return { ...data.result, fields: JSON.parse(data?.result?.fields) };
   } catch (error) {
     throw new Error(error);
@@ -121,7 +124,6 @@ export const getFields = async ({ queryKey }) => {
         type: 'json',
       },
     });
-    console.log(dgsbjt.response.body.items.item.map(field => field.dgsbjtCdNm));
     return dgsbjt.response.body.items.item;
   } catch (error) {
     throw new Error(error);

@@ -8,7 +8,6 @@ import {
   Link as ChakraLink,
   UnorderedList,
   ListItem,
-  Tag,
   AspectRatio,
   Image,
   Icon,
@@ -18,15 +17,16 @@ import { useQuery } from '@tanstack/react-query';
 import ListSkeleton from '@housepital/common/ListSkeleton';
 
 import { getDoctors, getHospitals } from '../../api';
+import { getAllByCategory } from '../../utils/getByCategory';
 
 const AppointmentViewList = function ({ type }) {
   // TODO: isOpen을 통해 영업 여부를 판단해야 함
   // TODO: fields의 값은 백엔드로부터 가져오지 않고 ykiho를 통해 가져와야 한다.
   const [nameOfView, setNameOfView] = useState('');
-  const { isLoading, data, isError } = useQuery(
-    [type],
-    type === 'hospitals' ? getHospitals : getDoctors,
+  const { isLoading, data, isError } = useQuery([type], () =>
+    getAllByCategory(type),
   );
+
   useEffect(() => {
     if (type === 'hospitals') {
       setNameOfView('병원별 보기');
