@@ -74,6 +74,7 @@ export const getHospital = async hospitalId => {
 export const getDoctor = async doctorId => {
   try {
     const { data } = await instance.get(`/doctors/${doctorId}`);
+    console.log(data);
     return { ...data.result, fields: JSON.parse(data?.result?.fields) };
   } catch (error) {
     throw new Error(error);
@@ -96,7 +97,21 @@ export const getHospitalDtl = async ykiho => {
       },
     });
 
-    // TODO: 병원의 진료과목을 가져오는 api 함수 분리하기
+    console.log(dtl.response.body.items);
+    return dtl.response.body.items.item;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const getFields = async ({ queryKey }) => {
+  const [_, ykiho] = queryKey;
+
+  if (ykiho === '') {
+    return {};
+  }
+  const base = 'https://apis.data.go.kr/B551182/MadmDtlInfoService2';
+  try {
     const { data: dgsbjt } = await axios.get(`${base}/getDgsbjtInfo2`, {
       params: {
         serviceKey: process.env.REACT_APP_DATA_DECODING_API_KEY,
@@ -106,9 +121,8 @@ export const getHospitalDtl = async ykiho => {
         type: 'json',
       },
     });
-    console.log(dtl.response.body.items.item);
     console.log(dgsbjt.response.body.items.item.map(field => field.dgsbjtCdNm));
-    // return data;
+    return dgsbjt.response.body.items.item;
   } catch (error) {
     throw new Error(error);
   }

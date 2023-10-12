@@ -32,7 +32,7 @@ import { useSelector } from 'react-redux';
 
 import BackButton from '../../../components/BackButton/BackButton';
 import { useForm } from 'react-hook-form';
-import { createAppointment, getHospitalDtl } from '../../../api';
+import { createAppointment, getFields, getHospitalDtl } from '../../../api';
 import AppointForm from './AppiontForm';
 import ReviewList from '@housepital/common/ReviewList';
 import { useQuery } from '@tanstack/react-query';
@@ -61,11 +61,18 @@ const AppointmentDetail = function () {
     isLoading: isDtlLoading,
     data: hospitalDtl,
     isError: isDtlError,
-  } = useQuery([id], getHospitalDtl(data?.ykiho));
+  } = useQuery([id], () => getHospitalDtl(data?.ykiho));
+
+  const { data: fields = [] } = useQuery([id, data?.ykiho], getFields);
 
   const onToggleBookmarkClick = useCallback(() => {
     // Todo: 추후에 isFavorite 항목을 수정하는 axios patch 함수로 변경해야 함.
   }, []);
+
+  const getReviewAve = reviews => {
+    // TODO: 리뷰 평점 계산하는 computed 함수 제작하기
+    return 10;
+  };
 
   const onSubmit = useCallback(
     formData => {
@@ -80,7 +87,7 @@ const AppointmentDetail = function () {
 
       const appointment = {
         uid,
-        doctorId: 'hsw123', //TODO: 실제 doctor id로 변경해야 함
+        doctorId: data.id,
         time: appointTime,
         ...formData,
       };
@@ -89,7 +96,7 @@ const AppointmentDetail = function () {
         .then(() => console.log('success'))
         .catch(err => console.log(err));
     },
-    [appointTime, uid],
+    [appointTime, uid, data?.id],
   );
 
   useEffect(() => {
@@ -126,15 +133,19 @@ const AppointmentDetail = function () {
         'loading...'
       ) : (
         <>
-          <VStack minW="60" height="full" overflowY="auto">
+          <VStack
+            maxW="60"
+            height="full"
+            justifyContent="center"
+            overflowY="auto"
+          >
             <Box
               width="full"
-              minH="60"
               position="relative"
               borderRadius="md"
               overflow="hidden"
             >
-              <AspectRatio ratio={1}>
+              <AspectRatio ratio={1} maxW="48" mx="auto">
                 <Avatar src={data?.profileImg} alt="Profile" />
               </AspectRatio>
               <Text position="absolute" top="4" right="4">
@@ -182,7 +193,7 @@ const AppointmentDetail = function () {
               </Box>
               <HStack gap="2" alignItems="center" fontWeight="bold">
                 <Icon as={FaStar} color="yellow.400" />
-                <Text>{data?.rate}</Text>
+                <Text>{getReviewAve(data?.reviews)}</Text>
               </HStack>
             </HStack>
 
@@ -198,15 +209,22 @@ const AppointmentDetail = function () {
 
             <HStack
               width="full"
+              height="20"
               columnGap="4"
               rowGap="2"
               justifyContent="flex-start"
               alignItems="center"
               wrap="wrap"
+              overflowY="scroll"
             >
-              {data?.fields?.map(field => (
-                <Tag size="md" key={field} variant="outline" colorScheme="gray">
-                  {field}
+              {fields?.map(field => (
+                <Tag
+                  size="md"
+                  key={field.dgsbjtCdNm}
+                  variant="outline"
+                  colorScheme="gray"
+                >
+                  {field.dgsbjtCdNm}
                 </Tag>
               ))}
             </HStack>
@@ -250,7 +268,7 @@ const AppointmentDetail = function () {
                     minH="10"
                     mt="4"
                     padding="4"
-                    bgColor="primary.200"
+                    bgColor="primary.100"
                     borderRadius="md"
                   >
                     <Text>{data?.description}</Text>
@@ -266,7 +284,7 @@ const AppointmentDetail = function () {
                     minH="10"
                     mt="4"
                     padding="4"
-                    bgColor="primary.200"
+                    bgColor="primary.100"
                     borderRadius="md"
                   >
                     <UnorderedList styleType="none" ml={0} spacing="2">
@@ -334,7 +352,7 @@ const AppointmentDetail = function () {
                             as={ReactRouterLink}
                             to={`/appointment/doctors/${doctor.id}`}
                             p={'4'}
-                            bgColor={'primary.200'}
+                            bgColor={'primary.100'}
                             borderRadius={'md'}
                             display={'flex'}
                             justifyContent={'space-between'}
