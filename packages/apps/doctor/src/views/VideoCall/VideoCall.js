@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { io } from 'socket.io-client';
 import { Button, HStack, VStack } from '@chakra-ui/react';
@@ -10,7 +10,7 @@ const roomName = 'myRoom';
 const VideoCall = function () {
   const socketRef = useRef();
   const myVideoRef = useRef();
-  const doctorVideoRef = useRef();
+  const patientFace = useRef();
   const peerConnectionRef = useRef();
 
   const getMedia = async () => {
@@ -95,9 +95,9 @@ const VideoCall = function () {
     });
 
     peerConnectionRef.current.addEventListener('track', data => {
-      if (doctorVideoRef.current) {
+      if (patientFace.current) {
         console.log('track', data);
-        doctorVideoRef.current.srcObject = data.streams[0];
+        patientFace.current.srcObject = data.streams[0];
       }
     });
 
@@ -154,6 +154,8 @@ const VideoCall = function () {
       peerConnectionRef.current.addIceCandidate(candidate);
     });
 
+    onRTCStart();
+
     return () => {
       if (socketRef.current) {
         socketRef.current.disconnect();
@@ -167,22 +169,52 @@ const VideoCall = function () {
     };
   }, []);
 
+  const onTrmtDoneClick = useCallback(() => {
+    // TODO: 예약 상태를 진찰 완료로 변경하고 다음 페이지로 넘어가기
+  }, []);
+
   return (
     <VStack>
-      <Button onClick={onRTCStart}>입장하기</Button>
       <HStack justifyContent="center" alignItems="center">
         <video
-          style={{ border: '1px solid black' }}
-          width="300px"
+          className="myFace"
+          style={{
+            height: '100vh',
+            position: 'absolute',
+            top: '0px',
+            left: '0px',
+            zIndex: '999',
+            backgroundColor: 'white',
+          }}
           ref={myVideoRef}
           autoPlay
         />
+
         <video
-          style={{ border: '1px solid black' }}
-          width="300px"
-          ref={doctorVideoRef}
+          className="patientFace"
+          style={{
+            width: '250px',
+            position: 'absolute',
+            top: '0px',
+            right: '0px',
+            zIndex: '9999',
+            backgroundColor: 'transparent',
+            borderBottomLeftRadius: '16px',
+          }}
+          ref={patientFace}
           autoPlay
         />
+        <Button
+          colorScheme="red"
+          variant="outline"
+          position="absolute"
+          bottom="4"
+          right="4"
+          zIndex={1000}
+          onClick={onTrmtDoneClick}
+        >
+          진료 종료
+        </Button>
       </HStack>
     </VStack>
   );

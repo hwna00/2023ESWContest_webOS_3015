@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import LoadingPage from '@housepital/common/LoadingPage';
 import {
@@ -21,6 +21,7 @@ import { getAppointment } from '../../api';
 
 const AppointmentDetail = function () {
   const { id } = useParams();
+  const navigate = useNavigate();
   const {
     isOpen: isCancelOpen,
     onOpen: openCancelModal,
@@ -30,6 +31,10 @@ const AppointmentDetail = function () {
   const { isLoading, data = {} } = useQuery([`${id}`], () =>
     getAppointment(id),
   );
+
+  const onTrmtStartClick = () => {
+    navigate('treatment');
+  };
 
   return (
     /* eslint-disable */
@@ -70,7 +75,11 @@ const AppointmentDetail = function () {
             </VStack>
 
             {data.isNFTF === 1 && (
-              <Button alignSelf="center" colorScheme="primary">
+              <Button
+                alignSelf="center"
+                colorScheme="primary"
+                onClick={onTrmtStartClick}
+              >
                 진료 시작
               </Button>
             )}

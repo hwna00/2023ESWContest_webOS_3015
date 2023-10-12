@@ -29,6 +29,10 @@ const router = createHashRouter([
         element: <AppointmentDetail />,
       },
       {
+        path: '/appointments/:id/treatment',
+        element: <VideoCall />,
+      },
+      {
         path: '/appointments-history',
         element: <AppointmentsHistory />,
       },
@@ -39,10 +43,6 @@ const router = createHashRouter([
       {
         path: '/settings',
         element: <SettingPage />,
-      },
-      {
-        path: '/rtc',
-        element: <VideoCall />,
       },
     ],
   },
