@@ -1,5 +1,4 @@
-/* eslint-disable */
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { io } from 'socket.io-client';
 import { Button, HStack, VStack } from '@chakra-ui/react';
@@ -14,7 +13,6 @@ const VideoCall = function () {
   const peerConnectionRef = useRef();
 
   const getMedia = async () => {
-    console.log('get media');
     try {
       const stream = await window.navigator.mediaDevices.getUserMedia({
         video: true,
@@ -32,7 +30,6 @@ const VideoCall = function () {
   };
 
   const createOffer = async () => {
-    console.log('create Offer');
     if (!(peerConnectionRef.current && socketRef.current)) {
       return;
     }
@@ -41,14 +38,12 @@ const VideoCall = function () {
 
       peerConnectionRef.current.setLocalDescription(offer);
       socketRef.current.emit('offer', offer, roomName);
-      console.log('send offer', peerConnectionRef.current);
     } catch (e) {
       console.error(e);
     }
   };
 
   const createAnswer = async offer => {
-    console.log('createAnswer');
     if (!(peerConnectionRef.current && socketRef.current)) {
       return;
     }
@@ -64,7 +59,6 @@ const VideoCall = function () {
   };
 
   const makeConnection = async () => {
-    console.log('make connection');
     peerConnectionRef.current = new window.RTCPeerConnection({
       iceServers: [
         { urls: ['stun:ntk-turn-1.xirsys.com'] },
@@ -84,41 +78,32 @@ const VideoCall = function () {
     });
 
     peerConnectionRef.current.addEventListener('icecandidate', data => {
-      console.log('on icecandidate');
       if (data.candidate) {
         if (!socketRef.current) {
           return;
         }
-        console.log('recv candidate');
         socketRef.current.emit('ice', data.candidate, roomName);
       }
     });
 
     peerConnectionRef.current.addEventListener('track', data => {
       if (patientFace.current) {
-        console.log('track', data);
-        patientFace.current.srcObject = data.streams[0];
+        [patientFace.current.srcObject] = data.streams;
       }
     });
 
-    console.log('mystream', myStream);
     myStream
       ?.getTracks()
       .forEach(track => peerConnectionRef.current.addTrack(track, myStream));
   };
 
   const initCall = async () => {
-    console.log('1');
     await getMedia();
-    console.log('2');
     makeConnection();
-    console.log('3');
   };
 
   const onRTCStart = async () => {
-    console.log('before init call');
     await initCall();
-    console.log('after init call');
     socketRef.current.emit('join_room', roomName);
   };
 
@@ -128,29 +113,24 @@ const VideoCall = function () {
     });
 
     socketRef.current.on('welcome', async () => {
-      console.log('welcome!');
       await createOffer();
     });
 
     socketRef.current.on('offer', async offer => {
-      console.log('recv Offer');
       await createAnswer(offer);
     });
 
     socketRef.current.on('answer', async answer => {
-      console.log('recv Answer', answer);
       if (!peerConnectionRef.current) {
         return;
       }
       peerConnectionRef.current.setRemoteDescription(answer);
-      console.log('set remote', peerConnectionRef.current);
     });
 
     socketRef.current.on('ice', async candidate => {
       if (!peerConnectionRef.current) {
         return;
       }
-      console.log('received candidate', candidate);
       peerConnectionRef.current.addIceCandidate(candidate);
     });
 
@@ -188,7 +168,9 @@ const VideoCall = function () {
           }}
           ref={myVideoRef}
           autoPlay
-        />
+        >
+          <track kind="captions" />
+        </video>
 
         <video
           className="patientFace"
@@ -203,7 +185,9 @@ const VideoCall = function () {
           }}
           ref={patientFace}
           autoPlay
-        />
+        >
+          <track kind="captions" />
+        </video>
         <Button
           colorScheme="red"
           variant="outline"

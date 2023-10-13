@@ -22,7 +22,9 @@ const MainPage = function () {
     isLoading,
     data: appointments,
     isError,
-  } = useQuery(['appointments'], () => getAppointments(me.id));
+  } = useQuery(['appointments'], () => getAppointments(me.id), {
+    enabled: !!me.id,
+  });
 
   return (
     <HStack justifyContent="center" gap="12" height="full" overflowY="hidden">

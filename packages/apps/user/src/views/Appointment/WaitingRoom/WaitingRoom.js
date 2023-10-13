@@ -19,17 +19,26 @@ function WaitingRoom() {
     enabled: !!uid,
   });
 
-  useMutation(() => deleteAppointment('appointmentId'), {
-    onSuccess: () => {
-      queryClient.invalidateQueries(uid);
+  const { mutate } = useMutation(
+    appointmentId => deleteAppointment(appointmentId),
+    {
+      onSuccess: () => {
+        // TODO: 삭제 성공 알림
+        console.log('삭제 성공');
+        queryClient.invalidateQueries(uid);
+      },
+      onError: () => {
+        // TODO: 삭제 실패 알림
+        console.log('삭제 실패');
+      },
     },
-  });
-  const cancelAppointment = useCallback(async appointmentId => {
-    // TODO: 삭제 성공 알림
-    console.log('삭제 성공');
-
-    // TODO: 삭제 실패 알림
-  }, []);
+  );
+  const cancelAppointment = useCallback(
+    async appointmentId => {
+      mutate(appointmentId);
+    },
+    [mutate],
+  );
 
   return (
     <Box>
@@ -39,7 +48,7 @@ function WaitingRoom() {
 
       <HStack
         width="full"
-        justifyContent="space-evenly"
+        justifyContent="space-between"
         fontSize="lg"
         fontWeight="bold"
         mt="8"
@@ -51,9 +60,9 @@ function WaitingRoom() {
           병원
         </Box>
         <Box flex={1} textAlign="center" fontWeight="bold">
-          의사
+          담당 의사
         </Box>
-        <Box flex={1} />
+        <Box flex={2} />
       </HStack>
 
       <UnorderedList
