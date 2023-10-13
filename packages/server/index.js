@@ -69,7 +69,6 @@ wsServer.on('connection', socket => {
   });
 
   socket.on('join_room', roomName => {
-    console.log('someone joined romm');
     socket.join(roomName);
     socket.to(roomName).emit('welcome');
   });
@@ -84,6 +83,10 @@ wsServer.on('connection', socket => {
 
   socket.on('ice', (ice, roomName) => {
     socket.to(roomName).emit('ice', ice);
+  });
+
+  socket.on('trmt_end', roomName => {
+    socket.to(roomName).emit('trmt_end');
   });
 });
 

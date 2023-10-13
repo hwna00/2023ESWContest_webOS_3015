@@ -1,16 +1,30 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { io } from 'socket.io-client';
-import { Button, HStack, VStack } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  HStack,
+  Heading,
+  Textarea,
+  VStack,
+} from '@chakra-ui/react';
 
 let myStream;
 const roomName = 'myRoom';
 
 const VideoCall = function () {
+  const [isInProcess, setIsInProcess] = useState(true);
   const socketRef = useRef();
   const myVideoRef = useRef();
   const patientFace = useRef();
   const peerConnectionRef = useRef();
+
+  const navigate = useNavigate();
+  const { register, handleSubmit } = useForm({ mode: 'onChange' });
 
   const getMedia = async () => {
     try {
@@ -150,55 +164,96 @@ const VideoCall = function () {
   }, []);
 
   const onTrmtDoneClick = useCallback(() => {
-    // TODO: 예약 상태를 진찰 완료로 변경하고 다음 페이지로 넘어가기
+    socketRef.current.emit('trmt_end', roomName);
+    patientFace.current.srcObject = null;
+    setIsInProcess(false);
   }, []);
+
+  const onSubmit = data => {
+    console.log(data);
+    // TODO: 예약 상태를 진찰 완료로 변경
+    // TODO: comment 기반으로 diagnoses 생성
+    navigate('/');
+  };
 
   return (
     <VStack>
-      <HStack justifyContent="center" alignItems="center">
-        <video
-          className="myFace"
-          style={{
-            height: '100vh',
-            position: 'absolute',
-            top: '0px',
-            left: '0px',
-            zIndex: '999',
-            backgroundColor: 'white',
-          }}
-          ref={myVideoRef}
-          autoPlay
-        >
-          <track kind="captions" />
-        </video>
+      <HStack
+        justifyContent="center"
+        alignItems="center"
+        width="100vw"
+        height="100vh"
+        position="absolute"
+        top="0px"
+        left="0px"
+        zIndex="998"
+        bgColor="white"
+      >
+        {isInProcess ? (
+          <>
+            <video
+              className="myFace"
+              style={{
+                height: '100vh',
+                position: 'absolute',
+                top: '0px',
+                left: '0px',
+                zIndex: '999',
+                backgroundColor: 'white',
+              }}
+              ref={myVideoRef}
+              autoPlay
+            >
+              <track kind="captions" />
+            </video>
+            <video
+              className="patientFace"
+              style={{
+                width: '250px',
+                position: 'absolute',
+                top: '0px',
+                right: '0px',
+                zIndex: '9999',
+                backgroundColor: 'transparent',
+                borderBottomLeftRadius: '16px',
+              }}
+              ref={patientFace}
+              autoPlay
+            >
+              <track kind="captions" />
+            </video>
 
-        <video
-          className="patientFace"
-          style={{
-            width: '250px',
-            position: 'absolute',
-            top: '0px',
-            right: '0px',
-            zIndex: '9999',
-            backgroundColor: 'transparent',
-            borderBottomLeftRadius: '16px',
-          }}
-          ref={patientFace}
-          autoPlay
-        >
-          <track kind="captions" />
-        </video>
-        <Button
-          colorScheme="red"
-          variant="outline"
-          position="absolute"
-          bottom="4"
-          right="4"
-          zIndex={1000}
-          onClick={onTrmtDoneClick}
-        >
-          진료 종료
-        </Button>
+            <Button
+              colorScheme="red"
+              variant="outline"
+              position="absolute"
+              bottom="4"
+              right="4"
+              zIndex={1000}
+              onClick={onTrmtDoneClick}
+            >
+              진료 종료
+            </Button>
+          </>
+        ) : (
+          <Box position="absolute" zIndex={1001}>
+            <Heading>전달사항</Heading>
+            <VStack
+              as="form"
+              alignItems="flex-end"
+              onSubmit={handleSubmit(onSubmit)}
+              gap="4"
+              mt="4"
+            >
+              <Textarea width="lg" {...register('content')} />
+              <ButtonGroup>
+                <Button type="submit" colorScheme="primary">
+                  완료하기
+                </Button>
+              </ButtonGroup>
+            </VStack>
+          </Box>
+        )}
       </HStack>
     </VStack>
   );

@@ -140,6 +140,11 @@ const VideoCall = function () {
       peerConnectionRef.current.addIceCandidate(candidate);
     });
 
+    socketRef.current.on('trmt_end', () => {
+      // TODO: 약국 선택 페이지로 이동
+      navigate('/appointment-history');
+    });
+
     onRTCStart();
 
     return () => {
@@ -156,12 +161,6 @@ const VideoCall = function () {
         });
       }
     };
-  }, []);
-
-  const onTrmtDoneClick = useCallback(() => {
-    // TODO: 예약 상태를 진찰 완료로 변경하고
-    // TODO: diagnosis 생성하고
-    navigate('/appointments-history');
   }, []);
 
   return (
@@ -227,17 +226,6 @@ const VideoCall = function () {
         >
           <track kind="captions" />
         </video>
-        <Button
-          colorScheme="red"
-          variant="outline"
-          position="absolute"
-          bottom="4"
-          right="4"
-          zIndex={1000}
-          onClick={onTrmtDoneClick}
-        >
-          진료 종료
-        </Button>
       </HStack>
     </VStack>
   );
