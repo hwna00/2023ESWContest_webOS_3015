@@ -12,8 +12,9 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react';
+import { updatePayment } from '../api';
 
-function PaymentModal({ isOpen, onClose }) {
+function PaymentModal({ isOpen, onClose, appointmentId }) {
   const [payment, setPayment] = useState('');
 
   const handleInputChange = event => {
@@ -21,9 +22,11 @@ function PaymentModal({ isOpen, onClose }) {
   };
 
   const handleConfirm = useCallback(() => {
-    console.log(payment);
+    updatePayment(appointmentId, parseInt(payment), '');
+    window.location.reload();
+
     onClose();
-  }, [onClose, payment]);
+  }, [onClose, payment, appointmentId]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered="true">
@@ -32,7 +35,11 @@ function PaymentModal({ isOpen, onClose }) {
         <ModalHeader>금액 입력</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Input onChange={handleInputChange} placeholder="금액을 입력하세요" />
+          <Input
+            type="number"
+            onChange={handleInputChange}
+            placeholder="금액을 입력하세요"
+          />
         </ModalBody>
         <ModalFooter>
           <HStack spacing="3">
