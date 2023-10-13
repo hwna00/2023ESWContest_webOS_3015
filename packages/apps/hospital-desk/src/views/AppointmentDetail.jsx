@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
 import LoadingPage from '@housepital/common/LoadingPage';
@@ -21,7 +21,7 @@ import {
 } from '@chakra-ui/react';
 
 import CancelModal from '../component/CancelModal';
-import { getPatientDetail } from '../api';
+import { getPatientDetail, updateAppointmentState } from '../api';
 import { useNavigate, useParams } from 'react-router-dom';
 
 function AppointmentDetail() {
@@ -39,9 +39,11 @@ function AppointmentDetail() {
     [AppointmentId],
     getPatientDetail,
   );
-
+  console.log(data);
   const navigate = useNavigate();
-
+  const handleConfirm = useCallback(() => {
+    updateAppointmentState(AppointmentId, 'ac', '');
+  });
   useEffect(() => {
     if (isError) navigate('/error-page');
   }, [isError]);
@@ -96,6 +98,13 @@ function AppointmentDetail() {
                 </Text>
               </VStack>
             </HStack>
+            {data.result.stateId === 'aw' ? (
+              <Button colorScheme="primary" onClick={handleConfirm}>
+                예약수락
+              </Button>
+            ) : (
+              <></>
+            )}
             <Button colorScheme="red" onClick={openCancelModal}>
               취소하기
             </Button>
@@ -183,7 +192,7 @@ function AppointmentDetail() {
             </Grid>
           ) : (
             <Box as="form" margin="0" h="400px" w="full" p="4">
-              <FormControl as="GridItem" area="footer">
+              <FormControl as="" area="footer">
                 <FormLabel fontSize="28px" fontWeight="bold">
                   환자 전달 사항
                 </FormLabel>
