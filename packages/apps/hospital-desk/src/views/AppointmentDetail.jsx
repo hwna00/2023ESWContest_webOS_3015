@@ -49,11 +49,11 @@ function AppointmentDetail() {
       .catch(() => {
         navigate('/error-page');
       });
-  });
+  }, [AppointmentId, navigate]);
 
   useEffect(() => {
     if (isError) navigate('/error-page');
-  }, [isError]);
+  }, [isError, navigate]);
 
   const handleFirstCheck = event => {
     if (event.target.checked) {
