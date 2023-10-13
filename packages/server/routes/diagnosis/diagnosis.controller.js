@@ -8,6 +8,15 @@ const createDiagnosisQuery = async (connection, data) => {
   await connection.query(Query, Params);
 };
 
+const updateDiagnosisQuery = async (connection, appointmentId, data) => {
+  const Query =
+    'UPDATE DiagnosisRecords SET pharmacy = ?, payment = ifnull(?, payment) WHERE appointment_id = ?;';
+
+  const Params = [data.pharmacyYkiho, data.payment, appointmentId];
+
+  await connection.query(Query, Params);
+};
+
 exports.createDiagnosis = async (req, res) => {
   const { data } = req.body;
 
@@ -47,6 +56,38 @@ exports.createDiagnosis = async (req, res) => {
           });
       }
       return response;
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSuccess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
+exports.updateDiagnosis = async (req, res) => {
+  const { appointmentId } = req.params;
+  const { data } = req.body;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      await updateDiagnosisQuery(connection, appointmentId, data);
+
+      return res.json({
+        isSuccess: true,
+        code: 204,
+        message: '진료기록 업데이트 성공',
+      });
+    } catch (err) {
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
     } finally {
       connection.release();
     }
