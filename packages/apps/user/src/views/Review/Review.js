@@ -1,7 +1,8 @@
 import { useState, useCallback } from 'react';
 
 import { Link as ReactRouterLink } from 'react-router-dom';
-import { BiCommentEdit, BiUndo } from 'react-icons/bi';
+import { BiCommentEdit } from '@react-icons/all-files/bi/BiCommentEdit';
+import { BiUndo } from '@react-icons/all-files/bi/BiUndo';
 import {
   VStack,
   Box,

@@ -1,4 +1,4 @@
-import { FaStar } from 'react-icons/fa';
+import { FaStar } from '@react-icons/all-files/fa/FaStar';
 import { HStack, Icon, ListItem, Text, UnorderedList } from '@chakra-ui/react';
 
 const ReviewList = function ({ reviews = [], height = '' }) {

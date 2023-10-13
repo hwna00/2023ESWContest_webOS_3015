@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { FaStar } from 'react-icons/fa6';
+import { FaStar } from '@react-icons/all-files/fa/FaStar';
 import { Box, Icon, Stack } from '@chakra-ui/react';
 
 const Rating = React.forwardRef(

@@ -12,11 +12,10 @@ import {
   Image,
   Icon,
 } from '@chakra-ui/react';
-import { FaStar } from 'react-icons/fa';
+import { FaStar } from '@react-icons/all-files/fa/FaStar';
 import { useQuery } from '@tanstack/react-query';
 import ListSkeleton from '@housepital/common/ListSkeleton';
 
-import { getDoctors, getHospitals } from '../../api';
 import { getAllByCategory } from '../../utils/getByCategory';
 
 const AppointmentViewList = function ({ type }) {

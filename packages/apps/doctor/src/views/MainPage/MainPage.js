@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useQuery } from '@tanstack/react-query';
@@ -20,11 +22,16 @@ const MainPage = function () {
   const me = useSelector(state => state.doctor);
   const {
     isLoading,
-    data: appointments,
+    data: appointments = [],
     isError,
   } = useQuery(['appointments'], () => getAppointments(me.id), {
     enabled: !!me.id,
   });
+
+  useEffect(() => {
+    console.log(appointments);
+    console.log('isError', isError);
+  }, [appointments, isError]);
 
   return (
     <HStack justifyContent="center" gap="12" height="full" overflowY="hidden">

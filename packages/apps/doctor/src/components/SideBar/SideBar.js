@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { FaCog } from 'react-icons/fa';
+import { FaCog } from '@react-icons/all-files/fa/FaCog';
 import {
   Avatar,
   Text,

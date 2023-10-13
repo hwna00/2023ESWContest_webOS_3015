@@ -1,12 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { useParams, Link as ReactRouterLink } from 'react-router-dom';
-import {
-  FaAngleRight,
-  FaBookmark,
-  FaRegBookmark,
-  FaStar,
-} from 'react-icons/fa6';
+import { FaAngleRight } from '@react-icons/all-files/fa/FaAngleRight';
+import { FaBookmark } from '@react-icons/all-files/fa/FaBookmark';
+import { FaRegBookmark } from '@react-icons/all-files/fa/FaRegBookmark';
+import { FaStar } from '@react-icons/all-files/fa/FaStar';
 import dayjs from 'dayjs';
 import {
   AspectRatio,
