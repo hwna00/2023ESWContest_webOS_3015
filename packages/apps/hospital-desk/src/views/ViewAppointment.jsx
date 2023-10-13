@@ -139,7 +139,7 @@ function ViewAppointment() {
   return (
     <>
       {!isLoading ? (
-        <VStack p="8" spacing="8" alignItems="initial" w="100%">
+        <VStack p="8" spacing="8" alignItems="initial" w="100%" h="100%">
           <HStack justifyContent="space-between">
             <Heading textAlign="left" p="4" fontSize="30px">
               예약 전체보기
