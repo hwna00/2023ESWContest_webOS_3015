@@ -54,7 +54,7 @@ const MainPage = function () {
               <StatisticCard
                 title="오늘 예정된 예약"
                 count={
-                  data.aw.filter(reservation =>
+                  data.ac.filter(reservation =>
                     dayjs(reservation.date).isSame(now),
                   ).length
                 }
