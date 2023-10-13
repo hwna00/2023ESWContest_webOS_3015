@@ -39,7 +39,7 @@ function AppointmentDetail() {
     [AppointmentId],
     getPatientDetail,
   );
-  console.log(data);
+
   const navigate = useNavigate();
   const handleConfirm = useCallback(() => {
     updateAppointmentState(AppointmentId, 'ac', '')
@@ -199,7 +199,7 @@ function AppointmentDetail() {
             </Grid>
           ) : (
             <Box as="form" margin="0" h="400px" w="full" p="4">
-              <FormControl as="" area="footer">
+              <FormControl area="footer">
                 <FormLabel fontSize="28px" fontWeight="bold">
                   환자 전달 사항
                 </FormLabel>
