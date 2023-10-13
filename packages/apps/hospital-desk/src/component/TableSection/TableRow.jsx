@@ -90,10 +90,6 @@ function TableRow({ data, buttonType }) {
       <Box flex={1} textAlign="center">
         {data.patientName}
       </Box>
-      {/* TODO : 전화번호 뺼지 말지 정해야 함 */}
-      <Box flex={1} textAlign="center">
-        {data.phoneNumber}
-      </Box>
 
       <Box flex={1} textAlign="center">
         {data.date} {data.time}

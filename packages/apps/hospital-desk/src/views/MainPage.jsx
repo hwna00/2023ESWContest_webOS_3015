@@ -96,14 +96,7 @@ const MainPage = function () {
               </ChakraLink>
             </HStack>
             <TableHeader
-              tableHeaders={[
-                '이름',
-                '전화번호',
-                '진료시간',
-                '타입',
-                '담당의사',
-                '액션',
-              ]}
+              tableHeaders={['이름', '진료시간', '타입', '담당의사', '액션']}
             />
 
             <div className={styles.hideScrollBar}>
@@ -129,7 +122,6 @@ const MainPage = function () {
             <TableHeader
               tableHeaders={[
                 '이름',
-                '전화번호',
                 '진료시간',
                 '타입',
                 '담당의사',
