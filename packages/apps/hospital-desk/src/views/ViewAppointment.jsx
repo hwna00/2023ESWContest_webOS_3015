@@ -132,14 +132,10 @@ function ViewAppointment() {
     }
   }, [error, navigate]);
 
-  useEffect(() => {
-    setFilteredReservations();
-  }, []);
-
   return (
     <>
       {!isLoading ? (
-        <VStack p="8" spacing="8" alignItems="initial" w="100%" h="100%">
+        <VStack p="0" spacing="6" alignItems="initial" w="100%" h="100%">
           <HStack justifyContent="space-between">
             <Heading textAlign="left" p="4" fontSize="30px">
               예약 전체보기
@@ -148,12 +144,8 @@ function ViewAppointment() {
               예약추가
             </Button>
           </HStack>
-          <HStack
-            justifyItems="initial"
-            alignItems="unset"
-            justifyContent="space-between"
-          >
-            <Box w="480px" h="750px" border="1px" borderColor="black">
+          <HStack alignItems="unset" justifyContent="center" gap="10">
+            <Box flex={1} h="750px">
               <Box w="full" h="500px" border="0" borderColor="transparent">
                 <Calendar
                   selectedDay={day}
@@ -165,15 +157,25 @@ function ViewAppointment() {
               </Box>
               <RadioGroup onChange={setViewType} value={viewType}>
                 <VStack alignItems="initial" p="6" spacing="2">
-                  <Radio value="viewAll">전체보기</Radio>
-                  <Radio value="viewSelection">선택보기</Radio>
+                  <Radio colorScheme="primary" value="viewAll">
+                    전체보기
+                  </Radio>
+                  <Radio colorScheme="primary" value="viewSelection">
+                    선택보기
+                  </Radio>
                   {viewType === 'viewSelection' && (
                     <>
                       <RadioGroup onChange={setNftType} value={nftType}>
                         <HStack>
-                          <Radio value="ALl">모두 보기</Radio>
-                          <Radio value="FTF">대면</Radio>
-                          <Radio value="NFTF">비대면</Radio>
+                          <Radio colorScheme="primary" value="ALl">
+                            모두 보기
+                          </Radio>
+                          <Radio colorScheme="primary" value="FTF">
+                            대면
+                          </Radio>
+                          <Radio colorScheme="primary" value="NFTF">
+                            비대면
+                          </Radio>
                         </HStack>
                       </RadioGroup>
                       <SimpleGrid columns={2} spacing={4}>
@@ -243,7 +245,7 @@ function ViewAppointment() {
                 </VStack>
               </RadioGroup>
             </Box>
-            <VStack w="700px" alignItems="unset">
+            <VStack flex={2} alignItems="unset">
               <TableHeader
                 tableHeaders={[
                   '이름',
