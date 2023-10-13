@@ -5,6 +5,7 @@ const user = require('./routes/user/user');
 const review = require('./routes/review/review');
 const hospital = require('./routes/hospital/hospital');
 const doctor = require('./routes/doctor/doctor');
+const diagnosis = require('./routes/diagnosis/diagnosis');
 const auth = require('./routes/auth/auth');
 const appointment = require('./routes/appointment/appointment');
 
@@ -23,6 +24,7 @@ app.use('/api', hospital);
 app.use('/api', appointment);
 app.use('/api', doctor);
 app.use('/api', review);
+app.use('/api', diagnosis);
 
 let kakaoTid; // TODO : 깔끔하게 고치기
 let partner_order_id;

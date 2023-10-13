@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import { AiFillPlusCircle } from 'react-icons/ai';
@@ -23,8 +23,10 @@ import TableHeader from '../component/TableSection/TableHeader';
 import Calendar from '../component/Calendar/Calendar';
 import { getAppointments } from '../api';
 import LoadingPage from '@housepital/common/LoadingPage';
+import { useSelector } from 'react-redux';
 
 function ViewAppointment() {
+  const hospital = useSelector(state => state.hospital);
   const [value, onChange] = useState(new Date());
   const [day, setDay] = useState(new Date());
   const [viewType, setViewType] = useState('viewAll');
@@ -38,23 +40,28 @@ function ViewAppointment() {
   const [uniqueHours, setUniqueHours] = useState([]);
 
   const {
-    data = [],
+    data = { aw: [], ac: [], dc: [], pc: [], ar: [] },
     isLoading,
     error,
-  } = useQuery(['appointments'], getAppointments);
+  } = useQuery([hospital.id], getAppointments);
+
+  const allReservations = useMemo(
+    () => [...data.aw, ...data.ac, ...data.dc, ...data.pc, ...data.ar],
+    [data.aw, data.ac, data.dc, data.pc, data.ar],
+  );
 
   const navigate = useNavigate();
   useEffect(() => {
-    if (data) {
+    if (allReservations) {
       if (viewType === 'viewAll') {
         setFilteredReservations(
-          data.filter(reservation =>
+          allReservations.filter(reservation =>
             dayjs(`${reservation.date} ${reservation.time}`).isSame(day, 'day'),
           ),
         );
       } else if (viewType === 'viewSelection') {
         setFilteredReservations(
-          data.filter(reservation => {
+          allReservations.filter(reservation => {
             if (
               !dayjs(`${reservation.date} ${reservation.time}`).isSame(
                 day,
@@ -75,35 +82,12 @@ function ViewAppointment() {
 
             if (selectedDoctor && reservation.doctorId !== selectedDoctor)
               return false;
-            if (nftType === 'FTF') return reservation.isNFTF === false;
-            if (nftType === 'NFTF') return reservation.isNFTF === true;
+            if (nftType === 'FTF') return reservation.isNFTF === 1;
+            if (nftType === 'NFTF') return reservation.isNFTF === 0;
             return true;
           }),
         );
-        setUniqueDoctors(
-          Array.from(
-            data
-              .reduce(
-                (map, reservation) =>
-                  map.set(reservation.doctorId, reservation.doctorName),
-                new Map(),
-              )
-              .entries(),
-          ).map(([doctorId, doctorName]) => ({ doctorId, doctorName })),
-        );
-
-        setUniqueHours(
-          Array.from(
-            data.reduce((set, reservation) => {
-              const hour = reservation.time.split(':')[0];
-              return set.add(hour);
-            }, new Set()),
-          ),
-        );
       }
-    }
-    if (error) {
-      navigate('/error-page');
     }
   }, [
     isLoading,
@@ -114,15 +98,44 @@ function ViewAppointment() {
     selectedState,
     selectedDoctor,
     nftType,
-    data,
-    error,
-    navigate,
+    allReservations,
   ]);
+
+  useEffect(() => {
+    if (allReservations && viewType === 'viewSelection') {
+      setUniqueDoctors(
+        Array.from(
+          allReservations
+            .reduce(
+              (map, reservation) =>
+                map.set(reservation.doctorId, reservation.doctorName),
+              new Map(),
+            )
+            .entries(),
+        ).map(([doctorId, doctorName]) => ({ doctorId, doctorName })),
+      );
+
+      setUniqueHours(
+        Array.from(
+          allReservations.reduce((set, reservation) => {
+            const hour = reservation.time.split(':')[0];
+            return set.add(hour);
+          }, new Set()),
+        ),
+      );
+    }
+  }, [allReservations, viewType]);
+
+  useEffect(() => {
+    if (error) {
+      navigate('/error-page');
+    }
+  }, [error, navigate]);
 
   return (
     <>
       {!isLoading ? (
-        <VStack p="8" spacing="8" alignItems="initial" w="100%">
+        <VStack p="0" spacing="6" alignItems="initial" w="100%" h="100%">
           <HStack justifyContent="space-between">
             <Heading textAlign="left" p="4" fontSize="30px">
               예약 전체보기
@@ -131,31 +144,38 @@ function ViewAppointment() {
               예약추가
             </Button>
           </HStack>
-          <HStack
-            justifyItems="initial"
-            alignItems="unset"
-            justifyContent="space-between"
-          >
-            <Box w="480px" h="750px" border="1px" borderColor="black">
+          <HStack alignItems="unset" justifyContent="center" gap="10">
+            <Box flex={1} h="750px">
               <Box w="full" h="500px" border="0" borderColor="transparent">
                 <Calendar
                   selectedDay={day}
                   setSelectedDay={setDay}
+                  appointments={allReservations}
                   onChange={onChange}
                   value={value}
                 />
               </Box>
               <RadioGroup onChange={setViewType} value={viewType}>
                 <VStack alignItems="initial" p="6" spacing="2">
-                  <Radio value="viewAll">전체보기</Radio>
-                  <Radio value="viewSelection">선택보기</Radio>
+                  <Radio colorScheme="primary" value="viewAll">
+                    전체보기
+                  </Radio>
+                  <Radio colorScheme="primary" value="viewSelection">
+                    선택보기
+                  </Radio>
                   {viewType === 'viewSelection' && (
                     <>
                       <RadioGroup onChange={setNftType} value={nftType}>
                         <HStack>
-                          <Radio value="ALl">모두 보기</Radio>
-                          <Radio value="FTF">대면</Radio>
-                          <Radio value="NFTF">비대면</Radio>
+                          <Radio colorScheme="primary" value="ALl">
+                            모두 보기
+                          </Radio>
+                          <Radio colorScheme="primary" value="FTF">
+                            대면
+                          </Radio>
+                          <Radio colorScheme="primary" value="NFTF">
+                            비대면
+                          </Radio>
                         </HStack>
                       </RadioGroup>
                       <SimpleGrid columns={2} spacing={4}>
@@ -203,9 +223,12 @@ function ViewAppointment() {
                         <Select
                           placeholder="담당 의사"
                           value={selectedDoctor}
-                          onChange={e =>
-                            setSelectedDoctor(Number(e.target.value))
-                          }
+                          onChange={e => {
+                            const num = Number(e.target.value);
+                            if (!isNaN(num)) {
+                              setSelectedDoctor(num);
+                            }
+                          }}
                         >
                           {uniqueDoctors.map(doctor => (
                             <option
@@ -222,11 +245,10 @@ function ViewAppointment() {
                 </VStack>
               </RadioGroup>
             </Box>
-            <VStack w="700px" alignItems="unset">
+            <VStack flex={2} alignItems="unset">
               <TableHeader
                 tableHeaders={[
                   '이름',
-                  '전화번호',
                   '예약시간',
                   '타입',
                   '담당의사',
@@ -235,13 +257,14 @@ function ViewAppointment() {
               />
               <div className={styles.hideScrollBar}>
                 <Box maxH="830px" overflowY="scroll" w="100%">
-                  {filteredReservations.map(reservation => (
-                    <TableRow
-                      key={reservation.id}
-                      data={reservation}
-                      buttonType="detail"
-                    />
-                  ))}
+                  {filteredReservations &&
+                    filteredReservations.map(reservation => (
+                      <TableRow
+                        key={reservation.id}
+                        data={reservation}
+                        buttonType="detail"
+                      />
+                    ))}
                 </Box>
               </div>
             </VStack>
