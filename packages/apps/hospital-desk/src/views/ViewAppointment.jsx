@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import { AiFillPlusCircle } from 'react-icons/ai';
@@ -23,8 +23,10 @@ import TableHeader from '../component/TableSection/TableHeader';
 import Calendar from '../component/Calendar/Calendar';
 import { getAppointments } from '../api';
 import LoadingPage from '@housepital/common/LoadingPage';
+import { useSelector } from 'react-redux';
 
 function ViewAppointment() {
+  const hospital = useSelector(state => state.hospital);
   const [value, onChange] = useState(new Date());
   const [day, setDay] = useState(new Date());
   const [viewType, setViewType] = useState('viewAll');
@@ -38,23 +40,29 @@ function ViewAppointment() {
   const [uniqueHours, setUniqueHours] = useState([]);
 
   const {
-    data = [],
+    data = { aw: [], ac: [], dc: [], pc: [], ar: [] },
     isLoading,
     error,
-  } = useQuery(['appointments'], getAppointments);
+  } = useQuery([hospital.id], getAppointments);
+
+  const allReservations = useMemo(
+    () => [...data.aw, ...data.ac, ...data.dc, ...data.pc, ...data.ar],
+    [data.aw, data.ac, data.dc, data.pc, data.ar],
+  );
 
   const navigate = useNavigate();
   useEffect(() => {
-    if (data) {
+    if (allReservations) {
+      console.log('모든예약', allReservations);
       if (viewType === 'viewAll') {
         setFilteredReservations(
-          data.filter(reservation =>
+          allReservations.filter(reservation =>
             dayjs(`${reservation.date} ${reservation.time}`).isSame(day, 'day'),
           ),
         );
       } else if (viewType === 'viewSelection') {
         setFilteredReservations(
-          data.filter(reservation => {
+          allReservations.filter(reservation => {
             if (
               !dayjs(`${reservation.date} ${reservation.time}`).isSame(
                 day,
@@ -75,35 +83,12 @@ function ViewAppointment() {
 
             if (selectedDoctor && reservation.doctorId !== selectedDoctor)
               return false;
-            if (nftType === 'FTF') return reservation.isNFTF === false;
-            if (nftType === 'NFTF') return reservation.isNFTF === true;
+            if (nftType === 'FTF') return reservation.isNFTF === 1;
+            if (nftType === 'NFTF') return reservation.isNFTF === 0;
             return true;
           }),
         );
-        setUniqueDoctors(
-          Array.from(
-            data
-              .reduce(
-                (map, reservation) =>
-                  map.set(reservation.doctorId, reservation.doctorName),
-                new Map(),
-              )
-              .entries(),
-          ).map(([doctorId, doctorName]) => ({ doctorId, doctorName })),
-        );
-
-        setUniqueHours(
-          Array.from(
-            data.reduce((set, reservation) => {
-              const hour = reservation.time.split(':')[0];
-              return set.add(hour);
-            }, new Set()),
-          ),
-        );
       }
-    }
-    if (error) {
-      navigate('/error-page');
     }
   }, [
     isLoading,
@@ -114,10 +99,47 @@ function ViewAppointment() {
     selectedState,
     selectedDoctor,
     nftType,
-    data,
-    error,
-    navigate,
+    allReservations,
   ]);
+
+  useEffect(() => {
+    if (allReservations && viewType === 'viewSelection') {
+      setUniqueDoctors(
+        Array.from(
+          allReservations
+            .reduce(
+              (map, reservation) =>
+                map.set(reservation.doctorId, reservation.doctorName),
+              new Map(),
+            )
+            .entries(),
+        ).map(([doctorId, doctorName]) => ({ doctorId, doctorName })),
+      );
+
+      setUniqueHours(
+        Array.from(
+          allReservations.reduce((set, reservation) => {
+            const hour = reservation.time.split(':')[0];
+            return set.add(hour);
+          }, new Set()),
+        ),
+      );
+    }
+  }, [allReservations, viewType]);
+
+  useEffect(() => {
+    if (error) {
+      navigate('/error-page');
+    }
+  }, [error, navigate]);
+
+  useEffect(() => {
+    setFilteredReservations();
+  }, []);
+
+  useEffect(() => {
+    console.log('필터링된 예약: ', filteredReservations);
+  }, [filteredReservations]);
 
   return (
     <>
@@ -203,9 +225,12 @@ function ViewAppointment() {
                         <Select
                           placeholder="담당 의사"
                           value={selectedDoctor}
-                          onChange={e =>
-                            setSelectedDoctor(Number(e.target.value))
-                          }
+                          onChange={e => {
+                            const num = Number(e.target.value);
+                            if (!isNaN(num)) {
+                              setSelectedDoctor(num);
+                            }
+                          }}
                         >
                           {uniqueDoctors.map(doctor => (
                             <option
