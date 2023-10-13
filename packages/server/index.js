@@ -25,11 +25,13 @@ const wsServer = SocketIO(httpServer);
 
 wsServer.on('connection', socket => {
   console.log('connection established');
-  socket.on('enter', (msg, done) => {
-    console.log('enter');
+  socket.on('enter', (msg) => {
+    console.log(msg);
+    socket.emit('you entered');
   });
-  socket.on('leave', () => {
-    console.log('bye');
+  socket.on('leave', (msg) => {
+    console.log(msg);
+    socket.emit('bye bye');
   });
 });
 
