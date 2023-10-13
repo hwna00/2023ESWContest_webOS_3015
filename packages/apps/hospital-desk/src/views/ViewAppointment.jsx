@@ -53,7 +53,6 @@ function ViewAppointment() {
   const navigate = useNavigate();
   useEffect(() => {
     if (allReservations) {
-      console.log('모든예약', allReservations);
       if (viewType === 'viewAll') {
         setFilteredReservations(
           allReservations.filter(reservation =>
@@ -137,10 +136,6 @@ function ViewAppointment() {
     setFilteredReservations();
   }, []);
 
-  useEffect(() => {
-    console.log('필터링된 예약: ', filteredReservations);
-  }, [filteredReservations]);
-
   return (
     <>
       {!isLoading ? (
@@ -163,6 +158,7 @@ function ViewAppointment() {
                 <Calendar
                   selectedDay={day}
                   setSelectedDay={setDay}
+                  appointments={allReservations}
                   onChange={onChange}
                   value={value}
                 />
