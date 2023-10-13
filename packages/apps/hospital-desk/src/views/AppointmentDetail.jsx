@@ -42,8 +42,15 @@ function AppointmentDetail() {
   console.log(data);
   const navigate = useNavigate();
   const handleConfirm = useCallback(() => {
-    updateAppointmentState(AppointmentId, 'ac', '');
+    updateAppointmentState(AppointmentId, 'ac', '')
+      .then(() => {
+        window.location.reload();
+      })
+      .catch(() => {
+        navigate('/error-page');
+      });
   });
+
   useEffect(() => {
     if (isError) navigate('/error-page');
   }, [isError]);
