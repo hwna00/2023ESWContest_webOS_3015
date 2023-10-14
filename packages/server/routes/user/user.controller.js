@@ -239,25 +239,14 @@ exports.readUserDiagnoses = async (req, res) => {
     const connection = await pool.getConnection(async conn => conn);
     try {
       const [rows] = await readUserDiagnosesQuery(connection, uid);
-      if (rows.length === 0) {
-        throw Error('User or Appointment not found');
-      } else {
-        return res.json({
-          result: rows,
-          isSuccess: true,
-          code: 200,
-          message: '유저 진료기록 조회 성공',
-        });
-      }
-    } catch (err) {
-      if (err.message === 'User or Appointment not found') {
-        return res.json({
-          isSuccess: false,
-          code: 404,
-          message: '유저 혹은 예약정보를 찾을 수 없습니다.',
-        });
-      }
 
+      return res.json({
+        result: rows,
+        isSuccess: true,
+        code: 200,
+        message: '유저 진료기록 조회 성공',
+      });
+    } catch (err) {
       return res.json({
         isSuccess: false,
         code: 500,
