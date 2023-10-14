@@ -1,5 +1,3 @@
-import { fetchResultsTime } from '@housepital/hospital-desk/src/api';
-
 const formatTime = time => {
   const hours = Math.floor(time / 100);
   const minutes = time % 100;
@@ -67,9 +65,8 @@ const addTime = timeTable => {
   return timeList;
 };
 
-const getDtlInfo = async ykiho => {
-  const data = await fetchResultsTime(ykiho);
-  const { item } = data.response.body.items;
+const hospitalDtlconverter = async item => {
+  console.log(item);
   const [rcvSatStart, rcvSatEnd] = item.rcvSat.split(' - ');
   const [rcvWeekStart, rcvWeekEnd] = item.rcvWeek.split(' - ');
 
@@ -116,4 +113,4 @@ const getDtlInfo = async ykiho => {
   return addTime(timeTable);
 };
 
-export default getDtlInfo;
+export default hospitalDtlconverter;

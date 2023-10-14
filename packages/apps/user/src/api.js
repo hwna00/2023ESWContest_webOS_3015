@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getTrmtHours } from './utils/converter';
 
 const instance = axios.create({
   baseURL: 'http://localhost:3000/api',
@@ -90,23 +91,18 @@ export const createReivew = async review => {
 };
 
 export const getHospitalDtl = async ykiho => {
-  if (ykiho === '') {
-    return {};
-  }
   const base = 'https://apis.data.go.kr/B551182/MadmDtlInfoService2';
   try {
     const { data: dtl } = await axios.get(`${base}/getDtlInfo2`, {
       params: {
         serviceKey: process.env.REACT_APP_DATA_DECODING_API_KEY,
-        // ykiho,
-        ykiho:
-          'JDQ4MTYyMiM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQzIyQ3OSQyNjE4MzIjNDEjJDEjJDgjJDgz',
+        ykiho,
         type: 'json',
       },
     });
 
-    console.log(dtl.response.body.items);
-    return dtl.response.body.items.item;
+    const result = await getTrmtHours(dtl.response.body.items.item);
+    return result;
   } catch (error) {
     throw new Error(error);
   }

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import {
   useParams,
@@ -42,7 +42,6 @@ import { getDetailByCategory } from '../../../utils/getByCategory';
 
 const AppointmentDetail = function () {
   const [appointTime, setAppointTime] = useState();
-  const [reservationOfDay, setReservationOfDay] = useState({});
 
   const { category, id } = useParams();
   const navigate = useNavigate();
@@ -64,9 +63,14 @@ const AppointmentDetail = function () {
     isLoading: isDtlLoading,
     data: hospitalDtl,
     isError: isDtlError,
-  } = useQuery([id], () => getHospitalDtl(data?.ykiho));
+  } = useQuery(['publicData', id], () => getHospitalDtl(data?.ykiho), {
+    enabled: !!data?.ykiho,
+  });
 
-  const { data: fields = [] } = useQuery([id, data?.ykiho], getFields);
+  const { data: fields = [] } = useQuery(
+    ['fields', id, data?.ykiho],
+    getFields,
+  );
 
   const onToggleBookmarkClick = useCallback(() => {
     // Todo: 추후에 isFavorite 항목을 수정하는 axios patch 함수로 변경해야 함.
@@ -101,29 +105,6 @@ const AppointmentDetail = function () {
     },
     [appointTime, uid, data?.id, navigate],
   );
-
-  useEffect(() => {
-    setReservationOfDay({
-      '09:00': 2,
-      '09:30': 1,
-      '10:00': 0,
-      '10:30': 3,
-      '11:00': 3,
-      '11:30': 3,
-      '12:00': 2,
-      '12:30': 1,
-      '13:00': 0,
-      '13:30': 0,
-      '14:00': 0,
-      '14:30': 0,
-      '15:00': 3,
-      '15:30': 0,
-      '16:00': 1,
-      '16:30': 0,
-      '17:00': 0,
-      '17:30': 0,
-    });
-  }, []);
 
   return (
     <HStack height="full" gap="6">
@@ -291,34 +272,32 @@ const AppointmentDetail = function () {
                     borderRadius="md"
                   >
                     <UnorderedList styleType="none" ml={0} spacing="2">
-                      {/* // TODO: 공데포 api 연결하기 */}
                       <ListItem>
-                        <b>월요일</b> {data?.businessHours?.monday.open}{' '}
-                        (점심시간 {data?.businessHours?.monday.break})
+                        <b>월요일</b> {hospitalDtl?.mon} (점심시간{' '}
+                        {hospitalDtl?.lunchWeek})
                       </ListItem>
                       <ListItem>
-                        <b>화요일</b> {data?.businessHours?.tuesday.open}{' '}
-                        (점심시간 {data?.businessHours?.tuesday.break})
+                        <b>화요일</b> {hospitalDtl?.tue} (점심시간{' '}
+                        {hospitalDtl?.lunchWeek})
                       </ListItem>
                       <ListItem>
-                        <b>수요일</b> {data?.businessHours?.wednesday.open}{' '}
-                        (점심시간 {data?.businessHours?.wednesday.break})
+                        <b>수요일</b> {hospitalDtl?.wed} (점심시간{' '}
+                        {hospitalDtl?.lunchWeek})
                       </ListItem>
                       <ListItem>
-                        <b>목요일</b> {data?.businessHours?.thursday.open}{' '}
-                        (점심시간 {data?.businessHours?.thursday.break})
+                        <b>목요일</b> {hospitalDtl?.thu} (점심시간{' '}
+                        {hospitalDtl?.lunchWeek})
                       </ListItem>
                       <ListItem>
-                        <b>금요일</b> {data?.businessHours?.friday.open}{' '}
-                        (점심시간 {data?.businessHours?.friday.break})
+                        <b>금요일</b> {hospitalDtl?.fri} (점심시간{' '}
+                        {hospitalDtl?.lunchWeek})
                       </ListItem>
                       <ListItem>
-                        <b>토요일</b> {data?.businessHours?.saturday.open}{' '}
-                        (점심시간 {data?.businessHours?.saturday.break})
+                        <b>토요일</b> {hospitalDtl?.sat} (점심시간:{' '}
+                        {hospitalDtl?.lunchSat})
                       </ListItem>
                       <ListItem>
-                        <b>일요일</b> {data?.businessHours?.sunday.open}{' '}
-                        (점심시간 {data?.businessHours?.sunday.break})
+                        <b>일요일</b> {hospitalDtl?.sun}
                       </ListItem>
                     </UnorderedList>
                   </Box>
@@ -336,7 +315,7 @@ const AppointmentDetail = function () {
               >
                 {category === 'doctors' && (
                   <AppointForm
-                    reservationOfDay={reservationOfDay}
+                    hospitalDtl={hospitalDtl}
                     register={register}
                     errors={errors}
                     setAppointTime={setAppointTime}
