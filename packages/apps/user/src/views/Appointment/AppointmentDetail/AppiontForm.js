@@ -170,6 +170,9 @@ const AppointForm = function ({
 
   const onDateChange = useCallback(
     event => {
+      if (!hospitalDtl) {
+        return setTimeTable([]);
+      }
       const day =
         typeof event === 'object'
           ? dateToday(event.target.value)
