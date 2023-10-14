@@ -1,5 +1,5 @@
 import { Link as ReactRouterLink } from 'react-router-dom';
-import { TiChevronRight } from 'react-icons/ti';
+import { TiChevronRight } from '@react-icons/all-files/ti/TiChevronRight';
 import { Box, HStack, Link as ChakraLink } from '@chakra-ui/react';
 
 const AppointmentHistoryItem = function ({ history }) {

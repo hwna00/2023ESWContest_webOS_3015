@@ -25,6 +25,18 @@ export const getAppointments = async doctorId => {
   try {
     const { data } = await instance.get(`/doctors/${doctorId}/appointments`);
     if (data.isSuccess) {
+      return [...data.result];
+    }
+    return [];
+  } catch (error) {
+    return error;
+  }
+};
+
+export const getAppointment = async appointmentId => {
+  try {
+    const { data } = await instance.get(`appointments/${appointmentId}`);
+    if (data.isSuccess) {
       return data.result;
     }
     throw new Error(data.message);

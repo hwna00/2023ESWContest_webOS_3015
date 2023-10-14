@@ -11,36 +11,22 @@ import {
 
 import AppointmentViewList from '../../components/AppointmentViewList/AppointmentViewList';
 import { FavoriteList } from './dataList';
-import { useCallback, useEffect, useState } from 'react';
 import { getAppointments } from '../../api';
 import { useSelector } from 'react-redux';
+import { useQuery } from '@tanstack/react-query';
 
 const Appointment = function () {
   const uid = useSelector(state => state.me.uid);
-  const [appointments, setAppointments] = useState();
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
 
-  const fetchAppointments = useCallback(async () => {
-    if (!uid) {
-      setAppointments();
-      setIsLoading(true);
-      return;
-    }
-    try {
-      const response = await getAppointments(uid);
-      setAppointments(response.length);
-      setIsError(false);
-    } catch {
-      setIsError(true);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [uid]);
-
-  useEffect(() => {
-    fetchAppointments();
-  }, [fetchAppointments]);
+  const {
+    isLoading,
+    data: appointments,
+    isError,
+  } = useQuery({
+    queryKey: ['appointments', uid],
+    queryFn: () => getAppointments(uid),
+    enabled: !!uid,
+  });
 
   return (
     <VStack w="full" h="full" justifyContent={'space-between'} gap={'6'}>
@@ -68,7 +54,7 @@ const Appointment = function () {
                       textDecoration="underline"
                       fontSize="lg"
                     >
-                      {appointments}건의 예약이 있습니다.
+                      {appointments?.length}건의 예약이 있습니다.
                     </Text>
                   </ChakraLink>
                 }

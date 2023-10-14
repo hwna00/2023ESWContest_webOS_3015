@@ -1,5 +1,6 @@
 import { Outlet, createHashRouter } from 'react-router-dom';
 
+import VideoCall from './views/VideoCall/VideoCall';
 import SignUp from './views/SignUp';
 import SettingPage from './views/SettingPage';
 import MyPage from './views/MyPage';
@@ -26,6 +27,10 @@ const router = createHashRouter([
       {
         path: '/appointments/:id',
         element: <AppointmentDetail />,
+      },
+      {
+        path: '/appointments/:id/treatment',
+        element: <VideoCall />,
       },
       {
         path: '/appointments-history',

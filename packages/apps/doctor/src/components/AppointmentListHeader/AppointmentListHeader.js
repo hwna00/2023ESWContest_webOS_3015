@@ -7,9 +7,6 @@ const AppointmentListHeader = function () {
         이름
       </Text>
       <Text flex={1} textAlign="center" py="4">
-        전화번호
-      </Text>
-      <Text flex={1} textAlign="center" py="4">
         예약일자
       </Text>
       <Text flex={1} textAlign="center" py="4">

@@ -34,6 +34,11 @@ export const getAppointments = async uid => {
   }
 };
 
+export const deleteAppointment = async appointmentId => {
+  const { data } = await instance.delete(`/appointments/${appointmentId}`);
+  return data;
+};
+
 export const getFavorites = async () => {
   try {
     const { data } = await instance.get('/favorites');
@@ -79,6 +84,11 @@ export const getDoctor = async doctorId => {
   }
 };
 
+export const createReivew = async review => {
+  const { data } = await instance.post('/reviews', { data: review });
+  console.log(data);
+};
+
 export const getHospitalDtl = async ykiho => {
   if (ykiho === '') {
     return {};
@@ -95,7 +105,21 @@ export const getHospitalDtl = async ykiho => {
       },
     });
 
-    // TODO: 병원의 진료과목을 가져오는 api 함수 분리하기
+    console.log(dtl.response.body.items);
+    return dtl.response.body.items.item;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const getFields = async ({ queryKey }) => {
+  const [_, ykiho] = queryKey;
+
+  if (ykiho === '') {
+    return {};
+  }
+  const base = 'https://apis.data.go.kr/B551182/MadmDtlInfoService2';
+  try {
     const { data: dgsbjt } = await axios.get(`${base}/getDgsbjtInfo2`, {
       params: {
         serviceKey: process.env.REACT_APP_DATA_DECODING_API_KEY,
@@ -105,10 +129,34 @@ export const getHospitalDtl = async ykiho => {
         type: 'json',
       },
     });
-    console.log(dtl.response.body.items.item);
-    console.log(dgsbjt.response.body.items.item.map(field => field.dgsbjtCdNm));
-    // return data;
+    return dgsbjt.response.body.items.item;
   } catch (error) {
     throw new Error(error);
   }
+};
+
+export const getPharmacies = async ({ pageNo, numOfRows }) => {
+  const base =
+    'https://apis.data.go.kr/B551182/pharmacyInfoService/getParmacyBasisList';
+  const { data } = await axios.get(`${base}`, {
+    params: {
+      serviceKey: process.env.REACT_APP_DATA_DECODING_API_KEY,
+      pageNo,
+      numOfRows,
+      // TODO: emdongNm과 radius를 기반으로 주변 약국만 검색하도록 변경 가능
+    },
+  });
+  const pharmacies = data.response.body.items.item.map(pharmacy => {
+    return {
+      name: pharmacy.yadmNm,
+      address: pharmacy.addr,
+      tel: pharmacy.telno,
+      ykiho: pharmacy.ykiho,
+    };
+  });
+
+  return {
+    pharmacies,
+    pageNo,
+  };
 };

@@ -1,17 +1,14 @@
 import { Box, Divider, HStack, Skeleton, VStack } from '@chakra-ui/react';
 
 import AppointmentHistoryItem from '../../components/AppointmentHistoryItem/AppointmentHistoryItem';
-import { useQuery } from '@tanstack/react-query';
-import { getAppointments } from '../../api';
-import { useSelector } from 'react-redux';
+// import { useQuery } from '@tanstack/react-query';
+// import { getAppointments } from '../../api';
+// import { useSelector } from 'react-redux';
 
 //TODO: 히스토리 가져오기 요청
 const AppointmentHistory = function () {
-  const uid = useSelector(state => state.me.uid);
-  const { isLoading, data: histories } = useQuery(
-    ['appointment'],
-    getAppointments(uid),
-  );
+  const histories = [];
+  const isLoading = false;
 
   return (
     <VStack mx="5" align="stretch">
