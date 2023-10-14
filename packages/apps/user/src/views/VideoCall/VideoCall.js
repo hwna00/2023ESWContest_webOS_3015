@@ -141,8 +141,7 @@ const VideoCall = function () {
     });
 
     socketRef.current.on('trmt_end', () => {
-      // TODO: 약국 선택 페이지로 이동
-      navigate('/appointment-history');
+      navigate('/appointment/select-pharmacies');
     });
 
     onRTCStart();

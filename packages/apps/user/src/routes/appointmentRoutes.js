@@ -4,6 +4,7 @@ import AppointmentList from '../views/Appointment/AppointmentList';
 import AppointmentDetail from '../views/Appointment/AppointmentDetail/AppointmentDetail';
 import Appointment from '../views/Appointment';
 import WaitingRoom from '../views/Appointment/WaitingRoom/WaitingRoom';
+import Pharmacies from '../views/Appointment/Pharmacies/Pharmacies';
 
 const appointmentRoutes = [
   {
@@ -21,6 +22,10 @@ const appointmentRoutes = [
   {
     path: 'appointment/waiting-room',
     element: <WaitingRoom />,
+  },
+  {
+    path: 'appointment/select-pharmacies',
+    element: <Pharmacies />,
   },
   {
     path: 'appointment-history',

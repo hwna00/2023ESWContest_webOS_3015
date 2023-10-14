@@ -129,3 +129,29 @@ export const getFields = async ({ queryKey }) => {
     throw new Error(error);
   }
 };
+
+export const getPharmacies = async ({ pageNo, numOfRows }) => {
+  const base =
+    'https://apis.data.go.kr/B551182/pharmacyInfoService/getParmacyBasisList';
+  const { data } = await axios.get(`${base}`, {
+    params: {
+      serviceKey: process.env.REACT_APP_DATA_DECODING_API_KEY,
+      pageNo,
+      numOfRows,
+      // TODO: emdongNm과 radius를 기반으로 주변 약국만 검색하도록 변경 가능
+    },
+  });
+  const pharmacies = data.response.body.items.item.map(pharmacy => {
+    return {
+      name: pharmacy.yadmNm,
+      address: pharmacy.addr,
+      tel: pharmacy.telno,
+      ykiho: pharmacy.ykiho,
+    };
+  });
+
+  return {
+    pharmacies,
+    pageNo,
+  };
+};
