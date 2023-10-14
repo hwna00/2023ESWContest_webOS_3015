@@ -6,6 +6,7 @@ import MainPage from './views/MainPage';
 import ErrorPage from './views/ErrorPage';
 import NotFound from './views/NotFound';
 import LogIn from './views/LogIn';
+import SignUp from './views/SignUp';
 
 const router = createBrowserRouter([
   {
@@ -24,10 +25,10 @@ const router = createBrowserRouter([
     path: '/auth',
     errorElement: <NotFound />,
     children: [
-      //   {
-      //     path: 'sign-up',
-      //     element: <SignUp />,
-      //   },
+      {
+        path: 'sign-up',
+        element: <SignUp />,
+      },
       {
         path: 'log-in',
         element: <LogIn />,

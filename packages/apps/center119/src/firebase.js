@@ -20,7 +20,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-const fbSignUp = (email, password) =>
+const fbSignUp = (email, password) => {
   createUserWithEmailAndPassword(auth, email, password)
     .then(userCredential => {
       const { uid } = userCredential.user;
@@ -30,6 +30,7 @@ const fbSignUp = (email, password) =>
       console.error('Error during signing up:', error);
       throw error;
     });
+};
 
 const fbLogIn = async data => {
   await setPersistence(auth, browserLocalPersistence);
