@@ -1,10 +1,15 @@
+const http = require('http');
+
+const SocketIO = require('socket.io');
 const express = require('express');
 const cors = require('cors');
+const axios = require('axios');
 
 const user = require('./routes/user/user');
 const review = require('./routes/review/review');
 const hospital = require('./routes/hospital/hospital');
 const doctor = require('./routes/doctor/doctor');
+const diagnosis = require('./routes/diagnosis/diagnosis');
 const auth = require('./routes/auth/auth');
 const appointment = require('./routes/appointment/appointment');
 
@@ -12,6 +17,8 @@ require('dotenv').config();
 
 const app = express();
 const port = 3000 || process.env.PORT;
+const httpServer = http.createServer(app);
+const wsServer = SocketIO(httpServer);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -23,6 +30,7 @@ app.use('/api', hospital);
 app.use('/api', appointment);
 app.use('/api', doctor);
 app.use('/api', review);
+app.use('/api', diagnosis);
 
 let kakaoTid; // TODO : 깔끔하게 고치기
 let partner_order_id;
@@ -37,7 +45,6 @@ app.post('/api/payment/kakao-tid', (req, res) => {
 
 app.get('/kakao-payment/callback', async (req, res) => {
   const { pg_token } = req.query;
-
   const API_URI = `https://kapi.kakao.com/v1/payment/approve?cid=${process.env.KAKAO_PAYMENT_CID}&tid=${kakaoTid}&partner_order_id=${partner_order_id}&partner_user_id=${partner_user_id}&pg_token=${pg_token}`;
 
   const payment_agree = await axios.post(API_URI, null, {
@@ -48,6 +55,18 @@ app.get('/kakao-payment/callback', async (req, res) => {
   });
 });
 
-app.listen(port, () => {
+wsServer.on('connection', socket => {
+  console.log('connection established');
+  socket.on('enter', msg => {
+    console.log(msg);
+    socket.emit('you entered');
+  });
+  socket.on('leave', msg => {
+    console.log(msg);
+    socket.emit('bye bye');
+  });
+});
+
+httpServer.listen(port, () => {
   console.log(`Server on port: ${port}`);
 });

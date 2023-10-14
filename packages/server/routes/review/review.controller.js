@@ -5,6 +5,16 @@ const createReviewQuery = async (connection, data) => {
     'INSERT INTO Reviews(user_id, doctor_id, content, rate) VALUES (?, ?, ?, ?);';
   const Params = [data.uid, data.doctorId, data.content, data.rate];
 
+  const createData = await connection.query(Query, Params);
+
+  return createData;
+};
+
+const linkReviewToDiagnosis = async (connection, appointmentId, data) => {
+  const Query =
+    'UPDATE DiagnosisRecords SET review_id = ? WHERE appointment_id = ?;';
+  const Params = [data.reviewId, appointmentId];
+
   await connection.query(Query, Params);
 };
 
@@ -14,7 +24,11 @@ exports.createReview = async (req, res) => {
   try {
     const connection = await pool.getConnection(async conn => conn);
     try {
-      await createReviewQuery(connection, data);
+      const createData = await createReviewQuery(connection, data);
+      const createdId = createData[0].insertId;
+
+      data.reviewId = createdId;
+      await linkReviewToDiagnosis(connection, data.appointmentId, data);
 
       return res.json({
         result: data,

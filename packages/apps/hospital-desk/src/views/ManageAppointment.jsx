@@ -12,7 +12,7 @@ import {
   VStack,
   Button,
 } from '@chakra-ui/react';
-
+import dayjs from 'dayjs';
 import TableRow from '../component/TableSection/TableRow';
 import TableHeader from '../component/TableSection/TableHeader';
 import { getAppointments } from '../api';
@@ -29,12 +29,22 @@ function ManageAppointment() {
 
   useEffect(() => {
     if (!isLoading) {
-      setConfirmedReservation(
-        data?.ac?.filter(reservation => reservation.stateId === 'ac') || [],
+      const sortedConfirmed = (
+        data?.ac?.filter(reservation => reservation.stateId === 'ac') || []
+      ).sort((a, b) =>
+        dayjs(`${a.date} ${a.time}`).isBefore(dayjs(`${b.date} ${b.time}`))
+          ? -1
+          : 1,
       );
-      setNotConfirmedReservation(
-        data?.aw?.filter(reservation => reservation.stateId === 'aw') || [],
+      setConfirmedReservation(sortedConfirmed);
+      const sortedNotConfirmed = (
+        data?.aw?.filter(reservation => reservation.stateId === 'aw') || []
+      ).sort((a, b) =>
+        dayjs(`${a.date} ${a.time}`).isBefore(dayjs(`${b.date} ${b.time}`))
+          ? 1
+          : -1,
       );
+      setNotConfirmedReservation(sortedNotConfirmed);
     }
     if (error) {
       navigate('/error-page');
@@ -61,21 +71,12 @@ function ManageAppointment() {
               </ChakraLink>
             </HStack>
             <TableHeader
-              tableHeaders={[
-                '이름',
-                '전화번호',
-                '진료시간',
-                '타입',
-                '담당의사',
-                '액션',
-              ]}
+              tableHeaders={['이름', '진료시간', '타입', '담당의사', '액션']}
             />
 
             <div className={styles.hideScrollBar}>
               <Box maxH="250px" overflowY="scroll">
-                {ConfirmedReservation.filter(
-                  reservation => reservation.confirm === true,
-                ).map(reservation => (
+                {ConfirmedReservation.map(reservation => (
                   <TableRow
                     key={reservation.id}
                     data={reservation}
@@ -95,7 +96,6 @@ function ManageAppointment() {
             <TableHeader
               tableHeaders={[
                 '이름',
-                '전화번호',
                 '진료시간',
                 '타입',
                 '담당의사',

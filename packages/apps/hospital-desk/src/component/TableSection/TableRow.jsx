@@ -29,7 +29,11 @@ function TableRow({ data, buttonType }) {
       <Button h="10" colorScheme="primary" onClick={openPaymentModal}>
         금액 입력
       </Button>
-      <PaymentModal isOpen={isPaymentOpen} onClose={closePaymentModal} />
+      <PaymentModal
+        isOpen={isPaymentOpen}
+        onClose={closePaymentModal}
+        appointmentId={data.id}
+      />
     </>
   );
 
@@ -89,10 +93,6 @@ function TableRow({ data, buttonType }) {
     >
       <Box flex={1} textAlign="center">
         {data.patientName}
-      </Box>
-      {/* TODO : 전화번호 뺼지 말지 정해야 함 */}
-      <Box flex={1} textAlign="center">
-        {data.phoneNumber}
       </Box>
 
       <Box flex={1} textAlign="center">
