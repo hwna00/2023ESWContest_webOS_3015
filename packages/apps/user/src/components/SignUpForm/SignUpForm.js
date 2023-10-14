@@ -9,6 +9,7 @@ import { Box, Button, ButtonGroup, VStack } from '@chakra-ui/react';
 
 import { setErrors, setMe } from '../../store';
 import { fbSignUp } from '../../../firebase';
+import { createUser } from '../../api';
 
 const SignUpForm = function ({
   activeStep,
@@ -48,13 +49,21 @@ const SignUpForm = function ({
   }, [goToPrevious, activeStep, navigate]);
 
   const onSubmit = async data => {
-    const user = await fbSignUp({ ...data, profileImgBlob });
+    delete data.checkPassword;
+    const { email, password, ...rest } = data;
+    const uid = await fbSignUp({
+      email,
+      password,
+      profileImgBlob,
+    });
+    const response = await createUser({ uid, email, ...rest });
 
-    if (user) {
-      dispatch(setMe(user));
+    if (response.isSuccess) {
+      dispatch(setMe({ uid, email, ...rest }));
       navigate('/');
     } else {
       //TODO: 회원가입 실패 알림 띄우기
+      console.log(response);
     }
   };
 

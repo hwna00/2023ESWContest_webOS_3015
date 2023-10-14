@@ -2,7 +2,7 @@ import { configureStore, createSlice } from '@reduxjs/toolkit';
 
 const userInitialState = {
   uid: '',
-  name: '',
+  username: '',
   email: '',
   phoneNumber: '',
   secondPhoneNumber: '',
@@ -39,20 +39,14 @@ const meSlice = createSlice({
   initialState: userInitialState,
   reducers: {
     setMe: (state, action) => {
-      Object.entries(action.payload).map(([key, value]) => (state[key] = value));
+      if (action.payload !== undefined) {
+        Object.entries(action.payload).map(
+          ([key, value]) => (state[key] = value),
+        );
+        return state;
+      }
     },
     resetMe: () => userInitialState,
-  },
-});
-
-const appointmentSlice = createSlice({
-  name: 'appointment',
-  initialState: { date: '', time: '', type: '' },
-  reducers: {
-    setAppointDatetime: (state, action) => {
-      state.date = action.payload.date;
-      state.time = action.payload.time;
-    },
   },
 });
 
@@ -60,7 +54,6 @@ export const store = configureStore({
   reducer: {
     signUp: signUpSlice.reducer,
     me: meSlice.reducer,
-    appointment: appointmentSlice.reducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
@@ -70,5 +63,4 @@ export const store = configureStore({
 });
 
 export const { setImgBlob, setErrors, setAddress } = signUpSlice.actions;
-export const { setAppointDatetime } = appointmentSlice.actions;
 export const { setMe, resetMe } = meSlice.actions;

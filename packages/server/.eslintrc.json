@@ -11,6 +11,9 @@
     "ecmaVersion": "latest"
   },
   "rules": {
+    "implicit-arrow-linebreak": "off",
+    "arrow-parens": "off",
+    "operator-linebreak": "off",
     "no-param-reassign": [
       "error",
       {

@@ -5,7 +5,6 @@ import {
   Box,
   Heading,
   Button,
-  Stack,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -18,113 +17,76 @@ import {
   SimpleGrid,
   Radio,
   RadioGroup,
-  useCheckbox,
   useCheckboxGroup,
   Link as ChakraLink,
+  Skeleton,
+  Text,
 } from '@chakra-ui/react';
 
 import specialties from '../Specialties';
-import { DoctorList, HospitalList, FavoriteList } from '../dataList';
 import BackButton from '../../../components/BackButton/BackButton';
 import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
-
-function CheckCard({ ...checkboxProps }) {
-  const { getInputProps, getCheckboxProps } = useCheckbox(checkboxProps);
-
-  const input = getInputProps();
-  const checkbox = getCheckboxProps();
-
-  return (
-    <Box as="label">
-      <input {...input} />
-      <Box
-        {...checkbox}
-        cursor="pointer"
-        borderRadius="md"
-        bgColor="primary.100"
-        color="black"
-        _checked={{
-          bgColor: 'primary.500',
-          color: 'white',
-        }}
-        _disabled={{
-          bgColor: 'black',
-          opacity: '0.2',
-          color: 'white',
-        }}
-        px={4}
-        py={2}
-      >
-        {checkboxProps.children}
-      </Box>
-    </Box>
-  );
-}
+import CustomCheckbox from '@housepital/common/CustomCheckox';
+import { useQuery } from '@tanstack/react-query';
+import { getAllByCategory } from '../../../utils/getByCategory';
 
 function AppointmentList() {
-  const { category } = useParams();
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const [sortBy, setSortBy] = useState();
-  const [selectedSpecialties, setSelectedSpecialties] = useState([]);
-  const [list, setList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
+  const [radioValue, setRadioValue] = useState('name');
   const [title, setTitle] = useState();
-  const [value, setValue] = useState('name');
+
+  const { category } = useParams();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isLoading,
+    data = [],
+    isError,
+  } = useQuery([category], getAllByCategory(category));
 
   useEffect(() => {
     if (category === 'doctors') {
-      setList(DoctorList);
       setTitle('의사별 보기');
     } else if (category === 'hospitals') {
-      setList(HospitalList);
       setTitle('병원별 보기');
     } else if (category === 'favorites') {
-      setList(FavoriteList);
       setTitle('즐겨찾기 관리');
     }
-  }, [category, list, title]);
+  }, [category, title]);
 
-  const handleSortByChange = useCallback(sort => {
-    setSortBy(sort);
-  }, []);
-  const handleSortByName = useCallback(() => {
-    handleSortByChange('name');
-  }, [handleSortByChange]);
+  const onRadioGroupChange = useCallback(
+    value => {
+      const temp = [...filteredList];
 
-  const handleSortByRating = useCallback(() => {
-    handleSortByChange('rating');
-  }, [handleSortByChange]);
+      if (value === 'name') {
+        temp.sort((a, b) => (a.name > b.name ? 1 : -1));
+      } else if (value === 'distance') {
+        temp.sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance));
+      } else if (value === 'rating') {
+        temp.sort((a, b) => (a.rate < b.rate ? 1 : -1));
+      }
 
-  const handleSortByDistance = useCallback(() => {
-    handleSortByChange('distance');
-  }, [handleSortByChange]);
+      setRadioValue(value);
+      setFilteredList(temp);
+    },
+    [filteredList],
+  );
 
-  useEffect(() => {
-    let itemsToFilter = [...list];
+  const onCheckBoxGroupChange = useCallback(
+    selects => {
+      const temp = [...filteredList];
+      if (selects.length > 0) {
+        temp.filter(item =>
+          item?.fields?.some(specialty => selects.includes(specialty)),
+        );
+      }
+      setFilteredList(temp);
+    },
+    [filteredList],
+  );
 
-    if (selectedSpecialties.length > 0) {
-      itemsToFilter = itemsToFilter.filter(item =>
-        item.fields.some(specialty => selectedSpecialties.includes(specialty)),
-      );
-    }
-
-    if (sortBy === 'name') {
-      itemsToFilter.sort((a, b) => (a.name > b.name ? 1 : -1));
-    } else if (sortBy === 'distance') {
-      itemsToFilter.sort(
-        (a, b) => parseFloat(a.distance) - parseFloat(b.distance),
-      );
-    } else if (sortBy === 'rating') {
-      itemsToFilter.sort((a, b) => (a.rate < b.rate ? 1 : -1));
-    }
-
-    setFilteredList(itemsToFilter);
-  }, [sortBy, selectedSpecialties, list]);
   const checkboxGroup = useCheckboxGroup({
     defaultValue: [],
-    onChange: setSelectedSpecialties,
+    onChange: onCheckBoxGroupChange,
   });
 
   return (
@@ -156,35 +118,22 @@ function AppointmentList() {
                 <Heading as="h3" fontSize="24" mb="2">
                   정렬 기준
                 </Heading>
-                <RadioGroup onChange={setValue} value={value}>
-                  <Stack direction="row">
-                    <Radio
-                      value="name"
-                      checked={sortBy === 'name'}
-                      onChange={handleSortByName}
-                      name="sort"
-                    >
-                      이름순
-                    </Radio>
-
-                    <Radio
-                      value="rating"
-                      checked={sortBy === 'rating'}
-                      onChange={handleSortByRating}
-                      name="sort"
-                    >
-                      별점순
-                    </Radio>
-
-                    <Radio
-                      value="distance"
-                      checked={sortBy === 'distance'}
-                      onChange={handleSortByDistance}
-                      name="sort"
-                    >
-                      거리순
-                    </Radio>
-                  </Stack>
+                <RadioGroup
+                  display="flex"
+                  gap="4"
+                  colorScheme="primary"
+                  onChange={onRadioGroupChange}
+                  value={radioValue}
+                >
+                  <Radio borderColor="primary.500" value="name">
+                    이름순
+                  </Radio>
+                  <Radio borderColor="primary.500" value="rating">
+                    별점순
+                  </Radio>
+                  <Radio borderColor="primary.500" value="distance">
+                    거리순
+                  </Radio>
                 </RadioGroup>
               </Box>
               <Box>
@@ -193,13 +142,13 @@ function AppointmentList() {
                 </Heading>
                 <HStack gap="4" width="full" flexWrap="wrap">
                   {specialties.map(specialty => (
-                    <CheckCard
+                    <CustomCheckbox
                       {...checkboxGroup.getCheckboxProps({ value: specialty })}
                       specialty={specialty}
                       key={specialty}
                     >
                       {specialty}
-                    </CheckCard>
+                    </CustomCheckbox>
                   ))}
                 </HStack>
               </Box>
@@ -210,11 +159,29 @@ function AppointmentList() {
 
       <Box width="full" maxHeight="80vh" overflowY="scroll">
         <SimpleGrid columns={2} gap="8" mt="4" width="full" padding="8">
-          {filteredList.map(item => (
-            <ChakraLink as={ReactRouterLink} to={`${item.id}`} key={item.name}>
-              <AppointmentCard data={item} />
-            </ChakraLink>
-          ))}
+          {isLoading ? (
+            <>
+              <Skeleton height="40" borderRadius="lg" />
+              <Skeleton height="40" borderRadius="lg" />
+              <Skeleton height="40" borderRadius="lg" />
+              <Skeleton height="40" borderRadius="lg" />
+            </>
+          ) : (
+            <>
+              {isError && (
+                <Text textAlign="center">데이터를 불러올 수 없습니다.</Text>
+              )}
+              {data?.map(item => (
+                <ChakraLink
+                  as={ReactRouterLink}
+                  to={`${item.id}`}
+                  key={item.id}
+                >
+                  <AppointmentCard data={item} />
+                </ChakraLink>
+              ))}
+            </>
+          )}
         </SimpleGrid>
       </Box>
     </VStack>

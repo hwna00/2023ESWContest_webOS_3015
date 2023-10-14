@@ -15,10 +15,13 @@ import {
 } from '@chakra-ui/react';
 
 function CancelModal({ isOpen, onClose, cancelAppointment }) {
-  const handleConfirm = useCallback(() => {
-    cancelAppointment();
-    onClose();
-  }, [cancelAppointment, onClose]);
+  const handleConfirm = useCallback(
+    id => {
+      cancelAppointment(id);
+      onClose();
+    },
+    [cancelAppointment, onClose],
+  );
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered="true">
@@ -26,13 +29,21 @@ function CancelModal({ isOpen, onClose, cancelAppointment }) {
       <ModalContent>
         <ModalHeader>예약 취소</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>정말로 예약을 취소하시겠습니까?</ModalBody>
+        <ModalBody textAlign="center">
+          정말로 예약을 취소하시겠습니까?
+        </ModalBody>
 
-        <ModalFooter>
-          <Button colorScheme="blue" mr="3" width="12" onClick={onClose}>
+        <ModalFooter gap="4">
+          <Button
+            width="20"
+            borderColor="primary.300"
+            color="primary.300"
+            variant="outline"
+            onClick={onClose}
+          >
             아니요
           </Button>
-          <Button colorScheme="red" width="12" onClick={handleConfirm}>
+          <Button width="20" colorScheme="red" onClick={handleConfirm}>
             예
           </Button>
         </ModalFooter>
@@ -41,38 +52,44 @@ function CancelModal({ isOpen, onClose, cancelAppointment }) {
   );
 }
 
-const WaitingItem = function ({ waiting, cancelAppointment, index }) {
+const WaitingItem = function ({ appointment, cancelAppointment }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const handleCancel = useCallback(() => {
-    cancelAppointment(index);
-    onClose();
-  }, [cancelAppointment, index, onClose]);
+  const handleCancel = useCallback(
+    id => {
+      cancelAppointment(id);
+      onClose();
+    },
+    [cancelAppointment, onClose],
+  );
   return (
     <HStack
+      as="li"
+      width="full"
       bg="primary.100"
       py="4"
       borderRadius="10"
       justifyContent="space-evenly"
     >
-      <Box w="25%" textAlign="center">
-        {waiting.date}
+      <Box flex={1} textAlign="center">
+        {appointment.date} {appointment.time}
       </Box>
-      <Box w="25%" textAlign="center">
-        {waiting.hospital}
+      <Box flex={1} textAlign="center">
+        {appointment.hospitalName}
       </Box>
-      <Box w="25%" textAlign="center">
-        {waiting.name}
+      <Box flex={1} textAlign="center">
+        {appointment.doctorName}
       </Box>
-      <Box w="25%" textAlign="center" alignContent="center">
-        <Button onClick={onOpen}>취소하기</Button>
-
-        <CancelModal
-          isOpen={isOpen}
-          onClose={onClose}
-          cancelAppointment={handleCancel}
-        />
+      <Box flex={1} textAlign="center" alignContent="center">
+        <Button colorScheme="red" variant="outline" onClick={onOpen}>
+          취소하기
+        </Button>
       </Box>
+      <CancelModal
+        isOpen={isOpen}
+        onClose={onClose}
+        cancelAppointment={() => handleCancel(appointment.id)}
+      />
     </HStack>
   );
 };

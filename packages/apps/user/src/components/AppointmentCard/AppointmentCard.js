@@ -6,10 +6,10 @@ import {
   Flex,
   Heading,
   Text,
-  Image,
   Icon,
   HStack,
   AspectRatio,
+  Avatar,
 } from '@chakra-ui/react';
 import { StarIcon } from '@chakra-ui/icons';
 
@@ -30,12 +30,7 @@ function AppointmentCard({ data }) {
       gap="6"
     >
       <AspectRatio ratio={1} width="100%" maxW="32">
-        <Image
-          src={data.profileImg}
-          alt={data.name}
-          objectFit="cover"
-          borderRadius="full"
-        />
+        <Avatar src={data.profileImg} alt={data.name} borderRadius="full" />
       </AspectRatio>
 
       <Box width="100%">
@@ -70,7 +65,7 @@ function AppointmentCard({ data }) {
           {data.specialty && <span>{data.specialty}</span>}
         </Text>
         <Text fontSize="sm" mb="2" noOfLines="1">
-          {data.fields && <span>{data.fields.join(', ')}</span>}
+          {/* {data.fields && <span>{data.fields.join(', ')}</span>} */}
         </Text>
         <Text fontSize="sm" mb="1">
           {data.distance && <span>{data.distance}</span>}

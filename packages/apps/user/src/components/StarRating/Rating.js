@@ -19,7 +19,7 @@ const Rating = React.forwardRef(
       }
     };
 
-    function RatingIcon({ fill }) {
+    const RatingIcon = ({ fill }) => {
       return (
         <Icon
           as={FaStar}
@@ -30,9 +30,9 @@ const Rating = React.forwardRef(
           fillOpacity={fill ? '100%' : '30%'}
         />
       );
-    }
+    };
 
-    function RatingButton({ idx, fill }) {
+    const RatingButton = ({ idx, fill }) => {
       return (
         <Box
           as="button"
@@ -46,7 +46,7 @@ const Rating = React.forwardRef(
           <RatingIcon fill={fill} />
         </Box>
       );
-    }
+    };
 
     for (let i = 1; i <= scale; i++) {
       buttons.push(<RatingButton key={i} idx={i} fill={i <= rating} />);

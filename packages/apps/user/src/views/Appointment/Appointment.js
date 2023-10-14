@@ -10,107 +10,40 @@ import {
 } from '@chakra-ui/react';
 
 import AppointmentViewList from '../../components/AppointmentViewList/AppointmentViewList';
-
-const favorites = [
-  {
-    hospitalKey: 0,
-    src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsJdMaCS7uZhDHByTc7LbdzAEksv2Cpk4Vc3wWDHDaG5std77hpHokQQm-zcDHBIqMGYk&usqp=CAU',
-  },
-  {
-    hospitalKey: 1,
-    src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsJdMaCS7uZhDHByTc7LbdzAEksv2Cpk4Vc3wWDHDaG5std77hpHokQQm-zcDHBIqMGYk&usqp=CAU',
-  },
-  {
-    hospitalKey: 2,
-    src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsJdMaCS7uZhDHByTc7LbdzAEksv2Cpk4Vc3wWDHDaG5std77hpHokQQm-zcDHBIqMGYk&usqp=CAU',
-  },
-  {
-    hospitalKey: 3,
-    src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsJdMaCS7uZhDHByTc7LbdzAEksv2Cpk4Vc3wWDHDaG5std77hpHokQQm-zcDHBIqMGYk&usqp=CAU',
-  },
-  {
-    hospitalKey: 4,
-    src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsJdMaCS7uZhDHByTc7LbdzAEksv2Cpk4Vc3wWDHDaG5std77hpHokQQm-zcDHBIqMGYk&usqp=CAU',
-  },
-  {
-    hospitalKey: 5,
-    src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsJdMaCS7uZhDHByTc7LbdzAEksv2Cpk4Vc3wWDHDaG5std77hpHokQQm-zcDHBIqMGYk&usqp=CAU',
-  },
-];
-
-const hospitalList = [
-  {
-    hospitalKey: 0,
-    name: '지웅병원',
-    isOpen: true,
-    rating: 5.0,
-    numberOfRatings: 30,
-    specialities: ['이비인후과', '성형외과'],
-  },
-  {
-    hospitalKey: 1,
-    name: '철환병원',
-    isOpen: false,
-    rating: 4.3,
-    numberOfRatings: 2,
-    specialities: ['이비인후과'],
-  },
-  {
-    hospitalKey: 2,
-    name: '진형병원',
-    isOpen: true,
-    rating: 3.0,
-    numberOfRatings: 3,
-    specialities: ['피부과', '소아과'],
-  },
-  {
-    hospitalKey: 3,
-    name: '재인병원',
-    isOpen: false,
-    rating: 1.0,
-    numberOfRatings: 10,
-    specialities: ['마취과', '심장병학과'],
-  },
-  {
-    hospitalKey: 4,
-    name: '보경병원',
-    isOpen: false,
-    rating: 0.5,
-    numberOfRatings: 20,
-    specialities: [
-      '마취과',
-      '심장병학과',
-      '피부과',
-      '응급의학과',
-      '내분비학과',
-      '소화기내과',
-      '일반진료과',
-    ],
-  },
-];
-
-const doctorList = [
-  {
-    hospitalKey: 0,
-    name: '양지웅',
-    isOpen: true,
-    rating: 5.0,
-    numberOfRatings: 30,
-    specialities: ['이비인후과', '성형외과'],
-  },
-  {
-    hospitalKey: 1,
-    name: '하철환',
-    isOpen: false,
-    rating: 4.3,
-    numberOfRatings: 2,
-    specialities: ['이비인후과'],
-  },
-];
+import { FavoriteList } from './dataList';
+import { useCallback, useEffect, useState } from 'react';
+import { getAppointments } from '../../api';
+import { useSelector } from 'react-redux';
 
 const Appointment = function () {
+  const uid = useSelector(state => state.me.uid);
+  const [appointments, setAppointments] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
+
+  const fetchAppointments = useCallback(async () => {
+    if (!uid) {
+      setAppointments();
+      setIsLoading(true);
+      return;
+    }
+    try {
+      const response = await getAppointments(uid);
+      setAppointments(response.length);
+      setIsError(false);
+    } catch {
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [uid]);
+
+  useEffect(() => {
+    fetchAppointments();
+  }, [fetchAppointments]);
+
   return (
-    <VStack w="full" h="full">
+    <VStack w="full" h="full" justifyContent={'space-between'} gap={'6'}>
       <HStack w="full" gap="6" px="2">
         <Box bg="primary.200" w="full" h="40" borderRadius="10" p="4">
           <Box>
@@ -119,7 +52,28 @@ const Appointment = function () {
             </Text>
           </Box>
           <Flex h="75%" alignItems="center" justifyContent="center">
-            <Text opacity="0.5">예약 내역이 없습니다.</Text>
+            {isLoading ? (
+              '예약을 불러오는 중입니다.'
+            ) : (
+              <>
+                {isError && <Text opacity="0.5">예약 내역이 없습니다.</Text>}
+                {
+                  <ChakraLink
+                    as={ReactRouterLink}
+                    to="waiting-room"
+                    textDecoration="none !important"
+                  >
+                    <Text
+                      textAlign="center"
+                      textDecoration="underline"
+                      fontSize="lg"
+                    >
+                      {appointments}건의 예약이 있습니다.
+                    </Text>
+                  </ChakraLink>
+                }
+              </>
+            )}
           </Flex>
         </Box>
 
@@ -133,17 +87,22 @@ const Appointment = function () {
             </ChakraLink>
           </HStack>
 
-          <HStack justifyContent="flex-start" overflowX="scroll">
-            {favorites.map(favorite => (
-              <Image key={favorite.hospitalKey} src={favorite.src} h="full" />
+          <HStack justifyContent="flex-start" overflowX="scroll" gap={'4'}>
+            {FavoriteList.map(favorite => (
+              <Image
+                key={favorite.id}
+                src={favorite.profileImg}
+                h="full"
+                borderRadius={'sm'}
+              />
             ))}
           </HStack>
         </VStack>
       </HStack>
 
-      <HStack w="full" mt="4">
-        <AppointmentViewList type="hospital" selectedList={hospitalList} />
-        <AppointmentViewList type="doctor" selectedList={doctorList} />
+      <HStack w="full">
+        <AppointmentViewList type="hospitals" />
+        <AppointmentViewList type="doctors" />
       </HStack>
     </VStack>
   );

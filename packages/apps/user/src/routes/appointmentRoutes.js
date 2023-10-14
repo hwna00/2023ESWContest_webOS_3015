@@ -3,6 +3,7 @@ import AppointmentHistory from '../views/AppointmentHistory';
 import AppointmentList from '../views/Appointment/AppointmentList';
 import AppointmentDetail from '../views/Appointment/AppointmentDetail/AppointmentDetail';
 import Appointment from '../views/Appointment';
+import WaitingRoom from '../views/Appointment/WaitingRoom/WaitingRoom';
 
 const appointmentRoutes = [
   {
@@ -14,8 +15,12 @@ const appointmentRoutes = [
     element: <AppointmentList />,
   },
   {
-    path: 'appointment/:catetory/:id',
+    path: 'appointment/:category/:id',
     element: <AppointmentDetail />,
+  },
+  {
+    path: 'appointment/waiting-room',
+    element: <WaitingRoom />,
   },
   {
     path: 'appointment-history',
