@@ -1,5 +1,7 @@
 import { useCallback } from 'react';
 
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import {
   Box,
   HStack,
@@ -13,7 +15,8 @@ import {
   ModalBody,
   ModalCloseButton,
 } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
+
+import { setTrmt } from '../../store';
 
 function CancelModal({ isOpen, onClose, cancelAppointment }) {
   const handleConfirm = useCallback(
@@ -56,6 +59,7 @@ function CancelModal({ isOpen, onClose, cancelAppointment }) {
 const WaitingItem = function ({ appointment, cancelAppointment }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleCancel = useCallback(
     id => {
@@ -66,7 +70,14 @@ const WaitingItem = function ({ appointment, cancelAppointment }) {
   );
 
   const onTrmtStart = () => {
-    navigate('/treatment');
+    dispatch(
+      setTrmt({
+        uid: appointment.uid,
+        appointmentId: appointment.id,
+        doctorId: appointment.doctorId,
+      }),
+    );
+    navigate(`/treatment/${appointment.id}`);
   };
 
   return (

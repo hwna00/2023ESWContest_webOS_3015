@@ -23,7 +23,7 @@ const router = createHashRouter(
           element: <MainPage />,
         },
         {
-          path: 'treatment',
+          path: 'treatment/:appointmentId',
           element: <VideoCall />,
         },
         {

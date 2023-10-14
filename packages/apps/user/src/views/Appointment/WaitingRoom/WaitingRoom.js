@@ -11,6 +11,7 @@ import { deleteAppointment, getAppointments } from '../../../api';
 
 function WaitingRoom() {
   const uid = useSelector(state => state.me.uid);
+
   const queryClient = useQueryClient();
 
   const { isLoading, data, isError } = useQuery({
@@ -33,6 +34,7 @@ function WaitingRoom() {
       },
     },
   );
+
   const cancelAppointment = useCallback(
     async appointmentId => {
       mutate(appointmentId);
@@ -84,7 +86,7 @@ function WaitingRoom() {
             {data?.map(appointment => (
               <WaitingItem
                 key={appointment.id}
-                appointment={appointment}
+                appointment={{ uid, ...appointment }}
                 cancelAppointment={cancelAppointment}
               />
             ))}

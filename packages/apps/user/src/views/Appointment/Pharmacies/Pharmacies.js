@@ -20,12 +20,16 @@ import {
 
 import { getPharmacies } from '../../../api';
 import { useCallback, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Pharmacies = function () {
   const TOTAL_PAGE = 100;
 
   const [selectedPharmacy, setSelectedPharmacy] = useState();
   const [deliveryType, setDeliveryType] = useState();
+
+  const { id } = useParams();
+  const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data, isLoading, isError, fetchNextPage } = useInfiniteQuery(
     ['pharmacies'],
@@ -60,7 +64,8 @@ const Pharmacies = function () {
   const onCloseClick = useCallback(() => {
     onClose();
     // TODO: api 연결
-  }, [onClose]);
+    navigate(`/appointment/${id}/create-review`);
+  }, [onClose, navigate, id]);
 
   return (
     <VStack width="full" height="full" gap="4">

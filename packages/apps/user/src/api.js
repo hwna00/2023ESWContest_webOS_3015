@@ -84,6 +84,11 @@ export const getDoctor = async doctorId => {
   }
 };
 
+export const createReivew = async review => {
+  const { data } = await instance.post('/reviews', { data: review });
+  console.log(data);
+};
+
 export const getHospitalDtl = async ykiho => {
   if (ykiho === '') {
     return {};

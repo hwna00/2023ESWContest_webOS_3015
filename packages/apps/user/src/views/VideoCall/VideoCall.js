@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 import { Button, HStack, VStack } from '@chakra-ui/react';
 import LoadingPage from '@housepital/common/LoadingPage';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const roomName = 'myRoom';
 
@@ -17,6 +17,7 @@ const VideoCall = function () {
   const peerConnectionRef = useRef();
 
   const navigate = useNavigate();
+  const { appointmentId } = useParams();
 
   const getMedia = async () => {
     try {
@@ -141,7 +142,7 @@ const VideoCall = function () {
     });
 
     socketRef.current.on('trmt_end', () => {
-      navigate('/appointment/select-pharmacies');
+      navigate(`/appointment/${appointmentId}/select-pharmacies`);
     });
 
     onRTCStart();

@@ -13,8 +13,6 @@ const Rating = React.forwardRef(
           onRatingChange(0);
         } else {
           onRatingChange(idx);
-
-          console.log('별점 : ', idx);
         }
       }
     };

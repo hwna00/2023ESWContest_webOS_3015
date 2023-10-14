@@ -25,11 +25,11 @@ const appointmentRoutes = [
     element: <WaitingRoom />,
   },
   {
-    path: 'appointment/create-review',
+    path: 'appointment/:id/create-review',
     element: <CreateReview />,
   },
   {
-    path: 'appointment/select-pharmacies',
+    path: 'appointment/:id/select-pharmacies',
     element: <Pharmacies />,
   },
   {
