@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { useParams, Link as ReactRouterLink } from 'react-router-dom';
+import {
+  useParams,
+  Link as ReactRouterLink,
+  useNavigate,
+} from 'react-router-dom';
 import { FaAngleRight } from '@react-icons/all-files/fa/FaAngleRight';
 import { FaBookmark } from '@react-icons/all-files/fa/FaBookmark';
 import { FaRegBookmark } from '@react-icons/all-files/fa/FaRegBookmark';
@@ -41,6 +45,7 @@ const AppointmentDetail = function () {
   const [reservationOfDay, setReservationOfDay] = useState({});
 
   const { category, id } = useParams();
+  const navigate = useNavigate();
   const uid = useSelector(state => state.me.uid);
   const {
     register,
@@ -91,10 +96,10 @@ const AppointmentDetail = function () {
       };
 
       createAppointment(appointment)
-        .then(() => console.log('success'))
+        .then(() => navigate('/appointment/waiting-room'))
         .catch(err => console.log(err));
     },
-    [appointTime, uid, data?.id],
+    [appointTime, uid, data?.id, navigate],
   );
 
   useEffect(() => {
