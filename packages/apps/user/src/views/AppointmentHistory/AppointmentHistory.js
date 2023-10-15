@@ -10,56 +10,6 @@ const AppointmentHistory = function () {
   const { data: diagnoses } = useQuery(['diagnoses'], () => getDiagnoses(uid), {
     enabled: !!uid,
   });
-  const mockhistories = [
-    {
-      id: 0,
-      date: '2022-10-27',
-      hospitalName: '병원병원',
-      payment: '4000',
-    },
-    {
-      id: 1,
-      date: '2022-10-27',
-      hospitalName: '병원병원',
-      payment: '4000',
-    },
-    {
-      id: 2,
-      date: '2022-10-27',
-      hospitalName: '병원병원',
-      payment: '4000',
-    },
-    {
-      id: 4,
-      date: '2022-10-27',
-      hospitalName: '병원병원',
-      payment: '4000',
-    },
-    {
-      id: 5,
-      date: '2022-10-27',
-      hospitalName: '병원병원',
-      payment: '4000',
-    },
-    {
-      id: 6,
-      date: '2022-10-27',
-      hospitalName: '병원병원',
-      payment: '4000',
-    },
-    {
-      id: 7,
-      date: '2022-10-27',
-      hospitalName: '병원병원',
-      payment: '4000',
-    },
-    {
-      id: 8,
-      date: '2022-10-27',
-      hospitalName: '병원병원',
-      payment: '4000',
-    },
-  ];
 
   return (
     <VStack width="full" height="full" overflowY="hidden">
@@ -85,10 +35,10 @@ const AppointmentHistory = function () {
         height="full"
         overflowY="scroll"
       >
-        {mockhistories?.length === 0 && (
+        {diagnoses?.length === 0 && (
           <Text textAlign="center">진료 내역이 없습니다.</Text>
         )}
-        {mockhistories?.map(diagnosis => (
+        {diagnoses?.map(diagnosis => (
           <AppointmentHistoryItem key={diagnosis.id} diagnosis={diagnosis} />
         ))}
       </UnorderedList>

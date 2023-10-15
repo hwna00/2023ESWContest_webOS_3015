@@ -1,15 +1,14 @@
 import { Link as ReactRouterLink } from 'react-router-dom';
-import { TiChevronRight } from '@react-icons/all-files/ti/TiChevronRight';
+import { FaAngleRight } from '@react-icons/all-files/fa/FaAngleRight';
 import {
   HStack,
-  Link as ChakraLink,
   Text,
   ListItem,
   Icon,
+  Link as ChakraLink,
 } from '@chakra-ui/react';
 
 const AppointmentHistoryItem = function ({ diagnosis }) {
-  console.log(diagnosis);
   return (
     <ListItem>
       <ChakraLink
@@ -33,7 +32,7 @@ const AppointmentHistoryItem = function ({ diagnosis }) {
             {diagnosis.payment}
           </Text>
           <Text flex={1} textAlign="center">
-            <Icon as={TiChevronRight} />
+            <Icon as={FaAngleRight} boxSize={6} />
           </Text>
         </HStack>
       </ChakraLink>
