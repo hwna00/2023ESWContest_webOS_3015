@@ -321,6 +321,9 @@ const AppointmentDetail = function () {
                     margin={0}
                     spacing={'4'}
                   >
+                    {data?.doctors.length === 0 && (
+                      <Text textAlign="center">등록된 의료진이 없습니다.</Text>
+                    )}
                     {data?.doctors.map(doctor => {
                       return (
                         <ListItem key={doctor.id}>
