@@ -59,3 +59,12 @@ export const getRequests = async centerId => {
     ];
   }
 };
+
+export const getCenter = async centerId => {
+  try {
+    const { data } = await instance.get(`/centers/${centerId}`);
+    return data.result;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
