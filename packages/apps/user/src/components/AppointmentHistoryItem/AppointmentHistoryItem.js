@@ -1,34 +1,43 @@
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { TiChevronRight } from '@react-icons/all-files/ti/TiChevronRight';
-import { Box, HStack, Link as ChakraLink } from '@chakra-ui/react';
+import {
+  HStack,
+  Link as ChakraLink,
+  Text,
+  ListItem,
+  Icon,
+} from '@chakra-ui/react';
 
-const AppointmentHistoryItem = function ({ history }) {
+const AppointmentHistoryItem = function ({ diagnosis }) {
+  console.log(diagnosis);
   return (
-    <ChakraLink
-      as={ReactRouterLink}
-      to="/appointment-history/1"
-      textDecoration="none !important"
-    >
-      <HStack
-        bg="primary.100"
-        py="4"
-        borderRadius="10"
-        justifyContent="space-evenly"
+    <ListItem>
+      <ChakraLink
+        as={ReactRouterLink}
+        to={`/appointment-history/${diagnosis.id}`}
+        textDecoration="none !important"
       >
-        <Box w="48" textAlign="center">
-          {history.prescriptionDate}
-        </Box>
-        <Box w="48" textAlign="center">
-          {history.hospitalName}
-        </Box>
-        <Box w="48" textAlign="center">
-          {history.pharmacyName}
-        </Box>
-        <Box w="20" textAlign="center">
-          <TiChevronRight />
-        </Box>
-      </HStack>
-    </ChakraLink>
+        <HStack
+          bg="primary.100"
+          py="4"
+          borderRadius="10"
+          justifyContent="space-between"
+        >
+          <Text flex={1} textAlign="center">
+            {diagnosis.date}
+          </Text>
+          <Text flex={1} textAlign="center">
+            {diagnosis.hospitalName}
+          </Text>
+          <Text flex={1} textAlign="center">
+            {diagnosis.payment}
+          </Text>
+          <Text flex={1} textAlign="center">
+            <Icon as={TiChevronRight} />
+          </Text>
+        </HStack>
+      </ChakraLink>
+    </ListItem>
   );
 };
 
