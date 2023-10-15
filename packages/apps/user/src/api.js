@@ -6,7 +6,6 @@ const instance = axios.create({
 });
 
 export const createUser = async user => {
-  // TODO: checkPassword 제거하기
   const { data } = await instance.post('/users', { data: user });
   return data;
 };
@@ -89,6 +88,32 @@ export const getDoctor = async doctorId => {
 export const createReivew = async review => {
   const { data } = await instance.post('/reviews', { data: review });
   return data;
+};
+
+export const getDiagnoses = async uid => {
+  try {
+    const { data } = await instance.get(`users/${uid}/diagnoses`);
+
+    if (!data.isSuccess) {
+      throw new Error();
+    }
+    return data.result;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const getDiagnosis = async diagnosisId => {
+  try {
+    const { data } = await instance.get(`diagnoses/${diagnosisId}`);
+
+    if (!data.isSuccess) {
+      throw new Error();
+    }
+    return data.result;
+  } catch (error) {
+    throw new Error(error);
+  }
 };
 
 export const getHospitalDtl = async ykiho => {

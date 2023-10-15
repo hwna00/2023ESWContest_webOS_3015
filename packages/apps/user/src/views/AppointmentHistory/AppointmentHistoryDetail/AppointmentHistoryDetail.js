@@ -8,55 +8,47 @@ import {
   Heading,
   VStack,
 } from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
+import { useParams } from 'react-router-dom';
+import { getDiagnosis } from '../../../api';
 
 const AppointmentHistory = function () {
+  const { id } = useParams();
+  const { data: diagnosis } = useQuery(
+    ['diagnosis', id],
+    () => getDiagnosis(id),
+    {
+      enabled: !!id,
+    },
+  );
   return (
-    <>
-      <Heading as="h3" size="lg" pl="4" mb="5">
-        상세 진료 기록
-      </Heading>
-      <VStack
-        h="450"
-        mx="5"
-        align="stretch"
-        gap="4"
-        overflowY="scroll"
-      >
-        <Box pl="4" bg="primary.100" py="3" borderRadius="10">
-          진료 일시:
+    <Box height="full" overflowY="hidden">
+      <Heading as="h1">상세 진료 기록</Heading>
+
+      <VStack width="full" height="full" mt="4" gap="4" overflowY="scroll">
+        <Box width="full" bg="primary.100" padding="4" borderRadius="md">
+          진료 일시: {diagnosis?.date}
         </Box>
-        <Box pl="4" bg="primary.100" py="3" borderRadius="10">
-          진료 병원:
+        <Box width="full" bg="primary.100" padding="4" borderRadius="md">
+          진료 병원: {diagnosis?.hospitalName}
         </Box>
-        <Box pl="4" bg="primary.100" py="3" borderRadius="10">
-          담당 의사:
+        <Box width="full" bg="primary.100" padding="4" borderRadius="md">
+          담당 의사: {diagnosis?.doctorName}
         </Box>
-        <Box pl="4" bg="primary.100" py="3" borderRadius="10">
-          제조 약국:
+        <Box width="full" bg="primary.100" padding="4" borderRadius="md">
+          제조 약국: {diagnosis?.pharmacyName}
+        </Box>
+        <Box width="full" bg="primary.100" padding="4" borderRadius="md">
+          결제 금액: {diagnosis?.payment}
         </Box>
         <Accordion
           allowToggle
           display="flex"
           flexDirection="column"
           gap="4"
+          width="full"
         >
-          <AccordionItem bg="primary.100" borderRadius="10">
-            <h2>
-              <AccordionButton py="3" _expanded={{ bg: 'primary.200' }}>
-                <Box as="span" flex="1" textAlign="left">
-                  결제 금액:
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-            </h2>
-            <AccordionPanel pb={4}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </AccordionPanel>
-          </AccordionItem>
-          <AccordionItem bg="primary.100" borderRadius="10">
+          <AccordionItem bg="primary.100" borderRadius="md">
             <h2>
               <AccordionButton py="3" _expanded={{ bg: 'primary.200' }}>
                 <Box as="span" flex="1" textAlign="left">
@@ -66,34 +58,12 @@ const AppointmentHistory = function () {
               </AccordionButton>
             </h2>
             <AccordionPanel pb={4}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </AccordionPanel>
-          </AccordionItem>
-
-          <AccordionItem bg="primary.100" borderRadius="10">
-            <h2>
-              <AccordionButton py="3" _expanded={{ bg: 'primary.200' }}>
-                <Box as="span" flex="1" textAlign="left">
-                  나의 리뷰
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-            </h2>
-            <AccordionPanel pb={4}>
-              <br />
-              &nbsp; &nbsp; 담당의사:
-              <br />
-              &nbsp; &nbsp; 별점:
-              <br />
-              &nbsp; &nbsp; 내용:
+              {/* // TODO: 처방전 사진 추가하기 */}
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
       </VStack>
-    </>
+    </Box>
   );
 };
 
