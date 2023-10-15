@@ -1,7 +1,8 @@
 import { useState, useCallback } from 'react';
 
-import { Link as ReactRouterLink } from 'react-router-dom';
-import { BiCommentEdit, BiUndo } from 'react-icons/bi';
+import { Link as ReactRouterLink, useParams } from 'react-router-dom';
+import { BiCommentEdit } from '@react-icons/all-files/bi/BiCommentEdit';
+import { BiUndo } from '@react-icons/all-files/bi/BiUndo';
 import {
   VStack,
   Box,
@@ -15,9 +16,12 @@ import {
   ModalOverlay,
   Text,
   ModalHeader,
+  useDisclosure,
 } from '@chakra-ui/react';
 
-import Rating from '../../components/StarRating/Rating';
+import Rating from '../../../components/StarRating/Rating';
+import { createReivew } from '../../../api';
+import { useSelector } from 'react-redux';
 
 function ConfirmModal({ isOpen, onClose }) {
   return (
@@ -43,21 +47,25 @@ function ConfirmModal({ isOpen, onClose }) {
 }
 
 function Review() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [reviewText, setReviewText] = useState('');
-  const [rating, setRating] = useState(0);
+  const [reviewContent, setReviewContent] = useState('');
+  const [rate, setRate] = useState(0);
 
-  const onOpen = useCallback(() => setIsOpen(true), []);
-  const onClose = useCallback(() => setIsOpen(false), []);
-  const handlereview = useCallback(e => {
-    setReviewText(e.target.value);
+  const { uid, doctorId, appointmentId } = useSelector(state => state.trmt);
+  const { isOpen, onClose, onOpen } = useDisclosure();
+  const onReviewChange = useCallback(e => {
+    setReviewContent(e.target.value);
   }, []);
-  const saveReview = useCallback(() => {
-    // DB로 리뷰랑 별점 전송
-    console.log('리뷰 내용:', reviewText);
+  const onSaveReviewClick = useCallback(() => {
+    createReivew({
+      uid,
+      doctorId,
+      appointmentId,
+      rate,
+      content: reviewContent,
+    });
 
     onOpen();
-  }, [onOpen, reviewText]);
+  }, [onOpen, rate, reviewContent, uid, doctorId, appointmentId]);
 
   return (
     <VStack justifyContent="center" height="full">
@@ -71,6 +79,7 @@ function Review() {
             as={ReactRouterLink}
             to="/appointment-history"
             fontWeight="bold"
+            textDecoration="underline"
           >
             진료 내역
           </ChakraLink>
@@ -83,8 +92,8 @@ function Review() {
           scale={5}
           fillColor="yellow.400"
           strokeColor="grey"
-          rating={rating}
-          onRatingChange={setRating}
+          rating={rate}
+          onRatingChange={setRate}
         />
       </Box>
 
@@ -93,19 +102,19 @@ function Review() {
         height="120px"
         placeholder="리뷰를 남겨주세요"
         p="4"
-        onChange={handlereview}
+        onChange={onReviewChange}
       />
 
       <HStack spacing="4" p="4">
         <ChakraLink as={ReactRouterLink} to="/">
-          <Button leftIcon={<BiUndo />} colorScheme="primary">
+          <Button leftIcon={<BiUndo />} colorScheme="primary" variant="outline">
             메인 페이지로
           </Button>
         </ChakraLink>
         <Button
           leftIcon={<BiCommentEdit />}
           colorScheme="primary"
-          onClick={saveReview}
+          onClick={onSaveReviewClick}
         >
           저장하기
         </Button>

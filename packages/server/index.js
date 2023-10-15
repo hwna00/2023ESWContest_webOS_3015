@@ -57,13 +57,36 @@ app.get('/kakao-payment/callback', async (req, res) => {
 
 wsServer.on('connection', socket => {
   console.log('connection established');
+
   socket.on('enter', msg => {
     console.log(msg);
     socket.emit('you entered');
   });
+
   socket.on('leave', msg => {
     console.log(msg);
     socket.emit('bye bye');
+  });
+
+  socket.on('join_room', roomName => {
+    socket.join(roomName);
+    socket.to(roomName).emit('welcome');
+  });
+
+  socket.on('offer', (offer, roomName) => {
+    socket.to(roomName).emit('offer', offer);
+  });
+
+  socket.on('answer', (answer, roomName) => {
+    socket.to(roomName).emit('answer', answer);
+  });
+
+  socket.on('ice', (ice, roomName) => {
+    socket.to(roomName).emit('ice', ice);
+  });
+
+  socket.on('trmt_end', roomName => {
+    socket.to(roomName).emit('trmt_end');
   });
 });
 

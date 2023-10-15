@@ -1,6 +1,6 @@
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { FaCog } from 'react-icons/fa';
+import { FaCog } from '@react-icons/all-files/fa/FaCog';
 import {
   Avatar,
   Text,

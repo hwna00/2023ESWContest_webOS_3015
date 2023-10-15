@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react';
 
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
-import { FaSearch } from 'react-icons/fa';
 import { useForm } from 'react-hook-form';
+import { FaSearch } from '@react-icons/all-files/fa/FaSearch';
 import CustomCheckbox from '@housepital/common/CustomCheckox';
 import styles from '@housepital/common/css/HideScrollBar.module.css';
 import {

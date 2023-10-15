@@ -1,7 +1,10 @@
 import { useCallback, useState } from 'react';
 
 import { useNavigate, Link as ReactRouterLink } from 'react-router-dom';
-import { FaUserAlt, FaLock, FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
+import { FaUserAlt } from '@react-icons/all-files/fa/FaUserAlt';
+import { FaLock } from '@react-icons/all-files/fa/FaLock';
+import { FaRegEye } from '@react-icons/all-files/fa/FaRegEye';
+import { FaRegEyeSlash } from '@react-icons/all-files/fa/FaRegEyeSlash';
 import { useForm } from 'react-hook-form';
 import {
   Box,

@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 
-import { GoBookmark, GoBookmarkFill } from 'react-icons/go';
+import { FaRegBookmark } from '@react-icons/all-files/fa/FaRegBookmark';
+import { FaBookmark } from '@react-icons/all-files/fa/FaBookmark';
 import {
   Box,
   Flex,
@@ -42,7 +43,7 @@ function AppointmentCard({ data }) {
             <>
               {isFavorite ? (
                 <Icon
-                  as={GoBookmarkFill}
+                  as={FaBookmark}
                   onClick={handleFavoriteClick}
                   boxSize="25px"
                   mr="2"
@@ -50,7 +51,7 @@ function AppointmentCard({ data }) {
                 />
               ) : (
                 <Icon
-                  as={GoBookmark}
+                  as={FaRegBookmark}
                   onClick={handleFavoriteClick}
                   boxSize="25px"
                   mr="2"

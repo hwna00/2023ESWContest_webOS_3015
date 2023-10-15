@@ -1,5 +1,7 @@
 import { useCallback } from 'react';
 
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import {
   Box,
   HStack,
@@ -13,6 +15,8 @@ import {
   ModalBody,
   ModalCloseButton,
 } from '@chakra-ui/react';
+
+import { setTrmt } from '../../store';
 
 function CancelModal({ isOpen, onClose, cancelAppointment }) {
   const handleConfirm = useCallback(
@@ -54,6 +58,8 @@ function CancelModal({ isOpen, onClose, cancelAppointment }) {
 
 const WaitingItem = function ({ appointment, cancelAppointment }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleCancel = useCallback(
     id => {
@@ -62,6 +68,18 @@ const WaitingItem = function ({ appointment, cancelAppointment }) {
     },
     [cancelAppointment, onClose],
   );
+
+  const onTrmtStart = () => {
+    dispatch(
+      setTrmt({
+        uid: appointment.uid,
+        appointmentId: appointment.id,
+        doctorId: appointment.doctorId,
+      }),
+    );
+    navigate(`/treatment/${appointment.id}`);
+  };
+
   return (
     <HStack
       as="li"
@@ -69,7 +87,7 @@ const WaitingItem = function ({ appointment, cancelAppointment }) {
       bg="primary.100"
       py="4"
       borderRadius="10"
-      justifyContent="space-evenly"
+      justifyContent="space-between"
     >
       <Box flex={1} textAlign="center">
         {appointment.date} {appointment.time}
@@ -80,11 +98,14 @@ const WaitingItem = function ({ appointment, cancelAppointment }) {
       <Box flex={1} textAlign="center">
         {appointment.doctorName}
       </Box>
-      <Box flex={1} textAlign="center" alignContent="center">
-        <Button colorScheme="red" variant="outline" onClick={onOpen}>
-          취소하기
+      <HStack flex={2} textAlign="center" justifyContent="center" gap="4">
+        <Button colorScheme="primary" onClick={onTrmtStart}>
+          진료실 입장
         </Button>
-      </Box>
+        <Button colorScheme="red" variant="outline" onClick={onOpen}>
+          예약 취소
+        </Button>
+      </HStack>
       <CancelModal
         isOpen={isOpen}
         onClose={onClose}

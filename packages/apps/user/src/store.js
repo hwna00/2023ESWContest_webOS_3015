@@ -50,10 +50,24 @@ const meSlice = createSlice({
   },
 });
 
+const trmtSlice = createSlice({
+  name: 'trmt',
+  initialState: { uid: '', appointmentId: '', doctorId: '' },
+  reducers: {
+    setTrmt: (state, action) => {
+      const { uid, appointmentId, doctorId } = action.payload;
+      state.uid = uid;
+      state.appointmentId = appointmentId;
+      state.doctorId = doctorId;
+    },
+  },
+});
+
 export const store = configureStore({
   reducer: {
     signUp: signUpSlice.reducer,
     me: meSlice.reducer,
+    trmt: trmtSlice.reducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
@@ -64,3 +78,4 @@ export const store = configureStore({
 
 export const { setImgBlob, setErrors, setAddress } = signUpSlice.actions;
 export const { setMe, resetMe } = meSlice.actions;
+export const { setTrmt } = trmtSlice.actions;
