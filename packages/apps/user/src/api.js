@@ -60,8 +60,12 @@ export const getHospitals = async () => {
 
 export const getDoctors = async () => {
   try {
-    const { data } = await instance.get('/doctors');
-    return data.result;
+    const { data: doctors } = await instance.get('/doctors');
+
+    return doctors.result.map(doctor => ({
+      ...doctor,
+      fields: JSON.parse(doctor.fields),
+    }));
   } catch (error) {
     throw new Error(error);
   }
@@ -87,7 +91,7 @@ export const getDoctor = async doctorId => {
 
 export const createReivew = async review => {
   const { data } = await instance.post('/reviews', { data: review });
-  console.log(data);
+  return data;
 };
 
 export const getHospitalDtl = async ykiho => {
@@ -109,7 +113,7 @@ export const getHospitalDtl = async ykiho => {
 };
 
 export const getFields = async ({ queryKey }) => {
-  const [_, ykiho] = queryKey;
+  const ykiho = queryKey[1];
 
   if (ykiho === '') {
     return {};
@@ -119,12 +123,15 @@ export const getFields = async ({ queryKey }) => {
     const { data: dgsbjt } = await axios.get(`${base}/getDgsbjtInfo2`, {
       params: {
         serviceKey: process.env.REACT_APP_DATA_DECODING_API_KEY,
-        // ykiho,
-        ykiho:
-          'JDQ4MTYyMiM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQzIyQ3OSQyNjE4MzIjNDEjJDEjJDgjJDgz',
+        ykiho,
         type: 'json',
       },
     });
+    const { item } = dgsbjt.response.body.items;
+
+    if (!Array.isArray(item)) {
+      return [item];
+    }
     return dgsbjt.response.body.items.item;
   } catch (error) {
     throw new Error(error);

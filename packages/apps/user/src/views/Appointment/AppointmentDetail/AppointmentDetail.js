@@ -40,6 +40,18 @@ import ReviewList from '@housepital/common/ReviewList';
 import { useQuery } from '@tanstack/react-query';
 import { getDetailByCategory } from '../../../utils/getByCategory';
 
+const CustomTag = function ({ ykiho }) {
+  const { data: fields = [] } = useQuery(['fields', ykiho], getFields, {
+    enabled: !!ykiho,
+  });
+
+  return fields?.map(field => (
+    <Tag size="md" key={field.dgsbjtCdNm} variant="outline" colorScheme="gray">
+      {field.dgsbjtCdNm}
+    </Tag>
+  ));
+};
+
 const AppointmentDetail = function () {
   const [appointTime, setAppointTime] = useState();
 
@@ -59,27 +71,17 @@ const AppointmentDetail = function () {
     getDetailByCategory(category, id),
   );
 
-  const {
-    isLoading: isDtlLoading,
-    data: hospitalDtl,
-    isError: isDtlError,
-  } = useQuery(['publicData', id], () => getHospitalDtl(data?.ykiho), {
-    enabled: !!data?.ykiho,
-  });
-
-  const { data: fields = [] } = useQuery(
-    ['fields', id, data?.ykiho],
-    getFields,
+  const { data: hospitalDtl, isError: isDtlError } = useQuery(
+    ['publicData', id],
+    () => getHospitalDtl(data?.ykiho),
+    {
+      enabled: !!data?.ykiho,
+    },
   );
 
   const onToggleBookmarkClick = useCallback(() => {
     // Todo: 추후에 isFavorite 항목을 수정하는 axios patch 함수로 변경해야 함.
   }, []);
-
-  const getReviewAve = reviews => {
-    // TODO: 리뷰 평점 계산하는 computed 함수 제작하기
-    return 10;
-  };
 
   const onSubmit = useCallback(
     formData => {
@@ -155,7 +157,6 @@ const AppointmentDetail = function () {
               alignItems="center"
             >
               <Box>
-                {/* // TODO: api 연결해야 함 */}
                 <Text color="primary.500" fontWeight="bold">
                   영업중
                 </Text>
@@ -177,7 +178,7 @@ const AppointmentDetail = function () {
               </Box>
               <HStack gap="2" alignItems="center" fontWeight="bold">
                 <Icon as={FaStar} color="yellow.400" />
-                <Text>{getReviewAve(data?.reviews)}</Text>
+                <Text>{Math.round(data?.rate * 10) / 10}</Text>
               </HStack>
             </HStack>
 
@@ -194,23 +195,25 @@ const AppointmentDetail = function () {
             <HStack
               width="full"
               height="20"
-              columnGap="4"
-              rowGap="2"
-              justifyContent="flex-start"
-              alignItems="center"
+              alignItems="flex-start"
+              gap="2"
               wrap="wrap"
               overflowY="scroll"
             >
-              {fields?.map(field => (
-                <Tag
-                  size="md"
-                  key={field.dgsbjtCdNm}
-                  variant="outline"
-                  colorScheme="gray"
-                >
-                  {field.dgsbjtCdNm}
-                </Tag>
-              ))}
+              {data.fields ? (
+                data.fields?.map(field => (
+                  <Tag
+                    size="md"
+                    key={field}
+                    variant="outline"
+                    colorScheme="gray"
+                  >
+                    {field}
+                  </Tag>
+                ))
+              ) : (
+                <CustomTag ykiho={data.ykiho} />
+              )}
             </HStack>
           </VStack>
 

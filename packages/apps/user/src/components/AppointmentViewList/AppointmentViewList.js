@@ -9,18 +9,30 @@ import {
   UnorderedList,
   ListItem,
   AspectRatio,
-  Image,
   Icon,
+  Tag,
+  Avatar,
 } from '@chakra-ui/react';
 import { FaStar } from '@react-icons/all-files/fa/FaStar';
 import { useQuery } from '@tanstack/react-query';
 import ListSkeleton from '@housepital/common/ListSkeleton';
 
 import { getAllByCategory } from '../../utils/getByCategory';
+import { getFields } from '../../api';
+
+const CustomTag = function ({ ykiho }) {
+  const { data: fields = [] } = useQuery(['fields', ykiho], getFields, {
+    enabled: !!ykiho,
+  });
+
+  return fields?.map(field => (
+    <Tag size="md" key={field.dgsbjtCdNm} variant="outline" colorScheme="gray">
+      {field.dgsbjtCdNm}
+    </Tag>
+  ));
+};
 
 const AppointmentViewList = function ({ type }) {
-  // TODO: isOpen을 통해 영업 여부를 판단해야 함
-  // TODO: fields의 값은 백엔드로부터 가져오지 않고 ykiho를 통해 가져와야 한다.
   const [nameOfView, setNameOfView] = useState('');
   const { isLoading, data, isError } = useQuery([type], () =>
     getAllByCategory(type),
@@ -74,36 +86,30 @@ const AppointmentViewList = function ({ type }) {
                 >
                   <HStack
                     justifyContent={'flex-start'}
+                    alignItems="flex-start"
                     gap={'6'}
                     padding={'2'}
                     borderY="2px"
                     borderColor={'primary.300'}
                   >
-                    <AspectRatio width={'20'} ratio={1}>
-                      <Image src={item.profileImg} borderRadius={'md'} />
+                    <AspectRatio minWidth={'20'} ratio={1}>
+                      <Avatar src={item.profileImg} borderRadius={'md'} />
                     </AspectRatio>
                     <VStack pl="2" gap="0" alignItems="flex-start">
                       <HStack gap="4">
-                        <Text>{item.name}</Text>
-                        <HStack gap={'2'}>
-                          <Icon as={FaStar} color="yellow.400" />
-                          <Text>
-                            {item.rate} {item?.numberOfRatings}
-                          </Text>
-                        </HStack>
+                        <Text fontSize="lg" fontWeight="bold">
+                          {item.name}
+                        </Text>
+                        {item.rate && (
+                          <HStack gap={'2'}>
+                            <Icon as={FaStar} color="yellow.400" />
+                            <Text>{Math.round(item.rate * 10) / 10}</Text>
+                          </HStack>
+                        )}
                       </HStack>
-                      {item.isOpen ? (
-                        <Text fontSize="md" color="primary.400">
-                          진료중
-                        </Text>
-                      ) : (
-                        <Text fontSize="md" color="red">
-                          영업종료
-                        </Text>
-                      )}
 
-                      <HStack my="2" flexWrap="wrap" rowGap="0" columnGap="3">
-                        {/* {item?.fields?.map(field => (
+                      <HStack my="2" flexWrap="wrap" noOfLines={2}>
+                        {item.fields?.map(field => (
                           <Tag
                             size="md"
                             key={field}
@@ -112,7 +118,8 @@ const AppointmentViewList = function ({ type }) {
                           >
                             {field}
                           </Tag>
-                        ))} */}
+                        ))}
+                        <CustomTag ykiho={item.ykiho} />
                       </HStack>
                     </VStack>
                   </HStack>
