@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 
-import { Link as ReactRouterLink, useParams } from 'react-router-dom';
+import { Link as ReactRouterLink } from 'react-router-dom';
 import { BiCommentEdit } from '@react-icons/all-files/bi/BiCommentEdit';
 import { BiUndo } from '@react-icons/all-files/bi/BiUndo';
 import {
@@ -55,14 +55,19 @@ function Review() {
   const onReviewChange = useCallback(e => {
     setReviewContent(e.target.value);
   }, []);
-  const onSaveReviewClick = useCallback(() => {
-    createReivew({
+  const onSaveReviewClick = useCallback(async () => {
+    const response = await createReivew({
       uid,
       doctorId,
       appointmentId,
       rate,
       content: reviewContent,
     });
+
+    if (!response.isSuccess) {
+      // TODO: 리뷰 생성 실패
+      console.log(response);
+    }
 
     onOpen();
   }, [onOpen, rate, reviewContent, uid, doctorId, appointmentId]);

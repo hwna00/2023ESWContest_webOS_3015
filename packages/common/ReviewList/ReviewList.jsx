@@ -10,7 +10,7 @@ const ReviewList = function ({ reviews = [], height = '' }) {
       {reviews?.map(review => (
         <ListItem
           key={review.id}
-          bgColor="primary.200"
+          bgColor="primary.100"
           borderRadius="md"
           padding="4"
         >

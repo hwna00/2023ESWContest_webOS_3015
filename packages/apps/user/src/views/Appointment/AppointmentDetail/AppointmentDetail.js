@@ -5,7 +5,6 @@ import {
   Link as ReactRouterLink,
   useNavigate,
 } from 'react-router-dom';
-import { FaAngleRight } from '@react-icons/all-files/fa/FaAngleRight';
 import { FaBookmark } from '@react-icons/all-files/fa/FaBookmark';
 import { FaRegBookmark } from '@react-icons/all-files/fa/FaRegBookmark';
 import { FaStar } from '@react-icons/all-files/fa/FaStar';
@@ -34,23 +33,13 @@ import { useSelector } from 'react-redux';
 
 import BackButton from '../../../components/BackButton/BackButton';
 import { useForm } from 'react-hook-form';
-import { createAppointment, getFields, getHospitalDtl } from '../../../api';
+import { createAppointment, getHospitalDtl } from '../../../api';
 import AppointForm from './AppiontForm';
 import ReviewList from '@housepital/common/ReviewList';
 import { useQuery } from '@tanstack/react-query';
 import { getDetailByCategory } from '../../../utils/getByCategory';
-
-const CustomTag = function ({ ykiho }) {
-  const { data: fields = [] } = useQuery(['fields', ykiho], getFields, {
-    enabled: !!ykiho,
-  });
-
-  return fields?.map(field => (
-    <Tag size="md" key={field.dgsbjtCdNm} variant="outline" colorScheme="gray">
-      {field.dgsbjtCdNm}
-    </Tag>
-  ));
-};
+import FieldList from '../../../components/FieldList/FieldList';
+import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
 
 const AppointmentDetail = function () {
   const [appointTime, setAppointTime] = useState();
@@ -176,10 +165,12 @@ const AppointmentDetail = function () {
                   </>
                 )}
               </Box>
-              <HStack gap="2" alignItems="center" fontWeight="bold">
-                <Icon as={FaStar} color="yellow.400" />
-                <Text>{Math.round(data?.rate * 10) / 10}</Text>
-              </HStack>
+              {data?.rate && (
+                <HStack gap="2" alignItems="center" fontWeight="bold">
+                  <Icon as={FaStar} color="yellow.400" />
+                  <Text>{Math.round(data?.rate * 10) / 10}</Text>
+                </HStack>
+              )}
             </HStack>
 
             <Divider bgColor="primary.700" height="1px" />
@@ -212,7 +203,7 @@ const AppointmentDetail = function () {
                   </Tag>
                 ))
               ) : (
-                <CustomTag ykiho={data.ykiho} />
+                <FieldList ykiho={data.ykiho} />
               )}
             </HStack>
           </VStack>
@@ -336,35 +327,13 @@ const AppointmentDetail = function () {
                           <ChakraLink
                             as={ReactRouterLink}
                             to={`/appointment/doctors/${doctor.id}`}
-                            p={'4'}
                             bgColor={'primary.100'}
                             borderRadius={'md'}
                             display={'flex'}
                             justifyContent={'space-between'}
                             alignItems={'center'}
                           >
-                            <HStack gap={'6'}>
-                              <AspectRatio width={'28'} ratio={1}>
-                                <Avatar
-                                  borderRadius={'full'}
-                                  src={doctor.profileImg}
-                                  alt="Doctor Profile"
-                                />
-                              </AspectRatio>
-
-                              <VStack
-                                height={'full'}
-                                justifyContent={'flex-start'}
-                                alignItems={'flex-start'}
-                              >
-                                <Text fontSize="xl" fontWeight="bold">
-                                  {doctor.name} 의사
-                                </Text>
-                                <Text>{doctor.specialty} 전문의</Text>
-                              </VStack>
-                            </HStack>
-
-                            <Icon boxSize={8} as={FaAngleRight} />
+                            <AppointmentCard data={doctor} />
                           </ChakraLink>
                         </ListItem>
                       );

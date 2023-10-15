@@ -3,59 +3,45 @@ import { useState, useCallback } from 'react';
 import { FaRegBookmark } from '@react-icons/all-files/fa/FaRegBookmark';
 import { FaBookmark } from '@react-icons/all-files/fa/FaBookmark';
 import {
-  Box,
-  Flex,
   Text,
   Icon,
   HStack,
   AspectRatio,
   Avatar,
   Tag,
+  VStack,
 } from '@chakra-ui/react';
 import { StarIcon } from '@chakra-ui/icons';
-import { useQuery } from '@tanstack/react-query';
-import { getFields } from '../../api';
 
-const CustomTag = function ({ ykiho }) {
-  const { data: fields = [] } = useQuery(['fields', ykiho], getFields, {
-    enabled: !!ykiho,
-  });
-
-  return fields?.map(field => (
-    <Tag size="md" key={field.dgsbjtCdNm} variant="outline" colorScheme="gray">
-      {field.dgsbjtCdNm}
-    </Tag>
-  ));
-};
+import FieldList from '../FieldList';
 
 function AppointmentCard({ data }) {
-  const [isFavorite, setIsFavorite] = useState(data.isFavorite);
+  const [isFavorite, setIsFavorite] = useState(data?.isFavorite);
 
   const handleFavoriteClick = useCallback(() => {
     setIsFavorite(prevIsFavorite => !prevIsFavorite);
   }, []);
 
   return (
-    <Flex
+    <HStack
       key={data.id}
       bgColor="primary.100"
       padding="4"
       borderRadius="md"
-      alignItems="flex-start"
+      justifyContent="flex-start"
+      alignItems="center"
       gap="6"
     >
       <AspectRatio ratio={1} minWidth="24">
-        <Avatar src={data.profileImg} alt={data.name} />
+        <Avatar src={data?.profileImg} alt={data.name} />
       </AspectRatio>
 
-      <Box width="100%">
+      <VStack alignItems="flex-start" justifyContent="flex-start" gap={0}>
         <HStack justifyContent="space-between">
-          <HStack gap="4">
-            <Text fontSize="lg" fontWeight="bold">
-              {data.name}
-            </Text>
+          <HStack gap="4" fontWeight="bold">
+            <Text fontSize="lg">{data.name}</Text>
             {data.rate && (
-              <HStack gap={'2'}>
+              <HStack gap="1">
                 <Icon as={StarIcon} color="yellow.400" />
                 <Text>{Math.round(data.rate * 10) / 10}</Text>
               </HStack>
@@ -87,16 +73,20 @@ function AppointmentCard({ data }) {
         <Text fontSize="sm">
           {data.specialty && <span>{data.specialty} 전문의</span>}
         </Text>
-        <HStack flexWrap="wrap" gap="2" noOfLines={2}>
-          {data.fields?.map(field => (
-            <Tag size="md" key={field} variant="outline" colorScheme="gray">
-              {field}
-            </Tag>
-          ))}
-          <CustomTag ykiho={data.ykiho} />
+
+        <HStack flexWrap="wrap" gap="2" noOfLines={2} mt="4">
+          {data.fields ? (
+            JSON.parse(data.fields).map(field => (
+              <Tag size="md" key={field} variant="outline" colorScheme="gray">
+                {field}
+              </Tag>
+            ))
+          ) : (
+            <FieldList ykiho={data.ykiho} />
+          )}
         </HStack>
-      </Box>
-    </Flex>
+      </VStack>
+    </HStack>
   );
 }
 

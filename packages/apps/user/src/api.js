@@ -62,10 +62,7 @@ export const getDoctors = async () => {
   try {
     const { data: doctors } = await instance.get('/doctors');
 
-    return doctors.result.map(doctor => ({
-      ...doctor,
-      fields: JSON.parse(doctor.fields),
-    }));
+    return doctors.result;
   } catch (error) {
     throw new Error(error);
   }

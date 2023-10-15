@@ -8,29 +8,12 @@ import {
   Link as ChakraLink,
   UnorderedList,
   ListItem,
-  AspectRatio,
-  Icon,
-  Tag,
-  Avatar,
 } from '@chakra-ui/react';
-import { FaStar } from '@react-icons/all-files/fa/FaStar';
 import { useQuery } from '@tanstack/react-query';
 import ListSkeleton from '@housepital/common/ListSkeleton';
 
 import { getAllByCategory } from '../../utils/getByCategory';
-import { getFields } from '../../api';
-
-const CustomTag = function ({ ykiho }) {
-  const { data: fields = [] } = useQuery(['fields', ykiho], getFields, {
-    enabled: !!ykiho,
-  });
-
-  return fields?.map(field => (
-    <Tag size="md" key={field.dgsbjtCdNm} variant="outline" colorScheme="gray">
-      {field.dgsbjtCdNm}
-    </Tag>
-  ));
-};
+import AppointmentCard from '../AppointmentCard/AppointmentCard';
 
 const AppointmentViewList = function ({ type }) {
   const [nameOfView, setNameOfView] = useState('');
@@ -66,8 +49,8 @@ const AppointmentViewList = function ({ type }) {
       <UnorderedList
         w="full"
         overflowY="auto"
-        listStyleType={'none'}
-        spacing={'4'}
+        listStyleType="none"
+        spacing="4"
         margin={0}
       >
         {isLoading ? (
@@ -78,51 +61,13 @@ const AppointmentViewList = function ({ type }) {
               <Text textAlign="center">데이터를 불러올 수 없습니다.</Text>
             )}
             {data?.map(item => (
-              <ListItem w="full" px="2" key={item.id}>
+              <ListItem key={item.id}>
                 <ChakraLink
                   as={ReactRouterLink}
                   to={`/appointment/${type}/${item.id}`}
-                  width={'full'}
+                  width="full"
                 >
-                  <HStack
-                    justifyContent={'flex-start'}
-                    alignItems="flex-start"
-                    gap={'6'}
-                    padding={'2'}
-                    borderY="2px"
-                    borderColor={'primary.300'}
-                  >
-                    <AspectRatio minWidth={'20'} ratio={1}>
-                      <Avatar src={item.profileImg} borderRadius={'md'} />
-                    </AspectRatio>
-                    <VStack pl="2" gap="0" alignItems="flex-start">
-                      <HStack gap="4">
-                        <Text fontSize="lg" fontWeight="bold">
-                          {item.name}
-                        </Text>
-                        {item.rate && (
-                          <HStack gap={'2'}>
-                            <Icon as={FaStar} color="yellow.400" />
-                            <Text>{Math.round(item.rate * 10) / 10}</Text>
-                          </HStack>
-                        )}
-                      </HStack>
-
-                      <HStack my="2" flexWrap="wrap" noOfLines={2}>
-                        {item.fields?.map(field => (
-                          <Tag
-                            size="md"
-                            key={field}
-                            variant="outline"
-                            colorScheme="gray"
-                          >
-                            {field}
-                          </Tag>
-                        ))}
-                        <CustomTag ykiho={item.ykiho} />
-                      </HStack>
-                    </VStack>
-                  </HStack>
+                  <AppointmentCard data={item} />
                 </ChakraLink>
               </ListItem>
             ))}
