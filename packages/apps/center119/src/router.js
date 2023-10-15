@@ -7,16 +7,24 @@ import ErrorPage from './views/ErrorPage';
 import NotFound from './views/NotFound';
 import LogIn from './views/LogIn';
 import SignUp from './views/SignUp';
+import Root from './components/Root';
+import Setting from './views/Setting';
 
 const router = createBrowserRouter([
   {
     path: '/',
+    element: <Root />,
     errorElement: <NotFound />,
     children: [
       { path: '', element: <MainPage /> },
       {
         path: '/error-page',
         element: <ErrorPage />,
+        children: [],
+      },
+      {
+        path: '/settings',
+        element: <Setting />,
         children: [],
       },
     ],
@@ -26,12 +34,12 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
     children: [
       {
-        path: 'sign-up',
-        element: <SignUp />,
-      },
-      {
         path: 'log-in',
         element: <LogIn />,
+      },
+      {
+        path: 'sign-up',
+        element: <SignUp />,
       },
     ],
   },

@@ -12,7 +12,7 @@ import {
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { fbSignUp } from '../firebase';
-import { createCenter } from '../api';
+import { createCounselor } from '../api';
 
 function SignUp() {
   const {
@@ -27,7 +27,7 @@ function SignUp() {
   const onSubmit = async data => {
     try {
       const counselorId = await fbSignUp(data.email, data.password);
-      const centerData = await createCenter({
+      const centerData = await createCounselor({
         counselorId,
         centerName: data.centerName,
         counselorName: data.counselorName,
