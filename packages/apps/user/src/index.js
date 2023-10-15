@@ -1,6 +1,6 @@
 import { RouterProvider } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import ReactDOM from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
 import { AnimatePresence } from 'framer-motion';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ChakraProvider } from '@chakra-ui/react';
@@ -12,7 +12,7 @@ import router from './routes/index';
 
 const client = new QueryClient();
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = createRoot(document.getElementById('root'));
 
 // In a browser environment, render instead of exporting
 if (typeof window !== 'undefined') {

@@ -1,11 +1,10 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import {
   useParams,
   Link as ReactRouterLink,
   useNavigate,
 } from 'react-router-dom';
-import { FaAngleRight } from '@react-icons/all-files/fa/FaAngleRight';
 import { FaBookmark } from '@react-icons/all-files/fa/FaBookmark';
 import { FaRegBookmark } from '@react-icons/all-files/fa/FaRegBookmark';
 import { FaStar } from '@react-icons/all-files/fa/FaStar';
@@ -34,15 +33,16 @@ import { useSelector } from 'react-redux';
 
 import BackButton from '../../../components/BackButton/BackButton';
 import { useForm } from 'react-hook-form';
-import { createAppointment, getFields, getHospitalDtl } from '../../../api';
+import { createAppointment, getHospitalDtl } from '../../../api';
 import AppointForm from './AppiontForm';
 import ReviewList from '@housepital/common/ReviewList';
 import { useQuery } from '@tanstack/react-query';
 import { getDetailByCategory } from '../../../utils/getByCategory';
+import FieldList from '../../../components/FieldList/FieldList';
+import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
 
 const AppointmentDetail = function () {
   const [appointTime, setAppointTime] = useState();
-  const [reservationOfDay, setReservationOfDay] = useState({});
 
   const { category, id } = useParams();
   const navigate = useNavigate();
@@ -60,22 +60,17 @@ const AppointmentDetail = function () {
     getDetailByCategory(category, id),
   );
 
-  const {
-    isLoading: isDtlLoading,
-    data: hospitalDtl,
-    isError: isDtlError,
-  } = useQuery([id], () => getHospitalDtl(data?.ykiho));
-
-  const { data: fields = [] } = useQuery([id, data?.ykiho], getFields);
+  const { data: hospitalDtl, isError: isDtlError } = useQuery(
+    ['publicData', id],
+    () => getHospitalDtl(data?.ykiho),
+    {
+      enabled: !!data?.ykiho,
+    },
+  );
 
   const onToggleBookmarkClick = useCallback(() => {
     // Todo: 추후에 isFavorite 항목을 수정하는 axios patch 함수로 변경해야 함.
   }, []);
-
-  const getReviewAve = reviews => {
-    // TODO: 리뷰 평점 계산하는 computed 함수 제작하기
-    return 10;
-  };
 
   const onSubmit = useCallback(
     formData => {
@@ -101,29 +96,6 @@ const AppointmentDetail = function () {
     },
     [appointTime, uid, data?.id, navigate],
   );
-
-  useEffect(() => {
-    setReservationOfDay({
-      '09:00': 2,
-      '09:30': 1,
-      '10:00': 0,
-      '10:30': 3,
-      '11:00': 3,
-      '11:30': 3,
-      '12:00': 2,
-      '12:30': 1,
-      '13:00': 0,
-      '13:30': 0,
-      '14:00': 0,
-      '14:30': 0,
-      '15:00': 3,
-      '15:30': 0,
-      '16:00': 1,
-      '16:30': 0,
-      '17:00': 0,
-      '17:30': 0,
-    });
-  }, []);
 
   return (
     <HStack height="full" gap="6">
@@ -174,7 +146,6 @@ const AppointmentDetail = function () {
               alignItems="center"
             >
               <Box>
-                {/* // TODO: api 연결해야 함 */}
                 <Text color="primary.500" fontWeight="bold">
                   영업중
                 </Text>
@@ -194,10 +165,12 @@ const AppointmentDetail = function () {
                   </>
                 )}
               </Box>
-              <HStack gap="2" alignItems="center" fontWeight="bold">
-                <Icon as={FaStar} color="yellow.400" />
-                <Text>{getReviewAve(data?.reviews)}</Text>
-              </HStack>
+              {data?.rate && (
+                <HStack gap="2" alignItems="center" fontWeight="bold">
+                  <Icon as={FaStar} color="yellow.400" />
+                  <Text>{Math.round(data?.rate * 10) / 10}</Text>
+                </HStack>
+              )}
             </HStack>
 
             <Divider bgColor="primary.700" height="1px" />
@@ -213,23 +186,25 @@ const AppointmentDetail = function () {
             <HStack
               width="full"
               height="20"
-              columnGap="4"
-              rowGap="2"
-              justifyContent="flex-start"
-              alignItems="center"
+              alignItems="flex-start"
+              gap="2"
               wrap="wrap"
               overflowY="scroll"
             >
-              {fields?.map(field => (
-                <Tag
-                  size="md"
-                  key={field.dgsbjtCdNm}
-                  variant="outline"
-                  colorScheme="gray"
-                >
-                  {field.dgsbjtCdNm}
-                </Tag>
-              ))}
+              {data.fields ? (
+                data.fields?.map(field => (
+                  <Tag
+                    size="md"
+                    key={field}
+                    variant="outline"
+                    colorScheme="gray"
+                  >
+                    {field}
+                  </Tag>
+                ))
+              ) : (
+                <FieldList ykiho={data.ykiho} />
+              )}
             </HStack>
           </VStack>
 
@@ -291,34 +266,32 @@ const AppointmentDetail = function () {
                     borderRadius="md"
                   >
                     <UnorderedList styleType="none" ml={0} spacing="2">
-                      {/* // TODO: 공데포 api 연결하기 */}
                       <ListItem>
-                        <b>월요일</b> {data?.businessHours?.monday.open}{' '}
-                        (점심시간 {data?.businessHours?.monday.break})
+                        <b>월요일</b> {hospitalDtl?.mon} (점심시간{' '}
+                        {hospitalDtl?.lunchWeek})
                       </ListItem>
                       <ListItem>
-                        <b>화요일</b> {data?.businessHours?.tuesday.open}{' '}
-                        (점심시간 {data?.businessHours?.tuesday.break})
+                        <b>화요일</b> {hospitalDtl?.tue} (점심시간{' '}
+                        {hospitalDtl?.lunchWeek})
                       </ListItem>
                       <ListItem>
-                        <b>수요일</b> {data?.businessHours?.wednesday.open}{' '}
-                        (점심시간 {data?.businessHours?.wednesday.break})
+                        <b>수요일</b> {hospitalDtl?.wed} (점심시간{' '}
+                        {hospitalDtl?.lunchWeek})
                       </ListItem>
                       <ListItem>
-                        <b>목요일</b> {data?.businessHours?.thursday.open}{' '}
-                        (점심시간 {data?.businessHours?.thursday.break})
+                        <b>목요일</b> {hospitalDtl?.thu} (점심시간{' '}
+                        {hospitalDtl?.lunchWeek})
                       </ListItem>
                       <ListItem>
-                        <b>금요일</b> {data?.businessHours?.friday.open}{' '}
-                        (점심시간 {data?.businessHours?.friday.break})
+                        <b>금요일</b> {hospitalDtl?.fri} (점심시간{' '}
+                        {hospitalDtl?.lunchWeek})
                       </ListItem>
                       <ListItem>
-                        <b>토요일</b> {data?.businessHours?.saturday.open}{' '}
-                        (점심시간 {data?.businessHours?.saturday.break})
+                        <b>토요일</b> {hospitalDtl?.sat} (점심시간:{' '}
+                        {hospitalDtl?.lunchSat})
                       </ListItem>
                       <ListItem>
-                        <b>일요일</b> {data?.businessHours?.sunday.open}{' '}
-                        (점심시간 {data?.businessHours?.sunday.break})
+                        <b>일요일</b> {hospitalDtl?.sun}
                       </ListItem>
                     </UnorderedList>
                   </Box>
@@ -336,7 +309,7 @@ const AppointmentDetail = function () {
               >
                 {category === 'doctors' && (
                   <AppointForm
-                    reservationOfDay={reservationOfDay}
+                    hospitalDtl={hospitalDtl}
                     register={register}
                     errors={errors}
                     setAppointTime={setAppointTime}
@@ -348,41 +321,22 @@ const AppointmentDetail = function () {
                     margin={0}
                     spacing={'4'}
                   >
+                    {data?.doctors.length === 0 && (
+                      <Text textAlign="center">등록된 의료진이 없습니다.</Text>
+                    )}
                     {data?.doctors.map(doctor => {
                       return (
                         <ListItem key={doctor.id}>
                           <ChakraLink
                             as={ReactRouterLink}
                             to={`/appointment/doctors/${doctor.id}`}
-                            p={'4'}
                             bgColor={'primary.100'}
                             borderRadius={'md'}
                             display={'flex'}
                             justifyContent={'space-between'}
                             alignItems={'center'}
                           >
-                            <HStack gap={'6'}>
-                              <AspectRatio width={'28'} ratio={1}>
-                                <Avatar
-                                  borderRadius={'full'}
-                                  src={doctor.profileImg}
-                                  alt="Doctor Profile"
-                                />
-                              </AspectRatio>
-
-                              <VStack
-                                height={'full'}
-                                justifyContent={'flex-start'}
-                                alignItems={'flex-start'}
-                              >
-                                <Text fontSize="xl" fontWeight="bold">
-                                  {doctor.name} 의사
-                                </Text>
-                                <Text>{doctor.specialty} 전문의</Text>
-                              </VStack>
-                            </HStack>
-
-                            <Icon boxSize={8} as={FaAngleRight} />
+                            <AppointmentCard data={doctor} />
                           </ChakraLink>
                         </ListItem>
                       );

@@ -3,42 +3,50 @@ import { useState, useCallback } from 'react';
 import { FaRegBookmark } from '@react-icons/all-files/fa/FaRegBookmark';
 import { FaBookmark } from '@react-icons/all-files/fa/FaBookmark';
 import {
-  Box,
-  Flex,
-  Heading,
   Text,
   Icon,
   HStack,
   AspectRatio,
   Avatar,
+  Tag,
+  VStack,
 } from '@chakra-ui/react';
 import { StarIcon } from '@chakra-ui/icons';
 
+import FieldList from '../FieldList';
+
 function AppointmentCard({ data }) {
-  const [isFavorite, setIsFavorite] = useState(data.isFavorite);
+  const [isFavorite, setIsFavorite] = useState(data?.isFavorite);
 
   const handleFavoriteClick = useCallback(() => {
     setIsFavorite(prevIsFavorite => !prevIsFavorite);
   }, []);
 
   return (
-    <Flex
-      key={data.name}
-      backgroundColor="primary.200"
+    <HStack
+      key={data.id}
+      bgColor="primary.100"
       padding="4"
       borderRadius="md"
+      justifyContent="flex-start"
       alignItems="center"
       gap="6"
     >
-      <AspectRatio ratio={1} width="100%" maxW="32">
-        <Avatar src={data.profileImg} alt={data.name} borderRadius="full" />
+      <AspectRatio ratio={1} minWidth="24">
+        <Avatar src={data?.profileImg} alt={data.name} />
       </AspectRatio>
 
-      <Box width="100%">
+      <VStack alignItems="flex-start" justifyContent="flex-start" gap={0}>
         <HStack justifyContent="space-between">
-          <Heading as="h3" size="md" mb={1}>
-            {data.name}
-          </Heading>
+          <HStack gap="4" fontWeight="bold">
+            <Text fontSize="lg">{data.name}</Text>
+            {data.rate && (
+              <HStack gap="1">
+                <Icon as={StarIcon} color="yellow.400" />
+                <Text>{Math.round(data.rate * 10) / 10}</Text>
+              </HStack>
+            )}
+          </HStack>
           {data.isFavorite && (
             <>
               {isFavorite ? (
@@ -62,22 +70,23 @@ function AppointmentCard({ data }) {
           )}
         </HStack>
 
-        <Text fontSize="sm" mb="1">
-          {data.specialty && <span>{data.specialty}</span>}
-        </Text>
-        <Text fontSize="sm" mb="2" noOfLines="1">
-          {/* {data.fields && <span>{data.fields.join(', ')}</span>} */}
-        </Text>
-        <Text fontSize="sm" mb="1">
-          {data.distance && <span>{data.distance}</span>}
+        <Text fontSize="sm">
+          {data.specialty && <span>{data.specialty} 전문의</span>}
         </Text>
 
-        <Flex alignItems="center" gap="2">
-          <Icon as={StarIcon} boxSize="4" />
-          <Text fontSize="sm">{data.rate}</Text>
-        </Flex>
-      </Box>
-    </Flex>
+        <HStack flexWrap="wrap" gap="2" noOfLines={2} mt="4">
+          {data.fields ? (
+            JSON.parse(data.fields).map(field => (
+              <Tag size="md" key={field} variant="outline" colorScheme="gray">
+                {field}
+              </Tag>
+            ))
+          ) : (
+            <FieldList ykiho={data.ykiho} />
+          )}
+        </HStack>
+      </VStack>
+    </HStack>
   );
 }
 

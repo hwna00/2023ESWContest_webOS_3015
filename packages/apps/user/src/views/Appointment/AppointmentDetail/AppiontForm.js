@@ -1,3 +1,6 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
+
+import { useSelector } from 'react-redux';
 import {
   Box,
   Button,
@@ -21,12 +24,14 @@ import {
   useRadio,
   useRadioGroup,
 } from '@chakra-ui/react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import dayjs from 'dayjs';
+
 import useCamera from '../../../hooks/useCamera';
 import { uploadNftfBlob } from '../../../../firebase';
-import { useSelector } from 'react-redux';
+import { dateToday } from '../../../utils/getDayofWeek';
+import { getTimeTable } from '../../../utils/converter';
 
-function RadioCard({ remainingSeats, ...radioProps }) {
+function RadioCard({ ...radioProps }) {
   const { getInputProps, getRadioProps } = useRadio(radioProps);
 
   const input = getInputProps();
@@ -41,7 +46,6 @@ function RadioCard({ remainingSeats, ...radioProps }) {
         borderRadius="md"
         bgColor="primary.100"
         color="black"
-        aria-disabled={remainingSeats === 0}
         _checked={{
           bgColor: 'primary.500',
           color: 'white',
@@ -143,12 +147,13 @@ function CameraModal({ onClose }) {
 }
 
 const AppointForm = function ({
-  reservationOfDay,
+  hospitalDtl,
   register,
   errors,
   setAppointTime,
 }) {
   const [isNftf, setIsNftf] = useState(false);
+  const [timeTable, setTimeTable] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const onTimeChange = value => {
@@ -163,11 +168,54 @@ const AppointForm = function ({
     }
   }, []);
 
+  const onDateChange = useCallback(
+    event => {
+      if (!hospitalDtl) {
+        return setTimeTable([]);
+      }
+      const day =
+        typeof event === 'object'
+          ? dateToday(event.target.value)
+          : dateToday(event);
+
+      switch (day) {
+        case 'sat':
+          {
+            let result;
+            if (hospitalDtl.lunchSat === '없음') {
+              result = getTimeTable(hospitalDtl[day]);
+            } else {
+              result = getTimeTable(hospitalDtl[day], hospitalDtl.lunchSat);
+            }
+            setTimeTable(result);
+          }
+          break;
+        case 'sun':
+          setTimeTable([]);
+          break;
+        default:
+          {
+            const result = getTimeTable(
+              hospitalDtl[day],
+              hospitalDtl.lunchWeek,
+            );
+            setTimeTable(result);
+          }
+          break;
+      }
+    },
+    [hospitalDtl],
+  );
+
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: 'time',
     onChange: onTimeChange,
   });
   const group = getRootProps();
+
+  useEffect(() => {
+    onDateChange(dayjs(new Date()).format('YYYY-MM-DD'));
+  }, [onDateChange]);
 
   return (
     <>
@@ -178,6 +226,7 @@ const AppointForm = function ({
           type="date"
           py={'2'}
           {...register('date', { required: '이 항목은 필수입니다.' })}
+          onChange={onDateChange}
         />
         <FormErrorMessage>{errors.date?.message}</FormErrorMessage>
       </FormControl>
@@ -195,14 +244,11 @@ const AppointForm = function ({
           borderRadius="md"
           {...group}
         >
-          {Object.keys(reservationOfDay).map(key => {
+          {timeTable.map(key => {
             const radio = getRadioProps({ value: key });
-            const remainingSeats = reservationOfDay[key];
             return (
               <GridItem key={key} width="full" textAlign="center">
-                <RadioCard remainingSeats={remainingSeats} {...radio}>
-                  {key}
-                </RadioCard>
+                <RadioCard {...radio}>{key}</RadioCard>
               </GridItem>
             );
           })}
