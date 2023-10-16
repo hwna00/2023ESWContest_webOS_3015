@@ -10,11 +10,29 @@ const createDiagnosisQuery = async (connection, data) => {
 
 const updateDiagnosisQuery = async (connection, appointmentId, data) => {
   const Query =
-    'UPDATE DiagnosisRecords SET pharmacy = ?, payment = ifnull(?, payment) WHERE appointment_id = ?;';
+    'UPDATE DiagnosisRecords SET pharmacy_name = ifnull(?, pharmacy_name), pharmacy_ykiho = ifnull(?, pharmacy_ykiho), payment = ifnull(?, payment) WHERE appointment_id = ?;';
 
-  const Params = [data.pharmacyYkiho, data.payment, appointmentId];
+  const Params = [
+    data.pharmacyName,
+    data.pharmacyYkiho,
+    data.payment,
+    appointmentId,
+  ];
 
   await connection.query(Query, Params);
+};
+
+const readDiagnosisQuery = async (connection, appointmentId) => {
+  const Query = `SELECT A.date, HA.hospital_name AS hospitalName, HA.doctor_name AS doctorName, 
+      DR.pharmacy_name AS pharmacyname, DR.payment 
+    FROM DiagnosisRecords DR JOIN Appointments A ON DR.appointment_id = A.id JOIN HospitalAffiliations HA USING(doctor_id)
+    WHERE DR.appointment_id = ?`;
+
+  const Params = [appointmentId];
+
+  const rows = await connection.query(Query, Params);
+
+  return rows;
 };
 
 exports.createDiagnosis = async (req, res) => {
@@ -83,6 +101,46 @@ exports.updateDiagnosis = async (req, res) => {
         message: '진료기록 업데이트 성공',
       });
     } catch (err) {
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSuccess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
+exports.readDiagnosis = async (req, res) => {
+  const { appointmentId } = req.params;
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      const [rows] = await readDiagnosisQuery(connection, appointmentId);
+      if (rows.length === 0) {
+        throw Error('Diagnosis not found');
+      }
+      return res.json({
+        result: rows[0],
+        isSuccess: true,
+        code: 200,
+        message: '진료기록 조회 성공',
+      });
+    } catch (err) {
+      if (err.message === 'Diagnosis not found') {
+        return res.json({
+          isSuccess: false,
+          code: 404,
+          message: '진료기록을 찾을 수 없습니다.',
+        });
+      }
       return res.json({
         isSuccess: false,
         code: 500,
