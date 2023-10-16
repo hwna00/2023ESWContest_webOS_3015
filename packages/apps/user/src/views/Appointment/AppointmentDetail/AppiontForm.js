@@ -152,6 +152,8 @@ const AppointForm = function ({
   errors,
   setAppointTime,
 }) {
+  const CURRENT_TIME = dayjs(new Date()).format('YYYY-MM-DD');
+
   const [isNftf, setIsNftf] = useState(false);
   const [timeTable, setTimeTable] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -173,19 +175,22 @@ const AppointForm = function ({
       if (!hospitalDtl) {
         return setTimeTable([]);
       }
-      const day =
-        typeof event === 'object'
-          ? dateToday(event.target.value)
-          : dateToday(event);
+      const selectedDate =
+        typeof event === 'object' ? event.target.value : event;
+      const day = dateToday(selectedDate);
 
       switch (day) {
         case 'sat':
           {
             let result;
             if (hospitalDtl.lunchSat === '없음') {
-              result = getTimeTable(hospitalDtl[day]);
+              result = getTimeTable(selectedDate, hospitalDtl[day]);
             } else {
-              result = getTimeTable(hospitalDtl[day], hospitalDtl.lunchSat);
+              result = getTimeTable(
+                selectedDate,
+                hospitalDtl[day],
+                hospitalDtl.lunchSat,
+              );
             }
             setTimeTable(result);
           }
@@ -196,6 +201,7 @@ const AppointForm = function ({
         default:
           {
             const result = getTimeTable(
+              selectedDate,
               hospitalDtl[day],
               hospitalDtl.lunchWeek,
             );
@@ -224,6 +230,7 @@ const AppointForm = function ({
           placeholder="예약하실 날짜를 선택하세요"
           size="lg"
           type="date"
+          min={CURRENT_TIME}
           py={'2'}
           {...register('date', { required: '이 항목은 필수입니다.' })}
           onChange={onDateChange}

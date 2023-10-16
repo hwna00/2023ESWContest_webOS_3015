@@ -40,7 +40,11 @@ export const getTrmtHours = async item => {
   return trmtHours;
 };
 
-export const getTimeTable = (trmtHours, lunchHours = '00:00~00:00') => {
+export const getTimeTable = (
+  SELECTED_DATE,
+  trmtHours,
+  lunchHours = '00:00~00:00',
+) => {
   const timeTable = [];
   try {
     let [startTime, endTime] = trmtHours.split('~');
@@ -51,16 +55,18 @@ export const getTimeTable = (trmtHours, lunchHours = '00:00~00:00') => {
     lunchStart = Number(lunchStart.replace(':', ''));
     lunchEnd = Number(lunchEnd.replace(':', ''));
 
-    const current = formatTime(dayjs(new Date()).format('HH:mm'));
+    const current = Number(dayjs(new Date()).format('HH:mm').replace(':', ''));
 
     for (let time = startTime; time < endTime; time += 30) {
       if (time % 100 === 60) {
         time += 40;
       }
 
-      if (time <= current) {
-        continue;
-      } else if (time >= lunchStart && time < lunchEnd) {
+      if (SELECTED_DATE === dayjs(new Date()).format('YYYY-MM-DD')) {
+        if (time <= current) continue;
+      }
+
+      if (time >= lunchStart && time < lunchEnd) {
         continue;
       }
 
