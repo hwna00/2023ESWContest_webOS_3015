@@ -9,6 +9,9 @@ import LogIn from './views/LogIn';
 import SignUp from './views/SignUp';
 import Root from './components/Root';
 import Setting from './views/Setting';
+import RequestDetail from './views/RequestDetail';
+import ManageRequests from './views/ManageRequests';
+import CompletedRequests from './views/CompletedRequests';
 
 const router = createBrowserRouter([
   {
@@ -17,6 +20,21 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
     children: [
       { path: '', element: <MainPage /> },
+      {
+        path: '/view-requests/request-detail/:id',
+        element: <RequestDetail />,
+        children: [],
+      },
+      {
+        path: '/manage-requests',
+        element: <ManageRequests />,
+        children: [],
+      },
+      {
+        path: '/completed-requests',
+        element: <CompletedRequests />,
+        children: [],
+      },
       {
         path: '/error-page',
         element: <ErrorPage />,
