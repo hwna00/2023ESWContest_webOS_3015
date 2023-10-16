@@ -24,7 +24,7 @@ const updateDiagnosisQuery = async (connection, appointmentId, data) => {
 
 const readDiagnosisQuery = async (connection, appointmentId) => {
   const Query = `SELECT A.date, HA.hospital_name AS hospitalName, HA.doctor_name AS doctorName, 
-      DR.pharmacy_name AS pharmacyname, DR.payment 
+      DR.pharmacy_name AS pharmacyName, DR.payment 
     FROM DiagnosisRecords DR JOIN Appointments A ON DR.appointment_id = A.id JOIN HospitalAffiliations HA USING(doctor_id)
     WHERE DR.appointment_id = ?`;
 
