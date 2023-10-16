@@ -18,9 +18,9 @@ export const createHospital = async hospital => {
   return data;
 };
 
-export const updatePayment = (appointmentId, payment, pharmacyYkiho) => {
+export const updatePayment = (appointmentId, payment) => {
   instance.patch(`/diagnoses/${appointmentId}`, {
-    data: { payment: payment, pharmacyYkiho: pharmacyYkiho },
+    data: { payment: payment },
   });
 };
 
