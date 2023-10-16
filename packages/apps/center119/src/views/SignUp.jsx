@@ -81,7 +81,6 @@ function SignUp() {
       <VStack as="form" onSubmit={handleSubmit(onSubmit)}>
         <VStack width="80" gap="4">
           <Input
-            // value={centerName}
             onChange={onChange}
             w="100%"
             placeholder="센터 이름을 검색하세요."
