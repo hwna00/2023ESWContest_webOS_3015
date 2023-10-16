@@ -22,7 +22,7 @@ function PaymentModal({ isOpen, onClose, appointmentId }) {
   };
 
   const handleConfirm = useCallback(() => {
-    updatePayment(appointmentId, parseInt(payment), '');
+    updatePayment(appointmentId, parseInt(payment));
     window.location.reload();
 
     onClose();

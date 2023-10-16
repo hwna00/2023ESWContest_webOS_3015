@@ -49,6 +49,9 @@ export const getRequests = async counselorId => {
         regularMedicines: '타이레놀, 고혈압약',
         chronicDisease: null,
         message: '안녕',
+
+        stateId: '완료',
+
       },
       {
         name: '양지웅',
@@ -63,7 +66,11 @@ export const getRequests = async counselorId => {
         gender: 'M',
         regularMedicines: '타이레놀, 고혈압약',
         chronicDisease: '어찌고 저찌고',
+
         message: '안녕',
+
+        stateId: '미완료',
+
       },
       {
         name: '하철환',
@@ -78,16 +85,22 @@ export const getRequests = async counselorId => {
         gender: 'M',
         regularMedicines: '타이레놀, 고혈압약',
         chronicDisease: '아파요',
+
         message: '안녕',
+
+        stateId: '완료',
+
       },
     ];
   }
 };
 
 export const getRequest = async requestId => {
+
   // const response = await instance.get(`/requests/${requestId}`);
   if (false) {
     // return response.data;
+
   } else {
     return {
       name: '김재인',
@@ -102,7 +115,11 @@ export const getRequest = async requestId => {
       gender: 'M',
       regularMedicines: '타이레놀, 고혈압약',
       chronicDisease: null,
+
       message: '안녕',
+
+      stateId: '완료',
+
     };
   }
 };
