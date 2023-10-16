@@ -36,6 +36,7 @@ export const getRequests = async counselorId => {
         gender: 'M',
         regularMedicines: '타이레놀, 고혈압약',
         chronicDisease: null,
+        stateId: '완료',
       },
       {
         name: '양지웅',
@@ -50,6 +51,7 @@ export const getRequests = async counselorId => {
         gender: 'M',
         regularMedicines: '타이레놀, 고혈압약',
         chronicDisease: '어찌고 저찌고',
+        stateId: '미완료',
       },
       {
         name: '하철환',
@@ -64,6 +66,7 @@ export const getRequests = async counselorId => {
         gender: 'M',
         regularMedicines: '타이레놀, 고혈압약',
         chronicDisease: '아파요',
+        stateId: '완료',
       },
     ];
   }
@@ -71,9 +74,23 @@ export const getRequests = async counselorId => {
 
 export const getRequest = async requestId => {
   const response = await instance.get(`/requests/${requestId}`);
-  if (response.data) {
+  if (false) {
     return response.data;
   } else {
-    return {};
+    return {
+      name: '김재인',
+      id: '1',
+      phoneNumber: '010-1234-1234',
+      birthDate: '2003-03-07',
+      address: '서울 강남구 논현로123길 4-2',
+      secondPhoneNumber: '010-9911-0928',
+      bloodType: 'AB',
+      height: '184',
+      weight: '80',
+      gender: 'M',
+      regularMedicines: '타이레놀, 고혈압약',
+      chronicDisease: null,
+      stateId: '완료',
+    };
   }
 };
