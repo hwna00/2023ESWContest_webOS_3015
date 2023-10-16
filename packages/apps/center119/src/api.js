@@ -17,6 +17,18 @@ export const getCounselor = async counselorId => {
     throw new Error(error);
   }
 };
+export const updateRequestState = async (
+  requestId,
+  newStateId,
+  rejectionReason,
+) => {
+  return await instance.patch(`requests/${requestId}`, {
+    data: {
+      stateId: newStateId,
+      rejectionReason: rejectionReason,
+    },
+  });
+};
 
 export const getRequests = async counselorId => {
   // const response = await instance.get(`/counselors/${counselorId}/requests`);

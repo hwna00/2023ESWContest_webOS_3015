@@ -14,7 +14,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 
-import { getRequest } from '../api';
+import { getRequest, updateRequestState } from '../api';
 
 function RequestDetail() {
   const { id } = useParams();
@@ -29,9 +29,22 @@ function RequestDetail() {
       <Box overflow="hidden">
         <HStack justifyContent="space-between" alignItems="center">
           <Heading>{data.name}</Heading>
-          <Button colorScheme="red" variant="outline">
-            상담취소
-          </Button>
+          <HStack>
+            <Button
+              colorScheme="red"
+              variant="outline"
+              onClick={() => updateRequestState(id, 'rj', '')}
+            >
+              상담취소
+            </Button>
+            <Button
+              colorScheme="primary"
+              variant="outline"
+              onClick={() => updateRequestState(id, 'rc', null)}
+            >
+              상담완료
+            </Button>
+          </HStack>
         </HStack>
 
         <Grid width="full" templateColumns="1fr 3fr 1fr" gap="8" mt="4">
