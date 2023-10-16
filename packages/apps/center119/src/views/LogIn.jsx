@@ -61,7 +61,7 @@ function LogIn() {
       justifyContent="center"
       alignItems="center"
     >
-      <HStack wrap="wrap" alignItems="counselor">
+      <HStack wrap="wrap" alignItems="center">
         <Flex flexDirection="column" alignItems="flex-start" marginRight="8rem">
           <Heading as="h1" fontSize="3rem" mb="2rem" color="black">
             Housepital
