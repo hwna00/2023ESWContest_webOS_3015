@@ -1,8 +1,9 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 
-const centerInitialState = {
+const counselorInitialState = {
   id: '',
   name: '',
+  centerName: '',
   address: '',
   profileImg: '',
   tel: '',
@@ -24,25 +25,25 @@ const signUpSlice = createSlice({
   },
 });
 
-const centerSlice = createSlice({
-  name: 'center',
-  initialState: centerInitialState,
+const counselorSlice = createSlice({
+  name: 'counselor',
+  initialState: counselorInitialState,
   reducers: {
-    setCenter: (state, action) => {
+    setCounselor: (state, action) => {
       if (action.payload !== undefined) {
         Object.entries(action.payload).map(
           ([key, value]) => (state[key] = value),
         );
       }
     },
-    resetCenter: () => centerInitialState,
+    resetCounselor: () => counselorInitialState,
   },
 });
 
 export const store = configureStore({
   reducer: {
     signUp: signUpSlice.reducer,
-    center: centerSlice.reducer,
+    counselor: counselorSlice.reducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({ serializableCheck: false }),
@@ -50,4 +51,4 @@ export const store = configureStore({
 });
 
 export const { setImgBlob, setErrors, setAddress } = signUpSlice.actions;
-export const { setCenter, resetCenter } = centerSlice.actions;
+export const { setCounselor, resetCounselor } = counselorSlice.actions;

@@ -23,8 +23,8 @@ import {
 
 import { fbLogIn } from '../firebase';
 import { useDispatch } from 'react-redux';
-import { getCenter } from '../api';
-import { setCenter } from '../store';
+import { getCounselor } from '../api';
+import { setCounselor } from '../store';
 
 function LogIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -43,9 +43,9 @@ function LogIn() {
 
   const onSubmit = async function (data) {
     try {
-      const centerId = await fbLogIn(data);
-      const center = await getCenter(centerId);
-      dispatch(setCenter(center));
+      const counselorId = await fbLogIn(data);
+      const counselor = await getCounselor(counselorId);
+      dispatch(setCounselor(counselor));
       navigate('/');
     } catch (error) {
       console.log(error);
@@ -91,7 +91,7 @@ function LogIn() {
                 alignItems="center"
                 padding="15px"
               ></HStack>
-              <Heading fontSize="22px">LogIn for Center 119</Heading>
+              <Heading fontSize="22px">LogIn for Counselor 119</Heading>
               <FormControl isInvalid={errors.email}>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none">
@@ -170,7 +170,7 @@ function LogIn() {
               color="primary.500"
               href="#"
               textDecoration="underline"
-              textAlign="center"
+              textAlign="counselor"
               to="/find-pw"
             >
               비밀번호를 잊어버리셨나요?

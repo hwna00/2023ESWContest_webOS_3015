@@ -4,13 +4,22 @@ const instance = axios.create({
   baseURL: 'http://localhost:3000/api',
 });
 
-export const createCenter = async center => {
-  const data = await instance.post('centers', { data: center });
+export const createCounselor = async counselor => {
+  const data = await instance.post('counselors', { data: counselor });
   return data;
 };
 
-export const getRequests = async centerId => {
-  // const response = await instance.get(`/centers/${centerId}/requests`);
+export const getCounselor = async counselorId => {
+  try {
+    const { data } = await instance.get(`/counselors/${counselorId}`);
+    return data.result;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const getRequests = async counselorId => {
+  // const response = await instance.get(`/counselors/${counselorId}/requests`);
   if (false) {
   } else {
     return [
@@ -60,11 +69,11 @@ export const getRequests = async centerId => {
   }
 };
 
-export const getCenter = async centerId => {
-  try {
-    const { data } = await instance.get(`/centers/${centerId}`);
-    return data.result;
-  } catch (error) {
-    throw new Error(error);
+export const getRequest = async requestId => {
+  const response = await instance.get(`/requests/${requestId}`);
+  if (response.data) {
+    return response.data;
+  } else {
+    return {};
   }
 };

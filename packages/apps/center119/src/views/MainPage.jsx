@@ -8,16 +8,16 @@ import {
   Link as ChakraLink,
 } from '@chakra-ui/react';
 
-import TableHeader from '../components/TableHeader';
+import TableHeader from '../components/TableSection/TableHeader';
 import { useQuery } from '@tanstack/react-query';
 import { getRequests } from '../api';
-import TableRow from '../components/TableRow';
+import TableRow from '../components/TableSection/TableRow';
 import { useEffect } from 'react';
 
 const MainPage = function () {
   const centerId = '일단임시';
   const { data, error } = useQuery([centerId], getRequests);
-  console.log(data);
+
   const navigate = useNavigate();
   useEffect(() => {
     if (error) {
