@@ -67,6 +67,17 @@ const readDoctorAppointmentsQuery = async (connection, doctorId) => {
   return rows;
 };
 
+const readDoctorDiagnosesQuery = async (connection, doctorId) => {
+  const Query = `SELECT DR.appointment_id AS id, A.date, U.name AS patientName, U.phone_number AS phoneNumber 
+    FROM DiagnosisRecords DR JOIN Appointments A ON DR.appointment_id = A.id JOIN Users U USING(user_id)
+    WHERE A.doctor_id = ?;`;
+
+  const Params = [doctorId];
+  const rows = await connection.query(Query, Params);
+
+  return rows;
+};
+
 exports.createDoctor = async (req, res) => {
   const { data } = req.body;
   try {
@@ -226,6 +237,49 @@ exports.readDoctorAppointments = async (req, res) => {
           isSuccess: false,
           code: 404,
           message: '예약정보를 찾을 수 없습니다.',
+        });
+      }
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSuccess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
+exports.readDoctorDiagnoses = async (req, res) => {
+  const { doctorId } = req.params;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      const [rows] = await readDoctorDiagnosesQuery(connection, doctorId);
+
+      if (rows.length === 0) {
+        throw Error('Diagnoses not found');
+      } else {
+        return res.json({
+          result: rows,
+          isSuccess: true,
+          code: 200,
+          message: '진료기록 조회 성공',
+        });
+      }
+    } catch (err) {
+      if (err.message === 'Diagnoses not found') {
+        return res.json({
+          isSuccess: false,
+          code: 404,
+          message: '진료기록을 찾을 수 없습니다.',
         });
       }
       return res.json({
