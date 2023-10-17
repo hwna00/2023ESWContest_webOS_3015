@@ -77,7 +77,7 @@ const readUserAppointmentsQuery = async (connection, uid) => {
 };
 
 const readUserDiagnosesQuery = async (connection, uid) => {
-  const Query = `SELECT A.date, H.hospital_name AS hospitalName, DR.pharmacy AS pharmacyYkiho, DR.payment FROM DiagnosisRecords DR 
+  const Query = `SELECT A.date, H.hospital_name AS hospitalName, DR.pharmacy_name AS pharmacyName, DR.payment FROM DiagnosisRecords DR 
       JOIN Appointments A ON DR.appointment_id = A.id AND A.user_id = ? 
         JOIN Doctors D USING(doctor_id) JOIN HospitalName H USING(hospital_id)`;
   const Params = [uid];
