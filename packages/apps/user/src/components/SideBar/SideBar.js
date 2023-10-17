@@ -128,7 +128,7 @@ const SideBar = function () {
           <CustomTab to="">메인화면</CustomTab>
           <CustomTab to="appointment">진료예약</CustomTab>
           <CustomTab to="appointment-history">진료내역</CustomTab>
-          <CustomTab to="health-history">건강기록</CustomTab>
+          <CustomTab to="health-manage">건강관리</CustomTab>
           <CustomTab to="medicines">복약관리</CustomTab>
         </VStack>
         <CustomTab to="settings">

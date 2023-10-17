@@ -1,10 +1,10 @@
-import HealthHistory from '../views/HealthHistory/HealthHistory';
+import HealthManage from '../views/HealthManage';
 
-const healthHistoryRoutes = [
+const healthManageRoutes = [
   {
-    path: 'health-history',
-    element: <HealthHistory />,
+    path: 'health-manage',
+    element: <HealthManage />,
   },
 ];
 
-export default healthHistoryRoutes;
+export default healthManageRoutes;
