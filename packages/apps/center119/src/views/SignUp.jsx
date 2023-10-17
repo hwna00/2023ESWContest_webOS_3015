@@ -52,6 +52,7 @@ function SignUp() {
   const onSubmit = async data => {
     try {
       const counselorId = await fbSignUp(data.email, data.password);
+
       const centerData = await createCounselor({
         counselorId,
         centerName: centerName,
