@@ -88,7 +88,7 @@ const readUserDiagnosesQuery = async (connection, uid) => {
 };
 
 const readUserMedecinesQuery = async (connection, uid) => {
-  const Query = `SELECT medecine_id AS id, user_id AS uid, name AS medecineName, intake_days AS intakeDays, intake_time1 AS intakeTime1, intake_time2 AS intakeTime2, intake_time3 AS intakeTime3 
+  const Query = `SELECT medecine_id AS id, user_id AS uid, name AS medecineName, ifnull(intake_days, JSON_ARRAY()) AS intakeDays, ifnull(intake_times, JSON_ARRAY()) AS intakeTimes 
   FROM Medecines WHERE user_id = ?`;
   const Params = [uid];
 
