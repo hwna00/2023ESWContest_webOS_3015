@@ -33,7 +33,7 @@ function RequestDetail() {
               <Button
                 colorScheme="red"
                 variant="outline"
-                onClick={() => updateRequestState(id, 'rj', '')}
+                onClick={() => updateRequestState(id, 'rr', '')}
               >
                 상담취소
               </Button>
