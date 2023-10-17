@@ -18,7 +18,6 @@
       "packages/apps/*",
       "packages/js-services/*",
       "packages/common",
-      "packages/shared",
       "packages/server"
     ],
     "nohoist": []

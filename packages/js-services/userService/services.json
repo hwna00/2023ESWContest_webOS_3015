@@ -1,0 +1,9 @@
+{
+  "id": "com.housepital.app.user.service",
+  "description": "HelloWorld Service",
+  "services": [
+    {
+      "name": "com.housepital.app.user.service"
+    }
+  ]
+}
