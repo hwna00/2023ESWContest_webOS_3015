@@ -34,7 +34,7 @@ const MainPage = function () {
         <Box>
           <HStack justifyContent="space-between">
             <Heading fontSize="25px">들어온 요청</Heading>
-            <ChakraLink as={ReactRouterLink} to="/">
+            <ChakraLink as={ReactRouterLink} to="/manage-requests">
               + 전체보기
             </ChakraLink>
           </HStack>
