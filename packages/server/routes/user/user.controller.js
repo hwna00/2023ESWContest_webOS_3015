@@ -87,6 +87,16 @@ const readUserDiagnosesQuery = async (connection, uid) => {
   return rows;
 };
 
+const readUserMedecinesQuery = async (connection, uid) => {
+  const Query = `SELECT medecine_id AS id, user_id AS uid, name AS medecineName, intake_days AS intakeDays, intake_time1 AS intakeTime1, intake_time2 AS intakeTime2, intake_time3 AS intakeTime3 
+  FROM Medecines WHERE user_id = ?`;
+  const Params = [uid];
+
+  const rows = await connection.query(Query, Params);
+
+  return rows;
+};
+
 exports.createUser = async (req, res) => {
   const { data } = req.body;
   try {
@@ -245,6 +255,38 @@ exports.readUserDiagnoses = async (req, res) => {
         isSuccess: true,
         code: 200,
         message: '유저 진료기록 조회 성공',
+      });
+    } catch (err) {
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSuccess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
+exports.readUserMedecines = async (req, res) => {
+  const { uid } = req.params;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      const [rows] = await readUserMedecinesQuery(connection, uid);
+
+      return res.json({
+        result: rows,
+        isSuccess: true,
+        code: 200,
+        message: '복약정보 조회 성공',
       });
     } catch (err) {
       return res.json({
