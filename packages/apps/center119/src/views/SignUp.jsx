@@ -34,10 +34,6 @@ function SignUp() {
   const [centerName, setCenterName] = useState('');
   const [isFormVisible, setIsFormVisible] = useState(false);
 
-  const onChange = e => {
-    setSearchTerm(e.target.value);
-  };
-
   useEffect(() => {
     if (searchTerm === '') {
       setSearchResults([]);
