@@ -116,6 +116,21 @@ export const getDiagnosis = async diagnosisId => {
   }
 };
 
+export const getMedicines = async (uid, date) => {
+  try {
+    // const { data } = instance.get(`/users/${uid}/medicines?date=${date}`);
+    const data = 'temp';
+    console.log(data);
+    if (!data.isSuccess) {
+      return null;
+    }
+
+    return data.result;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getHospitalDtl = async ykiho => {
   const base = 'https://apis.data.go.kr/B551182/MadmDtlInfoService2';
   try {
