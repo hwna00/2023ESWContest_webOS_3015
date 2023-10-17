@@ -79,7 +79,7 @@ function SignUp() {
         Housepital for Center
       </Heading>
       <VStack as="form" onSubmit={handleSubmit(onSubmit)}>
-        <VStack width="80" gap="4">
+        <VStack width="100%" gap="4">
           <Input
             onChange={onChange}
             w="100%"
@@ -91,7 +91,7 @@ function SignUp() {
               <Box
                 border="solid 1px"
                 borderColor="black"
-                w="80"
+                w="500px"
                 maxHeight="80"
                 overflowY="auto"
               >
