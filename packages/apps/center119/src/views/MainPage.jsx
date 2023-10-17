@@ -26,7 +26,7 @@ const MainPage = function () {
   }, [data, error, navigate]);
   return (
     <>
-      <VStack p="8" spacing="8" alignItems="initial">
+      <VStack spacing="8" alignItems="initial">
         <Heading textAlign="left" p="4" fontSize="30px">
           이름
         </Heading>
