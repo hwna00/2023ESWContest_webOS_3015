@@ -34,7 +34,7 @@ function ManageRequests() {
         <Text>로딩중</Text>
       ) : (
         <VStack p="8" spacing="8" alignItems="initial">
-          <Heading textAlign="left" p="4" fontSize="30px">
+          <Heading textAlign="left" fontSize="30px">
             신고관리
           </Heading>
 

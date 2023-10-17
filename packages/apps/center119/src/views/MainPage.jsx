@@ -31,7 +31,7 @@ const MainPage = function () {
         <Text>로딩중</Text>
       ) : (
         <VStack spacing="8" p="8" alignItems="initial">
-          <Heading textAlign="left" p="4" fontSize="30px">
+          <Heading textAlign="left" fontSize="30px">
             이름
           </Heading>
 
