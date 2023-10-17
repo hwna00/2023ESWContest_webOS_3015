@@ -72,8 +72,10 @@ function SignUp() {
 
   const handleSelect = center => {
     setCenterName(center.wardname);
+    setSearchTerm(center.wardname);
     setIsFormVisible(true);
   };
+
   return (
     <Container>
       <Heading as="h1" textAlign="center" p="8">
@@ -82,7 +84,8 @@ function SignUp() {
       <VStack as="form" onSubmit={handleSubmit(onSubmit)}>
         <VStack width="100%" gap="4">
           <Input
-            onChange={onChange}
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
             w="100%"
             placeholder="센터 이름을 검색하세요."
           />
