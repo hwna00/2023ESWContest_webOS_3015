@@ -21,6 +21,13 @@ function RequestDetail() {
 
   const { isLoading, data = {} } = useQuery([`${id}`], () => getRequest(id));
   console.log(data);
+  const handleCancelClick = async () => {
+    await updateRequestState(id, 'rr', '');
+  };
+
+  const handleCompleteClick = async () => {
+    await updateRequestState(id, 'rc', null);
+  };
   return (
     <>
       {isLoading ? (
@@ -33,14 +40,14 @@ function RequestDetail() {
               <Button
                 colorScheme="red"
                 variant="outline"
-                onClick={() => updateRequestState(id, 'rr', '')}
+                onClick={handleCancelClick}
               >
                 상담취소
               </Button>
               <Button
                 colorScheme="primary"
                 variant="outline"
-                onClick={() => updateRequestState(id, 'rc', null)}
+                onClick={handleCompleteClick}
               >
                 상담완료
               </Button>
