@@ -19,11 +19,15 @@ const readCounselorQuery = async (connection, counselorId) => {
   return rows;
 };
 
-const readCounselorEmergenciesQuery = async (connection, counselorId) => {
+const readCounselorEmergenciesQuery = async (
+  connection,
+  counselorId,
+  isCompleted,
+) => {
   const Query = `SELECT E.id, U.name, U.phone_number AS phoneNumber, E.is_completed AS isCompleted FROM Emergencies E JOIN Users U USING(user_id) 
-    WHERE E.counselor_id = ?
+    WHERE E.counselor_id = ? AND E.is_completed = ifnull(?,0)
     ORDER BY E.created_at;`;
-  const Params = [counselorId];
+  const Params = [counselorId, isCompleted];
 
   const rows = await connection.query(Query, Params);
 
@@ -111,6 +115,7 @@ exports.readCounselor = async (req, res) => {
 
 exports.readCounselorEmergencies = async (req, res) => {
   const { counselorId } = req.params;
+  const { isCompleted } = req.query;
 
   try {
     const connection = await pool.getConnection(async conn => conn);
@@ -118,6 +123,7 @@ exports.readCounselorEmergencies = async (req, res) => {
       const [rows] = await readCounselorEmergenciesQuery(
         connection,
         counselorId,
+        isCompleted,
       );
 
       return res.json({
