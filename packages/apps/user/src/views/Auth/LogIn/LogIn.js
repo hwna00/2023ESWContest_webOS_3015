@@ -27,6 +27,7 @@ import {
 import KakaoLoginButton from '../../../components/KakaoLoginButton/KakaoLoginButton';
 import NaverLoginButton from '../../../components/NaverLoginButton/NaverLoginButton';
 import { fbEmailLogIn } from '../../../../firebase';
+import useCreateToast from '../../../hooks/useCreateToast';
 
 function LogIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -35,6 +36,8 @@ function LogIn() {
   }, [showPassword]);
 
   const navigate = useNavigate();
+  const toast = useCreateToast();
+
   const {
     register,
     handleSubmit,
@@ -46,7 +49,7 @@ function LogIn() {
       if (user) {
         navigate('/');
       } else {
-        //TODO: 상황에 맞는 알림 전송하기 ex. 존재하지 않는 사용자입니다.
+        toast('존재하지 않는 사용자입니다. ');
       }
     });
   };

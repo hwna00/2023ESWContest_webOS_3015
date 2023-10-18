@@ -40,6 +40,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getDetailByCategory } from '../../../utils/getByCategory';
 import FieldList from '../../../components/FieldList/FieldList';
 import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
+import useCreateToast from '../../../hooks/useCreateToast';
 
 const AppointmentDetail = function () {
   const [appointTime, setAppointTime] = useState();
@@ -47,6 +48,7 @@ const AppointmentDetail = function () {
   const { category, id } = useParams();
   const navigate = useNavigate();
   const uid = useSelector(state => state.me.uid);
+  const toast = useCreateToast();
   const {
     register,
     handleSubmit,
@@ -75,11 +77,11 @@ const AppointmentDetail = function () {
   const onSubmit = useCallback(
     formData => {
       if (!appointTime) {
-        //TODO: webOS로 알림 전송하기
+        toast('예약시간을 선택해주세요.');
         return null;
       }
       if (formData.type === 'nftf' && !formData.nftfType) {
-        //TODO: webOS로 알림 전송하기
+        toast('비대면 진료 타입을 선택해주세요.');
         return null;
       }
 
@@ -94,7 +96,7 @@ const AppointmentDetail = function () {
         .then(() => navigate('/appointment/waiting-room'))
         .catch(err => console.log(err));
     },
-    [appointTime, uid, data?.id, navigate],
+    [appointTime, uid, data?.id, navigate, toast],
   );
 
   return (
