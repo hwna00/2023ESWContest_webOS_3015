@@ -286,7 +286,9 @@ exports.readUserMedecines = async (req, res) => {
     const connection = await pool.getConnection(async conn => conn);
     try {
       const [rows] = await readUserMedecinesQuery(connection, uid, day);
-
+      rows.forEach(medecine => {
+        medecine.intakeTimes.sort();
+      });
       return res.json({
         result: rows,
         isSuccess: true,
