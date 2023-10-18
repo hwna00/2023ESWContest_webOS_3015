@@ -60,37 +60,58 @@ app.get('/kakao-payment/callback', async (req, res) => {
 });
 
 wsServer.on('connection', socket => {
-  console.log('connection established');
-
-  socket.on('enter', msg => {
-    console.log(msg);
-    socket.emit('you entered');
-  });
-
-  socket.on('leave', msg => {
-    console.log(msg);
-    socket.emit('bye bye');
-  });
-
   socket.on('join_room', roomName => {
     socket.join(roomName);
     socket.to(roomName).emit('welcome');
   });
 
+  //* rtc area
   socket.on('offer', (offer, roomName) => {
+    console.log(offer);
     socket.to(roomName).emit('offer', offer);
   });
 
   socket.on('answer', (answer, roomName) => {
+    console.log(answer);
     socket.to(roomName).emit('answer', answer);
   });
 
   socket.on('ice', (ice, roomName) => {
+    console.log(ice);
     socket.to(roomName).emit('ice', ice);
   });
 
   socket.on('trmt_end', roomName => {
     socket.to(roomName).emit('trmt_end');
+  });
+
+  //* senser area
+  socket.on('setup_senser', roomName => {
+    socket.to(roomName).emit('setup_senser');
+  });
+
+  socket.on('temperature_start', roomName => {
+    console.log('temp start at ', roomName);
+    // socket.to(roomName).emit('temp_start');
+    socket.to(roomName).emit('start', 'temp');
+  });
+
+  socket.on('temp_end', (roomName, data) => {
+    console.log('result: ', data);
+    socket.to(roomName).emit('temperature_end', data);
+  });
+
+  socket.on('bmp_start', roomName => {
+    socket.to(roomName).emit('bmp_start');
+  });
+
+  socket.on('bmp_end', (roomName, data) => {
+    console.log('result: ', data);
+    socket.to(roomName).emit('bmp_end', data);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('disconnected');
   });
 });
 
