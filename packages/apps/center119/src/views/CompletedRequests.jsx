@@ -48,19 +48,23 @@ function CompletedRequests() {
               tableHeaders={['이름', '전화번호', '생년월일', '상세보기']}
             />
 
-            <div className={styles.hideScrollBar}>
-              <Box maxH="250px" overflowY="scroll">
-                {data
-                  .filter(request => request.stateId === 'rr')
-                  .map(request => (
-                    <TableRow
-                      key={request.id}
-                      data={request}
-                      buttonType="detail"
-                    />
-                  ))}
-              </Box>
-            </div>
+            {data && data.length > 0 ? (
+              <div className={styles.hideScrollBar}>
+                <Box maxH="250px" overflowY="scroll">
+                  {data
+                    .filter(request => request.stateId === 'rr')
+                    .map(request => (
+                      <TableRow
+                        key={request.id}
+                        data={request}
+                        buttonType="detail"
+                      />
+                    ))}
+                </Box>
+              </div>
+            ) : (
+              <Text>정보가 없습니다.</Text>
+            )}
           </Box>
         </VStack>
       )}
