@@ -87,10 +87,14 @@ const readUserDiagnosesQuery = async (connection, uid) => {
   return rows;
 };
 
-const readUserMedecinesQuery = async (connection, uid) => {
-  const Query = `SELECT medecine_id AS id, user_id AS uid, name AS medecineName, ifnull(intake_days, JSON_ARRAY()) AS intakeDays, ifnull(intake_times, JSON_ARRAY()) AS intakeTimes 
-  FROM Medecines WHERE user_id = ?`;
-  const Params = [uid];
+const readUserMedecinesQuery = async (connection, uid, day) => {
+  const selectAllMedecinesQuery = `SELECT medecine_id AS id, user_id AS uid, name AS medecineName, ifnull(intake_days, JSON_ARRAY()) AS intakeDays, ifnull(intake_times, JSON_ARRAY()) AS intakeTimes 
+  FROM Medecines WHERE user_id = ?;`;
+  const selectMedecinesByDayQuery = `SELECT medecine_id AS id, user_id AS uid, name AS medecineName, ifnull(intake_times, JSON_ARRAY()) AS intakeTimes 
+  FROM Medecines WHERE user_id = ? AND JSON_CONTAINS(intake_days, JSON_QUOTE(?));`;
+  const Params = [uid, day];
+
+  const Query = !day ? selectAllMedecinesQuery : selectMedecinesByDayQuery;
 
   const rows = await connection.query(Query, Params);
 
@@ -276,11 +280,12 @@ exports.readUserDiagnoses = async (req, res) => {
 
 exports.readUserMedecines = async (req, res) => {
   const { uid } = req.params;
+  const { day } = req.query;
 
   try {
     const connection = await pool.getConnection(async conn => conn);
     try {
-      const [rows] = await readUserMedecinesQuery(connection, uid);
+      const [rows] = await readUserMedecinesQuery(connection, uid, day);
 
       return res.json({
         result: rows,
