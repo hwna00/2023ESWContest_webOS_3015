@@ -19,6 +19,17 @@ const readCounselorQuery = async (connection, counselorId) => {
   return rows;
 };
 
+const readCounselorEmergenciesQuery = async (connection, counselorId) => {
+  const Query = `SELECT E.id, U.name, U.phone_number AS phoneNumber, E.is_completed AS isCompleted FROM Emergencies E JOIN Users U USING(user_id) 
+    WHERE E.counselor_id = ?
+    ORDER BY E.created_at;`;
+  const Params = [counselorId];
+
+  const rows = await connection.query(Query, Params);
+
+  return rows;
+};
+
 exports.createCounselor = async (req, res) => {
   const { data } = req.body;
   try {
@@ -81,6 +92,41 @@ exports.readCounselor = async (req, res) => {
           message: '상담원을 찾을 수 없습니다.',
         });
       }
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSuccess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
+exports.readCounselorEmergencies = async (req, res) => {
+  const { counselorId } = req.params;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      const [rows] = await readCounselorEmergenciesQuery(
+        connection,
+        counselorId,
+      );
+
+      return res.json({
+        result: rows,
+        isSuccess: true,
+        code: 200,
+        message: '신고목록 조회 성공',
+      });
+    } catch (err) {
       return res.json({
         isSuccess: false,
         code: 500,
