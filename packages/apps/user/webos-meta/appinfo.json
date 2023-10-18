@@ -12,6 +12,7 @@
   "requiredPermissions": [
     "time.query",
     "activity.operation",
-    "notification.operation"
+    "notification.operation",
+    "application.launcher"
   ]
 }
