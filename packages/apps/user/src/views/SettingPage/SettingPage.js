@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { Button, Heading, ListItem, UnorderedList } from '@chakra-ui/react';
 
 import { fbLogOut } from '../../../firebase';
-import useCloseApp from '../../hooks/useCloseApp';
+import useCloseApp from '@housepital/common/hooks/useCloseApp';
 
 const SettingPage = function () {
   //TODO: webOS API 사용해서 앱 종료 기능 추가하기
