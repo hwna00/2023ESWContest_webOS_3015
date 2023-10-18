@@ -40,7 +40,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getDetailByCategory } from '../../../utils/getByCategory';
 import FieldList from '../../../components/FieldList/FieldList';
 import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
-import useCreateToast from '../../../hooks/useCreateToast';
+import useCreateToast from '@housepital/common/hooks/useCreateToast';
 
 const AppointmentDetail = function () {
   const [appointTime, setAppointTime] = useState();

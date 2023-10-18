@@ -10,7 +10,7 @@ import { Box, Button, ButtonGroup, VStack } from '@chakra-ui/react';
 import { setErrors, setMe } from '../../store';
 import { fbSignUp } from '../../../firebase';
 import { createUser } from '../../api';
-import useCreateToast from '../../hooks/useCreateToast';
+import useCreateToast from '@housepital/common/hooks/useCreateToast';
 
 const SignUpForm = function ({
   activeStep,

@@ -8,7 +8,7 @@ import { Flex, Box, HStack, Text, UnorderedList } from '@chakra-ui/react';
 import WaitingItem from '../../../components/WaitingItem/WaitingItem';
 import BackButton from '../../../components/BackButton/BackButton';
 import { deleteAppointment, getAppointments } from '../../../api';
-import useCreateToast from '../../../hooks/useCreateToast';
+import useCreateToast from '@housepital/common/hooks/useCreateToast';
 
 function WaitingRoom() {
   const uid = useSelector(state => state.me.uid);

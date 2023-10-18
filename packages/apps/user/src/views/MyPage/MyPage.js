@@ -24,8 +24,7 @@ import { useSelector } from 'react-redux';
 import { DaumPostcodeEmbed } from 'react-daum-postcode';
 import { useCallback, useEffect, useState } from 'react';
 import { updateMe } from '../../api';
-import useCreateToast from '../../hooks/useCreateToast';
-
+import useCreateToast from '@housepital/common/hooks/useCreateToast';
 //TODO: 성별 정보를 회원가입에서 받아야 함
 //TODO: 끝나면 인증페이지 접근 제한
 const MyPage = function () {

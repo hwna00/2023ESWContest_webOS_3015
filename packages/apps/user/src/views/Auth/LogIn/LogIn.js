@@ -27,7 +27,7 @@ import {
 import KakaoLoginButton from '../../../components/KakaoLoginButton/KakaoLoginButton';
 import NaverLoginButton from '../../../components/NaverLoginButton/NaverLoginButton';
 import { fbEmailLogIn } from '../../../../firebase';
-import useCreateToast from '../../../hooks/useCreateToast';
+import useCreateToast from '@housepital/common/hooks/useCreateToast';
 
 function LogIn() {
   const [showPassword, setShowPassword] = useState(false);
