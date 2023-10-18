@@ -72,7 +72,7 @@ function MyPage() {
         <HStack
           width={'full'}
           justifyContent={'center'}
-          alignItems={'center'}
+          alignItems={('center', 'flex-start')}
           gap={'12'}
         >
           <Avatar src={hospital.profileImg} size={'2xl'} />
@@ -86,52 +86,50 @@ function MyPage() {
               />
               <FormErrorMessage>{errors.username?.message}</FormErrorMessage>
             </FormControl>
+            <FormControl width="full" isRequired isInvalid={errors.address}>
+              <FormLabel margin={0}>주소</FormLabel>
+              <Input {...register('address', {})} readOnly />
+              <FormErrorMessage>{errors?.address?.message}</FormErrorMessage>
+            </FormControl>
+            <FormControl width="full" isRequired isInvalid={errors.tel}>
+              <FormLabel>전화번호</FormLabel>
+              <InputGroup colorScheme="primary">
+                <Input
+                  type="tel"
+                  {...register('tel', {
+                    pattern: {
+                      value: /^[0-9]{9, 11}$/i,
+                    },
+                  })}
+                  readOnly
+                />
+              </InputGroup>
+              <FormErrorMessage>{errors.tel?.message}</FormErrorMessage>
+            </FormControl>
+            <FormControl width="full" isInvalid={errors.description}>
+              <FormLabel>상세정보 및 소개글</FormLabel>
+              <InputGroup colorScheme="primary">
+                <Textarea
+                  {...register('description')}
+                  defaultValue={hospital.description}
+                />
+              </InputGroup>
+              <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
+            </FormControl>
+
+            <FormControl width="full" isInvalid={errors.runningtime}>
+              <FormLabel>병원 영업시간</FormLabel>
+              <InputGroup colorScheme="primary">
+                <Textarea
+                  {...register('runningtime')}
+                  defaultValue={hospital.runningtime}
+                />
+              </InputGroup>
+              <FormErrorMessage>{errors.runningtime?.message}</FormErrorMessage>
+            </FormControl>
           </VStack>
         </HStack>
 
-        <VStack>
-          <FormControl width="full" isRequired isInvalid={errors.address}>
-            <FormLabel margin={0}>주소</FormLabel>
-            <Input {...register('address', {})} readOnly />
-            <FormErrorMessage>{errors?.address?.message}</FormErrorMessage>
-          </FormControl>
-          <FormControl width="full" isRequired isInvalid={errors.tel}>
-            <FormLabel>전화번호</FormLabel>
-            <InputGroup colorScheme="primary">
-              <Input
-                type="tel"
-                {...register('tel', {
-                  pattern: {
-                    value: /^[0-9]{9, 11}$/i,
-                  },
-                })}
-                readOnly
-              />
-            </InputGroup>
-            <FormErrorMessage>{errors.tel?.message}</FormErrorMessage>
-          </FormControl>
-          <FormControl width="full" isInvalid={errors.description}>
-            <FormLabel>상세정보 및 소개글</FormLabel>
-            <InputGroup colorScheme="primary">
-              <Textarea
-                {...register('description')}
-                defaultValue={hospital.description}
-              />
-            </InputGroup>
-            <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
-          </FormControl>
-
-          <FormControl width="full" isInvalid={errors.runningtime}>
-            <FormLabel>병원 영업시간</FormLabel>
-            <InputGroup colorScheme="primary">
-              <Textarea
-                {...register('runningtime')}
-                defaultValue={hospital.runningtime}
-              />
-            </InputGroup>
-            <FormErrorMessage>{errors.runningtime?.message}</FormErrorMessage>
-          </FormControl>
-        </VStack>
         <ButtonGroup
           display={'flex'}
           justifyContent={'center'}

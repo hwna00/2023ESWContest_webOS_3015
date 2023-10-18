@@ -12,6 +12,7 @@ import Setting from './views/Setting';
 import RequestDetail from './views/RequestDetail';
 import ManageRequests from './views/ManageRequests';
 import CompletedRequests from './views/CompletedRequests';
+import MyPage from './views/MyPage';
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,7 @@ const router = createBrowserRouter([
         element: <Setting />,
         children: [],
       },
+      { path: '/mypage', element: <MyPage />, children: [] },
     ],
   },
   {
