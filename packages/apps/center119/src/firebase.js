@@ -21,9 +21,10 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 const fbSignUp = (email, password) => {
-  createUserWithEmailAndPassword(auth, email, password)
+  return createUserWithEmailAndPassword(auth, email, password)
     .then(userCredential => {
       const { uid } = userCredential.user;
+
       return uid;
     })
     .catch(error => {

@@ -34,10 +34,6 @@ function SignUp() {
   const [centerName, setCenterName] = useState('');
   const [isFormVisible, setIsFormVisible] = useState(false);
 
-  const onChange = e => {
-    setSearchTerm(e.target.value);
-  };
-
   useEffect(() => {
     if (searchTerm === '') {
       setSearchResults([]);
@@ -52,6 +48,7 @@ function SignUp() {
   const onSubmit = async data => {
     try {
       const counselorId = await fbSignUp(data.email, data.password);
+
       const centerData = await createCounselor({
         counselorId,
         centerName: centerName,
@@ -71,17 +68,20 @@ function SignUp() {
 
   const handleSelect = center => {
     setCenterName(center.wardname);
+    setSearchTerm(center.wardname);
     setIsFormVisible(true);
   };
+
   return (
     <Container>
       <Heading as="h1" textAlign="center" p="8">
         Housepital for Center
       </Heading>
       <VStack as="form" onSubmit={handleSubmit(onSubmit)}>
-        <VStack width="80" gap="4">
+        <VStack width="100%" gap="4">
           <Input
-            onChange={onChange}
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
             w="100%"
             placeholder="센터 이름을 검색하세요."
           />
@@ -91,7 +91,7 @@ function SignUp() {
               <Box
                 border="solid 1px"
                 borderColor="black"
-                w="80"
+                w="500px"
                 maxHeight="80"
                 overflowY="auto"
               >
