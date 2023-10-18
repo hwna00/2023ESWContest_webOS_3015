@@ -39,7 +39,7 @@ const CustomTab = function ({ children, to }) {
 
 const SideBar = function () {
   const [tabIdex, setTabIdx] = useState();
-  const center = useSelector(state => state.center);
+  const counselor = useSelector(state => state.counselor);
 
   const onTabIdxChange = useCallback(index => {
     setTabIdx(index);
@@ -92,7 +92,7 @@ const SideBar = function () {
             fontWeight: 'bold',
           }}
         >
-          {center ? (
+          {counselor ? (
             <ChakraLink
               width="full"
               display="flex"
@@ -103,9 +103,9 @@ const SideBar = function () {
               as={ReactRouterLink}
               to="mypage"
             >
-              <Avatar src={center.profileImg} size="xl" />
+              <Avatar src={counselor.profileImg} size="xl" />
               <Text fontSize="xl" fontWeight="bold" textAlign="center">
-                {center.name} 님
+                {counselor.counselorName} 님
               </Text>
             </ChakraLink>
           ) : (

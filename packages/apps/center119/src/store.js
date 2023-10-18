@@ -1,12 +1,10 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 
 const counselorInitialState = {
-  id: '',
+  counselorId: '',
   name: '',
   centerName: '',
-  address: '',
   profileImg: '',
-  tel: '',
 };
 
 const signUpSlice = createSlice({
