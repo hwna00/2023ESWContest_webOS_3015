@@ -37,7 +37,9 @@ const HealthManageDetail = function () {
   }, [type]);
 
   useEffect(() => {
-    socketRef.current = io('localhost:3000', { transports: ['websocket'] });
+    socketRef.current = io(`${process.env.REACT_APP_BACKEND_API}:3000`, {
+      transports: ['websocket'],
+    });
 
     socketRef.current.on('welcome', () => {
       setShowStartBtn(true);

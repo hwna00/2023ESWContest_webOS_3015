@@ -1,8 +1,8 @@
 /* eslint-disable */
-import { useCallback, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { io } from 'socket.io-client';
-import { Button, HStack, VStack } from '@chakra-ui/react';
+import { HStack, VStack } from '@chakra-ui/react';
 import LoadingPage from '@housepital/common/LoadingPage';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -117,7 +117,9 @@ const VideoCall = function () {
   };
 
   useEffect(() => {
-    socketRef.current = io('localhost:3000', { transports: ['websocket'] });
+    socketRef.current = io(`${process.env.REACT_APP_BACKEND_API}:3000`, {
+      transports: ['websocket'],
+    });
 
     socketRef.current.on('welcome', async () => {
       await createOffer();

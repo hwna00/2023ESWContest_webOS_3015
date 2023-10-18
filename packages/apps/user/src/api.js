@@ -2,7 +2,7 @@ import axios from 'axios';
 import { getTrmtHours } from './utils/converter';
 
 const instance = axios.create({
-  baseURL: 'http://localhost:3000/api',
+  baseURL: `${process.env.REACT_APP_BACKEND_API}/api`,
 });
 
 export const createUser = async user => {
