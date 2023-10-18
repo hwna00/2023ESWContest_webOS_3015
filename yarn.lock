@@ -3296,42 +3296,6 @@
     d3-time-format "^3.0.0"
     prop-types "^15.7.2"
 
-"@nivo/boxplot@^0.83.0":
-  version "0.83.0"
-  resolved "https://registry.yarnpkg.com/@nivo/boxplot/-/boxplot-0.83.0.tgz#0f87153d6d345e742ddc22ab79294207a9e1401e"
-  integrity sha512-tGrmlVLb5cASZYnWY5qSF2Ddy6FRl4mX+fGBXR7HXpty/4pFgIOhYDq50+6fZfxoCWsZSI1t4UdBUqDM0fZl5Q==
-  dependencies:
-    "@nivo/annotations" "0.83.0"
-    "@nivo/axes" "0.83.0"
-    "@nivo/colors" "0.83.0"
-    "@nivo/core" "0.83.0"
-    "@nivo/legends" "0.83.0"
-    "@nivo/scales" "0.83.0"
-    "@nivo/tooltip" "0.83.0"
-    "@react-spring/web" "9.4.5 || ^9.7.2"
-    "@types/d3-scale" "^3.2.3"
-    "@types/d3-shape" "^2.0.0"
-    d3-scale "^3.2.3"
-    d3-shape "^1.3.5"
-    lodash "^4.17.21"
-
-"@nivo/bump@^0.83.0":
-  version "0.83.0"
-  resolved "https://registry.yarnpkg.com/@nivo/bump/-/bump-0.83.0.tgz#49c953e0314f008c8620c93eb31ca4f922edc025"
-  integrity sha512-hiuquRqzZjpewApqAywpgFu77FjXrTgXe69skhI266kIX8/d7Wd6Vu5CQS7iqoshPcdo+9jz5o7sTZ8xtaskrw==
-  dependencies:
-    "@nivo/axes" "0.83.0"
-    "@nivo/colors" "0.83.0"
-    "@nivo/core" "0.83.0"
-    "@nivo/legends" "0.83.0"
-    "@nivo/scales" "0.83.0"
-    "@nivo/tooltip" "0.83.0"
-    "@react-spring/web" "9.4.5 || ^9.7.2"
-    "@types/d3-scale" "^3.2.3"
-    "@types/d3-shape" "^2.0.0"
-    d3-scale "^3.2.3"
-    d3-shape "^1.3.5"
-
 "@nivo/colors@0.83.0":
   version "0.83.0"
   resolved "https://registry.yarnpkg.com/@nivo/colors/-/colors-0.83.0.tgz#e8afb2ec10ceb2c0d2b2407f01e11c197c57f78d"
@@ -7779,7 +7743,7 @@ find-up@^6.3.0:
     locate-path "^7.1.0"
     path-exists "^5.0.0"
 
-firebase-admin@^11.10.1:
+firebase-admin@^11.10.1, firebase-admin@^11.11.0:
   version "11.11.0"
   resolved "https://registry.yarnpkg.com/firebase-admin/-/firebase-admin-11.11.0.tgz#3d6df5dfbcf85dc1c6c4302f8aee4f7c82171725"
   integrity sha512-lp784gXFAJgUEtjSdYNZGTWZqltqjBkoaPSQhDKnmWXJP/MCbWdiDY1hsdkl/6O4O4KFovTjUDLu26sojwdQvw==
