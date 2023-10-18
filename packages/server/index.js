@@ -8,6 +8,7 @@ const axios = require('axios');
 const user = require('./routes/user/user');
 const review = require('./routes/review/review');
 const hospital = require('./routes/hospital/hospital');
+const emergency = require('./routes/emergency/emergency');
 const doctor = require('./routes/doctor/doctor');
 const diagnosis = require('./routes/diagnosis/diagnosis');
 const counselor = require('./routes/counselor/counselor');
@@ -33,6 +34,7 @@ app.use('/api', doctor);
 app.use('/api', review);
 app.use('/api', diagnosis);
 app.use('/api', counselor);
+app.use('/api', emergency);
 
 let kakaoTid; // TODO : 깔끔하게 고치기
 let partner_order_id;
@@ -84,13 +86,19 @@ wsServer.on('connection', socket => {
   });
 
   //* senser area
-  socket.on('temp_start', roomName => {
-    socket.to(roomName).emit('temp_start');
+  socket.on('setup_senser', roomName => {
+    socket.to(roomName).emit('setup_senser');
+  });
+
+  socket.on('temperature_start', roomName => {
+    console.log('temp start at ', roomName);
+    // socket.to(roomName).emit('temp_start');
+    socket.to(roomName).emit('start', 'temp');
   });
 
   socket.on('temp_end', (roomName, data) => {
     console.log('result: ', data);
-    socket.to(roomName).emit('temp_end', data);
+    socket.to(roomName).emit('temperature_end', data);
   });
 
   socket.on('bmp_start', roomName => {
@@ -103,7 +111,7 @@ wsServer.on('connection', socket => {
   });
 
   socket.on('disconnect', () => {
-    console.log('user disconnected');
+    console.log('disconnected');
   });
 });
 

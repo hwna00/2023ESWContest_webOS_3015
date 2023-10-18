@@ -10,6 +10,7 @@ import { Box, Button, ButtonGroup, VStack } from '@chakra-ui/react';
 import { setErrors, setMe } from '../../store';
 import { fbSignUp } from '../../../firebase';
 import { createUser } from '../../api';
+import useCreateToast from '../../hooks/useCreateToast';
 
 const SignUpForm = function ({
   activeStep,
@@ -57,12 +58,12 @@ const SignUpForm = function ({
       profileImgBlob,
     });
     const response = await createUser({ uid, email, ...rest });
-
+    const toast = useCreateToast;
     if (response.isSuccess) {
       dispatch(setMe({ uid, email, ...rest }));
       navigate('/');
     } else {
-      //TODO: 회원가입 실패 알림 띄우기
+      toast('회원가입에 실패했습니다.');
       console.log(response);
     }
   };
