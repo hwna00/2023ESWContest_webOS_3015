@@ -10,6 +10,7 @@ import healthHistoryRoutes from './healthHistoryRoutes';
 import authRoutes from './authRoutes';
 import appointmentRoutes from './appointmentRoutes';
 import VideoCall from '../views/VideoCall/VideoCall';
+import MedicinesManage from '../views/MedicinesManage/MedicinesManage';
 
 const router = createHashRouter(
   [
@@ -32,7 +33,7 @@ const router = createHashRouter(
         },
         {
           path: 'medicines',
-          element: '',
+          element: <MedicinesManage />,
         },
         {
           path: 'settings',
