@@ -8,6 +8,7 @@ import { Flex, Box, HStack, Text, UnorderedList } from '@chakra-ui/react';
 import WaitingItem from '../../../components/WaitingItem/WaitingItem';
 import BackButton from '../../../components/BackButton/BackButton';
 import { deleteAppointment, getAppointments } from '../../../api';
+import useCreateToast from '../../../hooks/useCreateToast';
 
 function WaitingRoom() {
   const uid = useSelector(state => state.me.uid);
@@ -19,17 +20,17 @@ function WaitingRoom() {
     queryFn: () => getAppointments(uid),
     enabled: !!uid,
   });
-
+  const toast = useCreateToast();
   const { mutate } = useMutation(
     appointmentId => deleteAppointment(appointmentId),
     {
       onSuccess: () => {
-        // TODO: 삭제 성공 알림
+        toast('삭제에 성공했습니다.');
         console.log('삭제 성공');
         queryClient.invalidateQueries(uid);
       },
       onError: () => {
-        // TODO: 삭제 실패 알림
+        toast('삭제에 실패했습니다.');
         console.log('삭제 실패');
       },
     },

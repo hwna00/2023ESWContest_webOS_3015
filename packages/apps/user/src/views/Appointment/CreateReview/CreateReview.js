@@ -22,6 +22,7 @@ import {
 import Rating from '../../../components/StarRating/Rating';
 import { createReivew } from '../../../api';
 import { useSelector } from 'react-redux';
+import useCreateToast from '../../../hooks/useCreateToast';
 
 function ConfirmModal({ isOpen, onClose }) {
   return (
@@ -55,6 +56,7 @@ function Review() {
   const onReviewChange = useCallback(e => {
     setReviewContent(e.target.value);
   }, []);
+  const toast = useCreateToast();
   const onSaveReviewClick = useCallback(async () => {
     const response = await createReivew({
       uid,
@@ -65,12 +67,12 @@ function Review() {
     });
 
     if (!response.isSuccess) {
-      // TODO: 리뷰 생성 실패
+      toast('리뷰 생성에 실패했습니다.');
       console.log(response);
     }
 
     onOpen();
-  }, [onOpen, rate, reviewContent, uid, doctorId, appointmentId]);
+  }, [onOpen, rate, reviewContent, uid, doctorId, appointmentId, toast]);
 
   return (
     <VStack justifyContent="center" height="full">
