@@ -20,6 +20,13 @@ const readEmergencyQuery = async (connection, emergencyId) => {
   return rows;
 };
 
+const updateEmergencyQuery = async (connection, emergencyId, data) => {
+  const Query = 'UPDATE Emergencies SET is_completed = ? WHERE id = ?;';
+  const Params = [data.isCompleted, emergencyId];
+
+  await connection.query(Query, Params);
+};
+
 exports.createEmergency = async (req, res) => {
   const { data } = req.body;
   try {
@@ -63,6 +70,38 @@ exports.readEmergency = async (req, res) => {
         isSuccess: true,
         code: 200,
         message: '신고정보 조회 성공',
+      });
+    } catch (err) {
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSuccess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
+exports.updateEmergency = async (req, res) => {
+  const { emergencyId } = req.params;
+  const { data } = req.body;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      await updateEmergencyQuery(connection, emergencyId, data);
+
+      return res.json({
+        isSuccess: true,
+        code: 204,
+        message: '신고정보 업데이트 성공',
       });
     } catch (err) {
       return res.json({
