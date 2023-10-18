@@ -82,13 +82,19 @@ wsServer.on('connection', socket => {
   });
 
   //* senser area
-  socket.on('temp_start', roomName => {
-    socket.to(roomName).emit('temp_start');
+  socket.on('setup_senser', roomName => {
+    socket.to(roomName).emit('setup_senser');
+  });
+
+  socket.on('temperature_start', roomName => {
+    console.log('temp start at ', roomName);
+    // socket.to(roomName).emit('temp_start');
+    socket.to(roomName).emit('start', 'temp');
   });
 
   socket.on('temp_end', (roomName, data) => {
     console.log('result: ', data);
-    socket.to(roomName).emit('temp_end', data);
+    socket.to(roomName).emit('temperature_end', data);
   });
 
   socket.on('bmp_start', roomName => {
@@ -101,7 +107,7 @@ wsServer.on('connection', socket => {
   });
 
   socket.on('disconnect', () => {
-    console.log('user disconnected');
+    console.log('disconnected');
   });
 });
 
