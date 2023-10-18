@@ -3,18 +3,21 @@ import { useCallback } from 'react';
 import { Button, Heading, ListItem, UnorderedList } from '@chakra-ui/react';
 
 import { fbLogOut } from '../../../firebase';
-import useCloseApp from '@housepital/common/hooks/useCloseApp';
+import closeApp from '../../../../../common/utils/closeApp';
+import appinfo from '../../../webos-meta/appinfo.json';
 
 const SettingPage = function () {
   //TODO: webOS API 사용해서 앱 종료 기능 추가하기
   //TODO: 계정 전환 기능 추가하기
-  const close = useCloseApp();
   const onLogoutClick = useCallback(() => {
     fbLogOut();
   }, []);
+
   const onClickCloseApp = useCallback(() => {
-    close();
-  });
+    const appId = appinfo.id;
+    closeApp(appId);
+  }, []);
+
   return (
     <>
       <Heading>설정</Heading>
