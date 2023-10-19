@@ -132,7 +132,7 @@ export const getMedicines = async (uid, date) => {
 };
 
 export const getHospitalDtl = async ykiho => {
-  const base = 'https://apis.data.go.kr/B551182/MadmDtlInfoService2';
+  const base = 'http://apis.data.go.kr/B551182/MadmDtlInfoService2';
   try {
     const { data: dtl } = await axios.get(`${base}/getDtlInfo2`, {
       params: {
@@ -155,7 +155,7 @@ export const getFields = async ({ queryKey }) => {
   if (ykiho === '') {
     return {};
   }
-  const base = 'https://apis.data.go.kr/B551182/MadmDtlInfoService2';
+  const base = 'http://apis.data.go.kr/B551182/MadmDtlInfoService2';
   try {
     const { data: dgsbjt } = await axios.get(`${base}/getDgsbjtInfo2`, {
       params: {
@@ -177,7 +177,7 @@ export const getFields = async ({ queryKey }) => {
 
 export const getPharmacies = async ({ pageNo, numOfRows }) => {
   const base =
-    'https://apis.data.go.kr/B551182/pharmacyInfoService/getParmacyBasisList';
+    'http://apis.data.go.kr/B551182/pharmacyInfoService/getParmacyBasisList';
   const { data } = await axios.get(`${base}`, {
     params: {
       serviceKey: process.env.REACT_APP_DATA_DECODING_API_KEY,
