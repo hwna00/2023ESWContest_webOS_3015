@@ -122,7 +122,7 @@ const VideoCall = function () {
   };
 
   useEffect(() => {
-    socketRef.current = io(`${process.env.REACT_APP_BACKEND_API}:3000`, {
+    socketRef.current = io(`${process.env.REACT_APP_BACKEND_API}`, {
       transports: ['websocket'],
     });
 
