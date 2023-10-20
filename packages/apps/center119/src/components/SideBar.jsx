@@ -125,7 +125,7 @@ const SideBar = function () {
           )}
         </Tab>
         <VStack width="full" justifyContent="center" gap="0">
-          <CustomTab to="/manage-emergencies">신고관리</CustomTab>
+          <CustomTab to="/manage-emergencies">들어온 신고</CustomTab>
           <CustomTab to="/completed-emergencies">완료된 신고</CustomTab>
         </VStack>
         <CustomTab to="settings">

@@ -31,7 +31,7 @@ function CompletedEmergencies() {
       ) : (
         <VStack p="8" spacing="8" alignItems="initial">
           <Heading textAlign="left" fontSize="30px">
-            신고관리
+            {counselor.centerName}
           </Heading>
 
           <Box>
