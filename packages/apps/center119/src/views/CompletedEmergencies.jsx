@@ -15,6 +15,7 @@ import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import TableHeader from '../components/TableSection/TableHeader';
 import TableRow from '../components/TableSection/TableRow';
 import { useEffect } from 'react';
+import LoadingPage from '@housepital/common/LoadingPage';
 
 function CompletedEmergencies() {
   const counselor = useSelector(state => state.counselor);
@@ -33,7 +34,7 @@ function CompletedEmergencies() {
   return (
     <>
       {isLoading ? (
-        <Text>로딩중</Text>
+        <LoadingPage />
       ) : (
         <VStack p="8" spacing="8" alignItems="initial">
           <Heading textAlign="left" fontSize="30px">

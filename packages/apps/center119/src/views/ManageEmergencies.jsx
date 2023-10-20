@@ -15,6 +15,7 @@ import { getEmergencies } from '../api';
 import TableRow from '../components/TableSection/TableRow';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import LoadingPage from '@housepital/common/LoadingPage';
 
 const ManageEmergencies = function () {
   const counselor = useSelector(state => state.counselor);
@@ -32,7 +33,7 @@ const ManageEmergencies = function () {
   return (
     <>
       {isLoading ? (
-        <Text>로딩중</Text>
+        <LoadingPage />
       ) : (
         <VStack spacing="8" p="8" alignItems="initial">
           <Heading textAlign="left" fontSize="30px">

@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react';
 
 import { getEmergency, updateEmergencyState } from '../api';
+import { LoadingPage } from '@housepital/common/LoadingPage';
 
 function EmergencyDetail() {
   const { id } = useParams();
@@ -28,7 +29,7 @@ function EmergencyDetail() {
   return (
     <>
       {isLoading ? (
-        <Text>로딩 중</Text>
+        <LoadingPage />
       ) : (
         <Box overflow="hidden">
           <HStack justifyContent="space-between" alignItems="center">
