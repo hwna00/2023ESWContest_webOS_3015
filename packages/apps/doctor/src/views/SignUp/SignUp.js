@@ -3,6 +3,7 @@ import { useCallback, useState } from 'react';
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { FaSearch } from '@react-icons/all-files/fa/FaSearch';
+import useCreateToast from '@housepital/common/hooks/useCreateToast';
 import CustomCheckbox from '@housepital/common/CustomCheckox';
 import styles from '@housepital/common/css/HideScrollBar.module.css';
 import {
@@ -75,7 +76,7 @@ const SignUp = function () {
   const checkboxGroup = useCheckboxGroup({
     onChange: values => setSelectedFields(values),
   });
-
+  const toast = useCreateToast();
   const onSearchFieldClick = useCallback(async () => {
     const hospitalName = getValues('hospital');
     if (hospitalName !== '') {
@@ -84,7 +85,7 @@ const SignUp = function () {
       if (data.isSuccess) {
         setHospitals(data.result);
       } else {
-        // TODO: webOS.notification 전송
+        toast('병원을 불러오는데 실패했습니다.');
       }
     }
   }, [getValues]);
@@ -101,8 +102,7 @@ const SignUp = function () {
   const onSubmit = useCallback(
     async data => {
       if (selectedHospitalId === '') {
-        // TODO: 병원이 선택되지 않은 경우
-        // TODO: webOS.notification 사용
+        toast('병원이 선택되지 않았습니다.');
       }
       delete data.hospital; // eslint-disable-line
 
@@ -121,9 +121,7 @@ const SignUp = function () {
       if (doctor.isSuccess) {
         navigate('/');
       } else {
-        // TODO: 가입 실패
-        // TODO: webOS.notification 사용
-        console.log(doctor.message);
+        toast('회원가입에 실패했습니다.');
       }
     },
     [selectedHospitalId, selectedFields, navigate],
