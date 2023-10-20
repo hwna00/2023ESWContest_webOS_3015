@@ -11,6 +11,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { getDiagnosis } from '../../../api';
+import BackButton from '../../../components/BackButton/BackButton';
 
 const AppointmentHistory = function () {
   const { id } = useParams();
@@ -23,7 +24,7 @@ const AppointmentHistory = function () {
   );
   return (
     <Box height="full" overflowY="hidden">
-      <Heading as="h1">상세 진료 기록</Heading>
+      <BackButton title="상세 진료 기록" />
 
       <VStack width="full" height="full" mt="4" gap="4" overflowY="scroll">
         <Box width="full" bg="primary.100" padding="4" borderRadius="md">

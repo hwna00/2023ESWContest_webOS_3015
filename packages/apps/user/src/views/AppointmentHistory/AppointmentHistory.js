@@ -29,7 +29,6 @@ const AppointmentHistory = function () {
       <UnorderedList
         width="full"
         marginX={0}
-        TiChevronRight
         mt="4"
         spacing="4"
         height="full"

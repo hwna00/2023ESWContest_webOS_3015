@@ -21,6 +21,7 @@ const roomName = 'room';
 
 const HealthManageDetail = function () {
   const socketRef = useRef();
+  
   const [showStartBtn, setShowStartBtn] = useState(false);
   const [data, setData] = useState();
   const [timer, setTimer] = useState({
@@ -40,11 +41,11 @@ const HealthManageDetail = function () {
     socketRef.current = io(`${process.env.REACT_APP_BACKEND_API}:3000`, {
       transports: ['websocket'],
     });
-
+    
     socketRef.current.on('welcome', () => {
       setShowStartBtn(true);
-      console.log('welcome');
     });
+
 
     socketRef.current.on('setup_senser', () => {
       setShowStartBtn(true);
