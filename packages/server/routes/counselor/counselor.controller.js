@@ -24,7 +24,7 @@ const readCounselorEmergenciesQuery = async (
   counselorId,
   isCompleted,
 ) => {
-  const Query = `SELECT E.id, U.name, U.phone_number AS phoneNumber, E.is_completed AS isCompleted FROM Emergencies E JOIN Users U USING(user_id) 
+  const Query = `SELECT E.id, U.name, U.phone_number AS phoneNumber, U.birthdate AS birthDate, E.is_completed AS isCompleted FROM Emergencies E JOIN Users U USING(user_id) 
     WHERE E.counselor_id = ? AND E.is_completed = ifnull(?,0)
     ORDER BY E.created_at;`;
   const Params = [counselorId, isCompleted];
