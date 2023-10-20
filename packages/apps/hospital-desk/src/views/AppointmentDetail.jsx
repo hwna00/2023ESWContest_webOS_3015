@@ -9,7 +9,6 @@ import {
   Grid,
   HStack,
   Heading,
-  Modal,
   Text,
   Textarea,
   VStack,
@@ -106,7 +105,6 @@ const AppointmentDetail = function () {
 
           <Box mt="6" height="full" overflowY="scroll">
             {data.isNFTF === 1 && <FtfDetail data={data} />}
-
             <Box mt="6" height="full">
               <Heading as="h2" fontSize="2xl" fontWeight="bold">
                 환자 전달 사항
