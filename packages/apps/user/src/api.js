@@ -2,7 +2,8 @@ import axios from 'axios';
 import { getTrmtHours } from './utils/converter';
 
 const instance = axios.create({
-  baseURL: `${process.env.REACT_APP_BACKEND_API}/api`,
+  // baseURL: `${process.env.REACT_APP_BACKEND_API}/api`,
+  baseURL: `http://localhost:3000/api`,
 });
 
 export const createUser = async user => {
@@ -126,15 +127,14 @@ export const updateDiagnosis = async (appointmentId, pharmacy) => {
   console.log(data);
 };
 
-export const getMedicines = async (uid, date) => {
+export const getMedicines = async (uid, day = '') => {
   try {
-    // const { data } = instance.get(`/users/${uid}/medicines?date=${date}`);
-    const data = 'temp';
-    console.log(data);
+    const { data } = await instance.get(`/users/${uid}/medecines?day=${day}`);
+    console.log('data ', data);
+
     if (!data.isSuccess) {
       return null;
     }
-
     return data.result;
   } catch (error) {
     console.log(error);

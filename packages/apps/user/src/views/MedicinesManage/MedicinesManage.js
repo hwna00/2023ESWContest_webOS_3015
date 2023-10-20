@@ -42,12 +42,10 @@ const MedicinesManage = function () {
   const uid = useSelector(state => state.me.uid);
 
   const { data: registeredMedicines } = useQuery(
-    ['medecines'],
+    ['medicines'],
     () => getMedicines(uid),
     { enabled: !!uid },
   );
-
-  console.log(registeredMedicines);
 
   const onDateChange = async event => {
     setSelectedDate(event.target.value);
@@ -102,15 +100,16 @@ const MedicinesManage = function () {
           my="4"
           spacing="4"
         >
-          {[1, 2, 3, 4, 5, 6, 7, 8].map(medicine => (
+          {registeredMedicines?.map(medicine => (
             <ListItem
+              key={medicine.id}
               padding="4"
               bgColor="primary.100"
               borderRadius="md"
               textAlign="center"
-              onClick={() => onMedicineClick(medicine.id)}
+              onClick={() => onMedicineClick(medicine)}
             >
-              hi
+              {medicine.medecineName}
             </ListItem>
           ))}
           <Modal size="xl" isOpen={isMedicineOpen} onClose={onMedicineClose}>
@@ -164,8 +163,13 @@ const MedicinesManage = function () {
           my="4"
           spacing="4"
         >
-          {[1, 2, 3, 4, 5].map(() => (
-            <ListItem padding="4" bgColor="primary.100" borderRadius="md">
+          {[1, 2, 3, 4, 5].map(item => (
+            <ListItem
+              key={item}
+              padding="4"
+              bgColor="primary.100"
+              borderRadius="md"
+            >
               hi
             </ListItem>
           ))}
