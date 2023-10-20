@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react';
 
 import { getEmergency, updateEmergencyState } from '../api';
-import { LoadingPage } from '@housepital/common/LoadingPage';
+import LoadingPage from '@housepital/common/LoadingPage/LoadingPage';
 
 function EmergencyDetail() {
   const { id } = useParams();

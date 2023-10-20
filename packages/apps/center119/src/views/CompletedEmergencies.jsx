@@ -15,7 +15,7 @@ import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import TableHeader from '../components/TableSection/TableHeader';
 import TableRow from '../components/TableSection/TableRow';
 import { useEffect } from 'react';
-import LoadingPage from '@housepital/common/LoadingPage';
+import LoadingPage from '@housepital/common/LoadingPage/LoadingPage';
 
 function CompletedEmergencies() {
   const counselor = useSelector(state => state.counselor);
