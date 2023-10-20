@@ -7,7 +7,9 @@
   "scripts": {
     "serve": "node ./scripts/serve.js",
     "pack": "node ./scripts/pack.js",
+    "prepack-p": "yarn run clean",
     "pack-p": "node ./scripts/pack.js -p",
+    "postpack-p": "ares-package -n ./dist && ares-install --device patient ./com.housepital.app.user_1.0.0_all.ipk",
     "watch": "node ./scripts/pack.js --watch",
     "clean": "node ./scripts/clean.js",
     "lint": "node ./scripts/lint.js .",
