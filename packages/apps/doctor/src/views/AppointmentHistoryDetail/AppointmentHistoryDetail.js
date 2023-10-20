@@ -1,18 +1,19 @@
+import { useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import {
   Accordion,
-  AccordionItem,
   AccordionButton,
-  AccordionPanel,
   AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
   Box,
+  Heading,
   VStack,
 } from '@chakra-ui/react';
-import { useQuery } from '@tanstack/react-query';
-import { useParams } from 'react-router-dom';
-import { getDiagnosis } from '../../../api';
-import BackButton from '../../../components/BackButton/BackButton';
 
-const AppointmentHistory = function () {
+import { getDiagnosis } from '../../api';
+
+const AppointmentHistoryDetail = function () {
   const { id } = useParams();
   const { data: diagnosis } = useQuery(
     ['diagnosis', id],
@@ -21,9 +22,10 @@ const AppointmentHistory = function () {
       enabled: !!id,
     },
   );
+
   return (
     <Box height="full" overflowY="hidden">
-      <BackButton title="상세 진료 기록" />
+      <Heading>상세 기록</Heading>
 
       <VStack width="full" height="full" mt="4" gap="4" overflowY="scroll">
         <Box width="full" bg="primary.100" padding="4" borderRadius="md">
@@ -67,4 +69,4 @@ const AppointmentHistory = function () {
   );
 };
 
-export default AppointmentHistory;
+export default AppointmentHistoryDetail;

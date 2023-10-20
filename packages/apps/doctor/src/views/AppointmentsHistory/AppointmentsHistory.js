@@ -56,7 +56,7 @@ const AppointmentsHistory = function () {
                 <ListItem cursor="pointer" key={diagnosis.id}>
                   <ChakraLink
                     as={ReactRouterLink}
-                    to={`/diagnoses/${diagnosis.id}`}
+                    to={`/appointments-history/${diagnosis.id}`}
                     textDecoration="none !important"
                   >
                     <HStack
