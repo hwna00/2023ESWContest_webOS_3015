@@ -17,31 +17,37 @@ export const getCounselor = async counselorId => {
     throw new Error(error);
   }
 };
-export const updateRequestState = async (
-  requestId,
-  newStateId,
-  rejectionReason,
-) => {
-  return await instance.patch(`requests/${requestId}`, {
+export const updateEmergencyState = async (emergencyId, isCompleted) => {
+  return await instance.patch(`emergencies/${emergencyId}`, {
     data: {
-      stateId: newStateId,
-      rejectionReason: rejectionReason,
+      isCompleted: isCompleted,
     },
   });
 };
 
-export const getRequests = async counselorId => {
-  const response = await instance.get(`/counselors/${counselorId}/requests`);
+export const getEmergencies = async ({ queryKey }) => {
+  const counselorId = queryKey[0];
+  const response = await instance.get(`/counselors/${counselorId}/emergencies`);
   if (response.data) {
-    return response.data;
+    return response.data.result;
   } else {
     return {};
   }
 };
 
-export const getRequest = async requestId => {
-  const response = await instance.get(`/requests/${requestId}`);
+export const getEmergency = async emergencyId => {
+  const response = await instance.get(`/emergencies/${emergencyId}`);
   if (response.data) {
-    return response.data;
+    return response.data.result;
+  }
+};
+
+export const getCompletedEmergency = async ({ queryKey }) => {
+  const counselorId = queryKey[0];
+  const response = await instance.get(
+    `/counselors/${counselorId}/emergencies?isCompleted=1`,
+  );
+  if (response) {
+    return response.data.result;
   }
 };

@@ -2,16 +2,15 @@ import React from 'react';
 
 import { createBrowserRouter } from 'react-router-dom';
 
-import MainPage from './views/MainPage';
 import ErrorPage from './views/ErrorPage';
 import NotFound from './views/NotFound';
 import LogIn from './views/LogIn';
 import SignUp from './views/SignUp';
 import Root from './components/Root';
 import Setting from './views/Setting';
-import RequestDetail from './views/RequestDetail';
-import ManageRequests from './views/ManageRequests';
-import CompletedRequests from './views/CompletedRequests';
+import EmergencyDetail from './views/EmergencyDetail';
+import ManageEmergencies from './views/ManageEmergencies';
+import CompletedEmergencies from './views/CompletedEmergencies';
 import MyPage from './views/MyPage';
 
 const router = createBrowserRouter([
@@ -20,20 +19,19 @@ const router = createBrowserRouter([
     element: <Root />,
     errorElement: <NotFound />,
     children: [
-      { path: '', element: <MainPage /> },
       {
-        path: '/view-requests/request-detail/:id',
-        element: <RequestDetail />,
+        path: '/view-emergencies/emergency-detail/:id',
+        element: <EmergencyDetail />,
         children: [],
       },
       {
-        path: '/manage-requests',
-        element: <ManageRequests />,
+        path: '/manage-emergencies',
+        element: <ManageEmergencies />,
         children: [],
       },
       {
-        path: '/completed-requests',
-        element: <CompletedRequests />,
+        path: '/completed-emergencies',
+        element: <CompletedEmergencies />,
         children: [],
       },
       {

@@ -1,5 +1,6 @@
-import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
-import styles from '@housepital/common/css/HideScrollBar.module.css';
+import { useQuery } from '@tanstack/react-query';
+import { useSelector } from 'react-redux';
+import { getCompletedEmergency } from '../api';
 import {
   Box,
   HStack,
@@ -8,55 +9,59 @@ import {
   Link as ChakraLink,
   Text,
 } from '@chakra-ui/react';
+import styles from '@housepital/common/css/HideScrollBar.module.css';
+import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 
 import TableHeader from '../components/TableSection/TableHeader';
-import { useQuery } from '@tanstack/react-query';
-import { getRequests } from '../api';
 import TableRow from '../components/TableSection/TableRow';
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import LoadingPage from '@housepital/common/LoadingPage/LoadingPage';
 
-const MainPage = function () {
+function CompletedEmergencies() {
   const counselor = useSelector(state => state.counselor);
-  const { data, isLoading, error } = useQuery([counselor.id], getRequests);
+  const { data, isLoading, error } = useQuery(
+    [counselor.counselorId],
+    getCompletedEmergency,
+  );
+
   const navigate = useNavigate();
+
   useEffect(() => {
     if (error) {
       navigate('/error-page');
     }
-  }, [data, error, navigate]);
+  }, [error, navigate]);
   return (
     <>
       {isLoading ? (
-        <Text>로딩중</Text>
+        <LoadingPage />
       ) : (
-        <VStack spacing="8" p="8" alignItems="initial">
+        <VStack p="8" spacing="8" alignItems="initial">
           <Heading textAlign="left" fontSize="30px">
-            이름
+            신고관리
           </Heading>
 
           <Box>
             <HStack justifyContent="space-between">
-              <Heading fontSize="25px">들어온 요청</Heading>
-              <ChakraLink as={ReactRouterLink} to="/manage-requests">
+              <Heading fontSize="25px">완료된 신고</Heading>
+              <ChakraLink as={ReactRouterLink} to="/view-appointment">
                 + 전체보기
               </ChakraLink>
             </HStack>
             <TableHeader
               tableHeaders={['이름', '전화번호', '생년월일', '상세보기']}
             />
+
             {data && data.length > 0 ? (
               <div className={styles.hideScrollBar}>
                 <Box maxH="250px" overflowY="scroll">
-                  {data
-                    .filter(request => request.stateId === 'rw')
-                    .map(request => (
-                      <TableRow
-                        key={request.id}
-                        data={request}
-                        buttonType="detail"
-                      />
-                    ))}
+                  {data.map(request => (
+                    <TableRow
+                      key={request.id}
+                      data={request}
+                      buttonType="detail"
+                    />
+                  ))}
                 </Box>
               </div>
             ) : (
@@ -67,6 +72,6 @@ const MainPage = function () {
       )}
     </>
   );
-};
+}
 
-export default MainPage;
+export default CompletedEmergencies;

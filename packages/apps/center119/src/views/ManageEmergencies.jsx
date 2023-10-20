@@ -1,6 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
-import { useSelector } from 'react-redux';
-import { getRequests } from '../api';
+import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
+import styles from '@housepital/common/css/HideScrollBar.module.css';
 import {
   Box,
   HStack,
@@ -9,39 +8,42 @@ import {
   Link as ChakraLink,
   Text,
 } from '@chakra-ui/react';
-import styles from '@housepital/common/css/HideScrollBar.module.css';
-import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 
 import TableHeader from '../components/TableSection/TableHeader';
+import { useQuery } from '@tanstack/react-query';
+import { getEmergencies } from '../api';
 import TableRow from '../components/TableSection/TableRow';
 import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import LoadingPage from '@housepital/common/LoadingPage';
 
-function ManageRequests() {
+const ManageEmergencies = function () {
   const counselor = useSelector(state => state.counselor);
-  const { data, isLoading, error } = useQuery([counselor.id], getRequests);
-  console.log(data);
-  const navigate = useNavigate();
+  const { data, isLoading, error } = useQuery(
+    [counselor.counselorId],
+    getEmergencies,
+  );
 
+  const navigate = useNavigate();
   useEffect(() => {
     if (error) {
       navigate('/error-page');
     }
-  }, [error, navigate]);
-
+  }, [data, error, navigate]);
   return (
     <>
       {isLoading ? (
-        <Text>로딩중</Text>
+        <LoadingPage />
       ) : (
-        <VStack p="8" spacing="8" alignItems="initial">
+        <VStack spacing="8" p="8" alignItems="initial">
           <Heading textAlign="left" fontSize="30px">
-            신고관리
+            {counselor.centerName}
           </Heading>
 
           <Box>
             <HStack justifyContent="space-between">
-              <Heading fontSize="25px">모든 신고</Heading>
-              <ChakraLink as={ReactRouterLink} to="/view-appointment">
+              <Heading fontSize="25px">들어온 요청</Heading>
+              <ChakraLink as={ReactRouterLink} to="/manage-requests">
                 + 전체보기
               </ChakraLink>
             </HStack>
@@ -68,5 +70,6 @@ function ManageRequests() {
       )}
     </>
   );
-}
-export default ManageRequests;
+};
+
+export default ManageEmergencies;

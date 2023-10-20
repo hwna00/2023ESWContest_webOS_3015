@@ -1,8 +1,6 @@
 import {
   Avatar,
   Box,
-  Button,
-  ButtonGroup,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -13,14 +11,12 @@ import {
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
-import { updateCounselor } from '../api';
 
 function MyPage() {
   const counselor = useSelector(state => state.counselor);
 
   const {
     register,
-    handleSubmit,
 
     reset,
     formState: { errors },

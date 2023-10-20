@@ -14,54 +14,47 @@ import {
   VStack,
 } from '@chakra-ui/react';
 
-import { getRequest, updateRequestState } from '../api';
+import { getEmergency, updateEmergencyState } from '../api';
+import LoadingPage from '@housepital/common/LoadingPage/LoadingPage';
 
-function RequestDetail() {
+function EmergencyDetail() {
   const { id } = useParams();
 
-  const { isLoading, data = {} } = useQuery([`${id}`], () => getRequest(id));
-  console.log(data);
-  const handleCancelClick = async () => {
-    await updateRequestState(id, 'rr', '');
-  };
+  const { isLoading, data = {} } = useQuery([`${id}`], () => getEmergency(id));
 
   const handleCompleteClick = async () => {
-    await updateRequestState(id, 'rc', null);
+    await updateEmergencyState(id, 1);
+    window.location.reload();
   };
   return (
     <>
       {isLoading ? (
-        <Text>로딩 중</Text>
+        <LoadingPage />
       ) : (
         <Box overflow="hidden">
           <HStack justifyContent="space-between" alignItems="center">
-            <Heading>{data.name}</Heading>
+            <Heading>{data.username}</Heading>
             <HStack>
-              <Button
-                colorScheme="red"
-                variant="outline"
-                onClick={handleCancelClick}
-              >
-                상담취소
-              </Button>
-              <Button
-                colorScheme="primary"
-                variant="outline"
-                onClick={handleCompleteClick}
-              >
-                상담완료
-              </Button>
+              {data.isCompleted === 0 && (
+                <Button
+                  colorScheme="primary"
+                  variant="outline"
+                  onClick={handleCompleteClick}
+                >
+                  접수완료
+                </Button>
+              )}
             </HStack>
           </HStack>
 
           <Grid width="full" templateColumns="1fr 3fr 1fr" gap="8" mt="4">
             <AspectRatio ratio={1}>
-              <Avatar src="" alt={data.name} objectFit="cover" />
+              <Avatar src="" alt={data.username} objectFit="cover" />
             </AspectRatio>
 
             <VStack justifyContent="center" alignItems="flex-start">
               <Text fontSize="lg" fontWeight="bold">
-                이름 : {data?.name}
+                이름 : {data?.username}
               </Text>
               <Text fontSize="lg" fontWeight="bold">
                 전화 번호 : {data?.phoneNumber}
@@ -102,4 +95,4 @@ function RequestDetail() {
   );
 }
 
-export default RequestDetail;
+export default EmergencyDetail;

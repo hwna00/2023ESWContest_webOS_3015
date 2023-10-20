@@ -1,12 +1,13 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import SideBar from './SideBar';
-import { Box, Text } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase';
 import { resetCounselor, setCounselor } from '../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCounselor } from '../api';
+import LoadingPage from '@housepital/common/LoadingPage';
 
 function Root() {
   const [isLoading, setIsLoading] = useState(true);
@@ -41,7 +42,7 @@ function Root() {
           </Box>
         </>
       ) : (
-        <Text>로딩중</Text>
+        <LoadingPage />
       )}
     </>
   );
