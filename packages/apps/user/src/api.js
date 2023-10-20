@@ -116,6 +116,16 @@ export const getDiagnosis = async diagnosisId => {
   }
 };
 
+export const updateDiagnosis = async (appointmentId, pharmacy) => {
+  const { data } = await instance.patch(`diagnoses/${appointmentId}`, {
+    data: {
+      pharmacyName: pharmacy.name,
+      pharmacyYkiho: pharmacy.ykiho,
+    },
+  });
+  console.log(data);
+};
+
 export const getMedicines = async (uid, date) => {
   try {
     // const { data } = instance.get(`/users/${uid}/medicines?date=${date}`);

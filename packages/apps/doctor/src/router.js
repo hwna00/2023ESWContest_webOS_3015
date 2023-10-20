@@ -8,6 +8,7 @@ import MainPage from './views/MainPage';
 import LogIn from './views/LogIn';
 import AppointmentsHistory from './views/AppointmentsHistory';
 import Appointments from './views/Appointments';
+import AppointmentHistoryDetail from './views/AppointmentHistoryDetail/AppointmentHistoryDetail';
 import AppointmentDetail from './views/AppointmentDetail';
 import Root from './layout/Root';
 
@@ -35,6 +36,10 @@ const router = createHashRouter([
       {
         path: '/appointments-history',
         element: <AppointmentsHistory />,
+      },
+      {
+        path: '/appointments-history/:id',
+        element: <AppointmentHistoryDetail />,
       },
       {
         path: '/mypage',

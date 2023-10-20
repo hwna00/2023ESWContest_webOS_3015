@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { io } from 'socket.io-client';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import {
   Box,
@@ -13,6 +13,8 @@ import {
   VStack,
 } from '@chakra-ui/react';
 
+import { createDiagnoses, updateAppointment } from '../../api';
+
 let myStream;
 const roomName = 'myRoom';
 
@@ -22,6 +24,7 @@ const VideoCall = function () {
   const myVideoRef = useRef();
   const patientFace = useRef();
   const peerConnectionRef = useRef();
+  const { id: appointmentId } = useParams();
 
   const navigate = useNavigate();
   const { register, handleSubmit } = useForm({ mode: 'onChange' });
@@ -164,16 +167,24 @@ const VideoCall = function () {
   }, []);
 
   const onTrmtDoneClick = useCallback(() => {
-    socketRef.current.emit('trmt_end', roomName);
+    socketRef.current.emit('trmt_pending', roomName);
     patientFace.current.srcObject = null;
     setIsInProcess(false);
   }, []);
 
-  const onSubmit = data => {
-    console.log(data);
-    // TODO: 예약 상태를 진찰 완료로 변경
-    // TODO: comment 기반으로 diagnoses 생성
-    navigate('/');
+  const onSubmit = async data => {
+    const { content } = data;
+
+    try {
+      await createDiagnoses(appointmentId, content);
+      await updateAppointment(appointmentId);
+
+      socketRef.current.emit('trmt_end', roomName);
+
+      navigate('/');
+    } catch (error) {
+      // TODO: webOS 알림 error.messgae
+    }
   };
 
   return (

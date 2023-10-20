@@ -21,7 +21,7 @@ const roomName = 'room';
 
 const HealthManageDetail = function () {
   const socketRef = useRef();
-  
+
   const [showStartBtn, setShowStartBtn] = useState(false);
   const [data, setData] = useState();
   const [timer, setTimer] = useState({
@@ -38,20 +38,19 @@ const HealthManageDetail = function () {
   }, [type]);
 
   useEffect(() => {
-    socketRef.current = io(`${process.env.REACT_APP_BACKEND_API}:3000`, {
+    socketRef.current = io(`${process.env.REACT_APP_BACKEND_API}`, {
       transports: ['websocket'],
     });
-    
+
     socketRef.current.on('welcome', () => {
       setShowStartBtn(true);
     });
-
 
     socketRef.current.on('setup_senser', () => {
       setShowStartBtn(true);
     });
 
-    socketRef.current.on(`${type}_start`, time => {
+    socketRef.current.on(`${type}_start`, (time = 5) => {
       setTimer({
         isValid: true,
         time: time,
@@ -130,7 +129,7 @@ const HealthManageDetail = function () {
         <Button
           colorScheme="primary"
           size="lg"
-          isLoading={showStartBtn}
+          isLoading={!showStartBtn}
           loadingText="측정 준비"
           spinnerPlacement="end"
           onClick={onStartClick}

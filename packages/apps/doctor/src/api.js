@@ -44,3 +44,32 @@ export const getAppointment = async appointmentId => {
     return error;
   }
 };
+
+export const createDiagnoses = async (appointmentId, content) => {
+  const { data } = await instance.post('diagnoses', {
+    data: { appointmentId, content },
+  });
+
+  if (!data.isSuccess) {
+    throw new Error('진료 기록을 생성하지 못했습니다.');
+  }
+  return data;
+};
+
+export const getDiagnoses = async doctorId => {
+  const { data } = await instance.get(`/doctors/${doctorId}/diagnoses`);
+  return data.result;
+};
+
+export const getDiagnosis = async appointmentId => {
+  const { data } = await instance.get(`/diagnoses/${appointmentId}`);
+  return data.result;
+};
+
+export const updateAppointment = async appointmentId => {
+  const { data } = await instance.patch(`appointments/${appointmentId}`, {
+    data: { stateId: 'dc' },
+  });
+
+  return data;
+};

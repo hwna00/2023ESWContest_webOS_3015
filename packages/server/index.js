@@ -81,6 +81,16 @@ wsServer.on('connection', socket => {
     socket.to(roomName).emit('ice', ice);
   });
 
+  socket.on('trmt_start', (roomName, id) => {
+    console.log('trmt_start: ', id);
+    socket.to(roomName).emit('trmt_start', id);
+  });
+
+  socket.on('trmt_pending', roomName => {
+    console.log('trmt_pending');
+    socket.to(roomName).emit('trmt_pending');
+  });
+
   socket.on('trmt_end', roomName => {
     socket.to(roomName).emit('trmt_end');
   });

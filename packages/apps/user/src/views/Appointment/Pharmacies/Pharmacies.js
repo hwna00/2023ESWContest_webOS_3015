@@ -18,14 +18,14 @@ import {
   Radio,
 } from '@chakra-ui/react';
 
-import { getPharmacies } from '../../../api';
+import { getPharmacies, updateDiagnosis } from '../../../api';
 import { useCallback, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const Pharmacies = function () {
   const TOTAL_PAGE = 100;
+  let selectedPharmacy;
 
-  const [selectedPharmacy, setSelectedPharmacy] = useState();
   const [deliveryType, setDeliveryType] = useState();
 
   const { id } = useParams();
@@ -55,17 +55,17 @@ const Pharmacies = function () {
 
   const onPharmacyClick = useCallback(
     pharmacy => {
-      setSelectedPharmacy(pharmacy);
       onOpen();
+      selectedPharmacy = pharmacy;
     },
     [onOpen],
   );
 
-  const onCloseClick = useCallback(() => {
+  const onCloseClick = useCallback(async () => {
     onClose();
-    // TODO: api 연결
+    await updateDiagnosis(id, selectedPharmacy);
     navigate(`/appointment/${id}/create-review`);
-  }, [onClose, navigate, id]);
+  }, [onClose, navigate, id, selectedPharmacy]);
 
   return (
     <VStack width="full" height="full" gap="4">
@@ -123,10 +123,10 @@ const Pharmacies = function () {
               colorScheme="primary"
             >
               <Radio borderColor="primary.300" value="nftf" size="lg">
-                비대면으로 배송받기
+                비대면으로 수령하기
               </Radio>
               <Radio borderColor="primary.300" value="ftf" size="lg">
-                대면으로 배송받기
+                대면으로 수령하기
               </Radio>
             </RadioGroup>
           </ModalBody>

@@ -1,18 +1,23 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useSelector } from 'react-redux';
 import ListSkeletion from '@housepital/common/ListSkeleton';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Flex, Box, HStack, Text, UnorderedList } from '@chakra-ui/react';
+import { io } from 'socket.io-client';
 
 import WaitingItem from '../../../components/WaitingItem/WaitingItem';
 import BackButton from '../../../components/BackButton/BackButton';
 import { deleteAppointment, getAppointments } from '../../../api';
 import useCreateToast from '@housepital/common/hooks/useCreateToast';
 
-function WaitingRoom() {
-  const uid = useSelector(state => state.me.uid);
+const roomName = 'myRoom';
 
+function WaitingRoom() {
+  const socketRef = useRef();
+  const [currAppointmentId, setCurrAppointmentId] = useState();
+
+  const uid = useSelector(state => state.me.uid);
   const queryClient = useQueryClient();
 
   const { isLoading, data, isError } = useQuery({
@@ -42,6 +47,19 @@ function WaitingRoom() {
     },
     [mutate],
   );
+
+  useEffect(() => {
+    socketRef.current = io(`${process.env.REACT_APP_BACKEND_API}`, {
+      transports: ['websocket'],
+    });
+
+    socketRef.current.on('trmt_start', async id => {
+      console.log('trmt_start: ', id);
+      setCurrAppointmentId(id);
+    });
+
+    socketRef.current.emit('join_room', roomName);
+  }, []);
 
   return (
     <Box>
@@ -88,6 +106,7 @@ function WaitingRoom() {
               <WaitingItem
                 key={appointment.id}
                 appointment={{ uid, ...appointment }}
+                currAppointmentId={currAppointmentId}
                 cancelAppointment={cancelAppointment}
               />
             ))}
