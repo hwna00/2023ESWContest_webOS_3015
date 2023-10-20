@@ -17,10 +17,10 @@ export const getCounselor = async counselorId => {
     throw new Error(error);
   }
 };
-export const updateEmergencyState = async (emergencyId, newStateId) => {
+export const updateEmergencyState = async (emergencyId, isCompleted) => {
   return await instance.patch(`emergencies/${emergencyId}`, {
     data: {
-      stateId: newStateId,
+      isCompleted: isCompleted,
     },
   });
 };

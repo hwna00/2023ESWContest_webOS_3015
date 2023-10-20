@@ -21,11 +21,8 @@ function EmergencyDetail() {
 
   const { isLoading, data = {} } = useQuery([`${id}`], () => getEmergency(id));
 
-  const handleCancelClick = async () => {
-    await updateEmergencyState(id, 0);
-  };
-
   const handleCompleteClick = async () => {
+    console.log(id);
     await updateEmergencyState(id, 1);
   };
   return (
@@ -38,18 +35,11 @@ function EmergencyDetail() {
             <Heading>{data.username}</Heading>
             <HStack>
               <Button
-                colorScheme="red"
-                variant="outline"
-                onClick={handleCancelClick}
-              >
-                상담취소
-              </Button>
-              <Button
                 colorScheme="primary"
                 variant="outline"
                 onClick={handleCompleteClick}
               >
-                상담완료
+                접수완료
               </Button>
             </HStack>
           </HStack>
