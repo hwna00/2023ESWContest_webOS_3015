@@ -22,8 +22,8 @@ function EmergencyDetail() {
   const { isLoading, data = {} } = useQuery([`${id}`], () => getEmergency(id));
 
   const handleCompleteClick = async () => {
-    console.log(id);
     await updateEmergencyState(id, 1);
+    window.location.reload();
   };
   return (
     <>
@@ -34,13 +34,15 @@ function EmergencyDetail() {
           <HStack justifyContent="space-between" alignItems="center">
             <Heading>{data.username}</Heading>
             <HStack>
-              <Button
-                colorScheme="primary"
-                variant="outline"
-                onClick={handleCompleteClick}
-              >
-                접수완료
-              </Button>
+              {data.isCompleted === 0 && (
+                <Button
+                  colorScheme="primary"
+                  variant="outline"
+                  onClick={handleCompleteClick}
+                >
+                  접수완료
+                </Button>
+              )}
             </HStack>
           </HStack>
 

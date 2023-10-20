@@ -22,7 +22,7 @@ const ManageEmergencies = function () {
     [counselor.counselorId],
     getEmergencies,
   );
-  console.log(data);
+
   const navigate = useNavigate();
   useEffect(() => {
     if (error) {
