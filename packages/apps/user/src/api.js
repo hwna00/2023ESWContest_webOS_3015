@@ -130,11 +130,11 @@ export const updateDiagnosis = async (appointmentId, pharmacy) => {
 export const getMedicines = async (uid, day = '') => {
   try {
     const { data } = await instance.get(`/users/${uid}/medecines?day=${day}`);
-    console.log('data ', data);
 
     if (!data.isSuccess) {
       return null;
     }
+
     return data.result;
   } catch (error) {
     console.log(error);

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { Link as ReactRouterLink } from 'react-router-dom';
 import {
@@ -20,18 +20,22 @@ import {
   VStack,
   useDisclosure,
   Link as ChakraLink,
+  Text,
+  Tag,
 } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 
 import { getMedicines } from '../../api';
 import { useSelector } from 'react-redux';
 import { useQuery } from '@tanstack/react-query';
+import { dateToday } from '../../utils/getDayofWeek';
 
 const MedicinesManage = function () {
   const [selectedDate, setSelectedDate] = useState(
     dayjs(new Date()).format('YYYY-MM-DD'),
   );
-  const [selectedMedicine, setSelectedMedicine] = useState();
+  const [selectedMedicine, setSelectedMedicine] = useState([]);
+  const [medicinesOfDay, setMedicinesOfDay] = useState([]);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -47,15 +51,29 @@ const MedicinesManage = function () {
     { enabled: !!uid },
   );
 
-  const onDateChange = async event => {
-    setSelectedDate(event.target.value);
-    await getMedicines(uid, event.tartget.value);
-  };
+  const onDateChange = useCallback(
+    async event => {
+      setSelectedDate(event.target.value);
+      const response = await getMedicines(uid, dateToday(event.target.value));
+      setMedicinesOfDay(response);
+    },
+    [uid],
+  );
 
   const onMedicineClick = async id => {
     setSelectedMedicine(id);
     onMedicineOpne();
   };
+
+  useEffect(() => {
+    const fetchMedicines = async () => {
+      const response = await getMedicines(uid, dateToday(selectedDate));
+      setMedicinesOfDay(response);
+    };
+    if (uid) {
+      fetchMedicines();
+    }
+  }, [uid]);
 
   return (
     <HStack
@@ -163,14 +181,24 @@ const MedicinesManage = function () {
           my="4"
           spacing="4"
         >
-          {[1, 2, 3, 4, 5].map(item => (
+          {medicinesOfDay?.map(medicine => (
             <ListItem
-              key={item}
+              key={medicine.id}
               padding="4"
               bgColor="primary.100"
               borderRadius="md"
             >
-              hi
+              <Text fontSize="lg" fontWeight="bold" mb="2">
+                {medicine.medecineName}
+              </Text>
+              <HStack width="full" flexWrap="wrap" gap="2">
+                {medicine.intakeTimes.map(time => (
+                  // TODO: 약을 먹었다면 solid로 변경
+                  <Tag key={time} variant="outline">
+                    {time}
+                  </Tag>
+                ))}
+              </HStack>
             </ListItem>
           ))}
         </UnorderedList>
