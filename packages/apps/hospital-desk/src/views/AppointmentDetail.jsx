@@ -16,7 +16,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 
-import FtfDetail from '../component/FtfDetail';
+import FtfDetail from '@housepital/common/FtfDetail/FtfDetail';
 import { getPatientDetail, updateAppointmentState } from '../api';
 import PaymentModal from '../component/PaymentModal';
 import { useCallback } from 'react';

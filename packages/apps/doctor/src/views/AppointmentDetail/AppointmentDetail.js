@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import LoadingPage from '@housepital/common/LoadingPage';
+import FtfDetail from '@housepital/common/FtfDetail/FtfDetail';
 import {
   AspectRatio,
   Avatar,
@@ -16,7 +17,6 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 
-import FtfDetail from '../../components/FtfDetail/FtfDetail';
 import { getAppointment } from '../../api';
 
 const AppointmentDetail = function () {
