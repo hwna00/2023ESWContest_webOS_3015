@@ -25,10 +25,11 @@ export const updateEmergencyState = async (emergencyId, newStateId) => {
   });
 };
 
-export const getEmergencies = async counselorId => {
+export const getEmergencies = async ({ queryKey }) => {
+  const counselorId = queryKey[0];
   const response = await instance.get(`/counselors/${counselorId}/emergencies`);
   if (response.data) {
-    return response.data;
+    return response.data.result;
   } else {
     return {};
   }
@@ -37,15 +38,16 @@ export const getEmergencies = async counselorId => {
 export const getEmergency = async emergencyId => {
   const response = await instance.get(`/emergencies/${emergencyId}`);
   if (response.data) {
-    return response.data;
+    return response.data.result;
   }
 };
 
-export const getCompletedEmergency = async counselorId => {
+export const getCompletedEmergency = async ({ queryKey }) => {
+  const counselorId = queryKey[0];
   const response = await instance.get(
     `/counselors/${counselorId}/emergencies?isCompleted=1`,
   );
-  if (response.data) {
-    return response.data;
+  if (response) {
+    return response.data.result;
   }
 };

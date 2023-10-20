@@ -14,19 +14,19 @@ import {
   VStack,
 } from '@chakra-ui/react';
 
-import { getRequest, updateRequestState } from '../api';
+import { getEmergency, updateEmergencyState } from '../api';
 
-function RequestDetail() {
+function EmergencyDetail() {
   const { id } = useParams();
 
-  const { isLoading, data = {} } = useQuery([`${id}`], () => getRequest(id));
-  console.log(data);
+  const { isLoading, data = {} } = useQuery([`${id}`], () => getEmergency(id));
+
   const handleCancelClick = async () => {
-    await updateRequestState(id, 'rr', '');
+    await updateEmergencyState(id, 0);
   };
 
   const handleCompleteClick = async () => {
-    await updateRequestState(id, 'rc', null);
+    await updateEmergencyState(id, 1);
   };
   return (
     <>
@@ -35,7 +35,7 @@ function RequestDetail() {
       ) : (
         <Box overflow="hidden">
           <HStack justifyContent="space-between" alignItems="center">
-            <Heading>{data.name}</Heading>
+            <Heading>{data.username}</Heading>
             <HStack>
               <Button
                 colorScheme="red"
@@ -56,12 +56,12 @@ function RequestDetail() {
 
           <Grid width="full" templateColumns="1fr 3fr 1fr" gap="8" mt="4">
             <AspectRatio ratio={1}>
-              <Avatar src="" alt={data.name} objectFit="cover" />
+              <Avatar src="" alt={data.username} objectFit="cover" />
             </AspectRatio>
 
             <VStack justifyContent="center" alignItems="flex-start">
               <Text fontSize="lg" fontWeight="bold">
-                이름 : {data?.name}
+                이름 : {data?.username}
               </Text>
               <Text fontSize="lg" fontWeight="bold">
                 전화 번호 : {data?.phoneNumber}
@@ -102,4 +102,4 @@ function RequestDetail() {
   );
 }
 
-export default RequestDetail;
+export default EmergencyDetail;

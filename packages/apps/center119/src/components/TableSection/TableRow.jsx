@@ -7,7 +7,7 @@ function TableRow({ data, buttonType }) {
   const navigate = useNavigate();
 
   const moveToDetail = useCallback(() => {
-    navigate(`/view-requests/request-detail/${data.id}`);
+    navigate(`/view-emergencies/emergency-detail/${data.id}`);
   }, [navigate, data.id]);
 
   const cancelButton = (

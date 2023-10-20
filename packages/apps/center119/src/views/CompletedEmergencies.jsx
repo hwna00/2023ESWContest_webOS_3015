@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useSelector } from 'react-redux';
-import { getRequests } from '../api';
+import { getCompletedEmergency } from '../api';
 import {
   Box,
   HStack,
@@ -16,10 +16,13 @@ import TableHeader from '../components/TableSection/TableHeader';
 import TableRow from '../components/TableSection/TableRow';
 import { useEffect } from 'react';
 
-function ManageRequests() {
+function CompletedEmergencies() {
   const counselor = useSelector(state => state.counselor);
-  const { data, isLoading, error } = useQuery([counselor.id], getRequests);
-  console.log(data);
+  const { data, isLoading, error } = useQuery(
+    [counselor.counselorId],
+    getCompletedEmergency,
+  );
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,7 +30,6 @@ function ManageRequests() {
       navigate('/error-page');
     }
   }, [error, navigate]);
-
   return (
     <>
       {isLoading ? (
@@ -40,7 +42,7 @@ function ManageRequests() {
 
           <Box>
             <HStack justifyContent="space-between">
-              <Heading fontSize="25px">모든 신고</Heading>
+              <Heading fontSize="25px">완료된 신고</Heading>
               <ChakraLink as={ReactRouterLink} to="/view-appointment">
                 + 전체보기
               </ChakraLink>
@@ -48,6 +50,7 @@ function ManageRequests() {
             <TableHeader
               tableHeaders={['이름', '전화번호', '생년월일', '상세보기']}
             />
+
             {data && data.length > 0 ? (
               <div className={styles.hideScrollBar}>
                 <Box maxH="250px" overflowY="scroll">
@@ -69,4 +72,5 @@ function ManageRequests() {
     </>
   );
 }
-export default ManageRequests;
+
+export default CompletedEmergencies;

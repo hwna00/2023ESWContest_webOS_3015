@@ -11,14 +11,18 @@ import {
 
 import TableHeader from '../components/TableSection/TableHeader';
 import { useQuery } from '@tanstack/react-query';
-import { getRequests } from '../api';
+import { getEmergencies } from '../api';
 import TableRow from '../components/TableSection/TableRow';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-const MainPage = function () {
+const ManageEmergencies = function () {
   const counselor = useSelector(state => state.counselor);
-  const { data, isLoading, error } = useQuery([counselor.id], getRequests);
+  const { data, isLoading, error } = useQuery(
+    [counselor.counselorId],
+    getEmergencies,
+  );
+  console.log(data);
   const navigate = useNavigate();
   useEffect(() => {
     if (error) {
@@ -32,7 +36,7 @@ const MainPage = function () {
       ) : (
         <VStack spacing="8" p="8" alignItems="initial">
           <Heading textAlign="left" fontSize="30px">
-            이름
+            {counselor.centerName}
           </Heading>
 
           <Box>
@@ -48,15 +52,13 @@ const MainPage = function () {
             {data && data.length > 0 ? (
               <div className={styles.hideScrollBar}>
                 <Box maxH="250px" overflowY="scroll">
-                  {data
-                    .filter(request => request.stateId === 'rw')
-                    .map(request => (
-                      <TableRow
-                        key={request.id}
-                        data={request}
-                        buttonType="detail"
-                      />
-                    ))}
+                  {data.map(request => (
+                    <TableRow
+                      key={request.id}
+                      data={request}
+                      buttonType="detail"
+                    />
+                  ))}
                 </Box>
               </div>
             ) : (
@@ -69,4 +71,4 @@ const MainPage = function () {
   );
 };
 
-export default MainPage;
+export default ManageEmergencies;
