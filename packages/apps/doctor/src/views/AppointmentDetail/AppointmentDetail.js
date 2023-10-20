@@ -4,7 +4,7 @@ import { io } from 'socket.io-client';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import LoadingPage from '@housepital/common/LoadingPage';
-import FtfDetail from '@housepital/common/FtfDetail/FtfDetail';
+import FtfDetail from '@housepital/common/FtfDetail';
 import {
   AspectRatio,
   Avatar,
