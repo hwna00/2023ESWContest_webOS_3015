@@ -1,13 +1,6 @@
-import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styles from '@housepital/common/css/HideScrollBar.module.css';
-import {
-  Box,
-  HStack,
-  Heading,
-  VStack,
-  Link as ChakraLink,
-  Text,
-} from '@chakra-ui/react';
+import { Box, Heading, VStack, Text } from '@chakra-ui/react';
 
 import TableHeader from '../components/TableSection/TableHeader';
 import { useQuery } from '@tanstack/react-query';
@@ -41,12 +34,7 @@ const ManageEmergencies = function () {
           </Heading>
 
           <Box>
-            <HStack justifyContent="space-between">
-              <Heading fontSize="25px">들어온 요청</Heading>
-              <ChakraLink as={ReactRouterLink} to="/manage-requests">
-                + 전체보기
-              </ChakraLink>
-            </HStack>
+            <Heading fontSize="25px">들어온 요청</Heading>
             <TableHeader
               tableHeaders={['이름', '전화번호', '생년월일', '상세보기']}
             />
