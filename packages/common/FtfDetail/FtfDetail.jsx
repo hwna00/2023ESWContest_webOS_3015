@@ -6,7 +6,6 @@ import {
   RadioGroup,
   VStack,
 } from '@chakra-ui/react';
-import { useState } from 'react';
 
 const FtfDetail = function ({ data }) {
   return (
