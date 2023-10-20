@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { io } from 'socket.io-client';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import {
   Box,
@@ -13,6 +13,8 @@ import {
   VStack,
 } from '@chakra-ui/react';
 
+import { createDiagnoses } from '../../api';
+
 let myStream;
 const roomName = 'myRoom';
 
@@ -22,6 +24,7 @@ const VideoCall = function () {
   const myVideoRef = useRef();
   const patientFace = useRef();
   const peerConnectionRef = useRef();
+  const { id: appointmentId } = useParams();
 
   const navigate = useNavigate();
   const { register, handleSubmit } = useForm({ mode: 'onChange' });
@@ -170,7 +173,8 @@ const VideoCall = function () {
   }, []);
 
   const onSubmit = data => {
-    console.log(data);
+    const { content } = data;
+    createDiagnoses(appointmentId, content);
     // TODO: 예약 상태를 진찰 완료로 변경
     // TODO: comment 기반으로 diagnoses 생성
     navigate('/');

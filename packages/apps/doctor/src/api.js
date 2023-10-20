@@ -44,3 +44,17 @@ export const getAppointment = async appointmentId => {
     return error;
   }
 };
+
+export const createDiagnoses = async (appointmentId, content) => {
+  const { data } = await instance.post('diagnoses', {
+    data: { appointmentId, content },
+  });
+  console.log(data);
+};
+
+export const updateAppointment = async appointmentId => {
+  const { data } = await instance.patch(`appointments/${appointmentId}`, {
+    data: { stateId: 'dc' },
+  });
+  console.log(data);
+};
