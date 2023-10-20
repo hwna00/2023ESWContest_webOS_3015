@@ -1,3 +1,6 @@
+import { useEffect, useRef } from 'react';
+
+import { io } from 'socket.io-client';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import LoadingPage from '@housepital/common/LoadingPage';
@@ -19,7 +22,10 @@ import {
 import FtfDetail from '../../components/FtfDetail/FtfDetail';
 import { getAppointment } from '../../api';
 
+const roomName = 'myRoom';
+
 const AppointmentDetail = function () {
+  const socketRef = useRef();
   const { id } = useParams();
   const navigate = useNavigate();
   const {
@@ -32,9 +38,16 @@ const AppointmentDetail = function () {
     getAppointment(id),
   );
 
-  const onTrmtStartClick = () => {
+  const onTrmtStartClick = async () => {
+    await socketRef.current.emit('trmt_start', roomName, id);
     navigate('treatment');
   };
+
+  useEffect(() => {
+    socketRef.current = io(`${process.env.REACT_APP_BACKEND_API}`, {
+      transports: ['websocket'],
+    });
+  });
 
   return (
     /* eslint-disable */

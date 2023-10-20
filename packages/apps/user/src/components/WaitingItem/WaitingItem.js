@@ -56,7 +56,11 @@ function CancelModal({ isOpen, onClose, cancelAppointment }) {
   );
 }
 
-const WaitingItem = function ({ appointment, cancelAppointment }) {
+const WaitingItem = function ({
+  appointment,
+  cancelAppointment,
+  currAppointmentId,
+}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -99,7 +103,11 @@ const WaitingItem = function ({ appointment, cancelAppointment }) {
         {appointment.doctorName}
       </Box>
       <HStack flex={2} textAlign="center" justifyContent="center" gap="4">
-        <Button colorScheme="primary" onClick={onTrmtStart}>
+        <Button
+          colorScheme="primary"
+          isDisabled={appointment.id !== Number(currAppointmentId)}
+          onClick={onTrmtStart}
+        >
           진료실 입장
         </Button>
         <Button colorScheme="red" variant="outline" onClick={onOpen}>
