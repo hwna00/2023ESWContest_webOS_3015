@@ -59,32 +59,10 @@ const MainPage = function () {
                   ).length
                 }
               />
-              <StatisticCard
-                title="완료 대기"
-                count={
-                  data.dc.filter(reservation =>
-                    dayjs(reservation.date).isSame(now),
-                  ).length
-                }
-              />
+              <StatisticCard title="완료 대기" count={data.dc.length} />
               <StatisticCard
                 title="전체 환자"
-                count={
-                  [
-                    ...data.aw.filter(reservation =>
-                      dayjs(reservation.date).isSame(now),
-                    ),
-                    ...data.ac.filter(reservation =>
-                      dayjs(reservation.date).isSame(now),
-                    ),
-                    ...data.dc.filter(reservation =>
-                      dayjs(reservation.date).isSame(now),
-                    ),
-                    ...data.pc.filter(reservation =>
-                      dayjs(reservation.date).isSame(now),
-                    ),
-                  ].length
-                }
+                count={[...data.aw, ...data.ac, ...data.dc, ...data.pc].length}
               />
             </SimpleGrid>
           </Box>
