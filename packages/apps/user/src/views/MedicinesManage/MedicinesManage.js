@@ -22,13 +22,17 @@ import {
   Link as ChakraLink,
   Text,
   Tag,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
 } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 
-import { getMedicines } from '../../api';
+import { addMedicine, getMedicines } from '../../api';
 import { useSelector } from 'react-redux';
 import { useQuery } from '@tanstack/react-query';
 import { dateToday } from '../../utils/getDayofWeek';
+import { useForm } from 'react-hook-form';
 
 const MedicinesManage = function () {
   const [selectedDate, setSelectedDate] = useState(
@@ -37,13 +41,18 @@ const MedicinesManage = function () {
   const [selectedMedicine, setSelectedMedicine] = useState([]);
   const [medicinesOfDay, setMedicinesOfDay] = useState([]);
 
+  const uid = useSelector(state => state.me.uid);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isMedicineOpen,
     onOpen: onMedicineOpne,
     onClose: onMedicineClose,
   } = useDisclosure();
-  const uid = useSelector(state => state.me.uid);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ mode: 'onTouched' });
 
   const { data: registeredMedicines } = useQuery(
     ['medicines'],
@@ -64,6 +73,20 @@ const MedicinesManage = function () {
     setSelectedMedicine(id);
     onMedicineOpne();
   };
+
+  const onMedicineSubmit = useCallback(
+    async data => {
+      const response = await addMedicine(uid, data);
+
+      if (response.isSuccess) {
+        //TODO: webOS 알림
+        onClose();
+      } else {
+        //TODO: webOS 알림
+      }
+    },
+    [uid],
+  );
 
   useEffect(() => {
     const fetchMedicines = async () => {
@@ -95,13 +118,34 @@ const MedicinesManage = function () {
           </Button>
           <Modal size="xl" isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent as="form" onSubmit={handleSubmit(onMedicineSubmit)}>
               <ModalHeader>복용 약 추가하기</ModalHeader>
               <ModalCloseButton />
-              <ModalBody>{/* // TODO: 약 추가하는 form 제작하기 */}</ModalBody>
+              <ModalBody as={VStack} gap="6">
+                <FormControl isRequired isInvalid={errors?.medicineName}>
+                  <FormLabel>복용하시는 약을 입력해주세요</FormLabel>
+                  <Input
+                    {...register('medicineName', {
+                      required: '필수 값입니다.',
+                    })}
+                  />
+                  <FormErrorMessage>
+                    {errors.medicineName?.message}
+                  </FormErrorMessage>
+                </FormControl>
+                <FormControl isRequired isInvalid={errors?.intakeTimes}>
+                  <FormLabel>약을 드시는 시간을 입력해주세요</FormLabel>
+                  <Input type="time" {...register(`intakeTimes.0`)} mb="4" />
+                  <Input type="time" {...register(`intakeTimes.1`)} mb="4" />
+                  <Input type="time" {...register(`intakeTimes.2`)} />
+                </FormControl>
+                <FormErrorMessage>
+                  {errors.medicineName?.message}
+                </FormErrorMessage>
+              </ModalBody>
 
               <ModalFooter>
-                <Button colorScheme="primary" onClick={onClose}>
+                <Button type="submit" colorScheme="primary">
                   저장하기
                 </Button>
                 <Button variant="ghost">닫기</Button>

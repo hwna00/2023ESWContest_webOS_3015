@@ -141,6 +141,11 @@ export const getMedicines = async (uid, day = '') => {
   }
 };
 
+export const addMedicine = async (uid, intake) => {
+  const { data } = await instance.post('/medicines', { data: { uid, intake } });
+  return data;
+};
+
 export const getHospitalDtl = async ykiho => {
   const base = 'http://apis.data.go.kr/B551182/MadmDtlInfoService2';
   try {
