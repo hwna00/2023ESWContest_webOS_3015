@@ -56,6 +56,11 @@ export const createDiagnoses = async (appointmentId, content) => {
   return data;
 };
 
+export const getDiagnoses = async doctorId => {
+  const { data } = await instance.get(`/doctors/${doctorId}/diagnoses`);
+  return data.result;
+};
+
 export const updateAppointment = async appointmentId => {
   const { data } = await instance.patch(`appointments/${appointmentId}`, {
     data: { stateId: 'dc' },
