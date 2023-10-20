@@ -122,7 +122,6 @@ const SignUp = function () {
         navigate('/');
       } else {
         toast('회원가입에 실패했습니다.');
-        console.log(doctor.message);
       }
     },
     [selectedHospitalId, selectedFields, navigate],
