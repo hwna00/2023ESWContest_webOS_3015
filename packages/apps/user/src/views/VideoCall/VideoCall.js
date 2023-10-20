@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { io } from 'socket.io-client';
 import { HStack, VStack } from '@chakra-ui/react';
@@ -15,6 +15,7 @@ const VideoCall = function () {
   const myVideoRef = useRef();
   const doctorVideoRef = useRef();
   const peerConnectionRef = useRef();
+  const [isPending, setIsPending] = useState(false);
 
   const navigate = useNavigate();
   const { appointmentId } = useParams();
@@ -143,6 +144,10 @@ const VideoCall = function () {
       peerConnectionRef.current.addIceCandidate(candidate);
     });
 
+    socketRef.current.on('trmt_pending', () => {
+      setIsPending(true);
+    });
+
     socketRef.current.on('trmt_end', () => {
       navigate(`/appointment/${appointmentId}/select-pharmacies`);
     });
@@ -167,34 +172,54 @@ const VideoCall = function () {
 
   return (
     <VStack>
-      <HStack
-        justifyContent="center"
-        alignItems="center"
-        width="100vw"
-        height="100vh"
-        position="absolute"
-        top="0px"
-        left="0px"
-        zIndex="998"
-        bgColor="white"
-      >
-        <video
-          className="myFace"
-          style={{
-            height: '100vh',
-            position: 'absolute',
-            top: '0px',
-            left: '0px',
-            zIndex: '999',
-            backgroundColor: 'white',
-          }}
-          ref={myVideoRef}
-          autoPlay
+      {isPending ? (
+        <LoadingPage />
+      ) : (
+        <HStack
+          justifyContent="center"
+          alignItems="center"
+          width="100vw"
+          height="100vh"
+          position="absolute"
+          top="0px"
+          left="0px"
+          zIndex="998"
+          bgColor="white"
         >
-          <track kind="captions" />
-        </video>
+          <video
+            className="myFace"
+            style={{
+              height: '100vh',
+              position: 'absolute',
+              top: '0px',
+              left: '0px',
+              zIndex: '999',
+              backgroundColor: 'white',
+            }}
+            ref={myVideoRef}
+            autoPlay
+          >
+            <track kind="captions" />
+          </video>
 
-        {doctorVideoRef.current?.srcObject ? (
+          {doctorVideoRef.current?.srcObject ? (
+            <video
+              className="doctorFace"
+              style={{
+                width: '250px',
+                position: 'absolute',
+                top: '0px',
+                right: '0px',
+                zIndex: '9999',
+                backgroundColor: 'transparent',
+                borderBottomLeftRadius: '16px',
+              }}
+              ref={doctorVideoRef}
+              autoPlay
+            ></video>
+          ) : (
+            <LoadingPage />
+          )}
           <video
             className="doctorFace"
             style={{
@@ -208,27 +233,11 @@ const VideoCall = function () {
             }}
             ref={doctorVideoRef}
             autoPlay
-          ></video>
-        ) : (
-          <LoadingPage />
-        )}
-        <video
-          className="doctorFace"
-          style={{
-            width: '250px',
-            position: 'absolute',
-            top: '0px',
-            right: '0px',
-            zIndex: '9999',
-            backgroundColor: 'transparent',
-            borderBottomLeftRadius: '16px',
-          }}
-          ref={doctorVideoRef}
-          autoPlay
-        >
-          <track kind="captions" />
-        </video>
-      </HStack>
+          >
+            <track kind="captions" />
+          </video>
+        </HStack>
+      )}
     </VStack>
   );
 };

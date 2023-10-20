@@ -49,12 +49,17 @@ export const createDiagnoses = async (appointmentId, content) => {
   const { data } = await instance.post('diagnoses', {
     data: { appointmentId, content },
   });
-  console.log(data);
+
+  if (!data.isSuccess) {
+    throw new Error('진료 기록을 생성하지 못했습니다.');
+  }
+  return data;
 };
 
 export const updateAppointment = async appointmentId => {
   const { data } = await instance.patch(`appointments/${appointmentId}`, {
     data: { stateId: 'dc' },
   });
-  console.log(data);
+
+  return data;
 };
