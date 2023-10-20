@@ -17,12 +17,12 @@ export const getCounselor = async counselorId => {
     throw new Error(error);
   }
 };
-export const updateRequestState = async (
-  requestId,
+export const updateEmergencyState = async (
+  emergencyId,
   newStateId,
   rejectionReason,
 ) => {
-  return await instance.patch(`requests/${requestId}`, {
+  return await instance.patch(`emergencies/${emergencyId}`, {
     data: {
       stateId: newStateId,
       rejectionReason: rejectionReason,
@@ -30,8 +30,8 @@ export const updateRequestState = async (
   });
 };
 
-export const getRequests = async counselorId => {
-  const response = await instance.get(`/counselors/${counselorId}/requests`);
+export const getEmergencies = async counselorId => {
+  const response = await instance.get(`/counselors/${counselorId}/emergencies`);
   if (response.data) {
     return response.data;
   } else {
@@ -39,8 +39,8 @@ export const getRequests = async counselorId => {
   }
 };
 
-export const getRequest = async requestId => {
-  const response = await instance.get(`/requests/${requestId}`);
+export const getEmergency = async emergencyId => {
+  const response = await instance.get(`/emergencies/${emergencyId}`);
   if (response.data) {
     return response.data;
   }
