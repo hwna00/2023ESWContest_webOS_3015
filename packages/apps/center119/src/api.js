@@ -17,15 +17,10 @@ export const getCounselor = async counselorId => {
     throw new Error(error);
   }
 };
-export const updateEmergencyState = async (
-  emergencyId,
-  newStateId,
-  rejectionReason,
-) => {
+export const updateEmergencyState = async (emergencyId, newStateId) => {
   return await instance.patch(`emergencies/${emergencyId}`, {
     data: {
       stateId: newStateId,
-      rejectionReason: rejectionReason,
     },
   });
 };
@@ -41,6 +36,15 @@ export const getEmergencies = async counselorId => {
 
 export const getEmergency = async emergencyId => {
   const response = await instance.get(`/emergencies/${emergencyId}`);
+  if (response.data) {
+    return response.data;
+  }
+};
+
+export const getCompletedEmergency = async counselorId => {
+  const response = await instance.get(
+    `/counselors/${counselorId}/emergencies?isCompleted=1`,
+  );
   if (response.data) {
     return response.data;
   }
