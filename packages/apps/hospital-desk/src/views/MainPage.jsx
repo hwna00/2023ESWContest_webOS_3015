@@ -28,12 +28,8 @@ const MainPage = function () {
 
   useEffect(() => {
     if (data && !error) {
-      setConfirmedReservation(
-        data?.ac?.filter(reservation => reservation.stateId === 'ac') || [],
-      );
-      setCompleteReservation(
-        data?.dc?.filter(reservation => reservation.stateId === 'dc') || [],
-      );
+      setConfirmedReservation(data?.ac || []);
+      setCompleteReservation(data?.dc || []);
     }
     if (error) {
       navigate('/error-page');
@@ -54,15 +50,25 @@ const MainPage = function () {
               <StatisticCard
                 title="오늘 예정된 예약"
                 count={
-                  data.ac.filter(reservation =>
+                  ConfirmedReservation.filter(reservation =>
                     dayjs(reservation.date).isSame(now),
                   ).length
                 }
               />
-              <StatisticCard title="완료 대기" count={data.dc.length} />
+              <StatisticCard
+                title="완료 대기"
+                count={completeReservation.length}
+              />
               <StatisticCard
                 title="전체 환자"
-                count={[...data.aw, ...data.ac, ...data.dc, ...data.pc].length}
+                count={
+                  [
+                    ...(Array.isArray(data?.aw) ? data.aw : []),
+                    ...(Array.isArray(data?.ac) ? data.ac : []),
+                    ...(Array.isArray(data?.dc) ? data.dc : []),
+                    ...(Array.isArray(data?.pc) ? data.pc : []),
+                  ].length
+                }
               />
             </SimpleGrid>
           </Box>
