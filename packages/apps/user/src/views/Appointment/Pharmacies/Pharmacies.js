@@ -123,10 +123,10 @@ const Pharmacies = function () {
               colorScheme="primary"
             >
               <Radio borderColor="primary.300" value="nftf" size="lg">
-                비대면으로 배송받기
+                비대면으로 수령하기
               </Radio>
               <Radio borderColor="primary.300" value="ftf" size="lg">
-                대면으로 배송받기
+                대면으로 수령하기
               </Radio>
             </RadioGroup>
           </ModalBody>
