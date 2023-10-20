@@ -54,7 +54,7 @@ export const getPatientDetail = async queryKey => {
 
   const response = await instance.get(`/appointments/${appointmentId}?`);
   if (response.data) {
-    return response.data;
+    return response.data.result;
   } else {
     return {};
   }
