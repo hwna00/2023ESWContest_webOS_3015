@@ -20,7 +20,7 @@ const appointment = require('./routes/appointment/appointment');
 require('dotenv').config();
 
 const app = express();
-const port = 3000 || process.env.PORT;
+const port = parseInt(process.env.PORT, 10) || 3000;
 const httpServer = http.createServer(app);
 const wsServer = SocketIO(httpServer, {
   cors: { origin: '*' },
