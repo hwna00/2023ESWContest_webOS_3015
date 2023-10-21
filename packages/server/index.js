@@ -102,9 +102,12 @@ wsServer.on('connection', socket => {
     socket.to(roomName).emit('setup_senser');
   });
 
+  socket.on('measure_start', roomName => {
+    socket.to(roomName).emit('temperature_start');
+  });
+
   socket.on('temperature_start', roomName => {
-    console.log('temp start at ', roomName);
-    socket.to(roomName).emit('temperature_start', 'temp');
+    socket.to(roomName).emit('temperature_start');
   });
 
   socket.on('temp_end', (roomName, data) => {
