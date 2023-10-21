@@ -17,6 +17,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateHospital } from '../api';
 import axios from 'axios';
+import useCreateToast from '@housepital/common/hooks/useCreateToast';
 
 const BASE_URL = ` http://apis.data.go.kr/B551182/MadmDtlInfoService2`;
 
@@ -49,16 +50,14 @@ function MyPage() {
 
     fetchData();
   }, [fetchResultsInfo, setValue, dispatch]);
-
+  const toast = useCreateToast();
   const onSubmit = data => {
     updateHospital(hospital.hospitalId, data)
       .then(() => {
-        //TODO: 성공했다고 알림
-        console.log('성공');
+        toast('수정에 성공했습니다. ');
       })
       .catch(err => {
-        //TODO: 실패했다고 알림
-        console.log(err);
+        toast('수정에 실패했습니다. ');
       });
   };
 

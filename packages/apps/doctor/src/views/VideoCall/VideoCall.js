@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import useCreateToast from '@housepital/common/hooks/useCreateToast';
 import {
   Box,
   Button,
@@ -28,7 +29,7 @@ const VideoCall = function () {
 
   const navigate = useNavigate();
   const { register, handleSubmit } = useForm({ mode: 'onChange' });
-
+  const toast = useCreateToast();
   const getMedia = async () => {
     try {
       const stream = await window.navigator.mediaDevices.getUserMedia({
@@ -183,7 +184,7 @@ const VideoCall = function () {
 
       navigate('/');
     } catch (error) {
-      // TODO: webOS 알림 error.messgae
+      toast(error.message);
     }
   };
 

@@ -33,6 +33,7 @@ import { useSelector } from 'react-redux';
 import { useQuery } from '@tanstack/react-query';
 import { dateToday } from '../../utils/getDayofWeek';
 import { useForm } from 'react-hook-form';
+import useCreateToast from '@housepital/common/hooks/useCreateToast';
 
 const MedicinesManage = function () {
   const [selectedDate, setSelectedDate] = useState(
@@ -69,6 +70,8 @@ const MedicinesManage = function () {
     [uid],
   );
 
+  const toast = useCreateToast();
+
   const onMedicineClick = async id => {
     setSelectedMedicine(id);
     onMedicineOpne();
@@ -79,13 +82,13 @@ const MedicinesManage = function () {
       const response = await addMedicine(uid, data);
 
       if (response.isSuccess) {
-        //TODO: webOS 알림
+        toast('약 등록에 성공했습니다.');
         onClose();
       } else {
-        //TODO: webOS 알림
+        toast('약 등록에 실패했습니다.');
       }
     },
-    [uid],
+    [uid, onClose, toast],
   );
 
   useEffect(() => {
@@ -96,7 +99,7 @@ const MedicinesManage = function () {
     if (uid) {
       fetchMedicines();
     }
-  }, [uid]);
+  }, [uid, selectedDate]);
 
   return (
     <HStack
