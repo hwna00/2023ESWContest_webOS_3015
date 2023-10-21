@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { Link as ReactRouterLink } from 'react-router-dom';
 import {
@@ -20,44 +20,83 @@ import {
   VStack,
   useDisclosure,
   Link as ChakraLink,
+  Text,
+  Tag,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
 } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 
-import { getMedicines } from '../../api';
+import { addMedicine, getMedicines } from '../../api';
 import { useSelector } from 'react-redux';
 import { useQuery } from '@tanstack/react-query';
+import { dateToday } from '../../utils/getDayofWeek';
+import { useForm } from 'react-hook-form';
 
 const MedicinesManage = function () {
   const [selectedDate, setSelectedDate] = useState(
     dayjs(new Date()).format('YYYY-MM-DD'),
   );
-  const [selectedMedicine, setSelectedMedicine] = useState();
+  const [selectedMedicine, setSelectedMedicine] = useState([]);
+  const [medicinesOfDay, setMedicinesOfDay] = useState([]);
 
+  const uid = useSelector(state => state.me.uid);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isMedicineOpen,
     onOpen: onMedicineOpne,
     onClose: onMedicineClose,
   } = useDisclosure();
-  const uid = useSelector(state => state.me.uid);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ mode: 'onTouched' });
 
   const { data: registeredMedicines } = useQuery(
-    ['medecines'],
+    ['medicines'],
     () => getMedicines(uid),
     { enabled: !!uid },
   );
 
-  console.log(registeredMedicines);
-
-  const onDateChange = async event => {
-    setSelectedDate(event.target.value);
-    await getMedicines(uid, event.tartget.value);
-  };
+  const onDateChange = useCallback(
+    async event => {
+      setSelectedDate(event.target.value);
+      const response = await getMedicines(uid, dateToday(event.target.value));
+      setMedicinesOfDay(response);
+    },
+    [uid],
+  );
 
   const onMedicineClick = async id => {
     setSelectedMedicine(id);
     onMedicineOpne();
   };
+
+  const onMedicineSubmit = useCallback(
+    async data => {
+      const response = await addMedicine(uid, data);
+
+      if (response.isSuccess) {
+        //TODO: webOS 알림
+        onClose();
+      } else {
+        //TODO: webOS 알림
+      }
+    },
+    [uid],
+  );
+
+  useEffect(() => {
+    const fetchMedicines = async () => {
+      const response = await getMedicines(uid, dateToday(selectedDate));
+      setMedicinesOfDay(response);
+    };
+    if (uid) {
+      fetchMedicines();
+    }
+  }, [uid]);
 
   return (
     <HStack
@@ -79,13 +118,34 @@ const MedicinesManage = function () {
           </Button>
           <Modal size="xl" isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent as="form" onSubmit={handleSubmit(onMedicineSubmit)}>
               <ModalHeader>복용 약 추가하기</ModalHeader>
               <ModalCloseButton />
-              <ModalBody>{/* // TODO: 약 추가하는 form 제작하기 */}</ModalBody>
+              <ModalBody as={VStack} gap="6">
+                <FormControl isRequired isInvalid={errors?.medicineName}>
+                  <FormLabel>복용하시는 약을 입력해주세요</FormLabel>
+                  <Input
+                    {...register('medicineName', {
+                      required: '필수 값입니다.',
+                    })}
+                  />
+                  <FormErrorMessage>
+                    {errors.medicineName?.message}
+                  </FormErrorMessage>
+                </FormControl>
+                <FormControl isRequired isInvalid={errors?.intakeTimes}>
+                  <FormLabel>약을 드시는 시간을 입력해주세요</FormLabel>
+                  <Input type="time" {...register(`intakeTimes.0`)} mb="4" />
+                  <Input type="time" {...register(`intakeTimes.1`)} mb="4" />
+                  <Input type="time" {...register(`intakeTimes.2`)} />
+                </FormControl>
+                <FormErrorMessage>
+                  {errors.medicineName?.message}
+                </FormErrorMessage>
+              </ModalBody>
 
               <ModalFooter>
-                <Button colorScheme="primary" onClick={onClose}>
+                <Button type="submit" colorScheme="primary">
                   저장하기
                 </Button>
                 <Button variant="ghost">닫기</Button>
@@ -102,15 +162,16 @@ const MedicinesManage = function () {
           my="4"
           spacing="4"
         >
-          {[1, 2, 3, 4, 5, 6, 7, 8].map(medicine => (
+          {registeredMedicines?.map(medicine => (
             <ListItem
+              key={medicine.id}
               padding="4"
               bgColor="primary.100"
               borderRadius="md"
               textAlign="center"
-              onClick={() => onMedicineClick(medicine.id)}
+              onClick={() => onMedicineClick(medicine)}
             >
-              hi
+              {medicine.medecineName}
             </ListItem>
           ))}
           <Modal size="xl" isOpen={isMedicineOpen} onClose={onMedicineClose}>
@@ -164,9 +225,24 @@ const MedicinesManage = function () {
           my="4"
           spacing="4"
         >
-          {[1, 2, 3, 4, 5].map(() => (
-            <ListItem padding="4" bgColor="primary.100" borderRadius="md">
-              hi
+          {medicinesOfDay?.map(medicine => (
+            <ListItem
+              key={medicine.id}
+              padding="4"
+              bgColor="primary.100"
+              borderRadius="md"
+            >
+              <Text fontSize="lg" fontWeight="bold" mb="2">
+                {medicine.medecineName}
+              </Text>
+              <HStack width="full" flexWrap="wrap" gap="2">
+                {medicine.intakeTimes.map(time => (
+                  // TODO: 약을 먹었다면 solid로 변경
+                  <Tag key={time} variant="outline">
+                    {time}
+                  </Tag>
+                ))}
+              </HStack>
             </ListItem>
           ))}
         </UnorderedList>

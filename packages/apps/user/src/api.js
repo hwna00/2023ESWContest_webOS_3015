@@ -126,11 +126,10 @@ export const updateDiagnosis = async (appointmentId, pharmacy) => {
   console.log(data);
 };
 
-export const getMedicines = async (uid, date) => {
+export const getMedicines = async (uid, day = '') => {
   try {
-    // const { data } = instance.get(`/users/${uid}/medicines?date=${date}`);
-    const data = 'temp';
-    console.log(data);
+    const { data } = await instance.get(`/users/${uid}/medecines?day=${day}`);
+
     if (!data.isSuccess) {
       return null;
     }
@@ -139,6 +138,11 @@ export const getMedicines = async (uid, date) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+export const addMedicine = async (uid, intake) => {
+  const { data } = await instance.post('/medicines', { data: { uid, intake } });
+  return data;
 };
 
 export const getHospitalDtl = async ykiho => {
