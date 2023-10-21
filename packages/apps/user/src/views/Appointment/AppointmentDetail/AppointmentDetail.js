@@ -33,7 +33,12 @@ import { useSelector } from 'react-redux';
 
 import BackButton from '../../../components/BackButton/BackButton';
 import { useForm } from 'react-hook-form';
-import { createAppointment, getHospitalDtl } from '../../../api';
+import {
+  addFavorite,
+  createAppointment,
+  getHospitalDtl,
+  removeFavorite,
+} from '../../../api';
 import AppointForm from './AppiontForm';
 import ReviewList from '@housepital/common/ReviewList';
 import { useQuery } from '@tanstack/react-query';
@@ -71,8 +76,12 @@ const AppointmentDetail = function () {
     },
   );
 
-  const onToggleBookmarkClick = useCallback(() => {
-    // Todo: 추후에 isFavorite 항목을 수정하는 axios patch 함수로 변경해야 함.
+  const onToggleFavoriteClick = useCallback(async id => {
+    if (true /* fatorite에 추가되어 있다면 */) {
+      await addFavorite(id);
+    } else {
+      await removeFavorite(id);
+    }
   }, []);
 
   const onSubmit = useCallback(
@@ -149,13 +158,13 @@ const AppointmentDetail = function () {
                   <Icon
                     as={FaBookmark}
                     boxSize={6}
-                    onClick={onToggleBookmarkClick}
+                    onClick={onToggleFavoriteClick}
                   />
                 ) : (
                   <Icon
                     as={FaRegBookmark}
                     boxSize={6}
-                    onClick={onToggleBookmarkClick}
+                    onClick={onToggleFavoriteClick}
                   />
                 )}
               </Text>

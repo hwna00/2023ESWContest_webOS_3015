@@ -48,6 +48,42 @@ export const getFavorites = async uid => {
   }
 };
 
+export const addDoctorToFavorite = async (uid, doctorId) => {
+  try {
+    const { data } = await instance.post('/favorites', { data: { uid } });
+    return data.result;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const removeDoctorToFavorite = async (uid, doctorId) => {
+  try {
+    const { data } = await instance.delete('/favorites');
+    return data.result;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const addHospitalToFavorite = async (uid, hospitalId) => {
+  try {
+    const { data } = await instance.post('/favorites', { data: { uid } });
+    return data.result;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const removeHospitalToFavorite = async (uid, hospitalId) => {
+  try {
+    const { data } = await instance.delete('/favorites');
+    return data.result;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 export const getHospitals = async () => {
   try {
     const { data } = await instance.get('/hospitals');
