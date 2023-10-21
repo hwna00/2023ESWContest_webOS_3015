@@ -96,7 +96,6 @@ const HealthManageDetail = function () {
   const temp = [
     {
       id: '심박수',
-      color: 'hsl(190, 70%, 50%)',
       data: [
         {
           x: '2023-10-10',

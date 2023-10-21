@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import {
   useParams,
@@ -41,9 +41,11 @@ import { getDetailByCategory } from '../../../utils/getByCategory';
 import FieldList from '../../../components/FieldList/FieldList';
 import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
 import useCreateToast from '@housepital/common/hooks/useCreateToast';
+import { dateToday } from '../../../utils/getDayofWeek';
 
 const AppointmentDetail = function () {
   const [appointTime, setAppointTime] = useState();
+  const [onAir, setOnAir] = useState();
 
   const { category, id } = useParams();
   const navigate = useNavigate();
@@ -61,7 +63,6 @@ const AppointmentDetail = function () {
   const { isLoading, data } = useQuery([id], () =>
     getDetailByCategory(category, id),
   );
-
   const { data: hospitalDtl, isError: isDtlError } = useQuery(
     ['publicData', id],
     () => getHospitalDtl(data?.ykiho),
@@ -98,6 +99,24 @@ const AppointmentDetail = function () {
     },
     [appointTime, uid, data?.id, navigate, toast],
   );
+
+  useEffect(() => {
+    const currDay = dateToday(dayjs(new Date()).format('YYYY-MM-DD'));
+    if (hospitalDtl) {
+      let [trmtStart, trmtEnd] = hospitalDtl[currDay].split(' ~ ');
+      let currTime = dayjs(new Date()).format('HH:mm');
+
+      trmtStart = Number(trmtStart?.replace(':', ''));
+      trmtEnd = Number(trmtEnd?.replace(':', ''));
+      currTime = Number(currTime?.replace(':', ''));
+
+      if (currTime >= trmtStart && currTime < trmtEnd) {
+        setOnAir(true);
+      } else {
+        setOnAir(false);
+      }
+    }
+  }, [hospitalDtl]);
 
   return (
     <HStack height="full" gap="6">
@@ -148,9 +167,16 @@ const AppointmentDetail = function () {
               alignItems="center"
             >
               <Box>
-                <Text color="primary.500" fontWeight="bold">
-                  영업중
-                </Text>
+                {onAir ? (
+                  <Text color="primary.500" fontWeight="bold">
+                    영업 중
+                  </Text>
+                ) : (
+                  <Text color="red" fontWeight="bold">
+                    영업 종료
+                  </Text>
+                )}
+
                 {category === 'doctors' && (
                   <>
                     <Text fontSize="xl" fontWeight="bold">
