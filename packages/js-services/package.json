@@ -1,0 +1,7 @@
+{
+  "name": "@housepital/js-services",
+  "version": "0.1.0",
+  "dependencies": {
+    "node-schedule": "^2.1.1"
+  }
+}

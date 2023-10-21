@@ -16,6 +16,7 @@
     "activity.operation",
     "notification.operation",
     "application.launcher",
-    "com.housepital.app.user.service.group"
+    "com.housepital.app.user.service.group",
+    "activity.operation"
   ]
 }

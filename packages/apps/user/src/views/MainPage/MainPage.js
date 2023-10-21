@@ -7,6 +7,7 @@ import { Button, ButtonGroup, HStack, VStack } from '@chakra-ui/react';
 import TodoList from '../../components/TodoList/TodoList';
 import PushAlarm from '../../components/PushAlarm/PushAlarm';
 import Calendar from '../../components/Calendar/Calendar';
+import LS2Request from '@enact/webos/LS2Request';
 
 const todos = [
   {
@@ -87,6 +88,19 @@ const MainPage = function () {
     setTodoOfSelectedDay(todoOfTheDay);
   }, [selectedDay]);
 
+  const webOSBridge = new LS2Request();
+
+  const lstest = () => {
+    const lsRequest = {
+      service: 'luna://com.houspital.app.user.service',
+      method: 'createSchedule',
+      parameter: 'hi',
+      onSuccess: () => console.log('success'),
+      onFailure: () => console.log('fail'),
+    };
+    webOSBridge.send(lsRequest);
+  };
+
   return (
     <HStack height="full" gap="6">
       <Calendar
@@ -114,6 +128,7 @@ const MainPage = function () {
             py="8"
             width="full"
             fontSize="lg"
+            onClick={() => lstest}
           >
             챗봇 호출
           </Button>
