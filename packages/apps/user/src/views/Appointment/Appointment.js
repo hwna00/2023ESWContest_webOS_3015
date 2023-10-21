@@ -5,13 +5,12 @@ import {
   HStack,
   VStack,
   Text,
-  Image,
   Link as ChakraLink,
+  Avatar,
 } from '@chakra-ui/react';
 
 import AppointmentViewList from '../../components/AppointmentViewList/AppointmentViewList';
-import { FavoriteList } from './dataList';
-import { getAppointments } from '../../api';
+import { getAppointments, getFavorites } from '../../api';
 import { useSelector } from 'react-redux';
 import { useQuery } from '@tanstack/react-query';
 
@@ -25,6 +24,11 @@ const Appointment = function () {
   } = useQuery({
     queryKey: ['appointments', uid],
     queryFn: () => getAppointments(uid),
+    enabled: !!uid,
+  });
+  const { data: favorites } = useQuery({
+    queryKey: ['favorites'],
+    queryFn: () => getFavorites(uid),
     enabled: !!uid,
   });
 
@@ -74,8 +78,8 @@ const Appointment = function () {
           </HStack>
 
           <HStack justifyContent="flex-start" overflowX="scroll" gap={'4'}>
-            {FavoriteList.map(favorite => (
-              <Image
+            {favorites?.map(favorite => (
+              <Avatar
                 key={favorite.id}
                 src={favorite.profileImg}
                 h="full"

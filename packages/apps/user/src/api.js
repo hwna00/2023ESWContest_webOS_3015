@@ -39,9 +39,9 @@ export const deleteAppointment = async appointmentId => {
   return data;
 };
 
-export const getFavorites = async () => {
+export const getFavorites = async uid => {
   try {
-    const { data } = await instance.get('/favorites');
+    const { data } = await instance.get(`/user/${uid}/favorites`);
     return data.result;
   } catch (error) {
     throw new Error(error);
