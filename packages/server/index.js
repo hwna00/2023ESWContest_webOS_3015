@@ -104,8 +104,7 @@ wsServer.on('connection', socket => {
 
   socket.on('temperature_start', roomName => {
     console.log('temp start at ', roomName);
-    // socket.to(roomName).emit('temp_start');
-    socket.to(roomName).emit('start', 'temp');
+    socket.to(roomName).emit('temperature_start', 'temp');
   });
 
   socket.on('temp_end', (roomName, data) => {
