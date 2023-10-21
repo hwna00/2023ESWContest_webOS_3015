@@ -7,6 +7,7 @@ const axios = require('axios');
 
 const user = require('./routes/user/user');
 const review = require('./routes/review/review');
+const medicine = require('./routes/medicine/medicine');
 const hospital = require('./routes/hospital/hospital');
 const emergency = require('./routes/emergency/emergency');
 const doctor = require('./routes/doctor/doctor');
@@ -37,6 +38,7 @@ app.use('/api', review);
 app.use('/api', diagnosis);
 app.use('/api', counselor);
 app.use('/api', emergency);
+app.use('/api', medicine);
 
 let kakaoTid; // TODO : 깔끔하게 고치기
 let partner_order_id;
