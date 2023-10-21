@@ -195,7 +195,7 @@ const MedicinesManage = function () {
             </ModalContent>
           </Modal>
         </UnorderedList>
-        <ChakraLink as={ReactRouterLink} to="side-effets" width="full">
+        <ChakraLink as={ReactRouterLink} to="side-effects" width="full">
           <Button
             width="full"
             size="lg"
