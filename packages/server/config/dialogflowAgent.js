@@ -19,6 +19,7 @@ const dialogflow = require('@google-cloud/dialogflow');
 
 // Instantiates a session client
 const sessionClient = new dialogflow.SessionsClient();
+const projectId = require('../dfConfig.json').project_id;
 
 async function detectIntent(
   projectId,
@@ -54,8 +55,9 @@ async function detectIntent(
   return responses[0];
 }
 
-async function executeQueries(projectId, sessionId, queries, languageCode) {
+async function executeQueries(sessionId, queries, languageCode = 'ko') {
   // Keeping the context across queries let's us simulate an ongoing conversation with the bot
+
   let context;
   let intentResponse;
   for (const query of queries) {
@@ -88,9 +90,4 @@ async function executeQueries(projectId, sessionId, queries, languageCode) {
   }
 }
 
-const projectId = 'project_id';
-const sessionId = '123455';
-const queries = ['머리가 아파요'];
-const languageCode = 'ko';
-
-executeQueries(projectId, sessionId, queries, languageCode);
+exports.executeQueries = executeQueries;

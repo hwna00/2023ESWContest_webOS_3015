@@ -65,6 +65,11 @@ app.get('/kakao-payment/callback', async (req, res) => {
   });
 });
 
+app.get('/api/dialogflow', (req, res) => {
+  const { data } = req.body;
+  console.log(data);
+});
+
 wsServer.on('connection', socket => {
   socket.on('join_room', roomName => {
     socket.join(roomName);
