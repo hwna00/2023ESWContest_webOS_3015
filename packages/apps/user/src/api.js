@@ -271,11 +271,11 @@ export const getSideEffect = async itemName => {
       type: 'json',
     },
   });
-
+  console.log(data.body);
   if (!data.body.items) {
     return `${itemName}의 정보가 등록되어 있지 않습니다.`;
   }
-  return data.body.items[1];
+  return data.body.items[0];
 };
 
 export const getIntent = async symptom => {
