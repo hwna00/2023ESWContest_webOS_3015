@@ -257,3 +257,22 @@ export const getVitalSigns = async (uid, type) => {
     },
   ];
 };
+
+export const getSideEffect = async itemName => {
+  const service_url =
+    'http://apis.data.go.kr/1471000/DrbEasyDrugInfoService/getDrbEasyDrugList';
+
+  const { data } = await axios.get(service_url, {
+    params: {
+      serviceKey: process.env.REACT_APP_DATA_DECODING_API_KEY,
+      itemName,
+      type: 'json',
+    },
+  });
+
+  if (!data.body.items) {
+    return `${itemName}의 정보가 등록되어 있지 않습니다.`;
+  }
+  console.log(data.body.items);
+  return data.body.items[1];
+};
