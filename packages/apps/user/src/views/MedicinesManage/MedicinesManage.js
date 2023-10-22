@@ -155,15 +155,23 @@ const MedicinesManage = function () {
                 <FormControl>
                   <FormLabel>복용하시는 요일을 선택해주세요</FormLabel>
                   <HStack gap="4" width="full" flexWrap="wrap">
-                    {['월', '화', '수', '목', '금', '토', '일'].map(day => (
+                    {[
+                      ['mon', '월'],
+                      ['tue', '화'],
+                      ['wed', '수'],
+                      ['thu', '목'],
+                      ['fri', '금'],
+                      ['sat', '토'],
+                      ['sun', '일'],
+                    ].map(day => (
                       <CustomCheckbox
                         {...checkboxGroup.getCheckboxProps({
-                          value: day,
+                          value: day[0],
                         })}
-                        day={day}
+                        day={day[0]}
                         key={day}
                       >
-                        {day}
+                        {day[1]}
                       </CustomCheckbox>
                     ))}
                   </HStack>
@@ -190,6 +198,7 @@ const MedicinesManage = function () {
             </ModalContent>
           </Modal>
         </HStack>
+
         <UnorderedList
           listStyleType="none"
           width="full"
@@ -229,6 +238,7 @@ const MedicinesManage = function () {
             </ModalContent>
           </Modal>
         </UnorderedList>
+
         <ChakraLink as={ReactRouterLink} to="side-effects" width="full">
           <Button
             width="full"
@@ -273,12 +283,14 @@ const MedicinesManage = function () {
                 {medicine.medecineName}
               </Text>
               <HStack width="full" flexWrap="wrap" gap="2">
-                {medicine.intakeTimes.map(time => (
-                  // TODO: 약을 먹었다면 solid로 변경
-                  <Tag key={time} variant="outline">
-                    {time}
-                  </Tag>
-                ))}
+                {medicine.intakeTimes
+                  .filter(time => time !== '')
+                  .map(time => (
+                    // TODO: 약을 먹었다면 solid로 변경
+                    <Tag key={time} variant="outline">
+                      {time}
+                    </Tag>
+                  ))}
               </HStack>
             </ListItem>
           ))}
