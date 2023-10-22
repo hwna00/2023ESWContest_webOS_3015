@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { useQuery } from '@tanstack/react-query';
 // import LoadingPage from '@housepital/common/LoadingPage';
 import ListSkeletion from '@housepital/common/ListSkeleton';
+import styles from '@housepital/common/css/HideScrollBar.module.css';
 import {
   Box,
   HStack,
@@ -40,51 +41,53 @@ const AppointmentsHistory = function () {
             전화번호
           </Text>
         </HStack>
-        <UnorderedList
-          width="full"
-          listStyleType="none"
-          margin="0"
-          spacing="4"
-          height="sm"
-          overflowY="scroll"
-        >
-          {isLoading ? (
-            <ListSkeletion />
-          ) : (
-            <>
-              {data?.map(diagnosis => (
-                <ListItem cursor="pointer" key={diagnosis.id}>
-                  <ChakraLink
-                    as={ReactRouterLink}
-                    to={`/appointments-history/${diagnosis.id}`}
-                    textDecoration="none !important"
-                  >
-                    <HStack
-                      width="full"
-                      py="4"
-                      bgColor="primary.100"
-                      borderRadius="md"
+        <div className={styles.hideScrollBar} style={{ width: '100%' }}>
+          <UnorderedList
+            width="full"
+            listStyleType="none"
+            margin="0"
+            spacing="4"
+            height="sm"
+            overflowY="scroll"
+          >
+            {isLoading ? (
+              <ListSkeletion />
+            ) : (
+              <>
+                {data?.map(diagnosis => (
+                  <ListItem cursor="pointer" key={diagnosis.id}>
+                    <ChakraLink
+                      as={ReactRouterLink}
+                      to={`/appointments-history/${diagnosis.id}`}
+                      textDecoration="none !important"
                     >
-                      <Text textAlign="center" flex={1}>
-                        {diagnosis.patientName}
-                      </Text>
-                      <Text textAlign="center" flex={1}>
-                        {diagnosis.date}
-                      </Text>
-                      <Text textAlign="center" flex={1}>
-                        010-{Math.floor(diagnosis.phoneNumber / 10000)}-
-                        {diagnosis.phoneNumber % 10000}
-                      </Text>
-                    </HStack>
-                  </ChakraLink>
-                </ListItem>
-              ))}
-              {isError && (
-                <Text textAlign="center">예약을 불러올 수 없습니다.</Text>
-              )}
-            </>
-          )}
-        </UnorderedList>
+                      <HStack
+                        width="full"
+                        py="4"
+                        bgColor="primary.100"
+                        borderRadius="md"
+                      >
+                        <Text textAlign="center" flex={1}>
+                          {diagnosis.patientName}
+                        </Text>
+                        <Text textAlign="center" flex={1}>
+                          {diagnosis.date}
+                        </Text>
+                        <Text textAlign="center" flex={1}>
+                          010-{Math.floor(diagnosis.phoneNumber / 10000)}-
+                          {diagnosis.phoneNumber % 10000}
+                        </Text>
+                      </HStack>
+                    </ChakraLink>
+                  </ListItem>
+                ))}
+                {isError && (
+                  <Text textAlign="center">예약을 불러올 수 없습니다.</Text>
+                )}
+              </>
+            )}
+          </UnorderedList>
+        </div>
       </VStack>
     </Box>
   );
