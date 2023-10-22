@@ -72,13 +72,16 @@ const HealthManageDetail = function () {
   }, [mutate, measuredData, type, onClose]);
 
   useEffect(() => {
-    socketRef.current = io(`${process.env.REACT_APP_BACKEND_API}`, {
-      transports: ['websocket'],
-    });
+    console.log(process.env.REACT_APP_BACKEND_API);
+    socketRef.current = io(`${process.env.REACT_APP_BACKEND_API}`);
 
     socketRef.current.on('disconnect', () => {
       console.log('disconnect');
       setShowStartBtn(false);
+    });
+
+    socketRef.current.on('welcome', () => {
+      setShowStartBtn(true);
     });
 
     socketRef.current.on('setup_senser', () => {

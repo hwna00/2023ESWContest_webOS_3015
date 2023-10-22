@@ -44,9 +44,9 @@ const AppointmentDetail = function () {
   };
 
   useEffect(() => {
-    socketRef.current = io(`${process.env.REACT_APP_BACKEND_API}`, {
-      transports: ['websocket'],
-    });
+    socketRef.current = io(`${process.env.REACT_APP_BACKEND_API}`);
+
+    socketRef.current.emit('join_room', roomName);
   });
 
   return (

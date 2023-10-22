@@ -47,9 +47,7 @@ function WaitingRoom() {
   );
 
   useEffect(() => {
-    socketRef.current = io(`${process.env.REACT_APP_BACKEND_API}`, {
-      transports: ['websocket'],
-    });
+    socketRef.current = io(`${process.env.REACT_APP_BACKEND_API}`);
 
     socketRef.current.on('trmt_start', async id => {
       console.log('trmt_start: ', id);
