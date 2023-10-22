@@ -214,3 +214,46 @@ export const getPharmacies = async ({ pageNo, numOfRows }) => {
     pageNo,
   };
 };
+
+export const createVitalSign = async (uid, value) => {
+  const { data } = await instance.post('/vital-signs', {
+    data: { uid, ...value },
+  });
+  console.log(data);
+};
+
+export const getVitalSigns = async (uid, type) => {
+  // const { data } = await instance.post(`/user/${uid}/vital-signs?type=${type}`);
+  // if (!data.isSuccess) {
+  //   return [];
+  // }
+  // return data.result;
+  return [
+    {
+      id: '심박수',
+      color: 'hsl(190, 70%, 50%)',
+      data: [
+        {
+          x: '2023-10-10',
+          y: 112,
+        },
+        {
+          x: '2023-10-11',
+          y: 150,
+        },
+        {
+          x: '2023-10-12',
+          y: 137,
+        },
+        {
+          x: '2023-10-13',
+          y: 110,
+        },
+        {
+          x: '2023-10-14',
+          y: 89,
+        },
+      ],
+    },
+  ];
+};
