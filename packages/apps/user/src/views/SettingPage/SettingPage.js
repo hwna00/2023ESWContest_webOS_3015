@@ -5,6 +5,7 @@ import { Button, Heading, ListItem, UnorderedList } from '@chakra-ui/react';
 import { fbLogOut } from '../../../firebase';
 import closeApp from '../../../../../common/utils/closeApp';
 import appinfo from '../../../webos-meta/appinfo.json';
+import connectWifi from '../../utils/connectWifi';
 
 const SettingPage = function () {
   //TODO: webOS API 사용해서 앱 종료 기능 추가하기
@@ -17,7 +18,10 @@ const SettingPage = function () {
     const appId = appinfo.id;
     closeApp(appId);
   }, []);
-
+  const onClickConnect = useCallback(() => {
+    connectWifi;
+    console.log('와이파이 연결');
+  }, []);
   return (
     <>
       <Heading>설정</Heading>
@@ -30,6 +34,11 @@ const SettingPage = function () {
             onClick={onLogoutClick}
           >
             로그아웃
+          </Button>
+        </ListItem>
+        <ListItem>
+          <Button colorScheme="primary" size="lg" onClick={onClickConnect}>
+            와이파이 연결
           </Button>
         </ListItem>
         <ListItem>
