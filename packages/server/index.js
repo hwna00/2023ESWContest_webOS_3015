@@ -5,6 +5,7 @@ const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
 
+const vitalSign = require('./routes/vitalSign/vitalSign');
 const user = require('./routes/user/user');
 const review = require('./routes/review/review');
 const medicine = require('./routes/medicine/medicine');
@@ -39,6 +40,7 @@ app.use('/api', diagnosis);
 app.use('/api', counselor);
 app.use('/api', emergency);
 app.use('/api', medicine);
+app.use('/api', vitalSign);
 
 let kakaoTid; // TODO : 깔끔하게 고치기
 let partner_order_id;
