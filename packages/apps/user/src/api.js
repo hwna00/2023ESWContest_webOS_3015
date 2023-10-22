@@ -273,6 +273,10 @@ export const getSideEffect = async itemName => {
   if (!data.body.items) {
     return `${itemName}의 정보가 등록되어 있지 않습니다.`;
   }
-  console.log(data.body.items);
   return data.body.items[1];
+};
+
+export const getIntent = async symptom => {
+  const { data } = await instance.post('/dialogflow', { symptom });
+  return data;
 };

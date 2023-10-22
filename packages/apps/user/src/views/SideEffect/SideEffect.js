@@ -1,10 +1,12 @@
+import { useCallback, useState } from 'react';
+
+import { useSelector } from 'react-redux';
 import {
   Accordion,
   AccordionButton,
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
-  AspectRatio,
   Box,
   HStack,
   Icon,
@@ -13,13 +15,11 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { FaSearch } from '@react-icons/all-files/fa/FaSearch';
 
+import { getIntent, getMedicines, getSideEffect } from '../../api';
 import BackButton from '../../components/BackButton';
-import { useCallback, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { getMedicines, getSideEffect } from '../../api';
-import { useQuery } from '@tanstack/react-query';
 
 const CustomAccordionItem = function ({ medicine }) {
   const { data } = useQuery(
@@ -29,6 +29,7 @@ const CustomAccordionItem = function ({ medicine }) {
       enabled: !!medicine,
     },
   );
+
   return (
     <AccordionItem mb="4">
       <h2>
@@ -58,13 +59,45 @@ const CustomAccordionItem = function ({ medicine }) {
             <Box width="full">
               <Image src={data?.itemImage} width="50%" mx="auto" />
             </Box>
-            <Text>효능: {data?.efcyQesitm}</Text>
-            <Text>사용법: {data?.useMethodQesitm}</Text>
-            <Text>주의사항경고: {data?.atpnWarnQesitm}</Text>
-            <Text>주의사항: {data?.atpnQesitm}</Text>
-            <Text>상호작용: {data?.intrcQesitm}</Text>
-            <Text>부작용: {data?.seQesitm}</Text>
-            <Text>보관법: {data?.depositMethodQesitm}</Text>
+            <Text>
+              <Text as="b" fontSize="lg">
+                효능:
+              </Text>{' '}
+              {data?.efcyQesitm}
+            </Text>
+            <Text>
+              <Text as="b" fontSize="lg">
+                사용법:
+              </Text>{' '}
+              {data?.useMethodQesitm}
+            </Text>
+            <Text>
+              <Text as="b" fontSize="lg">
+                주의사항경고:
+              </Text>{' '}
+              {data?.atpnWarnQesitm}
+            </Text>
+            <Text>
+              <Text as="b" fontSize="lg">
+                주의사항:
+              </Text>{' '}
+              {data?.atpnQesitm}
+            </Text>
+            <Text>
+              <Text as="b" fontSize="lg">
+                상호작용:
+              </Text>{' '}
+              {data?.intrcQesitm}
+            </Text>
+            <Text>
+              <Text as="b" fontSize="lg">
+                부작용:
+              </Text>{' '}
+              {data?.seQesitm}
+            </Text>
+            <Text>
+              <Text as="b">보관법:</Text> {data?.depositMethodQesitm}
+            </Text>
           </VStack>
         )}
       </AccordionPanel>
@@ -73,33 +106,75 @@ const CustomAccordionItem = function ({ medicine }) {
 };
 
 const SideEffet = function () {
-  const [sideEffect, setSideEffect] = useState('');
-  const onSearchFieldClick = useCallback(async () => {}, []);
-  const uid = useSelector(state => state.me.uid);
+  const [symptom, setSymptom] = useState('');
 
+  const uid = useSelector(state => state.me.uid);
+  const queryClient = useQueryClient();
   const { data: registeredMedicines } = useQuery(
     ['medicines'],
     () => getMedicines(uid),
     { enabled: !!uid },
   );
 
+  const findSeQesitm = useCallback(
+    intent => {
+      console.log(intent);
+      const medicines = queryClient.getQueryData(['medicines']);
+      medicines.map(medicine => {
+        try {
+          const { seQesitm, atpnWarnQesitm, atpnQesitm } =
+            queryClient.getQueryData([medicine.medecineName]);
+
+          if (
+            seQesitm.includes(intent) ||
+            atpnWarnQesitm.includes(intent) ||
+            atpnQesitm.includes(intent)
+          ) {
+            console.log(`${medicine.medecineName} 때문입니다.`);
+          } else {
+            console.log(
+              `${medicine.medecineName}와/과 관련된 증상이 없습니다.`,
+            );
+          }
+        } catch {
+          console.log(`${medicine.medecineName}에 대한 정보가 없습니다.`);
+        }
+      });
+    },
+    [queryClient],
+  );
+
+  const onSearchFieldChange = useCallback(event => {
+    setSymptom(event.target.value);
+  }, []);
+
+  const onSearchClick = useCallback(async () => {
+    const intent = await getIntent(symptom);
+    findSeQesitm(intent);
+  }, [symptom, findSeQesitm]);
+
   return (
-    <Box>
+    <VStack height="full" alignItems="flex-start" overflow="hidden" gap="8">
       <BackButton title="부작용 관리" />
-      <HStack justifyContent="space-between" alignItems="center" gap="4" mt="8">
+      <HStack
+        width="full"
+        justifyContent="space-between"
+        alignItems="center"
+        gap="4"
+      >
         <Input
           placeholder="부작용을 검색하세요"
-          value={sideEffect}
-          onChange={event => setSideEffect(event.target.value)}
+          value={symptom}
+          onChange={onSearchFieldChange}
         />
-        <Icon as={FaSearch} boxSize={6} onClick={onSearchFieldClick} />
+        <Icon as={FaSearch} boxSize={6} onClick={onSearchClick} />
       </HStack>
-      <Accordion mt="8" allowMultiple>
+      <Accordion width="full" height="full" overflowY="scroll" allowMultiple>
         {registeredMedicines?.map(medicine => (
           <CustomAccordionItem key={medicine.id} medicine={medicine} />
         ))}
       </Accordion>
-    </Box>
+    </VStack>
   );
 };
 

@@ -16,6 +16,7 @@ const diagnosis = require('./routes/diagnosis/diagnosis');
 const counselor = require('./routes/counselor/counselor');
 const auth = require('./routes/auth/auth');
 const appointment = require('./routes/appointment/appointment');
+const { executeQueries } = require('./config/dialogflowAgent');
 
 require('dotenv').config();
 
@@ -65,9 +66,10 @@ app.get('/kakao-payment/callback', async (req, res) => {
   });
 });
 
-app.get('/api/dialogflow', (req, res) => {
-  const { data } = req.body;
-  console.log(data);
+app.post('/api/dialogflow', async (req, res) => {
+  const { symptom } = req.body;
+  const result = await executeQueries('123123', [symptom]);
+  res.json(result);
 });
 
 wsServer.on('connection', socket => {
