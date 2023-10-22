@@ -68,7 +68,8 @@ const HealthManageDetail = function () {
       time: dayjs(new Date()).format('HH:mm'),
     });
     setMeasuredData('');
-  }, [mutate, measuredData, type]);
+    onClose();
+  }, [mutate, measuredData, type, onClose]);
 
   useEffect(() => {
     socketRef.current = io(`${process.env.REACT_APP_BACKEND_API}`, {
