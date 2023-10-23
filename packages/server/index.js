@@ -16,11 +16,12 @@ const diagnosis = require('./routes/diagnosis/diagnosis');
 const counselor = require('./routes/counselor/counselor');
 const auth = require('./routes/auth/auth');
 const appointment = require('./routes/appointment/appointment');
+const { executeQueries } = require('./config/dialogflowAgent');
 
 require('dotenv').config();
 
 const app = express();
-const port = 3000 || process.env.PORT;
+const port = parseInt(process.env.PORT, 10) || 3000;
 const httpServer = http.createServer(app);
 const wsServer = SocketIO(httpServer, {
   cors: { origin: '*' },
@@ -63,6 +64,12 @@ app.get('/kakao-payment/callback', async (req, res) => {
       'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
     },
   });
+});
+
+app.post('/api/dialogflow', async (req, res) => {
+  const { symptom } = req.body;
+  const result = await executeQueries('123123', [symptom]);
+  res.json(result);
 });
 
 wsServer.on('connection', socket => {

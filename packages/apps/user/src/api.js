@@ -129,7 +129,6 @@ export const updateDiagnosis = async (appointmentId, pharmacy) => {
 export const getMedicines = async (uid, day = '') => {
   try {
     const { data } = await instance.get(`/users/${uid}/medecines?day=${day}`);
-
     if (!data.isSuccess) {
       return null;
     }
@@ -141,7 +140,10 @@ export const getMedicines = async (uid, day = '') => {
 };
 
 export const addMedicine = async (uid, intake) => {
-  const { data } = await instance.post('/medicines', { data: { uid, intake } });
+  const { data } = await instance.post('/medicines', {
+    data: { uid, ...intake },
+  });
+  console.log(data);
   return data;
 };
 
@@ -256,4 +258,27 @@ export const getVitalSigns = async (uid, type) => {
       ],
     },
   ];
+};
+
+export const getSideEffect = async itemName => {
+  const service_url =
+    'http://apis.data.go.kr/1471000/DrbEasyDrugInfoService/getDrbEasyDrugList';
+
+  const { data } = await axios.get(service_url, {
+    params: {
+      serviceKey: process.env.REACT_APP_DATA_DECODING_API_KEY,
+      itemName,
+      type: 'json',
+    },
+  });
+  console.log(data.body);
+  if (!data.body.items) {
+    return `${itemName}의 정보가 등록되어 있지 않습니다.`;
+  }
+  return data.body.items[0];
+};
+
+export const getIntent = async symptom => {
+  const { data } = await instance.post('/dialogflow', { symptom });
+  return data;
 };
