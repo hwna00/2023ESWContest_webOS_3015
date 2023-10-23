@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 
 import {
@@ -20,12 +20,13 @@ import VideoCall from './VideoCall';
 
 function EmergencyDetail() {
   const { id } = useParams();
-
+  const navigate = useNavigate();
   const { isLoading, data = {} } = useQuery([`${id}`], () => getEmergency(id));
 
   const handleCompleteClick = async () => {
+    // TODO: 상태에 따라 toast 알람 추가하기
     await updateEmergencyState(id, 1);
-    window.location.reload();
+    navigate('/manage-emergencies');
   };
   return (
     <>
@@ -87,8 +88,7 @@ function EmergencyDetail() {
               />
             </Box>
           </Grid>
-
-          <VideoCall patientId={data?.uid} />
+          {data.isCompleted === 0 && <VideoCall patientId={data?.uid} />}
         </Box>
       )}
     </>

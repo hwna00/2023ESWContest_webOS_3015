@@ -14,7 +14,6 @@ const VideoCall = function ({ patientId }) {
   const peerConnectionRef = useRef();
   const { id: emergencyId } = useParams();
 
-  const navigate = useNavigate();
   const getMedia = async () => {
     try {
       const stream = await window.navigator.mediaDevices.getUserMedia({
@@ -135,11 +134,13 @@ const VideoCall = function ({ patientId }) {
       peerConnectionRef.current.addIceCandidate(candidate);
     });
 
-    socketRef.current.emit('emergency_ready', patientId);
+    socketRef.current.emit('emergency_ready', patientId, emergencyId);
 
     onRTCStart();
 
     return () => {
+      socketRef.current.emit('emergency_end', roomName);
+
       if (socketRef.current) {
         socketRef.current.disconnect();
       }
@@ -150,12 +151,7 @@ const VideoCall = function ({ patientId }) {
         track.stop();
       });
     };
-  }, []);
-
-  const onTrmtDoneClick = useCallback(() => {
-    socketRef.current.emit('trmt_pending', roomName);
-    patientFace.current.srcObject = null;
-  }, [roomName]);
+  }, [emergencyId, patientId]);
 
   return (
     <HStack width="full" justifyContent="center" alignItems="center">
@@ -179,18 +175,6 @@ const VideoCall = function ({ patientId }) {
       >
         <track kind="captions" />
       </video>
-
-      <Button
-        colorScheme="red"
-        variant="outline"
-        position="absolute"
-        bottom="4"
-        right="4"
-        zIndex={1000}
-        onClick={onTrmtDoneClick}
-      >
-        진료 종료
-      </Button>
     </HStack>
   );
 };

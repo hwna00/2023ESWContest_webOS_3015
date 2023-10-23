@@ -141,9 +141,14 @@ wsServer.on('connection', socket => {
     socket.to(centerid).emit('emergency_call', uid);
   });
 
-  socket.on('emergency_ready', uid => {
+  socket.on('emergency_ready', (roomName, emergencyId) => {
     console.log('emergency_ready');
-    socket.to(uid).emit('emergency_ready');
+    socket.to(roomName).emit('emergency_ready', emergencyId);
+  });
+
+  socket.on('emergency_end', roomName => {
+    console.log('emergency_end');
+    socket.to(roomName).emit('emergency_end');
   });
 
   socket.on('disconnect', () => {

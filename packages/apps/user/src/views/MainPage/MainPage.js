@@ -126,8 +126,7 @@ const MainPage = function () {
 
     socketRef.current.on('emergency_ready', emergencyId => {
       setIsLoading(false);
-      console.log('emergency_ready');
-      navigate(`treatment/${emergencyId}`);
+      navigate(`/treatment/${emergencyId}`);
     });
 
     socketRef.current.emit('join_room', uid);

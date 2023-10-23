@@ -150,6 +150,10 @@ const VideoCall = function () {
       navigate(`/appointment/${appointmentId}/select-pharmacies`);
     });
 
+    socketRef.current.on('emergency_end', () => {
+      navigate('/');
+    });
+
     onRTCStart();
 
     return () => {
