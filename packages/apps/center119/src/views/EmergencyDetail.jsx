@@ -88,7 +88,7 @@ function EmergencyDetail() {
             </Box>
           </Grid>
 
-          <VideoCall />
+          <VideoCall patientId={data?.uid} />
         </Box>
       )}
     </>

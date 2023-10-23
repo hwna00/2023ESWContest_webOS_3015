@@ -45,7 +45,7 @@ const ManageEmergencies = function () {
     socketRef.current = io(process.env.REACT_APP_BACKEND_API);
 
     socketRef.current.on('emergency_call', uid => {
-      // mutate(uid);
+      mutate(uid);
     });
 
     socketRef.current.emit('join_room', counselor.counselorId);

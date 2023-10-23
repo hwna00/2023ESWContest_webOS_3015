@@ -7,12 +7,12 @@ import { Button, HStack } from '@chakra-ui/react';
 let myStream;
 const roomName = 'myRoom';
 
-const VideoCall = function () {
+const VideoCall = function ({ patientId }) {
   const socketRef = useRef();
   const myVideoRef = useRef();
   const patientFace = useRef();
   const peerConnectionRef = useRef();
-  const { id: appointmentId } = useParams();
+  const { id: emergencyId } = useParams();
 
   const navigate = useNavigate();
   const getMedia = async () => {
@@ -135,6 +135,8 @@ const VideoCall = function () {
       peerConnectionRef.current.addIceCandidate(candidate);
     });
 
+    socketRef.current.emit('emergency_ready', patientId);
+
     onRTCStart();
 
     return () => {
@@ -153,7 +155,7 @@ const VideoCall = function () {
   const onTrmtDoneClick = useCallback(() => {
     socketRef.current.emit('trmt_pending', roomName);
     patientFace.current.srcObject = null;
-  }, []);
+  }, [roomName]);
 
   return (
     <HStack width="full" justifyContent="center" alignItems="center">

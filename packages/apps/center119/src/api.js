@@ -37,10 +37,11 @@ export const getEmergencies = async counselorId => {
 };
 
 export const getEmergency = async emergencyId => {
-  const response = await instance.get(`/emergencies/${emergencyId}`);
-  if (response.data) {
-    return response.data.result;
+  const { data } = await instance.get(`/emergencies/${emergencyId}`);
+  if (!data.isSuccess) {
+    throw new Error();
   }
+  return data.result;
 };
 
 export const getCompletedEmergency = async ({ queryKey }) => {
