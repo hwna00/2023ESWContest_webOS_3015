@@ -282,3 +282,14 @@ export const getIntent = async symptom => {
   const { data } = await instance.post('/dialogflow', { symptom });
   return data;
 };
+
+export const getCenters = async () => {
+  const { data } = await instance.get('counselors');
+
+  return data.result.map(center => ({
+    name: center.center_name,
+    id: center.counselor_id,
+  }));
+};
+
+export const createEmergencyCall = async (uid, counselor_id) => {};

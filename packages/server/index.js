@@ -135,6 +135,17 @@ wsServer.on('connection', socket => {
     socket.to(roomName).emit('bmp_end', data);
   });
 
+  //* senser area
+  socket.on('emergency_call', (centerid, uid) => {
+    console.log('emergency_call');
+    socket.to(centerid).emit('emergency_call', uid);
+  });
+
+  socket.on('emergency_ready', uid => {
+    console.log('emergency_ready');
+    socket.to(uid).emit('emergency_ready');
+  });
+
   socket.on('disconnect', () => {
     console.log('disconnected');
   });
@@ -143,3 +154,5 @@ wsServer.on('connection', socket => {
 httpServer.listen(port, () => {
   console.log(`Server on port: ${port}`);
 });
+
+//* emergency area
