@@ -17,8 +17,6 @@
     "case-sensitive-paths-webpack-plugin": "^2.4.0",
     "css-loader": "^6.5.1",
     "css-minimizer-webpack-plugin": "^3.2.0",
-    "dotenv": "^10.0.0",
-    "dotenv-expand": "^5.1.0",
     "eslint": "^8.3.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-webpack-plugin": "^3.1.1",
@@ -78,8 +76,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "react-refresh": "^0.14.0"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
   },
   "jest": {
     "roots": [

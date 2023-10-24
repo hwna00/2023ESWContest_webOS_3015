@@ -117,22 +117,22 @@ wsServer.on('connection', socket => {
     socket.to(roomName).emit('temperature_start');
   });
 
-  socket.on('temperature_start', roomName => {
-    socket.to(roomName).emit('temperature_start');
+  socket.on('temperature_start', (roomName, time) => {
+    socket.to(roomName).emit('temperature_start', time);
   });
 
-  socket.on('temp_end', (roomName, data) => {
+  socket.on('temperature_end', (roomName, data) => {
     console.log('result: ', data);
     socket.to(roomName).emit('temperature_end', data);
   });
 
-  socket.on('bmp_start', roomName => {
-    socket.to(roomName).emit('bmp_start');
+  socket.on('bpm_start', roomName => {
+    socket.to(roomName).emit('bpm_start');
   });
 
-  socket.on('bmp_end', (roomName, data) => {
+  socket.on('bpm_end', (roomName, data) => {
     console.log('result: ', data);
-    socket.to(roomName).emit('bmp_end', data);
+    socket.to(roomName).emit('bpm_end', data);
   });
 
   //* senser area

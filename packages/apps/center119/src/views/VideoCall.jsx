@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { io } from 'socket.io-client';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Button, HStack } from '@chakra-ui/react';
+import { useParams } from 'react-router-dom';
+import { HStack } from '@chakra-ui/react';
 
 let myStream;
 const roomName = 'myRoom';

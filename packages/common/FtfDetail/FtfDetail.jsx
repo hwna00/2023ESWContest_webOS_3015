@@ -8,6 +8,7 @@ import {
 } from '@chakra-ui/react';
 
 const FtfDetail = function ({ data }) {
+  console.log(data);
   return (
     <HStack justifyContent="space-between" alignItems="flex-start" gap="4">
       <VStack flex={3} alignItems="start">

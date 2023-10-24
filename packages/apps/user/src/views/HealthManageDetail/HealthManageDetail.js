@@ -72,6 +72,7 @@ const HealthManageDetail = function () {
   }, [mutate, measuredData, type, onClose]);
 
   useEffect(() => {
+    console.log('type', type);
     console.log(process.env.REACT_APP_BACKEND_API);
     socketRef.current = io(`${process.env.REACT_APP_BACKEND_API}`);
 
@@ -88,7 +89,8 @@ const HealthManageDetail = function () {
       setShowStartBtn(true);
     });
 
-    socketRef.current.on(`${type}_start`, (time = 5) => {
+    socketRef.current.on(`${type}_start`, (time = 3) => {
+      console.log(time);
       setTimer({
         isValid: true,
         time: time,
@@ -97,7 +99,8 @@ const HealthManageDetail = function () {
     });
 
     socketRef.current.on(`${type}_end`, measured => {
-      setMeasuredData(measured.value);
+      console.log(measured);
+      setMeasuredData(Math.round(measured.value * 10) / 10);
     });
 
     socketRef.current.emit('join_room', roomName);
