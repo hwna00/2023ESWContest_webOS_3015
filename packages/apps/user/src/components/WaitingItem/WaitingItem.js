@@ -119,13 +119,15 @@ const WaitingItem = function ({
         {getAppointmentState(appointment.stateId)}
       </Box>
       <HStack flex={2} textAlign="center" justifyContent="center" gap="4">
-        <Button
-          colorScheme="primary"
-          isDisabled={appointment.id !== Number(currAppointmentId)}
-          onClick={onTrmtStart}
-        >
-          진료실 입장
-        </Button>
+        {appointment.isNFTF && (
+          <Button
+            colorScheme="primary"
+            isDisabled={appointment.id !== Number(currAppointmentId)}
+            onClick={onTrmtStart}
+          >
+            진료실 입장
+          </Button>
+        )}
         <Button colorScheme="red" variant="outline" onClick={onOpen}>
           예약 취소
         </Button>
