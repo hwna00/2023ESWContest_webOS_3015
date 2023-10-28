@@ -221,41 +221,22 @@ export const createVitalSign = async (uid, value) => {
   const { data } = await instance.post('/vital-signs', {
     data: { uid, ...value },
   });
-  console.log(data);
+  return data;
 };
 
 export const getVitalSigns = async (uid, type) => {
-  // const { data } = await instance.post(`/user/${uid}/vital-signs?type=${type}`);
-  // if (!data.isSuccess) {
-  //   return [];
-  // }
-  // return data.result;
+  const { data } = await instance.get(`/users/${uid}/vital-signs?type=${type}`);
+
+  if (!data.isSuccess) {
+    return [];
+  }
   return [
     {
-      id: '심박수',
-      color: 'hsl(190, 70%, 50%)',
-      data: [
-        {
-          x: '2023-10-10',
-          y: 112,
-        },
-        {
-          x: '2023-10-11',
-          y: 150,
-        },
-        {
-          x: '2023-10-12',
-          y: 137,
-        },
-        {
-          x: '2023-10-13',
-          y: 110,
-        },
-        {
-          x: '2023-10-14',
-          y: 89,
-        },
-      ],
+      id: type,
+      data: data.result.map(item => ({
+        x: item.time,
+        y: item.value,
+      })),
     },
   ];
 };
@@ -271,7 +252,7 @@ export const getSideEffect = async itemName => {
       type: 'json',
     },
   });
-  console.log(data.body);
+
   if (!data.body.items) {
     return `${itemName}의 정보가 등록되어 있지 않습니다.`;
   }
@@ -291,5 +272,3 @@ export const getCenters = async () => {
     id: center.counselor_id,
   }));
 };
-
-export const createEmergencyCall = async (uid, counselor_id) => {};
