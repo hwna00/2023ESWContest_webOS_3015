@@ -26,9 +26,9 @@ export const createAppointment = async data => {
 export const getAppointments = async uid => {
   try {
     const { data } = await instance.get(`users/${uid}/appointments`);
-    const { aw, ac } = await data.result;
+    const { aw, ac, ar } = await data.result;
 
-    return [...aw, ...ac];
+    return [...aw, ...ac, ...ar];
   } catch (error) {
     throw new Error(error);
   }

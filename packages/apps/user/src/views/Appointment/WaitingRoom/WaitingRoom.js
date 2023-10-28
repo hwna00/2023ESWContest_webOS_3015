@@ -79,6 +79,9 @@ function WaitingRoom() {
         <Box flex={1} textAlign="center" fontWeight="bold">
           담당 의사
         </Box>
+        <Box flex={1} textAlign="center" fontWeight="bold">
+          예약 상태
+        </Box>
         <Box flex={2} />
       </HStack>
 

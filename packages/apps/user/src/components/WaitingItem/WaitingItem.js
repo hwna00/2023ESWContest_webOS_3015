@@ -73,7 +73,7 @@ const WaitingItem = function ({
     [cancelAppointment, onClose],
   );
 
-  const onTrmtStart = () => {
+  const onTrmtStart = useCallback(() => {
     dispatch(
       setTrmt({
         uid: appointment.uid,
@@ -82,6 +82,19 @@ const WaitingItem = function ({
       }),
     );
     navigate(`/treatment/${appointment.id}`);
+  }, [appointment, dispatch, navigate]);
+
+  const getAppointmentState = stateId => {
+    switch (stateId) {
+      case 'aw':
+        return '예약 대기';
+      case 'ac':
+        return '예약 대기';
+      case 'ar':
+        return '예약 거절';
+      default:
+        return '알 수 없음';
+    }
   };
 
   return (
@@ -101,6 +114,9 @@ const WaitingItem = function ({
       </Box>
       <Box flex={1} textAlign="center">
         {appointment.doctorName}
+      </Box>
+      <Box flex={1} textAlign="center">
+        {getAppointmentState(appointment.stateId)}
       </Box>
       <HStack flex={2} textAlign="center" justifyContent="center" gap="4">
         <Button
