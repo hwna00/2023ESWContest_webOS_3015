@@ -21,6 +21,7 @@ import {
 } from '@chakra-ui/react';
 
 import { getAppointment } from '../../api';
+// import { getBlob } from '../../../firebase';
 
 const roomName = 'myRoom';
 
@@ -69,7 +70,12 @@ const AppointmentDetail = function () {
 
           <Grid width="full" templateColumns="1fr 3fr 1fr" gap="8" mt="4">
             <AspectRatio ratio={1} width="40">
-              <Avatar src="" alt={data.name} objectFit="cover" />
+              <Avatar
+                // src={getBlob(`${data.uid}/profile.png`)}
+                src=""
+                alt={data.name}
+                objectFit="cover"
+              />
             </AspectRatio>
 
             <VStack justifyContent="center" alignItems="flex-start">

@@ -7,15 +7,20 @@ import {
   VStack,
 } from '@chakra-ui/react';
 
+import { getBlob } from '../utils/firebase';
+
 const FtfDetail = function ({ data }) {
-  console.log(data);
   return (
     <HStack justifyContent="space-between" alignItems="flex-start" gap="4">
       <VStack flex={3} alignItems="start">
         <Heading as="h3" fontSize="xl">
           진료 심사 관련 서류
         </Heading>
-        <Image src={data.document} alt="비대면 진료 서류" width="full" />
+        <Image
+          src={getBlob(`${data.uid}/nftf.png`)}
+          alt="비대면 진료 서류"
+          width="full"
+        />
       </VStack>
 
       <VStack flex={2} alignItems="start">
