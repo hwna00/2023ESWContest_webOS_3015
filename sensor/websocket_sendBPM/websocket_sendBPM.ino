@@ -9,8 +9,8 @@
 #define USE_SERIAL Serial
 SocketIOclient socketIO;
 // wifi 연결 정보
-const char* ssid     = "hotspot";
-const char* password = "12345678";
+const char* ssid     = "abc";
+const char* password = "99991234";
 //bpm sensor code
 MAX30101 sensor;
 const auto kSamplingRate = sensor.SAMPLING_RATE_400SPS;
@@ -67,11 +67,11 @@ void socketIOEvent(socketIOmessageType_t type, uint8_t * payload, size_t length)
             break;
         case sIOtype_EVENT:
             USE_SERIAL.printf("[IOc] get event: %s\n", payload);
-            if(sp=="[bpm_start]"){
+            if(sp.indexOf("bpm_start")!=-1){
               send_message("bpm_start","room",20);
               send_message("bpm_end","room",readBPM(20000).c_str(),"value");
             }
-            else if(sp=="[welcome]"){
+            else if(sp.indexOf("welcome")!=-1){
               send_message("setup_senser","room",0);
             }
             else{
