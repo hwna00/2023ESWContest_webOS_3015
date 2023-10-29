@@ -32,10 +32,14 @@ export const uploadBlob = async (blob, uid) => {
   await uploadBytes(storageRef, blob);
 };
 
-export const getUserImage = email => {
-  getDownloadURL(ref(storage, `${email}/profileImg.png`))
-    .then(url => console.log(url))
-    .catch(() => null);
+export const getBlob = async path => {
+  try {
+    const url = await getDownloadURL(ref(storage, path));
+    return url;
+  } catch (error) {
+    console.log('error', error);
+    return '';
+  }
 };
 
 export const uploadNftfBlob = async (blob, path) => {
