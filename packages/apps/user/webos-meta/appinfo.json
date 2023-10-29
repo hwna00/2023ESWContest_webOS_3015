@@ -17,6 +17,7 @@
     "notification.operation",
     "application.launcher",
     "com.housepital.app.user.service.group",
+    "wifi.query",
     "wifi.management"
   ]
 }

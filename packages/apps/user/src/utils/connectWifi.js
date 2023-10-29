@@ -2,16 +2,16 @@ import LS2Request from '@enact/webos/LS2Request';
 
 const webOSBridge = new LS2Request();
 
-const connectWifi = () => {
+const connectWifi = (ssid, wifiPassword, availableSecurityTypes) => {
   webOSBridge.send({
     service: 'luna://com.webos.service.wifi',
     method: 'connect',
     parameters: {
-      ssid: 'wifi 이름',
+      ssid: ssid,
       security: {
-        securityType: 'WPA2',
+        securityType: availableSecurityTypes,
         simpleSecurity: {
-          passKey: 'a123456789!',
+          passKey: wifiPassword,
         },
       },
     },
