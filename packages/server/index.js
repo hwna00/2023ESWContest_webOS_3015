@@ -5,8 +5,10 @@ const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
 
+const vitalSign = require('./routes/vitalSign/vitalSign');
 const user = require('./routes/user/user');
 const review = require('./routes/review/review');
+const medicine = require('./routes/medicine/medicine');
 const hospital = require('./routes/hospital/hospital');
 const emergency = require('./routes/emergency/emergency');
 const doctor = require('./routes/doctor/doctor');
@@ -37,6 +39,8 @@ app.use('/api', review);
 app.use('/api', diagnosis);
 app.use('/api', counselor);
 app.use('/api', emergency);
+app.use('/api', medicine);
+app.use('/api', vitalSign);
 
 let kakaoTid; // TODO : 깔끔하게 고치기
 let partner_order_id;
@@ -102,10 +106,12 @@ wsServer.on('connection', socket => {
     socket.to(roomName).emit('setup_senser');
   });
 
+  socket.on('measure_start', roomName => {
+    socket.to(roomName).emit('temperature_start');
+  });
+
   socket.on('temperature_start', roomName => {
-    console.log('temp start at ', roomName);
-    // socket.to(roomName).emit('temp_start');
-    socket.to(roomName).emit('start', 'temp');
+    socket.to(roomName).emit('temperature_start');
   });
 
   socket.on('temp_end', (roomName, data) => {

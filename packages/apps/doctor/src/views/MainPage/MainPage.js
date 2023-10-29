@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { useQuery } from '@tanstack/react-query';
 import ReviewList from '@housepital/common/ReviewList/ReviewList';
 import ListSkeletion from '@housepital/common/ListSkeleton';
+import styles from '@housepital/common/css/HideScrollBar.module.css';
 import {
   Box,
   HStack,
@@ -39,50 +40,52 @@ const MainPage = function () {
         <Heading as="h2" fontSize="3xl" mb="6">
           예약된 진료
         </Heading>
-        <UnorderedList
-          listStyleType="none"
-          margin={0}
-          spacing="4"
-          height="96"
-          overflowY="scroll"
-        >
-          {isLoading ? (
-            <ListSkeletion />
-          ) : (
-            <>
-              {isError && (
-                <ListItem textAlign="center">
-                  예약을 불러올 수 없습니다.
-                </ListItem>
-              )}
-              {appointments?.map(appointment => (
-                <VStack
-                  as="li"
-                  key={appointment.id}
-                  padding="4"
-                  bgColor="primary.100"
-                  gap="2"
-                  borderRadius="md"
-                  alignItems="flex-start"
-                >
-                  <ChakraLink
-                    width="full"
-                    as={ReactRouterLink}
-                    to={`/appointments/${appointment.id}`}
-                    textDecoration="none !important"
+        <div className={styles.hideScrollBar}>
+          <UnorderedList
+            listStyleType="none"
+            margin={0}
+            spacing="4"
+            height="96"
+            overflowY="scroll"
+          >
+            {isLoading ? (
+              <ListSkeletion />
+            ) : (
+              <>
+                {isError && (
+                  <ListItem textAlign="center">
+                    예약을 불러올 수 없습니다.
+                  </ListItem>
+                )}
+                {appointments?.map(appointment => (
+                  <VStack
+                    as="li"
+                    key={appointment.id}
+                    padding="4"
+                    bgColor="primary.100"
+                    gap="2"
+                    borderRadius="md"
+                    alignItems="flex-start"
                   >
-                    <Text fontWeight="bold">
-                      예약자: {appointment.patientName}
-                    </Text>
-                    <Text>
-                      예약 시간: {appointment.date} {appointment.time}
-                    </Text>
-                  </ChakraLink>
-                </VStack>
-              ))}
-            </>
-          )}
-        </UnorderedList>
+                    <ChakraLink
+                      width="full"
+                      as={ReactRouterLink}
+                      to={`/appointments/${appointment.id}`}
+                      textDecoration="none !important"
+                    >
+                      <Text fontWeight="bold">
+                        예약자: {appointment.patientName}
+                      </Text>
+                      <Text>
+                        예약 시간: {appointment.date} {appointment.time}
+                      </Text>
+                    </ChakraLink>
+                  </VStack>
+                ))}
+              </>
+            )}
+          </UnorderedList>
+        </div>
       </Box>
       <Box flex={1}>
         <Heading as="h2" fontSize="3xl" mb="6">
