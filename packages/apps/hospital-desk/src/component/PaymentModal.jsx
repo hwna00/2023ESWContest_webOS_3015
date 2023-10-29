@@ -12,7 +12,7 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react';
-import { updatePayment } from '../api';
+import { updateAppointmentState, updatePayment } from '../api';
 
 function PaymentModal({ isOpen, onClose, appointmentId }) {
   const [payment, setPayment] = useState('');
@@ -22,7 +22,8 @@ function PaymentModal({ isOpen, onClose, appointmentId }) {
   };
 
   const handleConfirm = useCallback(() => {
-    updatePayment(appointmentId, parseInt(payment), '');
+    updatePayment(appointmentId, parseInt(payment));
+    updateAppointmentState(appointmentId, 'pc', '');
     window.location.reload();
 
     onClose();

@@ -14,13 +14,13 @@ import {
   useDisclosure,
   HStack,
   VStack,
-  SimpleGrid,
   Radio,
   RadioGroup,
   useCheckboxGroup,
   Link as ChakraLink,
   Skeleton,
   Text,
+  Grid,
 } from '@chakra-ui/react';
 
 import specialties from '../Specialties';
@@ -41,7 +41,7 @@ function AppointmentList() {
     isLoading,
     data = [],
     isError,
-  } = useQuery([category], getAllByCategory(category));
+  } = useQuery([category], () => getAllByCategory(category));
 
   useEffect(() => {
     if (category === 'doctors') {
@@ -158,7 +158,7 @@ function AppointmentList() {
       </Box>
 
       <Box width="full" maxHeight="80vh" overflowY="scroll">
-        <SimpleGrid columns={2} gap="8" mt="4" width="full" padding="8">
+        <Grid templateColumns="1fr 1fr" gap="8" mt="4" width="full">
           {isLoading ? (
             <>
               <Skeleton height="40" borderRadius="lg" />
@@ -182,7 +182,7 @@ function AppointmentList() {
               ))}
             </>
           )}
-        </SimpleGrid>
+        </Grid>
       </Box>
     </VStack>
   );

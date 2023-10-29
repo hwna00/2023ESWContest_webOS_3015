@@ -109,15 +109,15 @@ module.exports = function (
           sourceMap: shouldUseSourceMap,
           ...cssLoaderOptions,
           url: {
-              filter: url => {
-                // Don't handle absolute path urls
-                if (url.startsWith('/')) {
-                  return false;
-                }
+            filter: url => {
+              // Don't handle absolute path urls
+              if (url.startsWith('/')) {
+                return false;
+              }
 
-                return true;
-              },
+              return true;
             },
+          },
         },
       },
       {
@@ -174,7 +174,7 @@ module.exports = function (
       loader: require.resolve('less-loader'),
       options: {
         lessOptions: {
-          modifyVars: {__DEV__: !isEnvProduction, ...app.accent},
+          modifyVars: { __DEV__: !isEnvProduction, ...app.accent },
         },
         sourceMap: shouldUseSourceMap,
       },
@@ -237,10 +237,9 @@ module.exports = function (
           // output absolute-path mapped LESS sourcemaps, unaffected by this
           // function, while both css-loader and style-loader pseudo modules
           // will get their own sourcemaps. Good to differentiate.
-          return `${file  }?${  loader[0]}`;
-        } 
-          return file;
-        
+          return `${file}?${loader[0]}`;
+        }
+        return file;
       },
     },
     cache: {
@@ -282,8 +281,8 @@ module.exports = function (
       alias: fs.existsSync(
         path.join(app.context, 'node_modules', '@enact', 'i18n', 'ilib'),
       )
-        ? ({ilib: '@enact/i18n/ilib', ...app.alias})
-        : ({'@enact/i18n/ilib': 'ilib', ...app.alias}),
+        ? { ilib: '@enact/i18n/ilib', ...app.alias }
+        : { '@enact/i18n/ilib': 'ilib', ...app.alias },
       // Optional configuration for redirecting module requests.
       fallback: app.resolveFallback,
     },

@@ -9,6 +9,9 @@ import Root from '../components/Root/Root';
 import healthHistoryRoutes from './healthHistoryRoutes';
 import authRoutes from './authRoutes';
 import appointmentRoutes from './appointmentRoutes';
+import VideoCall from '../views/VideoCall/VideoCall';
+import MedicinesManage from '../views/MedicinesManage/MedicinesManage';
+import SideEffect from '../views/SideEffect';
 
 const router = createHashRouter(
   [
@@ -22,12 +25,20 @@ const router = createHashRouter(
           element: <MainPage />,
         },
         {
+          path: 'treatment/:appointmentId',
+          element: <VideoCall />,
+        },
+        {
           path: 'mypage',
           element: <MyPage />,
         },
         {
           path: 'medicines',
-          element: '',
+          element: <MedicinesManage />,
+        },
+        {
+          path: 'medicines/side-effects',
+          element: <SideEffect />,
         },
         {
           path: 'settings',

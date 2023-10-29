@@ -1,7 +1,10 @@
 import { useCallback, useState } from 'react';
 
 import { useNavigate, Link as ReactRouterLink } from 'react-router-dom';
-import { FaUserAlt, FaLock, FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
+import { FaUserAlt } from '@react-icons/all-files/fa/FaUserAlt';
+import { FaLock } from '@react-icons/all-files/fa/FaLock';
+import { FaRegEye } from '@react-icons/all-files/fa/FaRegEye';
+import { FaRegEyeSlash } from '@react-icons/all-files/fa/FaRegEyeSlash';
 import { useForm } from 'react-hook-form';
 import {
   Box,
@@ -24,6 +27,7 @@ import {
 import KakaoLoginButton from '../../../components/KakaoLoginButton/KakaoLoginButton';
 import NaverLoginButton from '../../../components/NaverLoginButton/NaverLoginButton';
 import { fbEmailLogIn } from '../../../../firebase';
+import useCreateToast from '@housepital/common/hooks/useCreateToast';
 
 function LogIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -32,6 +36,8 @@ function LogIn() {
   }, [showPassword]);
 
   const navigate = useNavigate();
+  const toast = useCreateToast();
+
   const {
     register,
     handleSubmit,
@@ -43,7 +49,7 @@ function LogIn() {
       if (user) {
         navigate('/');
       } else {
-        //TODO: 상황에 맞는 알림 전송하기 ex. 존재하지 않는 사용자입니다.
+        toast('존재하지 않는 사용자입니다. ');
       }
     });
   };

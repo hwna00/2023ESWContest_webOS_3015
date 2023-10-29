@@ -9,11 +9,11 @@ import {
 export const getAllByCategory = category => {
   switch (category) {
     case 'hospitals':
-      return getHospitals;
+      return getHospitals();
     case 'doctors':
-      return getDoctors;
+      return getDoctors();
     case 'favorites':
-      return getFavorites;
+      return getFavorites();
     default:
       throw new Error();
   }

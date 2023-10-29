@@ -23,17 +23,15 @@ const MainPage = function () {
   const hospital = useSelector(state => state.hospital);
   const [completeReservation, setCompleteReservation] = useState([]);
   const [ConfirmedReservation, setConfirmedReservation] = useState([]);
-  const { data, isLoading, error } = useQuery([hospital.id], getAppointments);
+  const { data, isLoading, error } = useQuery([hospital.id], getAppointments, {
+    enabled: !!hospital.id,
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
     if (data && !error) {
-      setConfirmedReservation(
-        data?.ac?.filter(reservation => reservation.stateId === 'ac') || [],
-      );
-      setCompleteReservation(
-        data?.dc?.filter(reservation => reservation.stateId === 'dc') || [],
-      );
+      setConfirmedReservation(data?.ac || []);
+      setCompleteReservation(data?.dc || []);
     }
     if (error) {
       navigate('/error-page');
@@ -54,35 +52,23 @@ const MainPage = function () {
               <StatisticCard
                 title="오늘 예정된 예약"
                 count={
-                  data.ac.filter(reservation =>
+                  ConfirmedReservation.filter(reservation =>
                     dayjs(reservation.date).isSame(now),
                   ).length
                 }
               />
               <StatisticCard
                 title="완료 대기"
-                count={
-                  data.dc.filter(reservation =>
-                    dayjs(reservation.date).isSame(now),
-                  ).length
-                }
+                count={completeReservation.length}
               />
               <StatisticCard
                 title="전체 환자"
                 count={
                   [
-                    ...data.aw.filter(reservation =>
-                      dayjs(reservation.date).isSame(now),
-                    ),
-                    ...data.ac.filter(reservation =>
-                      dayjs(reservation.date).isSame(now),
-                    ),
-                    ...data.dc.filter(reservation =>
-                      dayjs(reservation.date).isSame(now),
-                    ),
-                    ...data.pc.filter(reservation =>
-                      dayjs(reservation.date).isSame(now),
-                    ),
+                    ...(Array.isArray(data?.aw) ? data.aw : []),
+                    ...(Array.isArray(data?.ac) ? data.ac : []),
+                    ...(Array.isArray(data?.dc) ? data.dc : []),
+                    ...(Array.isArray(data?.pc) ? data.pc : []),
                   ].length
                 }
               />

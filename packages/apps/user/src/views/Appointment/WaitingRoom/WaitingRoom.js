@@ -1,43 +1,60 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { useSelector } from 'react-redux';
+import ListSkeletion from '@housepital/common/ListSkeleton';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Flex, Box, HStack, Text, UnorderedList } from '@chakra-ui/react';
+import { io } from 'socket.io-client';
 
 import WaitingItem from '../../../components/WaitingItem/WaitingItem';
 import BackButton from '../../../components/BackButton/BackButton';
-import { getAppointments } from '../../../api';
-import { useSelector } from 'react-redux';
-import ListSkeletion from '@housepital/common/ListSkeleton';
+import { deleteAppointment, getAppointments } from '../../../api';
+import useCreateToast from '@housepital/common/hooks/useCreateToast';
+
+const roomName = 'myRoom';
 
 function WaitingRoom() {
-  const uid = useSelector(state => state.me.uid);
-  const [appointments, setAppointments] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
+  const socketRef = useRef();
+  const [currAppointmentId, setCurrAppointmentId] = useState();
 
-  const fetchAppointments = useCallback(async () => {
-    if (!uid) {
-      setAppointments([]);
-      setIsLoading(true);
-      return;
-    }
-    try {
-      const response = await getAppointments(uid);
-      setAppointments(response);
-      setIsError(false);
-    } catch {
-      setIsError(true);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [uid]);
+  const uid = useSelector(state => state.me.uid);
+  const queryClient = useQueryClient();
+
+  const { isLoading, data, isError } = useQuery({
+    queryKey: ['appointments', uid],
+    queryFn: () => getAppointments(uid),
+    enabled: !!uid,
+  });
+  const toast = useCreateToast();
+  const { mutate } = useMutation(
+    appointmentId => deleteAppointment(appointmentId),
+    {
+      onSuccess: () => {
+        toast('삭제에 성공했습니다.');
+        queryClient.invalidateQueries(uid);
+      },
+      onError: () => {
+        toast('삭제에 실패했습니다.');
+      },
+    },
+  );
+
+  const cancelAppointment = useCallback(
+    async appointmentId => {
+      mutate(appointmentId);
+    },
+    [mutate],
+  );
 
   useEffect(() => {
-    fetchAppointments();
-  }, [fetchAppointments]);
+    socketRef.current = io(`${process.env.REACT_APP_BACKEND_API}`);
 
-  const cancelAppointment = useCallback(appointmentId => {
-    // TODO: appointment id 기반으로 예약 취소하기
-    console.log(appointmentId);
+    socketRef.current.on('trmt_start', async id => {
+      console.log('trmt_start: ', id);
+      setCurrAppointmentId(id);
+    });
+
+    socketRef.current.emit('join_room', roomName);
   }, []);
 
   return (
@@ -48,7 +65,7 @@ function WaitingRoom() {
 
       <HStack
         width="full"
-        justifyContent="space-evenly"
+        justifyContent="space-between"
         fontSize="lg"
         fontWeight="bold"
         mt="8"
@@ -60,9 +77,9 @@ function WaitingRoom() {
           병원
         </Box>
         <Box flex={1} textAlign="center" fontWeight="bold">
-          의사
+          담당 의사
         </Box>
-        <Box flex={1} />
+        <Box flex={2} />
       </HStack>
 
       <UnorderedList
@@ -81,10 +98,11 @@ function WaitingRoom() {
             {isError && (
               <Text textAlign="center">데이터를 불러올 수 없습니다.</Text>
             )}
-            {appointments?.map(appointment => (
+            {data?.map(appointment => (
               <WaitingItem
                 key={appointment.id}
-                appointment={appointment}
+                appointment={{ uid, ...appointment }}
+                currAppointmentId={currAppointmentId}
                 cancelAppointment={cancelAppointment}
               />
             ))}

@@ -1,8 +1,7 @@
 import axios from 'axios';
-import { Error } from 'mongoose';
 
 const instance = axios.create({
-  baseURL: 'http://localhost:3000/api',
+  baseURL: `${process.env.REACT_APP_BACKEND_API}/api`,
 });
 
 export const fetchResultsTime = async ykiho => {
@@ -14,14 +13,14 @@ export const fetchResultsTime = async ykiho => {
 };
 
 export const createHospital = async hospital => {
-  const { data } = await instance.post('hospitals', { data: hospital });
+  const { data } = await instance.post('/hospitals', { data: hospital });
 
   return data;
 };
 
-export const updatePayment = (appointmentId, payment, pharmacyYkiho) => {
+export const updatePayment = (appointmentId, payment) => {
   instance.patch(`/diagnoses/${appointmentId}`, {
-    data: { payment: payment, pharmacyYkiho: pharmacyYkiho },
+    data: { payment: payment },
   });
 };
 
@@ -43,7 +42,7 @@ export const updateAppointmentState = async (
   newStateId,
   rejectionReason,
 ) => {
-  return await instance.patch(`appointments/${id}`, {
+  return await instance.patch(`/appointments/${id}`, {
     data: {
       stateId: newStateId,
       rejectionReason: rejectionReason,
@@ -55,7 +54,7 @@ export const getPatientDetail = async queryKey => {
 
   const response = await instance.get(`/appointments/${appointmentId}?`);
   if (response.data) {
-    return response.data;
+    return response.data.result;
   } else {
     return {};
   }

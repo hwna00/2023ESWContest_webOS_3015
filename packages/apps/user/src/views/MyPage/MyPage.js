@@ -24,13 +24,14 @@ import { useSelector } from 'react-redux';
 import { DaumPostcodeEmbed } from 'react-daum-postcode';
 import { useCallback, useEffect, useState } from 'react';
 import { updateMe } from '../../api';
-
+import useCreateToast from '@housepital/common/hooks/useCreateToast';
 //TODO: 성별 정보를 회원가입에서 받아야 함
 //TODO: 끝나면 인증페이지 접근 제한
 const MyPage = function () {
   const [address, setAddress] = useState('');
 
   const me = useSelector(state => state.me);
+  const toast = useCreateToast();
   const {
     register,
     handleSubmit,
@@ -42,11 +43,11 @@ const MyPage = function () {
   const onSubmit = data => {
     updateMe(me.uid, data)
       .then(() => {
-        //TODO: 성공했다고 알림
+        toast('수정에 성공했습니다.');
         console.log('성공');
       })
       .catch(err => {
-        //TODO: 실패했다고 알림
+        toast('수정에 실패했습니다.');
         console.log(err);
       });
   };

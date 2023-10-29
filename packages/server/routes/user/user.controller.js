@@ -1,4 +1,5 @@
 const convertUser = require('../../utils/convertUser');
+const classifyVitalSigns = require('../../utils/classifyVitalSigns');
 const classifyAppointments = require('../../utils/classifyAppointments');
 const pool = require('../../config/db');
 
@@ -77,10 +78,58 @@ const readUserAppointmentsQuery = async (connection, uid) => {
 };
 
 const readUserDiagnosesQuery = async (connection, uid) => {
-  const Query = `SELECT A.date, H.hospital_name AS hospitalName, DR.pharmacy AS pharmacyYkiho, DR.payment FROM DiagnosisRecords DR 
+  const Query = `SELECT DR.appointment_id AS id, A.date, H.hospital_name AS hospitalName, DR.pharmacy_name AS pharmacyName, DR.payment FROM DiagnosisRecords DR 
       JOIN Appointments A ON DR.appointment_id = A.id AND A.user_id = ? 
         JOIN Doctors D USING(doctor_id) JOIN HospitalName H USING(hospital_id)`;
   const Params = [uid];
+
+  const rows = await connection.query(Query, Params);
+
+  return rows;
+};
+
+const readUserMedecinesQuery = async (connection, uid, day) => {
+  const selectAllMedecinesQuery = `SELECT medecine_id AS id, user_id AS uid, name AS medecineName, ifnull(intake_days, JSON_ARRAY()) AS intakeDays, ifnull(intake_times, JSON_ARRAY()) AS intakeTimes 
+  FROM Medecines WHERE user_id = ?;`;
+  const selectMedecinesByDayQuery = `SELECT medecine_id AS id, user_id AS uid, name AS medecineName, ifnull(intake_times, JSON_ARRAY()) AS intakeTimes 
+  FROM Medecines WHERE user_id = ? AND JSON_CONTAINS(intake_days, JSON_QUOTE(?));`;
+  const Params = [uid, day];
+
+  const Query = !day ? selectAllMedecinesQuery : selectMedecinesByDayQuery;
+
+  const rows = await connection.query(Query, Params);
+
+  return rows;
+};
+
+const readUservitalSignsQuery = async (connection, uid, type) => {
+  let Query;
+  switch (type) {
+    case 'temperature':
+      Query =
+        'SELECT id, value, date, time FROM Temperature WHERE user_id = ?;';
+      break;
+    case 'heartRate':
+      Query = 'SELECT id, value, date, time FROM HeartRate WHERE user_id = ?;';
+      break;
+    default:
+      Query = `WITH CTE_HeartRate AS (
+        SELECT 'heartRate' AS type, id, value, date, time 
+        FROM HeartRate 
+        WHERE user_id =?
+        ),
+        CTE_Temperature AS (
+        SELECT 'temperature' AS type, id, value, date, time 
+        FROM Temperature 
+        WHERE user_id = ?
+        )
+    
+        SELECT * FROM CTE_HeartRate
+        UNION
+        SELECT * FROM CTE_Temperature
+        ORDER BY date, time;`;
+  }
+  const Params = [uid, uid];
 
   const rows = await connection.query(Query, Params);
 
@@ -245,6 +294,82 @@ exports.readUserDiagnoses = async (req, res) => {
         isSuccess: true,
         code: 200,
         message: '유저 진료기록 조회 성공',
+      });
+    } catch (err) {
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSuccess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
+exports.readUserMedecines = async (req, res) => {
+  const { uid } = req.params;
+  const { day } = req.query;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      const [rows] = await readUserMedecinesQuery(connection, uid, day);
+      rows.forEach(medecine => {
+        medecine.intakeTimes.sort();
+      });
+      return res.json({
+        result: rows,
+        isSuccess: true,
+        code: 200,
+        message: '복약정보 조회 성공',
+      });
+    } catch (err) {
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSuccess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
+exports.readUserVitalSigns = async (req, res) => {
+  const { uid } = req.params;
+  const { type } = req.query;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      const [rows] = await readUservitalSignsQuery(connection, uid, type);
+      if (!type) {
+        const classifiedRows = classifyVitalSigns(rows);
+        return res.json({
+          result: classifiedRows,
+          isSuccess: true,
+          code: 200,
+          message: '활력징후 조회 성공',
+        });
+      }
+      return res.json({
+        result: rows,
+        isSuccess: true,
+        code: 200,
+        message: '활력징후 조회 성공',
       });
     } catch (err) {
       return res.json({
