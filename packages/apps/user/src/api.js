@@ -26,9 +26,9 @@ export const createAppointment = async data => {
 export const getAppointments = async uid => {
   try {
     const { data } = await instance.get(`users/${uid}/appointments`);
-    const { aw, ac } = await data.result;
+    const { aw, ac, ar } = await data.result;
 
-    return [...aw, ...ac];
+    return [...aw, ...ac, ...ar];
   } catch (error) {
     throw new Error(error);
   }
@@ -129,7 +129,6 @@ export const updateDiagnosis = async (appointmentId, pharmacy) => {
 export const getMedicines = async (uid, day = '') => {
   try {
     const { data } = await instance.get(`/users/${uid}/medecines?day=${day}`);
-
     if (!data.isSuccess) {
       return null;
     }
@@ -141,7 +140,10 @@ export const getMedicines = async (uid, day = '') => {
 };
 
 export const addMedicine = async (uid, intake) => {
-  const { data } = await instance.post('/medicines', { data: { uid, intake } });
+  const { data } = await instance.post('/medicines', {
+    data: { uid, ...intake },
+  });
+  console.log(data);
   return data;
 };
 
@@ -213,4 +215,71 @@ export const getPharmacies = async ({ pageNo, numOfRows }) => {
     pharmacies,
     pageNo,
   };
+};
+
+export const createVitalSign = async (uid, value) => {
+  const { data } = await instance.post('/vital-signs', {
+    data: { uid, ...value },
+  });
+  return data;
+};
+
+export const getVitalSigns = async (uid, type) => {
+  let typeForDb;
+  switch (type) {
+    case 'bpm':
+      typeForDb = 'heartRate';
+      break;
+    default:
+      typeForDb = type;
+      break;
+  }
+  const { data } = await instance.get(
+    `/users/${uid}/vital-signs?type=${typeForDb}`,
+  );
+
+  if (!data.isSuccess) {
+    return [];
+  }
+  return [
+    {
+      id: type,
+      data: data.result.map(item => ({
+        x: item.time,
+        y: item.value,
+      })),
+    },
+  ];
+};
+
+export const getSideEffect = async itemName => {
+  const service_url =
+    'http://apis.data.go.kr/1471000/DrbEasyDrugInfoService/getDrbEasyDrugList';
+
+  const { data } = await axios.get(service_url, {
+    params: {
+      serviceKey: process.env.REACT_APP_DATA_DECODING_API_KEY,
+      itemName,
+      type: 'json',
+    },
+  });
+
+  if (!data.body.items) {
+    return `${itemName}의 정보가 등록되어 있지 않습니다.`;
+  }
+  return data.body.items[0];
+};
+
+export const getIntent = async symptom => {
+  const { data } = await instance.post('/dialogflow', { symptom });
+  return data;
+};
+
+export const getCenters = async () => {
+  const { data } = await instance.get('counselors');
+
+  return data.result.map(center => ({
+    name: center.center_name,
+    id: center.counselor_id,
+  }));
 };

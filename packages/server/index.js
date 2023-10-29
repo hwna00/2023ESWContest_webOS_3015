@@ -16,11 +16,12 @@ const diagnosis = require('./routes/diagnosis/diagnosis');
 const counselor = require('./routes/counselor/counselor');
 const auth = require('./routes/auth/auth');
 const appointment = require('./routes/appointment/appointment');
+const { executeQueries } = require('./config/dialogflowAgent');
 
 require('dotenv').config();
 
 const app = express();
-const port = 3000 || process.env.PORT;
+const port = parseInt(process.env.PORT, 10) || 3000;
 const httpServer = http.createServer(app);
 const wsServer = SocketIO(httpServer, {
   cors: { origin: '*' },
@@ -63,6 +64,12 @@ app.get('/kakao-payment/callback', async (req, res) => {
       'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
     },
   });
+});
+
+app.post('/api/dialogflow', async (req, res) => {
+  const { symptom } = req.body;
+  const result = await executeQueries('123123', [symptom]);
+  res.json(result);
 });
 
 wsServer.on('connection', socket => {
@@ -110,22 +117,40 @@ wsServer.on('connection', socket => {
     socket.to(roomName).emit('temperature_start');
   });
 
-  socket.on('temperature_start', roomName => {
-    socket.to(roomName).emit('temperature_start');
+
+  socket.on('temperature_start', (roomName, time) => {
+    socket.to(roomName).emit('temperature_start', time);
+
   });
 
-  socket.on('temp_end', (roomName, data) => {
+  socket.on('temperature_end', (roomName, data) => {
     console.log('result: ', data);
     socket.to(roomName).emit('temperature_end', data);
   });
 
-  socket.on('bmp_start', roomName => {
-    socket.to(roomName).emit('bmp_start');
+  socket.on('bpm_start', roomName => {
+    socket.to(roomName).emit('bpm_start');
   });
 
-  socket.on('bmp_end', (roomName, data) => {
+  socket.on('bpm_end', (roomName, data) => {
     console.log('result: ', data);
-    socket.to(roomName).emit('bmp_end', data);
+    socket.to(roomName).emit('bpm_end', data);
+  });
+
+  //* senser area
+  socket.on('emergency_call', (centerid, uid) => {
+    console.log('emergency_call');
+    socket.to(centerid).emit('emergency_call', uid);
+  });
+
+  socket.on('emergency_ready', (roomName, emergencyId) => {
+    console.log('emergency_ready');
+    socket.to(roomName).emit('emergency_ready', emergencyId);
+  });
+
+  socket.on('emergency_end', roomName => {
+    console.log('emergency_end');
+    socket.to(roomName).emit('emergency_end');
   });
 
   socket.on('disconnect', () => {
@@ -136,3 +161,5 @@ wsServer.on('connection', socket => {
 httpServer.listen(port, () => {
   console.log(`Server on port: ${port}`);
 });
+
+//* emergency area

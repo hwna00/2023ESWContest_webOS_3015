@@ -22,6 +22,7 @@ const SignUpForm = function ({
   const navigate = useNavigate();
   const reactHookForm = useForm({ mode: 'all' });
   const dispatch = useDispatch();
+  const toast = useCreateToast();
   const profileImgBlob = useSelector(state => state.signUp.blob);
 
   useEffect(() => {
@@ -58,7 +59,7 @@ const SignUpForm = function ({
       profileImgBlob,
     });
     const response = await createUser({ uid, email, ...rest });
-    const toast = useCreateToast;
+
     if (response.isSuccess) {
       dispatch(setMe({ uid, email, ...rest }));
       navigate('/');

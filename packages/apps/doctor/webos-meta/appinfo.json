@@ -9,6 +9,9 @@
   "miniicon": "icon-mini.png",
   "largeIcon": "icon-large.png",
   "uiRevision": 2,
+  "allowAudioCapture": true,
+  "allowVideoCapture": true,
+  "enableWebOSVDA": true,
   "requiredPermissions": [
     "time.query",
     "activity.operation",

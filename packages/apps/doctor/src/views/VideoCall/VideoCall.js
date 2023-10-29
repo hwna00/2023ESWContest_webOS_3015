@@ -126,9 +126,7 @@ const VideoCall = function () {
   };
 
   useEffect(() => {
-    socketRef.current = io(`${process.env.REACT_APP_BACKEND_API}`, {
-      transports: ['websocket'],
-    });
+    socketRef.current = io(`${process.env.REACT_APP_BACKEND_API}`);
 
     socketRef.current.on('welcome', async () => {
       await createOffer();

@@ -8,6 +8,13 @@ const createCounselorQuery = async (connection, data) => {
   await connection.query(Query, Params);
 };
 
+const readCounselorsQuery = async connection => {
+  const Query = 'SELECT * FROM Counselors';
+
+  const rows = await connection.query(Query);
+  return rows;
+};
+
 const readCounselorQuery = async (connection, counselorId) => {
   const Query =
     'SELECT counselor_id AS counselorId, name AS counselorName, center_name AS centerName FROM Counselors WHERE counselor_id = ?;';
@@ -64,6 +71,43 @@ exports.createCounselor = async (req, res) => {
       connection.release();
     }
   } catch (err) {
+    return res.json({
+      isSuccess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
+exports.readCounselors = async (req, res) => {
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      const [data] = await readCounselorsQuery(connection);
+
+      return res.json({
+        result: data,
+        isSuccess: true,
+        code: 201,
+        message: '센터 조회 성공',
+      });
+    } catch (err) {
+      if (err.errno === 1062) {
+        return res.json({
+          isSuccess: false,
+          code: 409,
+          message: '센터를 찾을 수 없습니다.',
+        });
+      }
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (error) {
     return res.json({
       isSuccess: false,
       code: 500,

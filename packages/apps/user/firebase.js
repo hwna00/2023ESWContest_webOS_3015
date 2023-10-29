@@ -26,19 +26,24 @@ const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 export const auth = getAuth(app);
 
+// TODO: nftfblob 함수와 통일하기 - path 방식으로
 export const uploadBlob = async (blob, uid) => {
   const storageRef = ref(storage, `${uid}/profileImg.png`);
   await uploadBytes(storageRef, blob);
 };
 
-export const getUserImage = email => {
-  getDownloadURL(ref(storage, `${email}/profileImg.png`))
-    .then(url => console.log(url))
-    .catch(() => null);
+export const getBlob = async path => {
+  try {
+    const url = await getDownloadURL(ref(storage, path));
+    return url;
+  } catch (error) {
+    console.log('error', error);
+    return '';
+  }
 };
 
-export const uploadNftfBlob = async (blob, uid) => {
-  const storageRef = ref(storage, `${uid}/nftf.png`);
+export const uploadNftfBlob = async (blob, path) => {
+  const storageRef = ref(storage, path);
   await uploadBytes(storageRef, blob);
 };
 
