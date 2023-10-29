@@ -303,7 +303,7 @@ const AppointForm = function ({
               bgColor={'primary.200'}
               padding={'4'}
               borderRadius={'md'}
-              isInvalid={errors.nftfType}
+              isInvalid={errors.nftfId}
             >
               <RadioGroup>
                 <Box display={'flex'} flexDirection={'column'} gap={'4'}>
@@ -312,7 +312,7 @@ const AppointForm = function ({
                     colorScheme="primary"
                     value="f1"
                     size={'lg'}
-                    {...register('nftfType')}
+                    {...register('nftfId')}
                   >
                     섬벽지 거주자
                   </Radio>
@@ -320,7 +320,7 @@ const AppointForm = function ({
                     colorScheme="primary"
                     value="f2"
                     size={'lg'}
-                    {...register('nftfType')}
+                    {...register('nftfId')}
                   >
                     만 65세 이상 이용자
                   </Radio>
@@ -328,7 +328,7 @@ const AppointForm = function ({
                     colorScheme="primary"
                     value="f3"
                     size={'lg'}
-                    {...register('nftfType')}
+                    {...register('nftfId')}
                   >
                     장애인 이용자
                   </Radio>
@@ -336,7 +336,7 @@ const AppointForm = function ({
                     colorScheme="primary"
                     value="f4"
                     size={'lg'}
-                    {...register('nftfType')}
+                    {...register('nftfId')}
                   >
                     만 18세 미만 이용자
                   </Radio>
@@ -353,7 +353,7 @@ const AppointForm = function ({
                     colorScheme="primary"
                     value="s1"
                     size={'lg'}
-                    {...register('nftfType')}
+                    {...register('nftfId')}
                   >
                     30일 이내 대면 진료 이력
                   </Radio>
@@ -361,13 +361,13 @@ const AppointForm = function ({
                     colorScheme="primary"
                     value="s2"
                     size={'lg'}
-                    {...register('nftfType')}
+                    {...register('nftfId')}
                   >
                     1년 이내 대면 진료 이력
                   </Radio>
                 </Box>
               </RadioGroup>
-              <FormErrorMessage>{errors.nftfType?.message}</FormErrorMessage>
+              <FormErrorMessage>{errors.nftfId?.message}</FormErrorMessage>
             </FormControl>
 
             <Button
