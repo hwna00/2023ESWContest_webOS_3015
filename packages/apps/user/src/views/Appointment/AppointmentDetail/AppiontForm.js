@@ -240,16 +240,21 @@ const AppointForm = function ({
       <Box width="full">
         <Grid
           width="full"
-          maxH="64"
+          height="64"
           overflowY="scroll"
           bgColor="primary.200"
           padding="4"
-          templateColumns="repeat(4, 1fr)"
+          templateColumns={timeTable.length === 0 ? '1fr' : 'repeat(4, 1fr)'}
           placeItems="center"
           gap={4}
           borderRadius="md"
           {...group}
         >
+          {timeTable.length === 0 && (
+            <Text fontSize="lg" fontWeight="bold">
+              예약 가능한 시간이 없습니다.
+            </Text>
+          )}
           {timeTable.map(key => {
             const radio = getRadioProps({ value: key });
             return (
