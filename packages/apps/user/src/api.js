@@ -225,7 +225,18 @@ export const createVitalSign = async (uid, value) => {
 };
 
 export const getVitalSigns = async (uid, type) => {
-  const { data } = await instance.get(`/users/${uid}/vital-signs?type=${type}`);
+  let typeForDb;
+  switch (type) {
+    case 'bpm':
+      typeForDb = 'heartRate';
+      break;
+    default:
+      typeForDb = type;
+      break;
+  }
+  const { data } = await instance.get(
+    `/users/${uid}/vital-signs?type=${typeForDb}`,
+  );
 
   if (!data.isSuccess) {
     return [];

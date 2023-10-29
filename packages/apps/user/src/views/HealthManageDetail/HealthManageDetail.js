@@ -46,25 +46,32 @@ const HealthManageDetail = function () {
 
   const queryClient = useQueryClient();
   const { data: vitalSigns } = useQuery(
-    ['vitalSigns'],
+    ['vitalSigns', type],
     () => getVitalSigns(uid, type),
     { enabled: !!uid },
   );
   const { mutate } = useMutation(value => createVitalSign(uid, value), {
     onSuccess: () => {
-      toast('건강 기록을 저장하였습니다.');
+      // toast('건강 기록을 저장하였습니다.');
       queryClient.invalidateQueries('vitalSigns');
     },
   });
 
   const onStartClick = useCallback(() => {
+    setMeasuredData('');
     socketRef.current.emit(`${type}_start`, roomName);
   }, [type]);
 
   const onSaveClick = useCallback(() => {
+    let typeForDb;
+    switch (type) {
+      case 'bpm':
+        typeForDb = 'heartRate';
+        break;
+    }
     mutate({
       value: measuredData,
-      type,
+      type: typeForDb,
       date: dayjs(new Date()).format('YYYY-MM-DD'),
       time: dayjs(new Date()).format('HH:mm'),
     });
@@ -96,10 +103,12 @@ const HealthManageDetail = function () {
     });
 
     socketRef.current.on(`${type}_end`, measured => {
-      try {
-        setMeasuredData(Math.round(measured.value * 10) / 10);
-      } catch {
+      console.log(measured);
+      const filteredData = Math.round(measured.value * 10) / 10;
+      if (isNaN(filteredData)) {
         setMeasuredData('다시 측정해주세요');
+      } else {
+        setMeasuredData(filteredData);
       }
     });
 
