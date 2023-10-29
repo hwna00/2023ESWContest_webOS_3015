@@ -1,5 +1,3 @@
-
-
 #include <WiFi.h>
 #include <WiFiClient.h>
 #include <string.h>
@@ -11,8 +9,8 @@
 #define USE_SERIAL Serial
 SocketIOclient socketIO;
 // wifi 연결 정보
-const char* ssid     = "koss";
-const char* password = "a123456789!";
+const char* ssid     = "hotspot";
+const char* password = "12345678";
 //bpm sensor code
 MAX30101 sensor;
 const auto kSamplingRate = sensor.SAMPLING_RATE_400SPS;
@@ -51,189 +49,35 @@ bool finger_detected = false;
 float last_diff = NAN;
 bool crossed = false;
 long crossed_time = 0;
+int average_bpm;
 //bpm sensor code
 // Use WiFiClient class to create TCP connections
 unsigned long Timestamp = 0;
 WiFiClient client;
-void hexdump(const void *mem, uint32_t len, uint8_t cols = 16) {
-  const uint8_t* src = (const uint8_t*) mem;
-  USE_SERIAL.printf("\n[HEXDUMP] Address: 0x%08X len: 0x%X (%d)", (ptrdiff_t)src, len, len);
-  for(uint32_t i = 0; i < len; i++) {
-    if(i % cols == 0) {
-      USE_SERIAL.printf("\n[0x%08X] 0x%08X: ", (ptrdiff_t)src, i);
-    }
-    USE_SERIAL.printf("%02X ", *src);
-    src++;
-  }
-  USE_SERIAL.printf("\n");
-}
-String readBPM(unsigned long measurement_time){
-  unsigned long ct=millis()+measuremet_time;
-  while(1){
-    if(ct>millis()){
-      int average_bpm = averager.process(bpm);
-
-      // Show if enough samples have been collected
-      if(averager.count() > kSampleThreshold) {
-           
-           return String(average_bpm);
-      }
-      else{
-        return String("다시 측정해 주세요");
-      }
-    }
-    auto sample = sensor.readSample(1000);
-    float current_value = sample.red;
-    if(sample.red > kFingerThreshold) {
-      if(millis() - finger_timestamp > kFingerCooldownMs) {
-        //finger_detected = true;
-      }
-    }
-    else {
-      // Reset values if the finger is removed
-      differentiator.reset();
-      averager.reset();
-      low_pass_filter.reset();
-      high_pass_filter.reset();
-
-      //finger_detected = false;
-      finger_timestamp = millis();
-      USE_SERIAL.println("reseting ~~ wait plz");
-      continue;
-    }
-    current_value = low_pass_filter.process(current_value);
-    current_value = high_pass_filter.process(current_value);
-    float current_diff = differentiator.process(current_value);
-
-    // Valid values?
-    if(!isnan(current_diff) && !isnan(last_diff)) {
-
-      // Detect Heartbeat - Zero-Crossing
-      if(last_diff > 0 && current_diff < 0) {
-        crossed = true;
-        crossed_time = millis();
-      }
-
-      if(current_diff > 0) {
-        crossed = false;
-      }
-
-      // Detect Heartbeat - Falling Edge Threshold
-      if(crossed && current_diff < kEdgeThreshold) {
-        if(last_heartbeat != 0 && crossed_time - last_heartbeat > 300) {
-          // Show Results
-          int bpm = 60000/(crossed_time - last_heartbeat);
-          if(bpm > 50 && bpm < 250) {
-            // Average?
-            if(kEnableAveraging) {
-              int average_bpm = averager.process(bpm);
-
-              // Show if enough samples have been collected
-              if(averager.count() > kSampleThreshold) {
-                Serial.print("Heart Rate (avg, bpm): ");
-                Serial.println(average_bpm);
-                //return String(average_bpm);
-              }
-            }
-            else {
-              Serial.print("Heart Rate (current, bpm): ");
-              Serial.println(bpm);  
-            }
-          }
-        }
-
-        crossed = false;
-        last_heartbeat = crossed_time;
-      }
-  }
-  last_diff = current_diff;
-}
-}
-bool sendBPM(unsigned long measurement_time){
-  DynamicJsonDocument doc(1024);
-  JsonArray array = doc.to<JsonArray>();
-  array.add("");//Please write the bmp event name
-  array.add("room");
-  String output;
-  serializeJson(doc, output);
-  param1["temp"] = readBPM(measurement_time);           
-              // Send event
-  socketIO.sendEVENT(output);
-  USE_SERIAL.println(output);
-  return true;
-}
-void start_temp(){
-  DynamicJsonDocument doc(1024);
-  JsonArray array = doc.to<JsonArray>();
-  array.add("temp_end");
-  array.add("room");
-  array.add("5");
-  String output;
-  serializeJson(doc, output);
-  socketIO.sendEVENT(output);
-}
 void socketIOEvent(socketIOmessageType_t type, uint8_t * payload, size_t length) {
+    String sp=String((char*)payload);
     switch(type) {
         case sIOtype_DISCONNECT:
             USE_SERIAL.printf("[IOc] Disconnected!\n");
             break;
         case sIOtype_CONNECT:
             USE_SERIAL.printf("[IOc] Connected to url: %s\n", payload);
-
-            // join default namespace (no auto join in Socket.IO V3)
             socketIO.send(sIOtype_CONNECT, "/");
-            if(1){
-              DynamicJsonDocument doc(1024);
-              JsonArray array = doc.to<JsonArray>();
-              array.add("join_room");
-              array.add("room");
-              String output;
-              serializeJson(doc, output);
-
-              // Send event
-              socketIO.sendEVENT(output);
-
-              // Print JSON for debugging
-              USE_SERIAL.println(output);
-              }
+            send_message("join_room","room",0);
             break;
         case sIOtype_EVENT:
             USE_SERIAL.printf("[IOc] get event: %s\n", payload);
-            else if(payload[2]=='b'){
-              USE_SERIAL.println("bpm ricived event");
-              sendBPM(20000);
+            if(sp=="[bpm_start]"){
+              send_message("bpm_start","room",20);
+              send_message("bpm_end","room",readBPM(20000).c_str(),"value");
             }
-            else if(payload[2]=='w'){
-              DynamicJsonDocument doc(1024);
-              JsonArray array = doc.to<JsonArray>();
-              array.add("setup_senser");
-              array.add("room");
-              String output;
-              serializeJson(doc, output);
-
-              // Send event
-              socketIO.sendEVENT(output);
-              USE_SERIAL.print("w recived : ");
-              // Print JSON for debugging
-              USE_SERIAL.println(output);
+            else if(sp=="[welcome]"){
+              send_message("setup_senser","room",0);
+            }
+            else{
+              Serial.println("paylad no mac");
             }
             break;  
-        case sIOtype_ACK:
-            USE_SERIAL.printf("[IOc] get ack: %u\n", length);
-            //hexdump(payload, length);
-            break;
-        case sIOtype_ERROR:
-            USE_SERIAL.printf("[IOc] get error: %u\n", length);
-            //hexdump(payload, length);
-            break;
-        case sIOtype_BINARY_EVENT:
-            USE_SERIAL.printf("[IOc] get binary: %u\n", length);
-            //hexdump(payload, length);
-            break;
-        case sIOtype_BINARY_ACK:
-            USE_SERIAL.printf("[IOc] get binary ack: %u\n", length);
-            //hexdump(payload, length);
-            break;
     }
 }
 
@@ -270,10 +114,132 @@ void setup() {
       Serial.println("oh no");
     }
   }
-  socketIO.begin("192.168.1.74",3000,"/socket.io/?EIO=4");
+  socketIO.begin("18.117.97.128",3000,"/socket.io/?EIO=4");
     // event handler 
   socketIO.onEvent(socketIOEvent);
 }
 void loop() {
   socketIO.loop();
+}
+void send_message(char* event_name,char* id,const char* val,char* key){
+  DynamicJsonDocument doc(1024);
+  JsonArray array = doc.to<JsonArray>();
+  array.add(event_name); //Please write the bmp event name
+  array.add(id);
+  String output;
+  JsonObject param1 = array.createNestedObject();
+  param1[key] = val;           
+  serializeJson(doc, output);
+  socketIO.sendEVENT(output);
+  Serial.println("sm1 :");
+  Serial.println(output);
+}
+void send_message(char* event_name,char* id,unsigned long measurement_time){
+  DynamicJsonDocument doc(1024);
+  JsonArray array = doc.to<JsonArray>();
+  array.add(event_name);
+  array.add(id);
+  if(measurement_time>0) array.add(String(measurement_time));
+  String output;
+  serializeJson(doc, output);
+  socketIO.sendEVENT(output);
+  Serial.println("sm2 :");
+  Serial.println(output);
+}
+String readBPM(unsigned long measurement_time){
+  unsigned long ct= millis() + measurement_time;
+  while(1){
+    if(ct < millis()){
+      //int average_bpm = averager.process(bpm);
+
+      // Show if enough samples have been collected
+      if(averager.count() > kSampleThreshold) {
+           
+           return String(average_bpm);
+      }
+      else{
+        return String("다시 측정해 주세요");
+      }
+    }
+    auto sample = sensor.readSample(1000);
+    float current_value = sample.red;
+  
+    // Detect Finger using raw sensor value
+    if(sample.red > kFingerThreshold) {
+      if(millis() - finger_timestamp > kFingerCooldownMs) {
+        finger_detected = true;
+      }
+    }
+    else {
+    // Reset values if the finger is removed
+      differentiator.reset();
+      averager.reset();
+      low_pass_filter.reset();
+      high_pass_filter.reset();
+    
+      finger_detected = false;
+      finger_timestamp = millis();
+    }
+
+    if(finger_detected) {
+      current_value = low_pass_filter.process(current_value);
+      current_value = high_pass_filter.process(current_value);
+      float current_diff = differentiator.process(current_value);
+
+      // Valid values?
+      if(!isnan(current_diff) && !isnan(last_diff)) {
+      
+      // Detect Heartbeat - Zero-Crossing
+        if(last_diff > 0 && current_diff < 0) {
+          crossed = true;
+          crossed_time = millis();
+        }
+      
+        if(current_diff > 0) {
+          crossed = false;
+        }
+  
+      // Detect Heartbeat - Falling Edge Threshold
+        if(crossed && current_diff < kEdgeThreshold) {
+          if(last_heartbeat != 0 && crossed_time - last_heartbeat > 300) {
+          // Show Results
+            int bpm = 60000/(crossed_time - last_heartbeat);
+            if(bpm > 50 && bpm < 250) {
+            // Average?
+              if(kEnableAveraging) {
+                average_bpm = averager.process(bpm);
+  
+              // Show if enough samples have been collected
+                if(averager.count() > kSampleThreshold) {
+                  Serial.print("Heart Rate (avg, bpm): ");
+                  Serial.println(average_bpm);
+                }
+              }
+              else {
+                Serial.print("Heart Rate (current, bpm): ");
+                Serial.println(bpm);  
+              }
+            }
+          }
+  
+          crossed = false;
+          last_heartbeat = crossed_time;
+        }
+      }
+
+    last_diff = current_diff;
+    }
+  }
+}
+void hexdump(const void *mem, uint32_t len, uint8_t cols = 16) {
+  const uint8_t* src = (const uint8_t*) mem;
+  USE_SERIAL.printf("\n[HEXDUMP] Address: 0x%08X len: 0x%X (%d)", (ptrdiff_t)src, len, len);
+  for(uint32_t i = 0; i < len; i++) {
+    if(i % cols == 0) {
+      USE_SERIAL.printf("\n[0x%08X] 0x%08X: ", (ptrdiff_t)src, i);
+    }
+    USE_SERIAL.printf("%02X ", *src);
+    src++;
+  }
+  USE_SERIAL.printf("\n");
 }
