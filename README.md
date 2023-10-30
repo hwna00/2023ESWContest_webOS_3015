@@ -32,46 +32,8 @@
 
 ## Service Summary
 
-핵가족화에 따른 연령별 질병 대처 능력이 현저하게 떨어진 요즘 사회 </br>
-**뭐시기 뭐시기 할 수 있는 방법이 없을까?**
-
-- 진료 예약
-  - 머시기
-  - aaa
-
-</br>
-
-- 건강 관리
-  - aaa
-  - aaa
-
-</br>
-  
-- 복약 관리
-  - aa
-  - aa
-
-</br>
-
 ## Tech Summary
 
-- 진료 예약
-  - 머시기
-  - aaa
-
-</br>
-
-- 건강 관리
-  - aaa
-  - aaa
-
-</br>
-  
-- 복약 관리
-  - aa
-  - aa
-
-</br>
 
 ## Development Schedule
 ![개발일정](https://github.com/hwna00/2023ESWContest_webOS_3015/assets/127873267/e8424445-6c87-41f7-8236-185bb9eb1543)
