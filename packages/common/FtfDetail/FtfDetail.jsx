@@ -15,7 +15,6 @@ import {
   ModalOverlay,
   Radio,
   RadioGroup,
-  Text,
   VStack,
   useDisclosure,
 } from '@chakra-ui/react';
