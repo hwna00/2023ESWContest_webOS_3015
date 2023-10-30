@@ -16,6 +16,9 @@
     "time.query",
     "activity.operation",
     "notification.operation",
-    "application.launcher"
+    "application.launcher",
+    "com.housepital.app.user.service.group",
+    "wifi.query",
+    "wifi.management"
   ]
 }
