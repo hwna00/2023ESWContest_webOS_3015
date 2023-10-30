@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+import { motion } from 'framer-motion';
 import {
   Box,
   Step,
@@ -8,17 +10,15 @@ import {
   StepStatus,
   Stepper,
 } from '@chakra-ui/react';
-import { motion } from 'framer-motion';
-import PropTypes from 'prop-types';
 
 const SignUpStepper = function ({ activeStep, steps }) {
   return (
-    <Box height={'full'}>
+    <Box height="full">
       <Stepper
         as={motion.div}
         index={activeStep}
         orientation="vertical"
-        height={'full'}
+        height="full"
         gap="0"
         colorScheme="primary"
       >

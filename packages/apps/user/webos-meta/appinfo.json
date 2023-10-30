@@ -1,12 +1,21 @@
 {
-	"id": "user",
-	"version": "1.0.0",
-	"vendor": "LGE-SVL",
-	"type": "web",
-	"main": "index.html",
-	"title": "Enact App Template",
-	"icon": "icon.png",
-	"miniicon": "icon-mini.png",
-	"largeIcon": "icon-large.png",
-	"uiRevision": 2
+  "id": "com.housepital.app.user",
+  "version": "1.0.0",
+  "vendor": "LGE-SVL",
+  "type": "web",
+  "main": "index.html",
+  "title": "Housepital",
+  "icon": "icon.png",
+  "miniicon": "icon-mini.png",
+  "largeIcon": "icon-large.png",
+  "uiRevision": 2,
+  "allowAudioCapture": true,
+  "allowVideoCapture": true,
+  "enableWebOSVDA": true,
+  "requiredPermissions": [
+    "time.query",
+    "activity.operation",
+    "notification.operation",
+    "application.launcher"
+  ]
 }

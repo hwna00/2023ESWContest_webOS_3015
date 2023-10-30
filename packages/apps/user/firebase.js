@@ -1,12 +1,17 @@
-import { initializeApp } from 'firebase/app';
+import Cookie from 'js-cookie';
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import {
   getAuth,
-  createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
+  createUserWithEmailAndPassword,
+  signInWithCustomToken,
+  setPersistence,
+  browserLocalPersistence,
+  signOut,
 } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
 
+import { updateMe } from './src/api';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FB_API_KEY,
@@ -18,20 +23,61 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
+const storage = getStorage(app);
+export const auth = getAuth(app);
 
-const signIn = (email, password) => {
-  return createUserWithEmailAndPassword(auth, email, password);
+// TODO: nftfblob 함수와 통일하기 - path 방식으로
+export const uploadBlob = async (blob, uid) => {
+  const storageRef = ref(storage, `${uid}/profileImg.png`);
+  await uploadBytes(storageRef, blob);
 };
 
-const logIn = (email, password) => {
-  return signInWithEmailAndPassword(auth, email, password);
+export const getBlob = async path => {
+  try {
+    const url = await getDownloadURL(ref(storage, path));
+    return url;
+  } catch (error) {
+    console.log('error', error);
+    return '';
+  }
 };
 
-const googleLogin = () => {
-  return signInWithPopup(auth, provider);
+export const uploadNftfBlob = async (blob, path) => {
+  const storageRef = ref(storage, path);
+  await uploadBytes(storageRef, blob);
 };
 
-export { auth, signIn, logIn, googleLogin, provider };
+export const fbSignUp = async data => {
+  const { email, password, profileImgBlob } = data;
 
+  const { user } = await createUserWithEmailAndPassword(auth, email, password);
+  await uploadBlob(profileImgBlob, user.uid);
+
+  return user.uid;
+};
+
+export const fbEmailLogIn = async data => {
+  await setPersistence(auth, browserLocalPersistence);
+  const { email, password } = data;
+
+  try {
+    const { user } = await signInWithEmailAndPassword(auth, email, password);
+    return user;
+  } catch (error) {
+    return console.log(error);
+  }
+};
+
+export const fbTokenLogIn = async data => {
+  await setPersistence(auth, browserLocalPersistence);
+  const token = Cookie.get('token');
+
+  try {
+    const { user } = await signInWithCustomToken(auth, token);
+    return updateMe({ ...data, uid: user.uid });
+  } catch (error) {
+    return console.log(error);
+  }
+};
+
+export const fbLogOut = async () => signOut(auth);

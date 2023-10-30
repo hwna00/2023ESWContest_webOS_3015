@@ -1,113 +1,160 @@
 import { Link as ReactRouterLink } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { FaCog } from '@react-icons/all-files/fa/FaCog';
 import {
   Avatar,
   Text,
   VStack,
   Link as ChakraLink,
-  Button,
-  HStack,
+  SkeletonCircle,
+  SkeletonText,
+  Tabs,
+  TabList,
+  Tab,
   Flex,
+  Icon,
 } from '@chakra-ui/react';
-import { FaUser, FaCog } from 'react-icons/fa';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { getBlob } from '../../../firebase';
 
-const menuNames = [
-  { name: '메인 화면', path: '' },
-  { name: '진료 예약', path: 'doctor-appointment' },
-  { name: '진료 내역', path: 'appointment-history' },
-  { name: '건강 기록', path: 'health' },
-  { name: '복약 관리', path: 'medicines' },
-];
-
-//TODO: 로그인 기능 구현 후 실제 user를 props 로 받아와야 한다.
-//TODO: 버튼 클릭 시, 배경 색상이 유지되는 기능을 추가해야 한다.
-const SideBar = function ({ user }) {
+const CustomTab = function ({ children, to }) {
   return (
-    <Flex
+    <ChakraLink as={ReactRouterLink} to={to} width="full">
+      <Tab
+        width="full"
+        py="4"
+        bgColor="primary.500"
+        color="white"
+        border="none"
+        _selected={{
+          bgColor: 'white',
+          color: 'primary.500',
+          fontWeight: 'bold',
+        }}
+      >
+        {children}
+      </Tab>
+    </ChakraLink>
+  );
+};
+
+const SideBar = function () {
+  const [tabIdex, setTabIdx] = useState();
+  const [profileImg, setProfileImg] = useState('');
+  const me = useSelector(state => state.me);
+
+  const onTabIdxChange = useCallback(index => {
+    setTabIdx(index);
+    window.localStorage.setItem('currentTab', index);
+  }, []);
+
+  const getProfileImg = useCallback(async () => {
+    const url = await getBlob(`${me.uid}/profileImg.png`);
+    setProfileImg(url);
+  }, [me]);
+
+  useEffect(() => {
+    const currentTabIdx = window.localStorage.getItem('currentTab');
+    if (currentTabIdx) {
+      setTabIdx(Number(currentTabIdx));
+    }
+  }, []);
+
+  useEffect(() => {
+    getProfileImg();
+  }, [getProfileImg]);
+
+  return (
+    <Tabs
       height="100vh"
       width="40"
-      color={'white'}
-      bgColor={'primary.500'}
-      py={'4'}
-      direction={'column'}
-      justifyContent={'space-between'}
-      alignItems={'center'}
-      borderRightRadius={'md'}
+      color="white"
+      bgColor="primary.500"
+      py="8"
+      direction="column"
+      borderRightRadius="md"
       position="absolute"
       top="0"
       left="0"
       zIndex={2}
+      variant="enclosed-colored"
+      size="lg"
+      orientation="vertical"
+      defaultIndex={tabIdex}
+      index={tabIdex}
+      onChange={onTabIdxChange}
     >
-      <VStack width={'full'} py={'2'}>
-        <ChakraLink as={ReactRouterLink} to={'/mypage'}>
-          {user ? (
-            <Avatar src={user?.img} size={'xl'} />
-          ) : (
-            <Avatar icon={<FaUser />} size={'xl'} />
-          )}
-        </ChakraLink>
-
-        <ChakraLink as={ReactRouterLink} to={'/auth/log-in'}>
-          <Text fontSize={'xl'} fontWeight={'bold'}>
-            {user ? `${user?.name}님` : '로그인하기'}
-          </Text>
-        </ChakraLink>
-      </VStack>
-
-      <VStack width={'full'} gap={0}>
-        {menuNames.map(menu => {
-          return (
+      <TabList
+        width="full"
+        display="flex"
+        flexDirection="column"
+        justifyContent="space-between"
+        alignItems="center"
+        margin={0}
+      >
+        <Tab
+          width="full"
+          bgColor="primary.500"
+          color="white"
+          border="none"
+          _selected={{
+            bgColor: 'white',
+            color: 'primary.500',
+            fontWeight: 'bold',
+          }}
+        >
+          {me ? (
             <ChakraLink
+              width="full"
+              display="flex"
+              flexDirection="column"
+              justifyContent="center"
+              alignItems="center"
+              gap="4"
               as={ReactRouterLink}
-              to={menu.path}
-              width={'full'}
-              key={menu.name}
+              to="mypage"
             >
-              <Button
-                width={'full'}
-                size={'lg'}
-                borderRadius={'none'}
-                color={'white'}
-                bgColor={'primary.500'}
-                fontSize={'xl'}
-                _hover={{
-                  bgColor: 'primary.700',
-                }}
-                _focus={{
-                  bgColor: 'white',
-                  color: 'primary.500',
-                  fontWeight: 'bold',
-                }}
-              >
-                {menu.name}
-              </Button>
+              <Avatar src={profileImg} size="xl" />
+              <Text fontSize="xl" fontWeight="bold" textAlign="center">
+                {me.username}
+              </Text>
             </ChakraLink>
-          );
-        })}
-      </VStack>
-      <HStack width={'full'}>
-        <ChakraLink as={ReactRouterLink} to={'/'} width={'full'}>
-          <Button
-            leftIcon={<FaCog />}
-            variant={'ghost'}
-            width={'full'}
-            size={'lg'}
-            borderRadius={'none'}
-            color={'white'}
-            bgColor={'primary.500'}
-            _hover={{
-              bgColor: 'primary.700',
-            }}
-            _focus={{
-              bgColor: 'white',
-              color: 'primary.500',
-              fontWeight: 'bold',
-            }}
+          ) : (
+            <ChakraLink
+              width="full"
+              display="flex"
+              flexDirection="column"
+              justifyContent="center"
+              alignItems="center"
+              gap="4"
+              as={ReactRouterLink}
+              to="login"
+            >
+              <SkeletonCircle size="24" />
+              <SkeletonText skeletonHeight="6" width="16" noOfLines={1} />
+            </ChakraLink>
+          )}
+        </Tab>
+        <VStack width="full" justifyContent="center" gap="0">
+          <CustomTab to="">메인화면</CustomTab>
+          <CustomTab to="appointment">진료예약</CustomTab>
+          <CustomTab to="appointment-history">진료내역</CustomTab>
+          <CustomTab to="health-manage">건강관리</CustomTab>
+          <CustomTab to="medicines">복약관리</CustomTab>
+        </VStack>
+        <CustomTab to="settings">
+          <Flex
+            width="full"
+            justifyContent="center"
+            alignItems="center"
+            gap="2"
           >
-            환경 설정
-          </Button>
-        </ChakraLink>
-      </HStack>
-    </Flex>
+            <Icon as={FaCog} />
+            설정
+          </Flex>
+        </CustomTab>
+      </TabList>
+    </Tabs>
   );
 };
 

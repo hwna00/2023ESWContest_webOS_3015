@@ -21,21 +21,21 @@ const SignUp = function () {
     });
 
   return (
-    <VStack height={'100vh'} p={'6'}>
-      <HStack width={'full'} justifyContent={'start'} alignItems={'end'}>
-        <Heading as={'h1'}>Housepital 회원가입</Heading>
-        <ChakraLink as={ReactRouterLink} to={'/auth/login'}>
+    <VStack height="100vh" p="6">
+      <HStack width="full" justifyContent="start" alignItems="end">
+        <Heading as="h1">Housepital 회원가입</Heading>
+        <ChakraLink as={ReactRouterLink} to="/auth/log-in">
           이미 계정이 있으신가요? 로그인
         </ChakraLink>
       </HStack>
 
-      <Container centerContent height={'full'} maxW={'container.xl'}>
+      <Container centerContent height="full" maxW="3xl">
         <HStack
-          justifyContent={'center'}
-          gap={'12'}
+          justifyContent="center"
+          gap="12"
           maxH={600}
-          width={'full'}
-          my={'auto'}
+          width="full"
+          my="auto"
         >
           <SignUpStepper activeStep={activeStep} steps={steps} />
 
