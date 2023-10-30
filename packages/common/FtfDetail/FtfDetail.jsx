@@ -38,12 +38,12 @@ const FtfDetail = function ({ data }) {
           진료 심사 관련 서류
         </Heading>
 
-        <Image src={prescriptionUrl} alt="비대면 진료 서류" width="50%" />
+        <Image src={prescriptionUrl} alt="비대면 진료 서류" width="30%" />
         <Button onClick={onOpen} variant="ghost" textDecoration="underline">
           + 크게 보기
         </Button>
       </VStack>
-      <Modal isOpen={isOpen} onClose={onClose} size="3xl">
+      <Modal isOpen={isOpen} onClose={onClose} size="xl">
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>진료 심사 관련 서류</ModalHeader>
