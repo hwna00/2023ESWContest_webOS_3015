@@ -118,8 +118,8 @@ const CustomAccordionItem = function ({ medicine }) {
 };
 
 const SideEffet = function () {
-  const [symptom, setSymptom] = useState('');
-  const [keyWord, setKeyWord] = useState('');
+  const [symptom, setSymptom] = useState(''); // 사용자가 말한 증상
+  const [keyWord, setKeyWord] = useState(''); // 찾은 증상
   const [sideEffects, setSideEffects] = useState([]);
 
   const toast = useCreateToast();
