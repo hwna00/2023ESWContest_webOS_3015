@@ -31,12 +31,10 @@ function WaitingRoom() {
     {
       onSuccess: () => {
         toast('삭제에 성공했습니다.');
-        console.log('삭제 성공');
         queryClient.invalidateQueries(uid);
       },
       onError: () => {
         toast('삭제에 실패했습니다.');
-        console.log('삭제 실패');
       },
     },
   );
@@ -49,9 +47,7 @@ function WaitingRoom() {
   );
 
   useEffect(() => {
-    socketRef.current = io(`${process.env.REACT_APP_BACKEND_API}`, {
-      transports: ['websocket'],
-    });
+    socketRef.current = io(`${process.env.REACT_APP_BACKEND_API}`);
 
     socketRef.current.on('trmt_start', async id => {
       console.log('trmt_start: ', id);
@@ -82,6 +78,9 @@ function WaitingRoom() {
         </Box>
         <Box flex={1} textAlign="center" fontWeight="bold">
           담당 의사
+        </Box>
+        <Box flex={1} textAlign="center" fontWeight="bold">
+          예약 상태
         </Box>
         <Box flex={2} />
       </HStack>

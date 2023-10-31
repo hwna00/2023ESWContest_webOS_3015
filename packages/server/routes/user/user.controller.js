@@ -1,4 +1,6 @@
 const convertUser = require('../../utils/convertUser');
+const classifyVitalSigns = require('../../utils/classifyVitalSigns');
+const classifyFavorites = require('../../utils/classifyFavorites');
 const classifyAppointments = require('../../utils/classifyAppointments');
 const pool = require('../../config/db');
 
@@ -95,6 +97,63 @@ const readUserMedecinesQuery = async (connection, uid, day) => {
   const Params = [uid, day];
 
   const Query = !day ? selectAllMedecinesQuery : selectMedecinesByDayQuery;
+
+  const rows = await connection.query(Query, Params);
+
+  return rows;
+};
+
+const readUservitalSignsQuery = async (connection, uid, type) => {
+  let Query;
+  switch (type) {
+    case 'temperature':
+      Query =
+        'SELECT id, value, date, time FROM Temperature WHERE user_id = ?;';
+      break;
+    case 'heartRate':
+      Query = 'SELECT id, value, date, time FROM HeartRate WHERE user_id = ?;';
+      break;
+    default:
+      Query = `WITH CTE_HeartRate AS (
+        SELECT 'heartRate' AS type, id, value, date, time 
+        FROM HeartRate 
+        WHERE user_id =?
+        ),
+        CTE_Temperature AS (
+        SELECT 'temperature' AS type, id, value, date, time 
+        FROM Temperature 
+        WHERE user_id = ?
+        )
+    
+        SELECT * FROM CTE_HeartRate
+        UNION
+        SELECT * FROM CTE_Temperature
+        ORDER BY date, time;`;
+  }
+  const Params = [uid, uid];
+
+  const rows = await connection.query(Query, Params);
+
+  return rows;
+};
+
+const readUserFavoritesQuery = async (connection, uid, type) => {
+  let Query;
+  switch (type) {
+    case 'doctor':
+      Query =
+        'SELECT doctor_id AS id FROM DoctorBookmarks WHERE user_id = ?;';
+      break;
+    case 'hospital':
+      Query = 'SELECT hospital_id AS id FROM HospitalBookmarks WHERE user_id = ?;';
+      break;
+    default:
+      Query = `
+        SELECT 'doctor' AS type, doctor_id AS id FROM DoctorBookmarks WHERE user_id =?
+        UNION
+        SELECT 'hospital' AS type, hospital_id AS id FROM HospitalBookmarks WHERE user_id =?`;
+  }
+  const Params = [uid, uid];
 
   const rows = await connection.query(Query, Params);
 
@@ -294,6 +353,89 @@ exports.readUserMedecines = async (req, res) => {
         isSuccess: true,
         code: 200,
         message: '복약정보 조회 성공',
+      });
+    } catch (err) {
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSuccess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
+exports.readUserVitalSigns = async (req, res) => {
+  const { uid } = req.params;
+  const { type } = req.query;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      const [rows] = await readUservitalSignsQuery(connection, uid, type);
+      if (!type) {
+        const classifiedRows = classifyVitalSigns(rows);
+        return res.json({
+          result: classifiedRows,
+          isSuccess: true,
+          code: 200,
+          message: '활력징후 조회 성공',
+        });
+      }
+      return res.json({
+        result: rows,
+        isSuccess: true,
+        code: 200,
+        message: '활력징후 조회 성공',
+      });
+    } catch (err) {
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSuccess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
+exports.readUserFavorites = async (req, res) => {
+  const { uid } = req.params;
+  const { type } = req.query;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      const [rows] = await readUserFavoritesQuery(connection, uid, type);
+      if (!type) {
+        const classifiedRows = classifyFavorites(rows);
+        return res.json({
+          result: classifiedRows,
+          isSuccess: true,
+          code: 200,
+          message: '즐겨찾기 조회 성공',
+        });
+      }
+      const favoriteArray = rows.map(favorite => favorite.id);
+      return res.json({
+        result: favoriteArray,
+        isSuccess: true,
+        code: 200,
+        message: '즐겨찾기 조회 성공',
       });
     } catch (err) {
       return res.json({

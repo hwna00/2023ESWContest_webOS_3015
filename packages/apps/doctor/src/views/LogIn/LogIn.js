@@ -74,8 +74,7 @@ function LogIn() {
             color="black"
             fontWeight="500"
           >
-            수정 필요, <br />
-            수정 필요
+            간편하게 환자를 관리해보세요.
           </Heading>
         </Flex>
         <VStack

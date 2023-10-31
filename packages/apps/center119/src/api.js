@@ -17,6 +17,7 @@ export const getCounselor = async counselorId => {
     throw new Error(error);
   }
 };
+
 export const updateEmergencyState = async (emergencyId, isCompleted) => {
   return await instance.patch(`emergencies/${emergencyId}`, {
     data: {
@@ -25,8 +26,8 @@ export const updateEmergencyState = async (emergencyId, isCompleted) => {
   });
 };
 
-export const getEmergencies = async ({ queryKey }) => {
-  const counselorId = queryKey[0];
+export const getEmergencies = async counselorId => {
+  console.log('counselorId', counselorId);
   const response = await instance.get(`/counselors/${counselorId}/emergencies`);
   if (response.data) {
     return response.data.result;
@@ -36,10 +37,11 @@ export const getEmergencies = async ({ queryKey }) => {
 };
 
 export const getEmergency = async emergencyId => {
-  const response = await instance.get(`/emergencies/${emergencyId}`);
-  if (response.data) {
-    return response.data.result;
+  const { data } = await instance.get(`/emergencies/${emergencyId}`);
+  if (!data.isSuccess) {
+    throw new Error();
   }
+  return data.result;
 };
 
 export const getCompletedEmergency = async ({ queryKey }) => {
@@ -50,4 +52,15 @@ export const getCompletedEmergency = async ({ queryKey }) => {
   if (response) {
     return response.data.result;
   }
+};
+
+export const createEmergencyRequest = async (counselorId, uid) => {
+  const { data } = await instance.post('/emergencies', {
+    data: { counselorId, uid },
+  });
+  console.log(data);
+  if (!data.isSuccess) {
+    return new Error();
+  }
+  return data.result;
 };

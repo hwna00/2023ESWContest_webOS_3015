@@ -1,12 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import 'react-calendar/dist/Calendar.css';
 import dayjs from 'dayjs';
-import { Button, ButtonGroup, HStack, VStack } from '@chakra-ui/react';
+import {
+  Button,
+  ButtonGroup,
+  HStack,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  VStack,
+  useDisclosure,
+} from '@chakra-ui/react';
+import { io } from 'socket.io-client';
 
 import TodoList from '../../components/TodoList/TodoList';
 import PushAlarm from '../../components/PushAlarm/PushAlarm';
 import Calendar from '../../components/Calendar/Calendar';
+import { useQuery } from '@tanstack/react-query';
+import { getCenters } from '../../api';
 
 const todos = [
   {
@@ -77,8 +96,23 @@ const todos = [
 ];
 
 const MainPage = function () {
+  const socketRef = useRef();
   const [selectedDay, setSelectedDay] = useState(new Date());
   const [todoOfSelectedDay, setTodoOfSelectedDay] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const navigate = useNavigate();
+  const uid = useSelector(state => state.me.uid);
+  const { data: centers } = useQuery(['centers'], getCenters);
+
+  const onEmergencyClick = useCallback(
+    centerId => {
+      socketRef.current.emit('emergency_call', centerId, uid);
+      setIsLoading(true);
+    },
+    [uid],
+  );
 
   useEffect(() => {
     const todoOfTheDay = todos.find(
@@ -86,6 +120,17 @@ const MainPage = function () {
     );
     setTodoOfSelectedDay(todoOfTheDay);
   }, [selectedDay]);
+
+  useEffect(() => {
+    socketRef.current = io(process.env.REACT_APP_BACKEND_API);
+
+    socketRef.current.on('emergency_ready', emergencyId => {
+      setIsLoading(false);
+      navigate(`/treatment/${emergencyId}`);
+    });
+
+    socketRef.current.emit('join_room', uid);
+  }, [navigate, uid]);
 
   return (
     <HStack height="full" gap="6">
@@ -105,7 +150,14 @@ const MainPage = function () {
           justifyContent="space-between"
           alignItems="center"
         >
-          <Button colorScheme="red" py="8" width="full" fontSize="lg">
+          <Button
+            colorScheme="red"
+            py="8"
+            width="full"
+            fontSize="lg"
+            variant="outline"
+            onClick={onOpen}
+          >
             긴급 전화
           </Button>
           <Button
@@ -119,6 +171,42 @@ const MainPage = function () {
           </Button>
         </ButtonGroup>
       </VStack>
+      <Modal size="xl" isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>긴급 상황인가요?</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text size="2xl" fontWeight="bold">
+              {isLoading
+                ? '접수 대기 중입니다. 현재 화면에서 머물러주세요.'
+                : '가까운 상황실을 선택해주세요'}
+            </Text>
+            {isLoading ? (
+              'loading...'
+            ) : (
+              <VStack gap="4" maxHeight="80" mt="4">
+                {centers?.map(center => (
+                  <HStack
+                    key={center.id}
+                    width="full"
+                    padding="4"
+                    bgColor="primary.100"
+                    borderRadius="md"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    onClick={() => onEmergencyClick(center.id)}
+                  >
+                    <Text>{center.name}</Text>
+                  </HStack>
+                ))}
+              </VStack>
+            )}
+          </ModalBody>
+
+          <ModalFooter />
+        </ModalContent>
+      </Modal>
     </HStack>
   );
 };

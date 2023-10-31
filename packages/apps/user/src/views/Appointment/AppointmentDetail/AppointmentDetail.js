@@ -87,12 +87,10 @@ const AppointmentDetail = function () {
   const onSubmit = useCallback(
     formData => {
       if (!appointTime) {
-        toast('예약시간을 선택해주세요.');
-        return null;
+        return toast('예약시간을 선택해주세요.');
       }
-      if (formData.type === 'nftf' && !formData.nftfType) {
-        toast('비대면 진료 타입을 선택해주세요.');
-        return null;
+      if (formData.type === 'nftf' && !formData.nftfId) {
+        return toast('비대면 진료 타입을 선택해주세요.');
       }
 
       const appointment = {

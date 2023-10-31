@@ -17,7 +17,6 @@ function MyPage() {
 
   const {
     register,
-
     reset,
     formState: { errors },
   } = useForm({ mode: 'all', defaultValues: counselor });

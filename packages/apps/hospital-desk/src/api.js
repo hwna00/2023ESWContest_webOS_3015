@@ -13,7 +13,7 @@ export const fetchResultsTime = async ykiho => {
 };
 
 export const createHospital = async hospital => {
-  const { data } = await instance.post('hospitals', { data: hospital });
+  const { data } = await instance.post('/hospitals', { data: hospital });
 
   return data;
 };
@@ -42,7 +42,7 @@ export const updateAppointmentState = async (
   newStateId,
   rejectionReason,
 ) => {
-  return await instance.patch(`appointments/${id}`, {
+  return await instance.patch(`/appointments/${id}`, {
     data: {
       stateId: newStateId,
       rejectionReason: rejectionReason,

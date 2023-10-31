@@ -14,7 +14,8 @@ import {
   Flex,
   Icon,
 } from '@chakra-ui/react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { getBlob } from '../../../firebase';
 
 const CustomTab = function ({ children, to }) {
   return (
@@ -39,6 +40,7 @@ const CustomTab = function ({ children, to }) {
 
 const SideBar = function () {
   const [tabIdex, setTabIdx] = useState();
+  const [profileImg, setProfileImg] = useState('');
   const me = useSelector(state => state.me);
 
   const onTabIdxChange = useCallback(index => {
@@ -46,12 +48,21 @@ const SideBar = function () {
     window.localStorage.setItem('currentTab', index);
   }, []);
 
+  const getProfileImg = useCallback(async () => {
+    const url = await getBlob(`${me.uid}/profileImg.png`);
+    setProfileImg(url);
+  }, [me]);
+
   useEffect(() => {
     const currentTabIdx = window.localStorage.getItem('currentTab');
     if (currentTabIdx) {
       setTabIdx(Number(currentTabIdx));
     }
   }, []);
+
+  useEffect(() => {
+    getProfileImg();
+  }, [getProfileImg]);
 
   return (
     <Tabs
@@ -103,7 +114,7 @@ const SideBar = function () {
               as={ReactRouterLink}
               to="mypage"
             >
-              <Avatar src={me.profileImg} size="xl" />
+              <Avatar src={profileImg} size="xl" />
               <Text fontSize="xl" fontWeight="bold" textAlign="center">
                 {me.username}
               </Text>
