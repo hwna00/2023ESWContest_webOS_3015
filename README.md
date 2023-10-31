@@ -32,8 +32,25 @@
 
 ## Service Summary
 
-## Tech Summary
++ 진료 예약
+  + Housepital에 가입된 의사들 중 가능한 시간에 예약을 잡아 비대면 화상진료 혹은 대면 진료 예약 기능 지원
+  + 어플리케이션을 통한 실시간 비대면 화상 진료를 통해 진료 효과 증대
+  + 환자의 약물 정보 및 건강 정보를 전달하여 개인 맞춤형 진료 가능
+  + 진료 이후 카카오페이 결제를 통해 진료비 간편 징수 및 간편 결제 가능
+  + 약국 예약까지 책임지고 관리하여 환자의 진료 편의 완전 상승
 
++ 복약 관리
+  + 매일 먹을 약을 계획하고 알림을 울려 약물 복용을 잊지 않도록 보조
+  + 부작용 관리 탭의 증상 검색을 통해 부작용 증상을 유발시키는 약물 검색 기능 제공
+  + 약물 달력을 통해 이전 약물 복용 기록 확인 가능
+
++ 건강 관리
+  + IOT 기기를 이용해 혈압, 체온 등을 측정하여 보다 정확한 건강 기록 제공
+  + 그래프를 통한 가시성 좋은 건강 데이터 제공
+  + IOT 기기의 확장성이 높아 추후 더 다양한 건강 정보 측정 가능성 높음
+  + 긴급 신고 버튼을 만들어 건강 이상 증세 발생시 언제든 지정된 위치로 출동하도록 간편 신고 기능 제공
+
+</br>
 
 ## Development Schedule
 ![개발일정](https://github.com/hwna00/2023ESWContest_webOS_3015/assets/127873267/e8424445-6c87-41f7-8236-185bb9eb1543)
@@ -51,10 +68,13 @@
 
 | Area | Stack & Tool |
 | ---- | ------------ |
-| Front end | ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![Chakra](https://img.shields.io/badge/chakra-%234ED1C5.svg?style=for-the-badge&logo=chakraui&logoColor=white) ![React Query](https://img.shields.io/badge/-React%20Query-FF4154?style=for-the-badge&logo=react%20query&logoColor=white) ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white) |
+| Front end | ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![enact](https://img.shields.io/badge/enact-5483FF?style=for-the-badge&logoColor=white) ![ares-cli](https://img.shields.io/badge/ares_cli-C30036?style=for-the-badge&logoColor=white) ![Chakra](https://img.shields.io/badge/chakra-%234ED1C5.svg?style=for-the-badge&logo=chakraui&logoColor=white) ![React Query](https://img.shields.io/badge/-React%20Query-FF4154?style=for-the-badge&logo=react%20query&logoColor=white) ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white) |
 | Back end | ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB) ![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white) ![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase) ![Socket.io](https://img.shields.io/badge/Socket.io-black?style=for-the-badge&logo=socket.io&badgeColor=010101) ![Web RTC](https://img.shields.io/badge/WebRTC-333333?style=for-the-badge&logo=socket.io&badgeColor=010101) |
 | Common | ![ESLint](https://img.shields.io/badge/ESLint-4B3263?style=for-the-badge&logo=eslint&logoColor=white) ![Prettier](https://img.shields.io/badge/-Prettier-F7B93E?style=for-the-badge&logo=Prettier&logoColor=white) ![Arduino](https://img.shields.io/badge/-Arduino-00979D?style=for-the-badge&logo=Arduino&logoColor=white) ![dialogflow](https://img.shields.io/badge/-dialogflow-FF9800?style=for-the-badge&logo=dialogflow&logoColor=white) |
-| Coperation | ![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white) ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white) ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white) |
+| Platform | ![webOS](https://img.shields.io/badge/webOS-C30036?style=for-the-badge&logoColor=white) ![ares-cli](https://img.shields.io/badge/ares_cli-C30036?style=for-the-badge&logoColor=white) ![enact-cli](https://img.shields.io/badge/enact_cli-5483FF?style=for-the-badge&logoColor=white) |
+| Coperation | ![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white) ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white) ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white) ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white) |
+
+
 
 </br>
 
@@ -68,14 +88,13 @@
 ┃ ┃ ┣ 📂center119
 ┃ ┃ ┣ 📂doctor
 ┃ ┃ ┣ 📂hospital-desk
-┃ ┃ ┣ 📂pharmacy
 ┃ ┃ ┗ 📂user
 ┃ ┣ 📂common
 ┃ ┣ 📂js-service
 ┃ ┗ 📂server
 ┣ 📂sensers
-┣ 📂.eslintrc.json
-┗ 📂.prettierrc.json
+┣ 📜eslintrc.json
+┗ 📜prettierrc.json
 ```
 
 </br>
