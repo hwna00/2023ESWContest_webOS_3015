@@ -1,5 +1,5 @@
 {
-  "id": "com.housepital.app.user",
+  "id": "com.housepital.user.app",
   "version": "1.0.0",
   "vendor": "LGE-SVL",
   "type": "web",
@@ -13,12 +13,14 @@
   "allowVideoCapture": true,
   "enableWebOSVDA": true,
   "requiredPermissions": [
+    "all",
     "time.query",
     "activity.operation",
     "notification.operation",
     "application.launcher",
-    "com.housepital.app.user.service.group",
     "wifi.query",
-    "wifi.management"
+    "wifi.management",
+    "tts.operation",
+    "com.housepital.user.app.service.group"
   ]
 }

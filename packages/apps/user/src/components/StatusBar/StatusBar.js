@@ -8,12 +8,12 @@ const StatusBar = function () {
   dayjs.locale('ko');
 
   const [currentTime, setCurrentTime] = useState(
-    dayjs().format('MM월 DD일 (ddd) 오후 HH:mm'),
+    dayjs().format('YYYY년 MM월 DD일 (ddd) A HH:mm'),
   );
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentTime(dayjs().format('MM월 DD일 (ddd) 오후 HH:mm'));
+      setCurrentTime(dayjs().format('YYYY년 MM월 DD일 (ddd) A HH:mm'));
     }, 1000);
 
     return () => {
