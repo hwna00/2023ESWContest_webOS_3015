@@ -283,3 +283,17 @@ export const getCenters = async () => {
     id: center.counselor_id,
   }));
 };
+
+export const createSideEffectHistory = async (uid, history) => {
+  const { data } = await instance.post(`/users/${uid}/side-effects`, {
+    data: history,
+  });
+  console.log(data);
+  return data;
+};
+
+export const getSideEffectHistory = async uid => {
+  const { data } = await instance.get(`/side-effects/${uid}`);
+
+  return data.result;
+};

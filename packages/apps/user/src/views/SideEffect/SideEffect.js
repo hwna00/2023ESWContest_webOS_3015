@@ -30,8 +30,14 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { FaSearch } from '@react-icons/all-files/fa/FaSearch';
 import useCreateToast from '@housepital/common/hooks/useCreateToast';
 
-import { getIntent, getMedicines, getSideEffect } from '../../api';
+import {
+  createSideEffectHistory,
+  getIntent,
+  getMedicines,
+  getSideEffect,
+} from '../../api';
 import BackButton from '../../components/BackButton';
+import { useNavigate } from 'react-router-dom';
 
 const CustomAccordionItem = function ({ medicine }) {
   const { data } = useQuery(
@@ -118,10 +124,11 @@ const CustomAccordionItem = function ({ medicine }) {
 };
 
 const SideEffet = function () {
-  const [symptom, setSymptom] = useState(''); // 사용자가 말한 증상
-  const [keyWord, setKeyWord] = useState(''); // 찾은 증상
-  const [sideEffects, setSideEffects] = useState([]);
+  const [expression, setExpresssion] = useState(''); // 사용자가 말한 증상
+  const [symptom, setSymptom] = useState(''); // 찾은 증상
+  const [candidatePills, setCandidatePills] = useState([]);
 
+  const navigate = useNavigate();
   const toast = useCreateToast();
   const { onOpen, isOpen, onClose } = useDisclosure();
   const uid = useSelector(state => state.me.uid);
@@ -133,15 +140,26 @@ const SideEffet = function () {
   );
 
   const resetState = useCallback(() => {
+    setExpresssion('');
     setSymptom('');
-    setKeyWord('');
-    setSideEffects([]);
+    setCandidatePills([]);
   }, []);
 
   const onModalClose = useCallback(() => {
     resetState();
     onClose();
   }, [resetState, onClose]);
+
+  const onSave = useCallback(async () => {
+    const history = {
+      expression,
+      symptom,
+      candidatePills,
+    };
+    const response = await createSideEffectHistory(uid, history);
+    console.log(response);
+    onModalClose();
+  }, [onModalClose, expression, symptom, candidatePills, uid]);
 
   const findSeQesitm = useCallback(
     async intent => {
@@ -165,7 +183,7 @@ const SideEffet = function () {
 
           if (relatedDetail.length !== 0) {
             console.log(relatedDetail);
-            setSideEffects(prev => [
+            setCandidatePills(prev => [
               ...prev,
               {
                 medicineName: medicine.medecineName,
@@ -184,21 +202,35 @@ const SideEffet = function () {
   );
 
   const onSearchFieldChange = useCallback(event => {
-    setSymptom(event.target.value);
+    setExpresssion(event.target.value);
   }, []);
 
   const onSearchClick = useCallback(async () => {
-    if (symptom === '') {
+    if (expression === '') {
       return toast('증상을 입력해주세요');
     }
-    const intent = await getIntent(symptom);
-    setKeyWord(intent);
+    const intent = await getIntent(expression);
+    setSymptom(intent);
     findSeQesitm(intent);
-  }, [symptom, findSeQesitm, toast]);
+  }, [expression, findSeQesitm, toast]);
+
+  const onHistoryClick = useCallback(() => {
+    navigate('histories');
+  }, [navigate]);
 
   return (
     <VStack height="full" alignItems="flex-start" overflow="hidden" gap="8">
-      <BackButton title="부작용 관리" />
+      <HStack width="full" justifyContent="space-between" alignItems="center">
+        <BackButton title="부작용 관리" />
+        <Button
+          colorScheme="primary"
+          size="lg"
+          variant="outline"
+          onClick={onHistoryClick}
+        >
+          부작용 기록 보기
+        </Button>
+      </HStack>
       <HStack
         width="full"
         justifyContent="space-between"
@@ -207,7 +239,7 @@ const SideEffet = function () {
       >
         <Input
           placeholder="부작용을 검색하세요"
-          value={symptom}
+          value={expression}
           onChange={onSearchFieldChange}
         />
         <Icon as={FaSearch} boxSize={6} onClick={onSearchClick} />
@@ -221,18 +253,18 @@ const SideEffet = function () {
         <ModalOverlay />
         <ModalContent maxHeight="70%" overflowY="scroll">
           <ModalHeader>
-            <Heading size="xl">{`'${symptom}'에 대한 결과입니다.`}</Heading>{' '}
+            <Heading size="xl">{`'${expression}'에 대한 결과입니다.`}</Heading>{' '}
           </ModalHeader>
           <ModalBody>
             <Text fontSize="2xl" fontWeight="bold">
-              분석한 증상: {keyWord}
+              분석한 증상: {symptom}
             </Text>
             <HStack justifyContent="flex-start" alignItems="center">
               <Text fontSize="2xl" fontWeight="bold">
                 의심 약물:
               </Text>
               <HStack flexWrap="wrap" gap="4">
-                {sideEffects.map(sideEffect => (
+                {candidatePills.map(sideEffect => (
                   <Tag
                     key={sideEffect.medicineName}
                     colorScheme="gray"
@@ -245,7 +277,7 @@ const SideEffet = function () {
             </HStack>
 
             <VStack gap="6" mt="4">
-              {sideEffects.map(sideEffect => (
+              {candidatePills.map(sideEffect => (
                 <Box width="full" key={sideEffect}>
                   <Text fontSize="lg" fontWeight="bold">
                     {sideEffect.medicineName}
@@ -253,7 +285,7 @@ const SideEffet = function () {
                   {sideEffect.relatedDetail?.map(detail => (
                     <Text key={detail}>
                       <Highlight
-                        query={keyWord}
+                        query={symptom}
                         styles={{ px: '1', py: '1', bg: 'orange.100' }}
                       >
                         {detail}
@@ -264,10 +296,12 @@ const SideEffet = function () {
               ))}
             </VStack>
           </ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme="primary" onClick={onModalClose}>
-              확인
+          <ModalFooter gap="4">
+            <Button colorScheme="primary" onClick={onSave}>
+              기록 보관
+            </Button>
+            <Button colorScheme="red" variant="ghost" onClick={onModalClose}>
+              기록 삭제
             </Button>
           </ModalFooter>
         </ModalContent>
