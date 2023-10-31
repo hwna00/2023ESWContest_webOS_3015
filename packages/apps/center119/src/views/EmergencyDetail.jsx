@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 
 import {
@@ -16,22 +16,24 @@ import {
 
 import { getEmergency, updateEmergencyState } from '../api';
 import LoadingPage from '@housepital/common/LoadingPage/LoadingPage';
+import VideoCall from './VideoCall';
 
 function EmergencyDetail() {
   const { id } = useParams();
-
+  const navigate = useNavigate();
   const { isLoading, data = {} } = useQuery([`${id}`], () => getEmergency(id));
 
   const handleCompleteClick = async () => {
+    // TODO: 상태에 따라 toast 알람 추가하기
     await updateEmergencyState(id, 1);
-    window.location.reload();
+    navigate('/manage-emergencies');
   };
   return (
     <>
       {isLoading ? (
         <LoadingPage />
       ) : (
-        <Box overflow="hidden">
+        <Box overflow="hidden" height="full" overflowY="scroll">
           <HStack justifyContent="space-between" alignItems="center">
             <Heading>{data.username}</Heading>
             <HStack>
@@ -47,7 +49,7 @@ function EmergencyDetail() {
             </HStack>
           </HStack>
 
-          <Grid width="full" templateColumns="1fr 3fr 1fr" gap="8" mt="4">
+          <Grid width="full" templateColumns="1fr 2fr 2fr" gap="8" my="4">
             <AspectRatio ratio={1}>
               <Avatar src="" alt={data.username} objectFit="cover" />
             </AspectRatio>
@@ -72,23 +74,21 @@ function EmergencyDetail() {
                 만성질환 : {data?.chronicDisease}
               </Text>
             </VStack>
-          </Grid>
 
-          <Box mt="6" height="full" overflowY="scroll">
-            <Box mt="6" height="full">
+            <Box height="full" overflowY="scroll">
               <Heading as="h2" fontSize="2xl" fontWeight="bold">
                 환자 전달 사항
               </Heading>
               <Textarea
                 defaultValue={data?.message}
-                height="full"
                 mt="4"
                 bgColor="primary.100"
                 borderRadius="md"
                 readOnly
               />
             </Box>
-          </Box>
+          </Grid>
+          {data.isCompleted === 0 && <VideoCall patientId={data?.uid} />}
         </Box>
       )}
     </>

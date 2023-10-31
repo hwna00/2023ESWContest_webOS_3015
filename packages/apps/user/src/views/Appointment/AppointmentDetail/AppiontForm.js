@@ -94,7 +94,8 @@ function CameraModal({ onClose }) {
     const canvas = canvasRef.current;
 
     canvas.toBlob(async blob => {
-      uploadNftfBlob(blob, uid);
+      const path = `${uid}/nftf.png`;
+      uploadNftfBlob(blob, path);
     });
 
     onClose();
@@ -106,8 +107,6 @@ function CameraModal({ onClose }) {
     }
 
     return () => {
-      console.log('clean up', stream?.getTracks());
-
       stream?.getTracks().forEach(track => {
         track.stop();
       });

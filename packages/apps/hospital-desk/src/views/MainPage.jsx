@@ -23,7 +23,9 @@ const MainPage = function () {
   const hospital = useSelector(state => state.hospital);
   const [completeReservation, setCompleteReservation] = useState([]);
   const [ConfirmedReservation, setConfirmedReservation] = useState([]);
-  const { data, isLoading, error } = useQuery([hospital.id], getAppointments);
+  const { data, isLoading, error } = useQuery([hospital.id], getAppointments, {
+    enabled: !!hospital.id,
+  });
   const navigate = useNavigate();
 
   useEffect(() => {

@@ -30,10 +30,10 @@ export const uploadBlob = async (blob, uid) => {
   await uploadBytes(storageRef, blob);
 };
 
-export const getUserImage = email => {
-  getDownloadURL(ref(storage, `${email}/profileImg.png`))
-    .then(url => console.log(url))
-    .catch(() => null);
+export const getBlob = path => {
+  getDownloadURL(ref(storage, path))
+    .then(url => url)
+    .catch(() => '');
 };
 
 export const fbSignUp = async data => {
