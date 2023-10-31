@@ -77,7 +77,7 @@ const MainPage = function () {
           <Box>
             <HStack justifyContent="space-between">
               <Heading fontSize="25px">다음 예약</Heading>
-              <ChakraLink as={ReactRouterLink} to="manage-appointment">
+              <ChakraLink as={ReactRouterLink} to="/view-appointment">
                 + 전체보기
               </ChakraLink>
             </HStack>
@@ -100,7 +100,7 @@ const MainPage = function () {
           <Box>
             <HStack justifyContent="space-between">
               <Heading fontSize="25px">완료 대기</Heading>
-              <ChakraLink as={ReactRouterLink} to="/manage-appointment">
+              <ChakraLink as={ReactRouterLink} to="/view-appointment">
                 + 전체보기
               </ChakraLink>
             </HStack>
