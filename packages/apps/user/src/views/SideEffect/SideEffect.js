@@ -17,7 +17,6 @@ import {
   Input,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
@@ -218,7 +217,7 @@ const SideEffet = function () {
           <CustomAccordionItem key={medicine.id} medicine={medicine} />
         ))}
       </Accordion>
-      <Modal size="2xl" isOpen={isOpen} onClose={onClose}>
+      <Modal size="2xl" isOpen={isOpen} onClose={onModalClose}>
         <ModalOverlay />
         <ModalContent maxHeight="70%" overflowY="scroll">
           <ModalHeader>
