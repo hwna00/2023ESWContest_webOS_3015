@@ -182,7 +182,6 @@ const SideEffet = function () {
           }
 
           if (relatedDetail.length !== 0) {
-            console.log(relatedDetail);
             setCandidatePills(prev => [
               ...prev,
               {
@@ -194,8 +193,6 @@ const SideEffet = function () {
         } catch {
           console.log(`${medicine.medecineName}에 대한 정보가 없습니다.`);
         }
-
-        onOpen();
       });
     },
     [queryClient, onOpen],
@@ -211,8 +208,11 @@ const SideEffet = function () {
     }
     const intent = await getIntent(expression);
     setSymptom(intent);
-    findSeQesitm(intent);
-  }, [expression, findSeQesitm, toast]);
+    if (intent !== '') {
+      findSeQesitm(intent);
+    }
+    onOpen();
+  }, [expression, findSeQesitm, toast, onOpen]);
 
   const onHistoryClick = useCallback(() => {
     navigate('histories');
@@ -264,6 +264,9 @@ const SideEffet = function () {
                 의심 약물:
               </Text>
               <HStack flexWrap="wrap" gap="4">
+                {candidatePills.length === 0 && (
+                  <Text>의심 약물을 찾지 못했습니다.</Text>
+                )}
                 {candidatePills.map(sideEffect => (
                   <Tag
                     key={sideEffect.medicineName}
