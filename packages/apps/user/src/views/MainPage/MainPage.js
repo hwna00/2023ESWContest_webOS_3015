@@ -20,12 +20,15 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { io } from 'socket.io-client';
+import LS2Request from '@enact/webos/LS2Request';
 
 import TodoList from '../../components/TodoList/TodoList';
 import PushAlarm from '../../components/PushAlarm/PushAlarm';
 import Calendar from '../../components/Calendar/Calendar';
 import { useQuery } from '@tanstack/react-query';
 import { getCenters } from '../../api';
+
+const bridge = new LS2Request();
 
 const todos = [
   {
@@ -132,6 +135,27 @@ const MainPage = function () {
     socketRef.current.emit('join_room', uid);
   }, [navigate, uid]);
 
+  const onls2click = useCallback(() => {
+    const datetime = dayjs(new Date())
+      .add(3, 'second')
+      .format('YYYY-MM-DD HH:mm:ss');
+    console.log(datetime);
+    const parms = {
+      datetime,
+      activityname: datetime,
+    };
+
+    const lsRequest = {
+      service: 'luna://com.housepital.user.app.service',
+      method: 'createAppointmentActivity',
+      parameters: parms,
+      onSuccess: payload => console.log('success', payload),
+      onFailure: payload => console.log('fail', payload),
+    };
+
+    bridge.send(lsRequest);
+  }, []);
+
   return (
     <HStack height="full" gap="6">
       <Calendar
@@ -166,6 +190,7 @@ const MainPage = function () {
             py="8"
             width="full"
             fontSize="lg"
+            onClick={onls2click}
           >
             챗봇 호출
           </Button>

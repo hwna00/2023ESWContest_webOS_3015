@@ -11,6 +11,9 @@ import SideBar from '../SideBar/SideBar';
 import { resetMe, setMe } from '../../store';
 import { getMe } from '../../api';
 import { auth } from '../../../firebase';
+import LS2Request from '@enact/webos/LS2Request';
+
+const bridge = new LS2Request();
 
 const Root = function () {
   const [isLoading, setIsLoading] = useState(true);
@@ -36,6 +39,18 @@ const Root = function () {
       }
     });
   }, [dispatch, me, navigate]);
+
+  useEffect(() => {
+    const params = { appointment: { date: '2023-10-29', time: '01:10:00' } };
+    const lsRequest = {
+      service: 'com.housepital.app.user.service',
+      method: 'appointmentToast',
+      parameters: params,
+      onSuccess: payload => console.log('success', payload),
+      onFailure: payload => console.log('fail', payload),
+    };
+    bridge.send(lsRequest);
+  }, []);
 
   return (
     <>

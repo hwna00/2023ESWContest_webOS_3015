@@ -1,5 +1,5 @@
 {
-  "id": "com.housepital.app.user",
+  "id": "com.housepital.user.app",
   "version": "1.0.0",
   "vendor": "LGE-SVL",
   "type": "web",
@@ -19,6 +19,9 @@
     "application.launcher",
     "com.housepital.app.user.service.group",
     "wifi.query",
-    "wifi.management"
+    "wifi.management",
+    "tts.operation",
+    "alarm.operation",
+    "com.housepital.user.app.service.group"
   ]
 }
