@@ -2,6 +2,7 @@ import {
   Box,
   HStack,
   ListItem,
+  Tag,
   Text,
   UnorderedList,
   VStack,
@@ -79,7 +80,17 @@ const SideEffectHistory = function () {
                   <Box flex={1} textAlign="center">
                     {item.candidatePills.length === 0 &&
                       '매칭되는 약물이 없습니다.'}
-                    {item.candidatePills.map(candidate => candidate)}
+                    <HStack
+                      justifyContent="center"
+                      alignItems="center"
+                      flexWrap="nowrap"
+                    >
+                      {item.candidatePills.map(candidate => (
+                        <Tag colorScheme="gray" padding="2" variant="outline">
+                          {candidate.medicineName}
+                        </Tag>
+                      ))}
+                    </HStack>
                   </Box>
                 </HStack>
               </ListItem>
