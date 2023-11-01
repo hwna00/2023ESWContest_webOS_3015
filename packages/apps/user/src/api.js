@@ -233,10 +233,23 @@ export const createVitalSign = async (uid, value) => {
   const { data } = await instance.post('/vital-signs', {
     data: { uid, ...value },
   });
-  return data;
+  if (!data.isSuccess) {
+    return [
+      {
+        type: '심박수',
+      },
+      {
+        type: '체온',
+      },
+      {
+        type: '혈당',
+      },
+    ];
+  }
+  return data.result;
 };
 
-export const getVitalSigns = async (uid, type) => {
+export const getVitalSigns = async (uid, type = '') => {
   let typeForDb;
   switch (type) {
     case 'bpm':
@@ -256,12 +269,48 @@ export const getVitalSigns = async (uid, type) => {
   return [
     {
       id: type,
-      data: data.result.map(item => ({
+      data: data.result?.map(item => ({
         x: item.time,
         y: item.value,
       })),
     },
   ];
+};
+
+export const getRecentVitalSigns = async uid => {
+  const { data } = await instance.get(`/users/${uid}/recent-vital-signs`);
+  const basicFormat = [
+    {
+      id: new Date(),
+      name: '체온',
+      type: 'temperature',
+      value: '값을 측정해주세요',
+      time: '',
+    },
+    {
+      id: new Date(),
+      name: '심박수',
+      type: 'bpm',
+      value: '값을 측정해주세요',
+      time: '',
+    },
+  ];
+
+  if (!data.isSuccess) {
+    return basicFormat;
+  }
+
+  return basicFormat.map(format => {
+    data.result.forEach(item => {
+      if (format.type === item.type) {
+        format.id = item.id;
+        format.value = Math.round(item.value * 10) / 10;
+        format.time = `${item.date} ${item.time}`;
+      }
+    });
+
+    return format;
+  });
 };
 
 export const getSideEffect = async itemName => {
