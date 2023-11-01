@@ -21,6 +21,7 @@
     "wifi.query",
     "wifi.management",
     "tts.operation",
+    "alarm.operation",
     "com.housepital.user.app.service.group"
   ]
 }
