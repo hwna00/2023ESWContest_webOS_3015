@@ -293,7 +293,7 @@ export const createSideEffectHistory = async (uid, history) => {
 };
 
 export const getSideEffectHistory = async uid => {
-  const { data } = await instance.get(`/side-effects/${uid}`);
+  const { data } = await instance.get(`/users/${uid}/side-effects`);
 
   return data.result;
 };

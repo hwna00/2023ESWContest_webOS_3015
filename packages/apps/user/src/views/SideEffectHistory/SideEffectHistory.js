@@ -1,4 +1,11 @@
-import { Box, HStack, Text, UnorderedList, VStack } from '@chakra-ui/react';
+import {
+  Box,
+  HStack,
+  ListItem,
+  Text,
+  UnorderedList,
+  VStack,
+} from '@chakra-ui/react';
 import BackButton from '../../components/BackButton/BackButton';
 import ListSkeletion from '@housepital/common/ListSkeleton';
 import { useQuery } from '@tanstack/react-query';
@@ -12,6 +19,7 @@ const SideEffectHistory = function () {
     () => getSideEffectHistory(uid),
     { enabled: !!uid },
   );
+
   return (
     <VStack width="full" height="full">
       <HStack width="full">
@@ -51,7 +59,31 @@ const SideEffectHistory = function () {
             {isError && (
               <Text textAlign="center">데이터를 불러올 수 없습니다.</Text>
             )}
-            {data?.map(item => item)}
+            {data?.map(item => (
+              <ListItem
+                key={item.id}
+                width="full"
+                bgColor="primary.100"
+                padding="4"
+                borderRadius="md"
+              >
+                <HStack width="full" justifyContent="space-between">
+                  <Box flex={1} textAlign="center">
+                    {item.expression}
+                  </Box>
+                  <Box flex={1} textAlign="center">
+                    {item.symptom === ''
+                      ? '증상을 찾을 수 없습니다.'
+                      : item.symptom}
+                  </Box>
+                  <Box flex={1} textAlign="center">
+                    {item.candidatePills.length === 0 &&
+                      '매칭되는 약물이 없습니다.'}
+                    {item.candidatePills.map(candidate => candidate)}
+                  </Box>
+                </HStack>
+              </ListItem>
+            ))}
           </>
         )}
       </UnorderedList>
