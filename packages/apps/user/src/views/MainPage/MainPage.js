@@ -28,8 +28,6 @@ import Calendar from '../../components/Calendar/Calendar';
 import { useQuery } from '@tanstack/react-query';
 import { getCenters } from '../../api';
 
-const bridge = new LS2Request();
-
 const todos = [
   {
     date: '2023-08-16',
