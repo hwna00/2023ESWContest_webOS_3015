@@ -13,11 +13,11 @@
   "allowVideoCapture": true,
   "enableWebOSVDA": true,
   "requiredPermissions": [
+    "all",
     "time.query",
     "activity.operation",
     "notification.operation",
     "application.launcher",
-    "com.housepital.app.user.service.group",
     "wifi.query",
     "wifi.management",
     "tts.operation",
