@@ -1,10 +1,4 @@
-import {
-  getHospitals,
-  getDoctors,
-  getFavorites,
-  getHospital,
-  getDoctor,
-} from '../api';
+import { getHospitals, getDoctors, getHospital, getDoctor } from '../api';
 
 export const getAllByCategory = category => {
   switch (category) {
@@ -12,8 +6,7 @@ export const getAllByCategory = category => {
       return getHospitals();
     case 'doctors':
       return getDoctors();
-    case 'favorites':
-      return getFavorites();
+
     default:
       throw new Error();
   }

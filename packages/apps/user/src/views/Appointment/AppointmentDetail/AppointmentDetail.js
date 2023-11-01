@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import {
   useParams,
@@ -33,7 +33,13 @@ import { useSelector } from 'react-redux';
 
 import BackButton from '../../../components/BackButton/BackButton';
 import { useForm } from 'react-hook-form';
-import { createAppointment, getHospitalDtl } from '../../../api';
+import {
+  createAppointment,
+  createFavorite,
+  deleteFavorite,
+  getFavorite,
+  getHospitalDtl,
+} from '../../../api';
 import AppointForm from './AppiontForm';
 import ReviewList from '@housepital/common/ReviewList';
 import { useQuery } from '@tanstack/react-query';
@@ -44,7 +50,7 @@ import useCreateToast from '@housepital/common/hooks/useCreateToast';
 
 const AppointmentDetail = function () {
   const [appointTime, setAppointTime] = useState();
-
+  const [isFavorite, setIsFavorite] = useState(false);
   const { category, id } = useParams();
   const navigate = useNavigate();
   const uid = useSelector(state => state.me.uid);
@@ -57,6 +63,14 @@ const AppointmentDetail = function () {
     mode: 'all',
     defaultValues: { date: dayjs(new Date()).format('YYYY-MM-DD') },
   });
+  const { data: favorites } = useQuery(['favorites'], () => getFavorite(uid), {
+    enabled: !!uid,
+  });
+
+  useEffect(() => {
+    const isFav = favorites?.some(item => item.id === id);
+    setIsFavorite(isFav);
+  }, [favorites, id]);
 
   const { isLoading, data } = useQuery([id], () =>
     getDetailByCategory(category, id),
@@ -70,10 +84,38 @@ const AppointmentDetail = function () {
     },
   );
 
-  const onToggleBookmarkClick = useCallback(() => {
-    // Todo: 추후에 isFavorite 항목을 수정하는 axios patch 함수로 변경해야 함.
-  }, []);
+  const onCreateBookmarkClick = useCallback(async () => {
+    if (category === 'doctors') {
+      await createFavorite({
+        type: 'doctor',
+        uid,
+        doctorId: id,
+      });
+    } else {
+      await createFavorite({
+        type: 'hospital',
+        uid,
+        hospitalId: id,
+      });
+    }
+    setIsFavorite(true);
+  }, [category, id, uid]);
 
+  const onDeleteBookmarkClick = useCallback(async () => {
+    if (category === 'doctors') {
+      await deleteFavorite('doctor', {
+        data: {
+          uid,
+          targetId: id,
+        },
+      });
+    } else {
+      await deleteFavorite('hospital', {
+        data: { uid, targetId: id },
+      });
+    }
+    setIsFavorite(false);
+  }, [id, uid, category]);
   const onSubmit = useCallback(
     formData => {
       if (!appointTime) {
@@ -124,17 +166,17 @@ const AppointmentDetail = function () {
                 <Avatar src={data?.profileImg} alt="Profile" />
               </AspectRatio>
               <Text position="absolute" top="4" right="4">
-                {data?.isFavorite ? (
+                {isFavorite ? (
                   <Icon
                     as={FaBookmark}
                     boxSize={6}
-                    onClick={onToggleBookmarkClick}
+                    onClick={onDeleteBookmarkClick}
                   />
                 ) : (
                   <Icon
                     as={FaRegBookmark}
                     boxSize={6}
-                    onClick={onToggleBookmarkClick}
+                    onClick={onCreateBookmarkClick}
                   />
                 )}
               </Text>
