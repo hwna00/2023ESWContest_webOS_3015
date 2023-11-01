@@ -48,14 +48,14 @@ router.get('/auth/login/kakao-callback', async (req, res) => {
   const REDIRECT_URI = 'http://localhost:3000/api/auth/login/kakao-callback';
 
   const API_URI =
-    'https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=' +
-    process.env.REACT_APP_KAKAO_CLIENT_ID +
-    '&redirect_uri=' +
-    REDIRECT_URI +
-    '&code=' +
-    code +
-    '&ClientSecret=' +
-    process.env.REACT_APP_KAKAO_CLIENT_SECRET;
+    `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${
+      process.env.REACT_APP_KAKAO_CLIENT_ID
+    }&redirect_uri=${
+      REDIRECT_URI
+    }&code=${
+      code
+    }&ClientSecret=${
+      process.env.REACT_APP_KAKAO_CLIENT_SECRET}`;
 
   const {
     data: { access_token },

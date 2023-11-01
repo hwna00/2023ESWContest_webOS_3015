@@ -7,12 +7,12 @@ const webpack = require('webpack');
 const {choosePort, createCompiler, prepareProxy, prepareUrls} = require('react-dev-utils/WebpackDevServerUtils');
 const redirectServedPathMiddleware = require('react-dev-utils/redirectServedPathMiddleware');
 const openBrowser = require('react-dev-utils/openBrowser');
+const ignoredFiles = require('react-dev-utils/ignoredFiles');
 const getPublicUrlOrPath = require('react-dev-utils/getPublicUrlOrPath');
 const evalSourceMapMiddleware = require('react-dev-utils/evalSourceMapMiddleware');
 const clearConsole = require('react-dev-utils/clearConsole');
 const minimist = require('minimist');
 const chalk = require('chalk');
-const ignoredFiles = require('react-dev-utils/ignoredFiles');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const {optionParser: app} = require('@enact/dev-utils');
 
