@@ -4,9 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-// helloworld_webos_service.js
-// is simple service, based on low-level luna-bus API
-
 // eslint-disable-next-line import/no-unresolved
 const Service = require('webos-service');
 
