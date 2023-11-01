@@ -64,7 +64,7 @@ function createNotification(msg) {
     },
   );
 
-  service.call('luna://com.webos.service.tts/speak   ', ttsParams, m2 => {
+  service.call('luna://com.webos.service.tts/speak', ttsParams, m2 => {
     console.log('tts have been called', m2);
     msg.respond({
       returnValue: true,
