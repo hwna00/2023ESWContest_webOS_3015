@@ -39,6 +39,7 @@ import {
   deleteFavorite,
   getFavorite,
   getHospitalDtl,
+  lsCreateAlert,
 } from '../../../api';
 import AppointForm from './AppiontForm';
 import ReviewList from '@housepital/common/ReviewList';
@@ -47,6 +48,9 @@ import { getDetailByCategory } from '../../../utils/getByCategory';
 import FieldList from '../../../components/FieldList/FieldList';
 import AppointmentCard from '../../../components/AppointmentCard/AppointmentCard';
 import useCreateToast from '@housepital/common/hooks/useCreateToast';
+import LS2Request from '@enact/webos/LS2Request';
+
+const bridge = new LS2Request();
 
 const AppointmentDetail = function () {
   const [appointTime, setAppointTime] = useState();
@@ -116,13 +120,24 @@ const AppointmentDetail = function () {
     }
     setIsFavorite(false);
   }, [id, uid, category]);
+
   const onSubmit = useCallback(
     formData => {
       if (!appointTime) {
-        return toast('예약시간을 선택해주세요.');
+        console.log('예약시간 선택해주세요');
+        const lsRequest = {
+          service: 'luna://com.housepital.user.app.service',
+          method: 'createNotification',
+          parameters: { message: '예약시간을 선택해주세요.' },
+          onSuccess: response => console.log('success', response),
+          onFailure: response => console.log('fail', response),
+        };
+        bridge.send(lsRequest);
+        return lsCreateAlert('예약시간을 선택해주세요.');
       }
       if (formData.type === 'nftf' && !formData.nftfId) {
-        return toast('비대면 진료 타입을 선택해주세요.');
+        console.log('타입 선택해주세요');
+        return lsCreateAlert('비대면 진료 타입을 선택해주세요.');
       }
 
       const appointment = {
@@ -133,10 +148,13 @@ const AppointmentDetail = function () {
       };
 
       createAppointment(appointment)
-        .then(() => navigate('/appointment/waiting-room'))
+        .then(() => {
+          lsCreateAlert('예약이 생성되었습니다.');
+          navigate('/appointment/waiting-room');
+        })
         .catch(err => console.log(err));
     },
-    [appointTime, uid, data?.id, navigate, toast],
+    [appointTime, uid, data?.id, navigate],
   );
 
   return (

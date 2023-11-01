@@ -1,9 +1,14 @@
 import axios from 'axios';
+import LS2Request from '@enact/webos/LS2Request';
 import { getTrmtHours } from './utils/converter';
+
+const bridge = new LS2Request();
+const SERVICE_URL = 'luna://com.housepital.user.app.service';
 
 const instance = axios.create({
   baseURL: `${process.env.REACT_APP_BACKEND_API}/api`,
 });
+
 export const createUser = async user => {
   const { data } = await instance.post('/users', { data: user });
   return data;
@@ -357,4 +362,16 @@ export const getSideEffectHistory = async uid => {
   const { data } = await instance.get(`/users/${uid}/side-effects`);
 
   return data.result;
+};
+
+export const lsCreateAlert = msg => {
+  console.log(msg);
+  const lsRequest = {
+    service: SERVICE_URL,
+    method: 'createNotification',
+    parameters: { message: msg },
+    onSuccess: response => console.log('success', response),
+    onFailure: response => console.log('fail', response),
+  };
+  bridge.send(lsRequest);
 };
