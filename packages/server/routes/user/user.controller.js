@@ -150,6 +150,33 @@ const readUservitalSignsQuery = async (connection, uid, type) => {
   return rows;
 };
 
+const readUserRecentVitalSignsQuery = async (connection, uid) => {
+  const Query = `WITH CTE_HeartRate AS (
+        SELECT 'heart-rate' AS type, "심박수" AS name, id, value, date, time 
+        FROM HeartRate 
+        WHERE user_id =?
+        ORDER BY date DESC, time DESC
+        LIMIT 1
+        ),
+        CTE_Temperature AS (
+        SELECT 'temperature' AS type, "체온" AS name, id, value, date, time 
+        FROM Temperature 
+        WHERE user_id = ?
+        ORDER BY date DESC, time DESC
+        LIMIT 1
+        )
+    
+        SELECT * FROM CTE_HeartRate
+        UNION
+        SELECT * FROM CTE_Temperature;`;
+
+  const Params = [uid, uid];
+
+  const rows = await connection.query(Query, Params);
+
+  return rows;
+};
+
 const readUserFavoritesQuery = async (connection, uid, type) => {
   let Query;
   switch (type) {
@@ -443,6 +470,38 @@ exports.readUserVitalSigns = async (req, res) => {
           message: '활력징후 조회 성공',
         });
       }
+      return res.json({
+        result: rows,
+        isSuccess: true,
+        code: 200,
+        message: '활력징후 조회 성공',
+      });
+    } catch (err) {
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSuccess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
+exports.readUserRecentVitalSigns = async (req, res) => {
+  const { uid } = req.params;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      const [rows] = await readUserRecentVitalSignsQuery(connection, uid);
+
       return res.json({
         result: rows,
         isSuccess: true,
