@@ -1,6 +1,5 @@
 const convertUser = require('../../utils/convertUser');
 const classifyVitalSigns = require('../../utils/classifyVitalSigns');
-const classifyFavorites = require('../../utils/classifyFavorites');
 const classifyAppointments = require('../../utils/classifyAppointments');
 const pool = require('../../config/db');
 
@@ -477,9 +476,8 @@ exports.readUserFavorites = async (req, res) => {
     try {
       const [rows] = await readUserFavoritesQuery(connection, uid, type);
       if (!type) {
-        const classifiedRows = classifyFavorites(rows);
         return res.json({
-          result: classifiedRows,
+          result: rows,
           isSuccess: true,
           code: 200,
           message: '즐겨찾기 조회 성공',
