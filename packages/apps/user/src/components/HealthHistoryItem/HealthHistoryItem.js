@@ -22,14 +22,14 @@ const HealthHistoryItem = function ({ measureData }) {
     >
       <HStack w="full" justifyContent="space-between">
         <Text fontSize="2xl" fontWeight="bold">
-          {measureData.name}
+          {measureData.type}
         </Text>
         <Text fontSize="sm" float="right" opacity="0.5">
-          {measureData.measuementTime}&gt;
+          {measureData.time}&gt;
         </Text>
       </HStack>
-      <Text w="90%" fontSize="5xl" align="right">
-        {measureData.value}
+      <Text fontSize="xl" align="right">
+        {measureData.value ? measureData.value : '기록이 존재하지 않습니다.'}
       </Text>
     </VStack>
   );
