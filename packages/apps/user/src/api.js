@@ -4,7 +4,6 @@ import { getTrmtHours } from './utils/converter';
 const instance = axios.create({
   baseURL: `${process.env.REACT_APP_BACKEND_API}/api`,
 });
-
 export const createUser = async user => {
   const { data } = await instance.post('/users', { data: user });
   return data;
@@ -39,9 +38,18 @@ export const deleteAppointment = async appointmentId => {
   return data;
 };
 
-export const getFavorites = async () => {
+export const createFavorite = async data => {
+  return await instance.post(`/favorites`, { data });
+};
+export const deleteFavorite = async (type = '', data) => {
+  return await instance.delete(`/favorites?type=${type}`, { data });
+};
+
+export const getFavorite = async (uid, type = '') => {
   try {
-    const { data } = await instance.get('/favorites');
+    const { data } = await instance.get(`/users/${uid}/favorites?type=${type}`);
+    console.log(data.result);
+
     return data.result;
   } catch (error) {
     throw new Error(error);
@@ -79,6 +87,7 @@ export const getHospital = async hospitalId => {
 export const getDoctor = async doctorId => {
   try {
     const { data } = await instance.get(`/doctors/${doctorId}`);
+
     return { ...data.result, fields: JSON.parse(data?.result?.fields) };
   } catch (error) {
     throw new Error(error);
