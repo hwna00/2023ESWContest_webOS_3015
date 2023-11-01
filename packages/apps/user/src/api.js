@@ -41,15 +41,18 @@ export const deleteAppointment = async appointmentId => {
 export const createFavorite = async data => {
   return await instance.post(`/favorites`, { data });
 };
-export const deleteFavorite = async (type = '', data) => {
-  return await instance.delete(`/favorites?type=${type}`, { data });
+
+export const deleteFavorite = async (type, favorite) => {
+  const { data } = await instance.delete(`/favorites?type=${type}`, {
+    data: favorite,
+  });
+  return data.result;
 };
 
 export const getFavorite = async (uid, type = '') => {
   try {
     const { data } = await instance.get(`/users/${uid}/favorites?type=${type}`);
     console.log(data.result);
-
     return data.result;
   } catch (error) {
     throw new Error(error);

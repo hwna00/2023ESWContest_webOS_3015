@@ -14,11 +14,13 @@ import ListSkeleton from '@housepital/common/ListSkeleton';
 
 import { getAllByCategory } from '../../utils/getByCategory';
 import AppointmentCard from '../AppointmentCard/AppointmentCard';
+import { useSelector } from 'react-redux';
 
 const AppointmentViewList = function ({ type }) {
   const [nameOfView, setNameOfView] = useState('');
+  const uid = useSelector(state => state.me.uid);
   const { isLoading, data, isError } = useQuery([type], () =>
-    getAllByCategory(type),
+    getAllByCategory(type, uid),
   );
 
   useEffect(() => {
