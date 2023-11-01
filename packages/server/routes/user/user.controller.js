@@ -181,11 +181,11 @@ const readUserFavoritesQuery = async (connection, uid, type) => {
   let Query;
   switch (type) {
     case 'doctor':
-      Query =
-        'SELECT doctor_id AS id FROM DoctorBookmarks WHERE user_id = ?;';
+      Query = 'SELECT doctor_id AS id FROM DoctorBookmarks WHERE user_id = ?;';
       break;
     case 'hospital':
-      Query = 'SELECT hospital_id AS id FROM HospitalBookmarks WHERE user_id = ?;';
+      Query =
+        'SELECT hospital_id AS id FROM HospitalBookmarks WHERE user_id = ?;';
       break;
     default:
       Query = `
@@ -201,7 +201,8 @@ const readUserFavoritesQuery = async (connection, uid, type) => {
 };
 
 const readUserSideEffectsQuery = async (connection, uid) => {
-  const Query = 'SELECT id, expression, symptom, candidatePills FROM SideEffectHistories WHERE user_id = ?';
+  const Query =
+    'SELECT id, expression, symptom, candidatePills FROM SideEffectHistories WHERE user_id = ?';
   const Params = [uid];
 
   const rows = await connection.query(Query, Params);

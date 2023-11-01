@@ -240,7 +240,7 @@ export const createVitalSign = async (uid, value) => {
 export const getVitalSigns = async (uid, type = '') => {
   let typeForDb;
   switch (type) {
-    case 'heart-rate':
+    case 'bpm':
       typeForDb = 'heartRate';
       break;
     default:
@@ -266,13 +266,39 @@ export const getVitalSigns = async (uid, type = '') => {
 };
 
 export const getRecentVitalSigns = async uid => {
-  const { data } = await instance.get(`/users/${uid}/recent-vital-signs}`);
+  const { data } = await instance.get(`/users/${uid}/recent-vital-signs`);
+  const basicFormat = [
+    {
+      id: new Date(),
+      name: '체온',
+      type: 'temperature',
+      value: '값을 측정해주세요',
+      time: '',
+    },
+    {
+      id: new Date(),
+      name: '심박수',
+      type: 'bpm',
+      value: '값을 측정해주세요',
+      time: '',
+    },
+  ];
 
   if (!data.isSuccess) {
-    return [];
+    return basicFormat;
   }
-  console.log(data);
-  return data.result;
+
+  return basicFormat.map(format => {
+    data.result.forEach(item => {
+      if (format.type === item.type) {
+        format.id = item.id;
+        format.value = Math.round(item.value * 10) / 10;
+        format.time = `${item.date} ${item.time}`;
+      }
+    });
+
+    return format;
+  });
 };
 
 export const getSideEffect = async itemName => {

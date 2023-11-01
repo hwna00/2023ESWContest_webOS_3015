@@ -28,8 +28,8 @@ const HealthHistoryItem = function ({ measureData }) {
           {measureData.time}&gt;
         </Text>
       </HStack>
-      <Text fontSize="xl" align="right">
-        {measureData.value ? measureData.value : '기록이 존재하지 않습니다.'}
+      <Text width="full" fontSize="xl" textAlign="right">
+        {measureData.value}
       </Text>
     </VStack>
   );
