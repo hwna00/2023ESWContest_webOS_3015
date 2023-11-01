@@ -69,6 +69,7 @@ app.get('/kakao-payment/callback', async (req, res) => {
 });
 
 app.post('/api/dialogflow', async (req, res) => {
+  console.log('body', req.body);
   const { symptom } = req.body;
   const result = await executeQueries('123123', [symptom]);
   res.json(result);
