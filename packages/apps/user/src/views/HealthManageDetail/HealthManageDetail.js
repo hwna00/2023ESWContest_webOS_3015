@@ -38,7 +38,6 @@ const HealthManageDetail = function () {
     time: 0,
   });
 
-  // TODO: 현재까지의 건강 기록 정보를 받아오는 api 함수 추가
   const toast = useCreateToast();
   const { type } = useParams();
   const uid = useSelector(state => state.me.uid);
@@ -145,7 +144,7 @@ const HealthManageDetail = function () {
   return (
     <VStack height="full">
       <HStack width="full" justifyContent="space-between" alignItems="center">
-        <BackButton title="그래프" />
+        <BackButton title={`${type} 그래프`} />
         <Button
           colorScheme="primary"
           size="lg"

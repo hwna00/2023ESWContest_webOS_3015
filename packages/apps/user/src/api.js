@@ -240,7 +240,7 @@ export const createVitalSign = async (uid, value) => {
 export const getVitalSigns = async (uid, type = '') => {
   let typeForDb;
   switch (type) {
-    case 'bpm':
+    case 'heart-rate':
       typeForDb = 'heartRate';
       break;
     default:
@@ -254,7 +254,6 @@ export const getVitalSigns = async (uid, type = '') => {
   if (!data.isSuccess) {
     return [];
   }
-  console.log(data);
   return [
     {
       id: type,

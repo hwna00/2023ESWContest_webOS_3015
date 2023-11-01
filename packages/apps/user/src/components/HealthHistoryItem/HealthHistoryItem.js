@@ -22,7 +22,7 @@ const HealthHistoryItem = function ({ measureData }) {
     >
       <HStack w="full" justifyContent="space-between">
         <Text fontSize="2xl" fontWeight="bold">
-          {measureData.type}
+          {measureData.name}
         </Text>
         <Text fontSize="sm" float="right" opacity="0.5">
           {measureData.time}&gt;
