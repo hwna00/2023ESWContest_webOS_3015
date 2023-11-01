@@ -30,7 +30,7 @@ const createUserQuery = async (connection, data) => {
 
 const createUserSideEffectsQuery = async (connection, data, uid) => {
   const Query =
-    'INSERT INTO SideEffectHistories(uid, expression, symptom, candidatePills) VALUES (?, ?, ?, ?);';
+    'INSERT INTO SideEffectHistories(user_id, expression, symptom, candidatePills) VALUES (?, ?, ?, ?);';
 
   const Params = [
     uid,
@@ -168,6 +168,15 @@ const readUserFavoritesQuery = async (connection, uid, type) => {
         SELECT 'hospital' AS type, hospital_id AS id FROM HospitalBookmarks WHERE user_id =?`;
   }
   const Params = [uid, uid];
+
+  const rows = await connection.query(Query, Params);
+
+  return rows;
+};
+
+const readUserSideEffectsQuery = async (connection, uid) => {
+  const Query = 'SELECT id, expression, symptom, candidatePills FROM SideEffectHistories WHERE user_id = ?';
+  const Params = [uid];
 
   const rows = await connection.query(Query, Params);
 
@@ -482,6 +491,38 @@ exports.readUserFavorites = async (req, res) => {
         isSuccess: true,
         code: 200,
         message: '즐겨찾기 조회 성공',
+      });
+    } catch (err) {
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSuccess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
+exports.readUserSideEffects = async (req, res) => {
+  const { uid } = req.params;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      const [rows] = await readUserSideEffectsQuery(connection, uid);
+
+      return res.json({
+        result: rows,
+        isSuccess: true,
+        code: 200,
+        message: '부작용 정보 조회 성공',
       });
     } catch (err) {
       return res.json({
