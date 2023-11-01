@@ -28,6 +28,20 @@ const createUserQuery = async (connection, data) => {
   await connection.query(Query, Params);
 };
 
+const createUserSideEffectsQuery = async (connection, data, uid) => {
+  const Query =
+    'INSERT INTO SideEffectHistories(uid, expression, symptom, candidatePills) VALUES (?, ?, ?, ?);';
+
+  const Params = [
+    uid,
+    data.expression,
+    data.symptom,
+    JSON.stringify(data.candidatePills),
+  ];
+
+  await connection.query(Query, Params);
+};
+
 const readUserQuery = async (connection, uid) => {
   const Query = 'SELECT * FROM Users WHERE user_id = ?;';
   const Params = [uid];
@@ -181,6 +195,38 @@ exports.createUser = async (req, res) => {
           message: '이미 가입된 회원입니다.',
         });
       }
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSuccess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
+exports.createUserSideEffects = async (req, res) => {
+  const { data } = req.body;
+  const { uid } = req.params;
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      await createUserSideEffectsQuery(connection, data, uid);
+
+      return res.json({
+        result: data,
+        isSuccess: true,
+        code: 201,
+        message: '부작용기록 생성 성공',
+      });
+    } catch (err) {
       return res.json({
         isSuccess: false,
         code: 500,
