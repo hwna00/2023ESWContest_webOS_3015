@@ -73,3 +73,15 @@ export const updateAppointment = async appointmentId => {
 
   return data;
 };
+
+export const getPatientSideEffectHistory = async patientId => {
+  const { data } = await instance.get(`/users/${patientId}/side-effects`);
+
+  return data.result;
+};
+
+export const getPatient = async patientId => {
+  const { data } = await instance.get(`/users/${patientId}`);
+
+  return data.result;
+};

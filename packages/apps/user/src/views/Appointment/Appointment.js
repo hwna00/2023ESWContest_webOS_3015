@@ -1,23 +1,57 @@
-import { Link as ReactRouterLink } from 'react-router-dom';
+import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import {
   Box,
   Flex,
   HStack,
   VStack,
   Text,
-  Image,
   Link as ChakraLink,
+  Avatar,
 } from '@chakra-ui/react';
 
 import AppointmentViewList from '../../components/AppointmentViewList/AppointmentViewList';
-import { FavoriteList } from './dataList';
-import { getAppointments } from '../../api';
+import { getAppointments, getFavorite } from '../../api';
 import { useSelector } from 'react-redux';
 import { useQuery } from '@tanstack/react-query';
+import { useCallback, useEffect, useState } from 'react';
+import { getBlob } from '../../../firebase';
+
+const FavoriteItem = function ({ data }) {
+  const [favoriteImg, setFavoriteImg] = useState('');
+  const navigate = useNavigate();
+
+  const handleMove = useCallback(() => {
+    navigate(`/appointment/${data.type}s/${data.id}`);
+  }, [navigate, data]);
+
+  const getFavoriteImg = useCallback(async () => {
+    const url = await getBlob(`${data.id}/profileImg.png`);
+    setFavoriteImg(url);
+  }, [data]);
+
+  useEffect(() => {
+    getFavoriteImg();
+  }, [getFavoriteImg]);
+
+  return (
+    <Avatar
+      src={favoriteImg}
+      size="xl"
+      key={data.id}
+      h="full"
+      borderRadius={'sm'}
+      onClick={handleMove}
+    />
+  );
+};
 
 const Appointment = function () {
   const uid = useSelector(state => state.me.uid);
 
+  const { data: favorites } = useQuery(['favorites'], () => getFavorite(uid), {
+    enabled: !!uid,
+  });
+  console.log('d', favorites);
   const {
     isLoading,
     data: appointments,
@@ -68,20 +102,13 @@ const Appointment = function () {
             <Text fontSize="2xl" fontWeight="bold">
               즐겨찾기
             </Text>
-            <ChakraLink as={ReactRouterLink} to="/appointment">
-              + 더보기
-            </ChakraLink>
           </HStack>
 
           <HStack justifyContent="flex-start" overflowX="scroll" gap={'4'}>
-            {FavoriteList.map(favorite => (
-              <Image
-                key={favorite.id}
-                src={favorite.profileImg}
-                h="full"
-                borderRadius={'sm'}
-              />
-            ))}
+            {favorites &&
+              favorites.map(favorite => (
+                <FavoriteItem key={favorite.id} data={favorite} />
+              ))}
           </HStack>
         </VStack>
       </HStack>

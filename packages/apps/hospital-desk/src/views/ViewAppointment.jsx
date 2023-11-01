@@ -1,14 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
-import { AiFillPlusCircle } from 'react-icons/ai';
+
 import dayjs from 'dayjs';
 import 'react-calendar/dist/Calendar.css';
 import { useQuery } from '@tanstack/react-query';
 import styles from '@housepital/common/css/HideScrollBar.module.css';
 import {
   Box,
-  Button,
   HStack,
   Heading,
   Radio,
@@ -140,9 +139,6 @@ function ViewAppointment() {
             <Heading textAlign="left" p="4" fontSize="30px">
               예약 전체보기
             </Heading>
-            <Button colorScheme="primary" leftIcon={<AiFillPlusCircle />}>
-              예약추가
-            </Button>
           </HStack>
           <HStack alignItems="unset" justifyContent="center" gap="10">
             <Box flex={1} h="750px">

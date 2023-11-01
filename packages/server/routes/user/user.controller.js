@@ -27,6 +27,20 @@ const createUserQuery = async (connection, data) => {
   await connection.query(Query, Params);
 };
 
+const createUserSideEffectsQuery = async (connection, data, uid) => {
+  const Query =
+    'INSERT INTO SideEffectHistories(user_id, expression, symptom, candidatePills) VALUES (?, ?, ?, ?);';
+
+  const Params = [
+    uid,
+    data.expression,
+    data.symptom,
+    JSON.stringify(data.candidatePills),
+  ];
+
+  await connection.query(Query, Params);
+};
+
 const readUserQuery = async (connection, uid) => {
   const Query = 'SELECT * FROM Users WHERE user_id = ?;';
   const Params = [uid];
@@ -136,6 +150,66 @@ const readUservitalSignsQuery = async (connection, uid, type) => {
   return rows;
 };
 
+const readUserRecentVitalSignsQuery = async (connection, uid) => {
+  const Query = `WITH CTE_HeartRate AS (
+        SELECT 'heart-rate' AS type, "심박수" AS name, id, value, date, time 
+        FROM HeartRate 
+        WHERE user_id =?
+        ORDER BY date DESC, time DESC
+        LIMIT 1
+        ),
+        CTE_Temperature AS (
+        SELECT 'temperature' AS type, "체온" AS name, id, value, date, time 
+        FROM Temperature 
+        WHERE user_id = ?
+        ORDER BY date DESC, time DESC
+        LIMIT 1
+        )
+    
+        SELECT * FROM CTE_HeartRate
+        UNION
+        SELECT * FROM CTE_Temperature;`;
+
+  const Params = [uid, uid];
+
+  const rows = await connection.query(Query, Params);
+
+  return rows;
+};
+
+const readUserFavoritesQuery = async (connection, uid, type) => {
+  let Query;
+  switch (type) {
+    case 'doctor':
+      Query = 'SELECT doctor_id AS id FROM DoctorBookmarks WHERE user_id = ?;';
+      break;
+    case 'hospital':
+      Query =
+        'SELECT hospital_id AS id FROM HospitalBookmarks WHERE user_id = ?;';
+      break;
+    default:
+      Query = `
+        SELECT 'doctor' AS type, doctor_id AS id FROM DoctorBookmarks WHERE user_id =?
+        UNION
+        SELECT 'hospital' AS type, hospital_id AS id FROM HospitalBookmarks WHERE user_id =?`;
+  }
+  const Params = [uid, uid];
+
+  const rows = await connection.query(Query, Params);
+
+  return rows;
+};
+
+const readUserSideEffectsQuery = async (connection, uid) => {
+  const Query =
+    'SELECT id, expression, symptom, candidatePills FROM SideEffectHistories WHERE user_id = ?';
+  const Params = [uid];
+
+  const rows = await connection.query(Query, Params);
+
+  return rows;
+};
+
 exports.createUser = async (req, res) => {
   const { data } = req.body;
   try {
@@ -157,6 +231,38 @@ exports.createUser = async (req, res) => {
           message: '이미 가입된 회원입니다.',
         });
       }
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSuccess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
+exports.createUserSideEffects = async (req, res) => {
+  const { data } = req.body;
+  const { uid } = req.params;
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      await createUserSideEffectsQuery(connection, data, uid);
+
+      return res.json({
+        result: data,
+        isSuccess: true,
+        code: 201,
+        message: '부작용기록 생성 성공',
+      });
+    } catch (err) {
       return res.json({
         isSuccess: false,
         code: 500,
@@ -370,6 +476,111 @@ exports.readUserVitalSigns = async (req, res) => {
         isSuccess: true,
         code: 200,
         message: '활력징후 조회 성공',
+      });
+    } catch (err) {
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSuccess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
+exports.readUserRecentVitalSigns = async (req, res) => {
+  const { uid } = req.params;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      const [rows] = await readUserRecentVitalSignsQuery(connection, uid);
+
+      return res.json({
+        result: rows,
+        isSuccess: true,
+        code: 200,
+        message: '활력징후 조회 성공',
+      });
+    } catch (err) {
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSuccess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
+exports.readUserFavorites = async (req, res) => {
+  const { uid } = req.params;
+  const { type } = req.query;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      const [rows] = await readUserFavoritesQuery(connection, uid, type);
+      if (!type) {
+        return res.json({
+          result: rows,
+          isSuccess: true,
+          code: 200,
+          message: '즐겨찾기 조회 성공',
+        });
+      }
+      const favoriteArray = rows.map(favorite => favorite.id);
+      return res.json({
+        result: favoriteArray,
+        isSuccess: true,
+        code: 200,
+        message: '즐겨찾기 조회 성공',
+      });
+    } catch (err) {
+      return res.json({
+        isSuccess: false,
+        code: 500,
+        message: '서버 오류',
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (err) {
+    return res.json({
+      isSuccess: false,
+      code: 500,
+      message: '데이터베이스 연결 실패',
+    });
+  }
+};
+
+exports.readUserSideEffects = async (req, res) => {
+  const { uid } = req.params;
+
+  try {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+      const [rows] = await readUserSideEffectsQuery(connection, uid);
+
+      return res.json({
+        result: rows,
+        isSuccess: true,
+        code: 200,
+        message: '부작용 정보 조회 성공',
       });
     } catch (err) {
       return res.json({

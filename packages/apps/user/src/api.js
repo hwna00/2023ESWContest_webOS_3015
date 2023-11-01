@@ -1,5 +1,9 @@
 import axios from 'axios';
+import LS2Request from '@enact/webos/LS2Request';
 import { getTrmtHours } from './utils/converter';
+
+const bridge = new LS2Request();
+const SERVICE_URL = 'luna://com.housepital.user.app.service';
 
 const instance = axios.create({
   baseURL: `${process.env.REACT_APP_BACKEND_API}/api`,
@@ -39,9 +43,21 @@ export const deleteAppointment = async appointmentId => {
   return data;
 };
 
-export const getFavorites = async () => {
+export const createFavorite = async data => {
+  return await instance.post(`/favorites`, { data });
+};
+
+export const deleteFavorite = async (type, favorite) => {
+  const { data } = await instance.delete(`/favorites?type=${type}`, {
+    data: favorite,
+  });
+  return data.result;
+};
+
+export const getFavorite = async (uid, type = '') => {
   try {
-    const { data } = await instance.get('/favorites');
+    const { data } = await instance.get(`/users/${uid}/favorites?type=${type}`);
+    console.log(data.result);
     return data.result;
   } catch (error) {
     throw new Error(error);
@@ -79,6 +95,7 @@ export const getHospital = async hospitalId => {
 export const getDoctor = async doctorId => {
   try {
     const { data } = await instance.get(`/doctors/${doctorId}`);
+
     return { ...data.result, fields: JSON.parse(data?.result?.fields) };
   } catch (error) {
     throw new Error(error);
@@ -221,10 +238,23 @@ export const createVitalSign = async (uid, value) => {
   const { data } = await instance.post('/vital-signs', {
     data: { uid, ...value },
   });
-  return data;
+  if (!data.isSuccess) {
+    return [
+      {
+        type: '심박수',
+      },
+      {
+        type: '체온',
+      },
+      {
+        type: '혈당',
+      },
+    ];
+  }
+  return data.result;
 };
 
-export const getVitalSigns = async (uid, type) => {
+export const getVitalSigns = async (uid, type = '') => {
   let typeForDb;
   switch (type) {
     case 'bpm':
@@ -244,12 +274,48 @@ export const getVitalSigns = async (uid, type) => {
   return [
     {
       id: type,
-      data: data.result.map(item => ({
+      data: data.result?.map(item => ({
         x: item.time,
         y: item.value,
       })),
     },
   ];
+};
+
+export const getRecentVitalSigns = async uid => {
+  const { data } = await instance.get(`/users/${uid}/recent-vital-signs`);
+  const basicFormat = [
+    {
+      id: new Date(),
+      name: '체온',
+      type: 'temperature',
+      value: '값을 측정해주세요',
+      time: '',
+    },
+    {
+      id: new Date(),
+      name: '심박수',
+      type: 'bpm',
+      value: '값을 측정해주세요',
+      time: '',
+    },
+  ];
+
+  if (!data.isSuccess) {
+    return basicFormat;
+  }
+
+  return basicFormat.map(format => {
+    data.result.forEach(item => {
+      if (format.type === item.type) {
+        format.id = item.id;
+        format.value = Math.round(item.value * 10) / 10;
+        format.time = `${item.date} ${item.time}`;
+      }
+    });
+
+    return format;
+  });
 };
 
 export const getSideEffect = async itemName => {
@@ -282,4 +348,30 @@ export const getCenters = async () => {
     name: center.center_name,
     id: center.counselor_id,
   }));
+};
+
+export const createSideEffectHistory = async (uid, history) => {
+  const { data } = await instance.post(`/users/${uid}/side-effects`, {
+    data: history,
+  });
+  console.log(data);
+  return data;
+};
+
+export const getSideEffectHistory = async uid => {
+  const { data } = await instance.get(`/users/${uid}/side-effects`);
+
+  return data.result;
+};
+
+export const lsCreateAlert = msg => {
+  console.log(msg);
+  const lsRequest = {
+    service: SERVICE_URL,
+    method: 'createNotification',
+    parameters: { message: msg },
+    onSuccess: response => console.log('success', response),
+    onFailure: response => console.log('fail', response),
+  };
+  bridge.send(lsRequest);
 };

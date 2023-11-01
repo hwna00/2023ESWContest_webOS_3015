@@ -12,6 +12,7 @@ import appointmentRoutes from './appointmentRoutes';
 import VideoCall from '../views/VideoCall/VideoCall';
 import MedicinesManage from '../views/MedicinesManage/MedicinesManage';
 import SideEffect from '../views/SideEffect';
+import SideEffectHistory from '../views/SideEffectHistory/SideEffectHistory';
 
 const router = createHashRouter(
   [
@@ -39,6 +40,10 @@ const router = createHashRouter(
         {
           path: 'medicines/side-effects',
           element: <SideEffect />,
+        },
+        {
+          path: 'medicines/side-effects/histories',
+          element: <SideEffectHistory />,
         },
         {
           path: 'settings',

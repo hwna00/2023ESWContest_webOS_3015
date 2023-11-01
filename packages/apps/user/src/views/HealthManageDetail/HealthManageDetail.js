@@ -7,7 +7,6 @@ import {
   Button,
   ButtonGroup,
   HStack,
-  Heading,
   Modal,
   ModalBody,
   ModalContent,
@@ -22,6 +21,7 @@ import {
 import { io } from 'socket.io-client';
 import { ResponsiveLine } from '@nivo/line';
 import useCreateToast from '@housepital/common/hooks/useCreateToast';
+import BackButton from '../../components/BackButton';
 
 import { createVitalSign, getVitalSigns } from '../../api';
 import dayjs from 'dayjs';
@@ -38,7 +38,6 @@ const HealthManageDetail = function () {
     time: 0,
   });
 
-  // TODO: 현재까지의 건강 기록 정보를 받아오는 api 함수 추가
   const toast = useCreateToast();
   const { type } = useParams();
   const uid = useSelector(state => state.me.uid);
@@ -52,7 +51,7 @@ const HealthManageDetail = function () {
   );
   const { mutate } = useMutation(value => createVitalSign(uid, value), {
     onSuccess: () => {
-      // toast('건강 기록을 저장하였습니다.');
+      toast('건강 기록을 저장하였습니다.');
       queryClient.invalidateQueries('vitalSigns');
     },
   });
@@ -145,7 +144,7 @@ const HealthManageDetail = function () {
   return (
     <VStack height="full">
       <HStack width="full" justifyContent="space-between" alignItems="center">
-        <Heading>그래프</Heading>
+        <BackButton title={`${type} 그래프`} />
         <Button
           colorScheme="primary"
           size="lg"
@@ -164,9 +163,8 @@ const HealthManageDetail = function () {
         xScale={{ type: 'point' }}
         yScale={{
           type: 'linear',
-          min: 'auto',
+          min: '0',
           max: 'auto',
-          stacked: true,
           reverse: false,
         }}
         yFormat=" >-.2f"

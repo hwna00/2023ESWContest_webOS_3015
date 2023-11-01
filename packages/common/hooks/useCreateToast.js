@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+
 import LS2Request from '@enact/webos/LS2Request';
 
 const webOSBridge = new LS2Request();
@@ -21,7 +22,7 @@ const useCreateToast = () => {
       setMsg(message);
 
       const parms = {
-        message: message,
+        message,
       };
 
       const lsRequest = {

@@ -25,10 +25,10 @@ const HealthHistoryItem = function ({ measureData }) {
           {measureData.name}
         </Text>
         <Text fontSize="sm" float="right" opacity="0.5">
-          {measureData.measuementTime}&gt;
+          {measureData.time}&gt;
         </Text>
       </HStack>
-      <Text w="90%" fontSize="5xl" align="right">
+      <Text width="full" fontSize="xl" textAlign="right">
         {measureData.value}
       </Text>
     </VStack>

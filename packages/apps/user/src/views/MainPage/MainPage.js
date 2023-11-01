@@ -20,6 +20,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { io } from 'socket.io-client';
+import LS2Request from '@enact/webos/LS2Request';
 
 import TodoList from '../../components/TodoList/TodoList';
 import PushAlarm from '../../components/PushAlarm/PushAlarm';
@@ -102,6 +103,11 @@ const MainPage = function () {
   const [isLoading, setIsLoading] = useState(false);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isChatbotOpen,
+    onOpen: onChatbotOpen,
+    onClose: onChatbotClose,
+  } = useDisclosure();
   const navigate = useNavigate();
   const uid = useSelector(state => state.me.uid);
   const { data: centers } = useQuery(['centers'], getCenters);
@@ -131,6 +137,11 @@ const MainPage = function () {
 
     socketRef.current.emit('join_room', uid);
   }, [navigate, uid]);
+
+  const onChabotClick = useCallback(() => {
+    console.log('hi');
+    onChatbotOpen();
+  }, [onChatbotOpen]);
 
   return (
     <HStack height="full" gap="6">
@@ -166,6 +177,7 @@ const MainPage = function () {
             py="8"
             width="full"
             fontSize="lg"
+            onClick={onChabotClick}
           >
             챗봇 호출
           </Button>
@@ -205,6 +217,21 @@ const MainPage = function () {
           </ModalBody>
 
           <ModalFooter />
+        </ModalContent>
+      </Modal>
+      <Modal size="xl" isOpen={isChatbotOpen} onClose={onChatbotClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>증상을 검색해보세요</ModalHeader>
+          <ModalBody>
+            <iframe
+              title="df-chatbot"
+              width="100%"
+              height="400px"
+              allow="microphone;"
+              src="https://console.dialogflow.com/api-client/demo/embedded/d8e3522c-a8fd-467d-88ba-e1e104bf2128"
+            />
+          </ModalBody>
         </ModalContent>
       </Modal>
     </HStack>

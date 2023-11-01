@@ -1,27 +1,65 @@
+import { useCallback, useState, useEffect } from 'react';
+
 import {
+  Button,
   HStack,
   Heading,
   Image,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Radio,
   RadioGroup,
   VStack,
+  useDisclosure,
 } from '@chakra-ui/react';
 
 import { getBlob } from '../utils/firebase';
 
 const FtfDetail = function ({ data }) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [prescriptionUrl, setPrescriptionUrl] = useState();
+  const preImg = useCallback(async () => {
+    const prescriptionUrl = await getBlob(`${data.uid}/nftf.png`);
+    setPrescriptionUrl(prescriptionUrl);
+  }, [data]);
+
+  useEffect(() => {
+    preImg();
+  }, [preImg]);
+
   return (
     <HStack justifyContent="space-between" alignItems="flex-start" gap="4">
       <VStack flex={3} alignItems="start">
         <Heading as="h3" fontSize="xl">
           진료 심사 관련 서류
         </Heading>
-        <Image
-          src={getBlob(`${data.uid}/nftf.png`)}
-          alt="비대면 진료 서류"
-          width="full"
-        />
+
+        <Image src={prescriptionUrl} alt="비대면 진료 서류" width="30%" />
+        <Button onClick={onOpen} variant="ghost" textDecoration="underline">
+          + 크게 보기
+        </Button>
       </VStack>
+      <Modal isOpen={isOpen} onClose={onClose} size="xl">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>진료 심사 관련 서류</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Image src={prescriptionUrl} alt="비대면 진료 서류" width="full" />
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="primary" mr={3} onClick={onClose}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
 
       <VStack flex={2} alignItems="start">
         <Heading as="h3" fontSize="xl">
@@ -44,7 +82,6 @@ const FtfDetail = function ({ data }) {
           </VStack>
         </RadioGroup>
       </VStack>
-
       <VStack flex={2} alignItems="start">
         <Heading as="h3" fontSize="xl">
           재진대상

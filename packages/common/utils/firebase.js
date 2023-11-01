@@ -1,3 +1,4 @@
+
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import {
   getAuth,
@@ -12,6 +13,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FB_API_KEY,
   authDomain: process.env.REACT_APP_FB_AUTH_DOMAIN,
@@ -23,6 +25,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
+
 export const auth = getAuth(app);
 
 export const uploadBlob = async (blob, uid) => {
@@ -30,10 +33,14 @@ export const uploadBlob = async (blob, uid) => {
   await uploadBytes(storageRef, blob);
 };
 
-export const getBlob = path => {
-  getDownloadURL(ref(storage, path))
-    .then(url => url)
-    .catch(() => '');
+export const getBlob = async path => {
+  try {
+    const url = await getDownloadURL(ref(storage, path));
+    return url;
+  } catch (error) {
+    console.log('error', error);
+    return '';
+  }
 };
 
 export const fbSignUp = async data => {
@@ -60,3 +67,4 @@ export const fbEmailLogIn = async data => {
 };
 
 export const fbLogOut = async () => signOut(auth);
+
