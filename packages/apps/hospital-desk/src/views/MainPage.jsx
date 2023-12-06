@@ -29,6 +29,7 @@ const MainPage = function () {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log(data);
     if (data && !error) {
       setConfirmedReservation(data?.ac || []);
       setCompleteReservation(data?.dc || []);

@@ -18,10 +18,11 @@ export const createHospital = async hospital => {
   return data;
 };
 
-export const updatePayment = (appointmentId, payment) => {
-  instance.patch(`/diagnoses/${appointmentId}`, {
+export const updatePayment = async (appointmentId, payment) => {
+  const result = await instance.patch(`/diagnoses/${appointmentId}`, {
     data: { payment: payment },
   });
+  console.log(result);
 };
 
 export const getAppointments = async ({ queryKey }) => {

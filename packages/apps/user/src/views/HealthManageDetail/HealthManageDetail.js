@@ -81,6 +81,8 @@ const HealthManageDetail = function () {
   useEffect(() => {
     socketRef.current = io(`${process.env.REACT_APP_BACKEND_API}`);
 
+    console.log('socket Ref', socketRef.current);
+
     socketRef.current.on('disconnect', () => {
       setShowStartBtn(false);
     });
@@ -93,7 +95,8 @@ const HealthManageDetail = function () {
       setShowStartBtn(true);
     });
 
-    socketRef.current.on(`${type}_start`, (time = 3) => {
+    socketRef.current.on(`${type}_start`, (time = 20) => {
+      console.log(time);
       setTimer({
         isValid: true,
         time: time,
@@ -103,7 +106,7 @@ const HealthManageDetail = function () {
 
     socketRef.current.on(`${type}_end`, measured => {
       console.log(measured);
-      const filteredData = Math.round(measured.value * 10) / 10;
+      const filteredData = Math.round(measured?.value * 10) / 10;
       if (isNaN(filteredData)) {
         setMeasuredData('다시 측정해주세요');
       } else {

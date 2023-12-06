@@ -17,9 +17,7 @@ function CompletedDiagnosis() {
 
   useEffect(() => {
     if (!error && data) {
-      setCompletedDiagnosis(
-        data?.dc?.filter(reservation => reservation.stateId === 'dc') || [],
-      );
+      setCompletedDiagnosis(data?.pc);
     }
 
     if (error) {

@@ -43,7 +43,8 @@ function createAppointmentActivity(msg) {
   );
 }
 
-function createNotification(msg) {
+service.register('createAppointmentActivity', createAppointmentActivity);
+service.register('createNotification', function createNotification(msg) {
   const notificationParams = {
     message: msg.payload.message,
   };
@@ -70,7 +71,4 @@ function createNotification(msg) {
       returnValue: true,
     });
   });
-}
-
-service.register('createAppointmentActivity', createAppointmentActivity);
-service.register('createNotification', createNotification);
+});

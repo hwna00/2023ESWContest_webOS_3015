@@ -24,7 +24,7 @@ function PaymentModal({ isOpen, onClose, appointmentId }) {
   const handleConfirm = useCallback(() => {
     updatePayment(appointmentId, parseInt(payment));
     updateAppointmentState(appointmentId, 'pc', '');
-    window.location.reload();
+    // window.location.reload();
 
     onClose();
   }, [onClose, payment, appointmentId]);

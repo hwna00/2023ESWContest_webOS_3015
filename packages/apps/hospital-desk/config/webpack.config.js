@@ -1,5 +1,3 @@
-
-
 const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
@@ -293,6 +291,13 @@ module.exports = function (webpackEnv) {
       ],
     },
     resolve: {
+      fallback: {
+        path: require.resolve('path-browserify'),
+        os: require.resolve('os-browserify/browser'),
+        crypto: require.resolve('crypto-browserify'),
+        stream: require.resolve('stream-browserify'),
+        process: require.resolve('process/browser'),
+      },
       // This allows you to set a fallback for where webpack should look for modules.
       // We placed these paths second because we want `node_modules` to "win"
       // if there are any conflicts. This matches Node resolution mechanism.
@@ -624,7 +629,13 @@ module.exports = function (webpackEnv) {
       // It is absolutely essential that NODE_ENV is set to production
       // during a production build.
       // Otherwise React will be compiled in the very slow development mode.
-      new webpack.DefinePlugin(env.stringified),
+      new webpack.DefinePlugin({
+        ...env.stringified,
+        'process.env': JSON.stringify(process.env),
+      }),
+      new webpack.ProvidePlugin({
+        process: 'process/browser',
+      }),
       // Experimental hot reloading for React .
       // https://github.com/facebook/react/tree/main/packages/react-refresh
       isEnvDevelopment &&

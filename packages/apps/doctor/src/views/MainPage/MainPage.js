@@ -1,9 +1,12 @@
+import { useEffect } from 'react';
+
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useQuery } from '@tanstack/react-query';
 import ReviewList from '@housepital/common/ReviewList/ReviewList';
 import ListSkeletion from '@housepital/common/ListSkeleton';
 import styles from '@housepital/common/css/HideScrollBar.module.css';
+import LS2Request from '@enact/webos/LS2Request';
 import {
   Box,
   HStack,
@@ -17,6 +20,8 @@ import {
 
 import { getAppointments } from '../../api';
 
+const bridge = new LS2Request();
+
 const MainPage = function () {
   const me = useSelector(state => state.doctor);
   const {
@@ -26,6 +31,39 @@ const MainPage = function () {
   } = useQuery(['appointments'], () => getAppointments(me.id), {
     enabled: !!me.id,
   });
+
+  const onLsClick = () => {
+    console.log('onLsClick');
+    const lsRequest = {
+      service: 'com.housepital.doctor.app.service',
+      method: 'createNotification',
+      parameters: {
+        datetpayloadime: { message: '테스트입니다.' },
+      },
+      onSuccess: res => console.log('success', res),
+      onFailure: res => console.log('fail', res),
+    };
+    console.log(lsRequest);
+    bridge.send(lsRequest);
+  };
+
+  useEffect(() => {
+    appointments.map(appointment => {
+      const lsRequest = {
+        service: 'com.housepital.doctor.app.service',
+        method: 'createAppointmentActivity',
+        parameters: {
+          activityname: `${me.id}-${appointment.uid}-${appointment.date}-${appointment.time}`,
+          datetime: `${appointment.date} ${appointment.time}:00`,
+        },
+        onSuccess: res => console.log('success', res),
+        onFailure: res => console.log('fail', res),
+      };
+      console.log(lsRequest);
+      bridge.send(lsRequest);
+      return lsRequest;
+    });
+  }, [appointments]);
 
   return (
     <HStack justifyContent="center" gap="12" height="full" overflowY="hidden">
@@ -81,7 +119,7 @@ const MainPage = function () {
         </div>
       </Box>
       <Box flex={1}>
-        <Heading as="h2" fontSize="3xl" mb="6">
+        <Heading as="h2" fontSize="3xl" mb="6" onClick={onLsClick}>
           최근 리뷰
         </Heading>
         <ReviewList reviews={me.reviews} height="96" />

@@ -195,7 +195,7 @@ const SideEffet = function () {
         }
       });
     },
-    [queryClient, onOpen],
+    [queryClient],
   );
 
   const onSearchFieldChange = useCallback(event => {

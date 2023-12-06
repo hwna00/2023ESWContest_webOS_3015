@@ -85,10 +85,14 @@ const MedicinesManage = function () {
     [uid],
   );
 
-  const onMedicineClick = async id => {
-    setSelectedMedicine(id);
-    onMedicineOpne();
-  };
+  const onMedicineClick = useCallback(
+    async medicine => {
+      console.log(medicine);
+      setSelectedMedicine(medicine);
+      onMedicineOpne();
+    },
+    [onMedicineOpne],
+  );
 
   const onMedicineSubmit = useCallback(
     async data => {
@@ -223,17 +227,39 @@ const MedicinesManage = function () {
           <Modal size="xl" isOpen={isMedicineOpen} onClose={onMedicineClose}>
             <ModalOverlay />
             <ModalContent>
-              <ModalHeader>{selectedMedicine?.name}</ModalHeader>
+              <ModalHeader>{selectedMedicine?.medecineName}</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                {/* // TODO: 등록된 약의 상세 정보 보여주기 */}
+                <Text fontSize="lg" fontWeight="bold">
+                  복용 날짜
+                </Text>
+                <HStack mt="4">
+                  {selectedMedicine?.intakeDays?.map(day => {
+                    return (
+                      <Tag key={day} variant="outline" fontSize="xl">
+                        {day}
+                      </Tag>
+                    );
+                  })}
+                </HStack>
+                <Text fontSize="lg" fontWeight="bold" mt="8">
+                  복용 시간
+                </Text>
+                <HStack mt="4">
+                  {selectedMedicine?.intakeTimes?.map(time => {
+                    return (
+                      <Tag key={time} variant="outline" fontSize="xl">
+                        {time}
+                      </Tag>
+                    );
+                  })}
+                </HStack>
               </ModalBody>
 
               <ModalFooter>
-                <Button colorScheme="primary" onClick={onClose}>
-                  저장하기
+                <Button variant="ghost" onClick={onMedicineClose}>
+                  닫기
                 </Button>
-                <Button variant="ghost">닫기</Button>
               </ModalFooter>
             </ModalContent>
           </Modal>
